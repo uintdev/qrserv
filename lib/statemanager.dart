@@ -244,17 +244,17 @@ class StateManager extends State<StateManagerPage> {
           // Human readable file size
           String _sizeHuman = filesize(_fileInfo['length'], 2);
           _sizeHuman = _sizeHuman.replaceAll(
-              '.', translate('page.imported.decimalseparator'));
-          _sizeHuman = _sizeHuman.replaceAll(
-              'KB', translate('page.imported.sizesymbol.kb'));
-          _sizeHuman = _sizeHuman.replaceAll(
-              'MB', translate('page.imported.sizesymbol.mb'));
+              'TB', translate('page.imported.sizesymbol.tb'));
           _sizeHuman = _sizeHuman.replaceAll(
               'GB', translate('page.imported.sizesymbol.gb'));
           _sizeHuman = _sizeHuman.replaceAll(
-              'TB', translate('page.imported.sizesymbol.tb'));
+              'MB', translate('page.imported.sizesymbol.mb'));
+          _sizeHuman = _sizeHuman.replaceAll(
+              'KB', translate('page.imported.sizesymbol.kb'));
           _sizeHuman = _sizeHuman.replaceAll(
               'B', translate('page.imported.sizesymbol.b'));
+          _sizeHuman = _sizeHuman.replaceAll(
+              '.', translate('page.imported.decimalseparator'));
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data['interfaces'].contains(selectedIP.toString())) {
