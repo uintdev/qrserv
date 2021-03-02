@@ -1,0 +1,121 @@
+{
+    "page": {
+        "landing": {
+            "label": "Select file",
+            "msg": "Select a file to share..."
+        },
+        "info": {
+            "noconnection": {
+                "label": "No connection",
+                "msg": "Connect to a network and try again."
+            },
+            "snapshoterror": {
+                "label": "Error",
+                "msg": "Error collecting network information."
+            },
+            "fileremoved": {
+                "label": "File removed",
+                "msg": "Selected file was removed."
+            },
+            "permissiondenied": {
+                "label": "Error",
+                "msg": "Storage permission was denied."
+            },
+            "portinuse": {
+                "label": "Error",
+                "msg": "Server tried to start with already binded port."
+            },
+            "fallback": {
+                "label": "Error",
+                "msg": "An error has occurred.\nCode: "
+            }
+        },
+        "imported": {
+            "file": "File",
+            "size": "Size",
+            "decimalseparator": ".",
+            "sizesymbol": {
+                "b": "B",
+                "kb": "KB",
+                "mb": "MB",
+                "gb": "GB",
+                "tb": "TB"
+            }
+        }
+    },
+    "fab": {
+        "shutdownserver": {
+            "label": "Shutdown server"
+        },
+        "selectfile": {
+            "label": "Select file"
+        }
+    },
+    "info": {
+        "exception": {
+            "statusbar": {
+                "msg": "Failed to change status bar colour: "
+            },
+            "navigationbar": {
+                "msg": "Failed to change navigation bar colour: "
+            },
+            "fileselection": {
+                "msg": "Failed to select file: "
+            },
+            "shutdownfailed": {
+                "msg": "Failed to shutdown server"
+            },
+            "fileremoval": {
+                "msg": "Failed to remove cached file: "
+            },
+            "portinuse": {
+                "msg": "Error binding port: "
+            },
+            "linkopenfailed": {
+                "msg": "Unable to open link"
+            }
+        },
+        "pending": {
+            "fileprocessing": {
+                "msg": "Currently processing file..."
+            },
+            "servershutdown": {
+                "msg": "Server shutdown pending..."
+            },
+            "appinfo": {
+                "msg": "Loading..."
+            }
+        }
+    },
+    "server": {
+        "info": {
+            "tokenmismatch": {
+                "msg": "Server token mismatch"
+            },
+            "shutdownfailed": {
+                "msg": "Failed to shutdown server.\nHTTP code: "
+            },
+            "gone": {
+                "msg": "Server is gone: "
+            }
+        }
+    },
+    "panel": {
+        "title": {
+            "msg": "About..."
+        },
+        "packageinfofail": {
+            "msg": "Error"
+        },
+        "card": {
+            "opensource": {
+                "title": "Open source",
+                "subtitle": "Source code for this app can be found on GitHub."
+            },
+            "donate": {
+                "title": "Donate",
+                "subtitle": "Found the app useful? Feel free to throw some coffee my way."
+            }
+        }
+    }
+}

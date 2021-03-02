@@ -1,0 +1,121 @@
+{
+    "page": {
+        "landing": {
+            "label": "Selecione ficheiro",
+            "msg": "Selecione um ficheiro para compartilhar..."
+        },
+        "info": {
+            "noconnection": {
+                "label": "Sem conexão",
+                "msg": "Conecte-se a uma rede e tente novamente."
+            },
+            "snapshoterror": {
+                "label": "Erro",
+                "msg": "Erro ao coletar informações de rede."
+            },
+            "fileremoved": {
+                "label": "Ficheiro removido",
+                "msg": "O ficheiro selecionado foi removido."
+            },
+            "permissiondenied": {
+                "label": "Erro",
+                "msg": "A permissão de armazenamento foi negada."
+            },
+            "portinuse": {
+                "label": "Erro",
+                "msg": "O servidor tente começar com uma porta já vinculada."
+            },
+            "fallback": {
+                "label": "Erro",
+                "msg": "Ocorreu um erro.\nCódigo: "
+            }
+        },
+        "imported": {
+            "file": "Ficheiro",
+            "size": "Tamanho",
+            "decimalseparator": ",",
+            "sizesymbol": {
+                "b": "B",
+                "kb": "KB",
+                "mb": "MB",
+                "gb": "GB",
+                "tb": "TB"
+            }
+        }
+    },
+    "fab": {
+        "shutdownserver": {
+            "label": "Desligar servidor"
+        },
+        "selectfile": {
+            "label": "Selecione ficheiro"
+        }
+    },
+    "info": {
+        "exception": {
+            "statusbar": {
+                "msg": "Falha ao alterar a cor da barra de status: "
+            },
+            "navigationbar": {
+                "msg": "Falha ao alterar a cor da barra de navegação: "
+            },
+            "fileselection": {
+                "msg": "Falha ao selecionar ficheiro: "
+            },
+            "shutdownfailed": {
+                "msg": "Falha ao desligar servidor"
+            },
+            "fileremoval": {
+                "msg": "Falha ao remover ficheiro em cache: "
+            },
+            "portinuse": {
+                "msg": "Porta já vinculada erro: "
+            },
+            "linkopenfailed": {
+                "msg": "Incapaz de abrir o link"
+            }
+        },
+        "pending": {
+            "fileprocessing": {
+                "msg": "Processando ficheiro atualmente..."
+            },
+            "servershutdown": {
+                "msg": "Desligamento do servidor pendente..."
+            },
+            "appinfo": {
+                "msg": "Carregando..."
+            }
+        }
+    },
+    "server": {
+        "info": {
+            "tokenmismatch": {
+                "msg": "Incompatibilidade de token de servidor"
+            },
+            "shutdownfailed": {
+                "msg": "Falha ao desligar servidor.\nCódigo HTTP: "
+            },
+            "gone": {
+                "msg": "Servidor desaparecido: "
+            }
+        }
+    },
+    "panel": {
+        "title": {
+            "msg": "Sobre..."
+        },
+        "packageinfofail": {
+            "msg": "Erro"
+        },
+        "card": {
+            "opensource": {
+                "title": "Código aberto",
+                "subtitle": "O código-fonte deste aplicativo pode ser encontrado no GitHub."
+            },
+            "donate": {
+                "title": "Doar",
+                "subtitle": "Achou o aplicativo útil? Sinta-se à vontade para jogar um pouco de café meu caminho."
+            }
+        }
+    }
+}

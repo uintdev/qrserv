@@ -1,0 +1,121 @@
+{
+    "page": {
+        "landing": {
+            "label": "Sélectionner fichier",
+            "msg": "Sélectionnez un fichier à partager..."
+        },
+        "info": {
+            "noconnection": {
+                "label": "Pas de connection",
+                "msg": "Connectez-vous à un réseau et réessayez."
+            },
+            "snapshoterror": {
+                "label": "Erreur",
+                "msg": "Erreur lors de la collecte des informations réseau."
+            },
+            "fileremoved": {
+                "label": "Fichier supprimé",
+                "msg": "Le fichier sélectionné a été supprimé."
+            },
+            "permissiondenied": {
+                "label": "Erreur",
+                "msg": "L'autorisation d'entreposage a été refusée."
+            },
+            "portinuse": {
+                "label": "Erreur",
+                "msg": "Serveur a essayé de démarrer avec port déjà lié."
+            },
+            "fallback": {
+                "label": "Erreur",
+                "msg": "Une erreur est survenue.\nCode: "
+            }
+        },
+        "imported": {
+            "file": "Ficher",
+            "size": "Taille",
+            "decimalseparator": ",",
+            "sizesymbol": {
+                "b": "O",
+                "kb": "Ko",
+                "mb": "Mo",
+                "gb": "Go",
+                "tb": "To"
+            }
+        }
+    },
+    "fab": {
+        "shutdownserver": {
+            "label": "Arrêter le serveur"
+        },
+        "selectfile": {
+            "label": "Sélectionner fichier"
+        }
+    },
+    "info": {
+        "exception": {
+            "statusbar": {
+                "msg": "Échec de la modification de la couleur de la barre d'état: "
+            },
+            "navigationbar": {
+                "msg": "Échec de la modification de la couleur de la barre de navigation: "
+            },
+            "fileselection": {
+                "msg": "Échec de la sélection du fichier: "
+            },
+            "shutdownfailed": {
+                "msg": "Échec de l'arrêt du serveur."
+            },
+            "fileremoval": {
+                "msg": "Échec de la suppression du fichier mis en cache: "
+            },
+            "portinuse": {
+                "msg": "Error port déjà lié: "
+            },
+            "linkopenfailed": {
+                "msg": "Impossible d'ouvrir le lien"
+            }
+        },
+        "pending": {
+            "fileprocessing": {
+                "msg": "Fichier en cours de traitement..."
+            },
+            "servershutdown": {
+                "msg": "Arrêt du serveur en attente..."
+            },
+            "appinfo": {
+                "msg": "Chargement..."
+            }
+        }
+    },
+    "server": {
+        "info": {
+            "tokenmismatch": {
+                "msg": "Jeton de serveur est invalide"
+            },
+            "shutdownfailed": {
+                "msg": "Échec de l'arrêt du serveur.\nHTTP code: "
+            },
+            "gone": {
+                "msg": "Serveur est parti: "
+            }
+        }
+    },
+    "panel": {
+        "title": {
+            "msg": "À propos de..."
+        },
+        "packageinfofail": {
+            "msg": "Erreur"
+        },
+        "card": {
+            "opensource": {
+                "title": "Open source",
+                "subtitle": "Le code source de cette application est disponible sur GitHub."
+            },
+            "donate": {
+                "title": "Faire un don",
+                "subtitle": "Vous avez trouvé l'application utile? N'hésitez pas à jeter du café à ma façon."
+            }
+        }
+    }
+}
