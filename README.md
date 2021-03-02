@@ -49,6 +49,23 @@ All builds are to be finalised not too long from now. Keep an eye out.
 
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B and vice versa.
 
+## Building
+
+### Android
+
+If you wish to have debugging symbols for an app bundle release, ensure you have the Android NDK installed. You may need to specify the `ndk.dir` in the `local.properties` file.
+<br>
+However, if you do not plan to do any Play Store release, you may remove the `ndk` block from `android.defaultConfig` in the gradle build file.
+
+### Windows
+
+Windows builds normally require `Visual C++ Redistributable for Visual Studio 2015` to run. There are two ways you could go about it:
+1. Install [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
+2. Bundle the required files in the root directory of the compiled executable (`msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll`) -- ideal when distributing
+
+You could [package builds as a MSIX](https://pub.dev/packages/msix) but that is only practical if you plan to get or already have a code signing certificate.
+
+
 ## Licencing
 
 [Legal attribution soon goes here...]
