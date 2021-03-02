@@ -252,7 +252,7 @@ class StateManager extends State<StateManagerPage> {
           _sizeHuman = _sizeHuman.replaceAll(
               'KB', translate('page.imported.sizesymbol.kb'));
           _sizeHuman = _sizeHuman.replaceAll(
-              'B', translate('page.imported.sizesymbol.b'));
+              ' B', ' ' + translate('page.imported.sizesymbol.b'));
           _sizeHuman = _sizeHuman.replaceAll(
               '.', translate('page.imported.decimalseparator'));
 
