@@ -23,12 +23,6 @@ void main() async {
     setWindowMaxSize(Size.infinite);
   }
 
-  // TODO: Potentially rework i18n
-  // var delegate = await LocalizationDelegate.create(
-  //     fallbackLocale: 'en',
-  //     supportedLocales: ['en', 'fr', 'de', 'es', 'hu', 'pt']
-  //   );
-
   runApp(MaterialApp(home: QRServ()));
 }
 
@@ -54,20 +48,7 @@ class QRServ extends StatelessWidget {
         radius: 30,
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          // localizationsDelegates: [
-          //   GlobalMaterialLocalizations.delegate,
-          //   GlobalWidgetsLocalizations.delegate,
-          //   AppLocalizations.delegate,
-          // ],
           supportedLocales: AppLocalizations.supportedLocales,
-          // supportedLocales: [
-          //   const Locale('en', ''),
-          //   // const Locale('fr', ''),
-          //   // const Locale('de', ''),
-          //   // const Locale('es', ''),
-          //   // const Locale('hu', ''),
-          //   // const Locale('pt', ''),
-          // ],
           theme: FlutterDark.dark(ThemeData.dark()),
           home: PageState(),
         ));
