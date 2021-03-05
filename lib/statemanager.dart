@@ -7,7 +7,7 @@ import 'package:filesize/filesize.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StateManagerPage extends StatefulWidget {
   @override
@@ -33,14 +33,14 @@ class StateManager extends State<StateManagerPage> {
   Widget build(BuildContext context) {
     Widget _outputState;
     if (FilePicker.fileImported) {
-      _outputState = importedPage();
+      _outputState = importedPage(context);
     } else {
-      _outputState = landingPage();
+      _outputState = landingPage(context);
     }
     return _outputState;
   }
 
-  Widget landingPage() {
+  Widget landingPage(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -59,13 +59,14 @@ class StateManager extends State<StateManagerPage> {
                     Icons.insert_drive_file,
                     color: Colors.white,
                     size: 80.0,
-                    semanticLabel: translate('page.landing.label'),
+                    semanticLabel:
+                        AppLocalizations.of(context).page_landing_label,
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   AutoSizeText(
-                    translate('page.landing.msg'),
+                    AppLocalizations.of(context).page_landing_msg,
                     style: TextStyle(fontSize: 15.5),
                     textAlign: TextAlign.center,
                     minFontSize: 14,
@@ -124,8 +125,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.signal_wifi_off,
-            'label': translate('page.info.noconnection.label'),
-            'msg': translate('page.info.noconnection.msg'),
+            'label': AppLocalizations.of(context).page_info_noconnection_label,
+            'msg': AppLocalizations.of(context).page_info_noconnection_msg,
           };
         }
         break;
@@ -135,8 +136,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': translate('page.info.snapshoterror.label'),
-            'msg': translate('page.info.snapshoterror.msg'),
+            'label': AppLocalizations.of(context).page_info_snapshoterror_label,
+            'msg': AppLocalizations.of(context).page_info_snapshoterror_msg,
           };
         }
         break;
@@ -146,8 +147,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.block,
-            'label': translate('page.info.fileremoved.label'),
-            'msg': translate('page.info.fileremoved.msg'),
+            'label': AppLocalizations.of(context).page_info_fileremoved_label,
+            'msg': AppLocalizations.of(context).page_info_fileremoved_msg,
           };
         }
         break;
@@ -157,8 +158,9 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': translate('page.info.permissiondenied.label'),
-            'msg': translate('page.info.permissiondenied.msg'),
+            'label':
+                AppLocalizations.of(context).page_info_permissiondenied_label,
+            'msg': AppLocalizations.of(context).page_info_permissiondenied_msg,
           };
         }
         break;
@@ -168,8 +170,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': translate('page.info.portinuse.label'),
-            'msg': translate('page.info.portinuse.msg'),
+            'label': AppLocalizations.of(context).page_info_portinuse_label,
+            'msg': AppLocalizations.of(context).page_info_portinuse_msg,
           };
         }
         break;
@@ -178,8 +180,9 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': translate('page.info.fallback.label'),
-            'msg': translate('page.info.fallback.msg') + type.toString(),
+            'label': AppLocalizations.of(context).page_info_fallback_label,
+            'msg': AppLocalizations.of(context).page_info_fallback_msg +
+                type.toString(),
           };
         }
         break;
@@ -227,9 +230,9 @@ class StateManager extends State<StateManagerPage> {
   String defaultIP = '';
   String selectedIP = '';
 
-  Widget importedPage() {
+  Widget importedPage(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
-      future: Network().fetchInterfaces(),
+      future: Network().fetchInterfaces(context),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
           return msgPage(1);
@@ -244,17 +247,17 @@ class StateManager extends State<StateManagerPage> {
           // Human readable file size
           String _sizeHuman = filesize(_fileInfo['length'], 2);
           _sizeHuman = _sizeHuman.replaceAll(
-              'TB', translate('page.imported.sizesymbol.tb'));
+              'TB', AppLocalizations.of(context).page_imported_sizesymbol_tb);
           _sizeHuman = _sizeHuman.replaceAll(
-              'GB', translate('page.imported.sizesymbol.gb'));
+              'GB', AppLocalizations.of(context).page_imported_sizesymbol_gb);
           _sizeHuman = _sizeHuman.replaceAll(
-              'MB', translate('page.imported.sizesymbol.mb'));
+              'MB', AppLocalizations.of(context).page_imported_sizesymbol_mb);
           _sizeHuman = _sizeHuman.replaceAll(
-              'KB', translate('page.imported.sizesymbol.kb'));
+              'KB', AppLocalizations.of(context).page_imported_sizesymbol_kb);
+          _sizeHuman = _sizeHuman.replaceAll(' B',
+              ' ' + AppLocalizations.of(context).page_imported_sizesymbol_b);
           _sizeHuman = _sizeHuman.replaceAll(
-              ' B', ' ' + translate('page.imported.sizesymbol.b'));
-          _sizeHuman = _sizeHuman.replaceAll(
-              '.', translate('page.imported.decimalseparator'));
+              '.', AppLocalizations.of(context).page_imported_decimalseparator);
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data['interfaces'].contains(selectedIP.toString())) {
@@ -267,7 +270,7 @@ class StateManager extends State<StateManagerPage> {
 
             // If no interfaces available, return network error page
             if (defaultIP == '') {
-              Server().shutdownServer();
+              Server().shutdownServer(context);
               return msgPage(0);
             }
 
@@ -409,7 +412,8 @@ class StateManager extends State<StateManagerPage> {
                                       EdgeInsets.only(right: 10, bottom: 10),
                                   child: Center(
                                     child: Text(
-                                      translate('page.imported.file'),
+                                      AppLocalizations.of(context)
+                                          .page_imported_file,
                                       style: TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -443,7 +447,8 @@ class StateManager extends State<StateManagerPage> {
                                   padding: EdgeInsets.only(right: 10),
                                   child: Center(
                                     child: Text(
-                                      translate('page.imported.size'),
+                                      AppLocalizations.of(context)
+                                          .page_imported_size,
                                       style: TextStyle(fontSize: 14),
                                     ),
                                   ),

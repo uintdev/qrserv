@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:math';
 import 'filepicker.dart';
 import 'network.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Server {
   // Check if specified file path exists
@@ -93,7 +94,7 @@ class Server {
   }
 
   // Shutdown server
-  Future shutdownServer() async {
+  Future shutdownServer(BuildContext context) async {
     // Do not proceed if server is not running
     if (!serverRunning) return;
 
@@ -112,16 +113,17 @@ class Server {
         // Server had shutdown successfully
       } else if (response.statusCode == 401) {
         // Provided token did not match
-        showToast(translate('server.info.tokenmismatch.msg'));
+        showToast(AppLocalizations.of(context).server_info_tokenmismatch);
       } else {
         // Unhandled HTTP code (misc)
-        showToast(translate('server.info.shutdownfailed.msg') +
+        showToast(AppLocalizations.of(context).server_info_shutdownfailed +
             response.statusCode.toString());
       }
       serverPoweringDown = false;
     }).onError((error, _) {
       // Server not found, so probably already gone
-      showToast(translate('server.info.gone.msg') + error.toString());
+      showToast(
+          AppLocalizations.of(context).server_info_gone + error.toString());
       serverRunning = false;
       serverPoweringDown = false;
     });

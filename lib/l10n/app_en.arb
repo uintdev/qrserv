@@ -1,0 +1,67 @@
+{
+    "@@locale": "en",
+
+    "page_landing_label": "Select file",
+    "page_landing_msg": "Select a file to share...",
+
+    "page_info_noconnection_label": "No connection",
+    "page_info_noconnection_msg": "Connect to a network and try again.",
+
+    "page_info_snapshoterror_label": "Error",
+    "page_info_snapshoterror_msg": "Error collecting network information.",
+
+    "page_info_fileremoved_label": "File removed",
+    "page_info_fileremoved_msg": "Selected file was removed.",
+
+    "page_info_permissiondenied_label": "Error",
+    "page_info_permissiondenied_msg": "Storage permission was denied.",
+
+    "page_info_portinuse_label": "Error",
+    "page_info_portinuse_msg": "Server tried to start with already binded port.",
+
+    "page_info_fallback_label": "Error",
+    "page_info_fallback_msg": "An error has occurred.\nCode: ",
+
+    "page_imported_file": "File",
+    "page_imported_size": "Size",
+    "page_imported_decimalseparator": ".",
+
+    "page_imported_sizesymbol_b": "B",
+    "page_imported_sizesymbol_kb": "KB",
+    "page_imported_sizesymbol_mb": "MB",
+    "page_imported_sizesymbol_gb": "GB",
+    "page_imported_sizesymbol_tb": "TB",
+
+
+    "fab_shutdownserver_label": "Shutdown server",
+    "fab_selectfile_label": "Select file",
+
+
+    "info_exception_statusbar": "Failed to change status bar colour: ",
+    "info_exception_navigationbar": "Failed to change navigation bar colour: ",
+    "info_exception_fileselection": "Failed to select file: ",
+    "info_exception_shutdownfailed": "Failed to shutdown server",
+    "info_exception_fileremoval": "Failed to remove cached file: ",
+    "info_exception_portinuse": "Error binding port: ",
+    "info_exception_linkopenfailed": "Unable to open link",
+
+    "info_pending_fileprocessing": "Currently processing file...",
+    "info_pending_servershutdown": "Server shutdown pending...",
+    "info_pending_appinfo": "Loading...",
+
+
+    "server_info_tokenmismatch": "Server token mismatch",
+    "server_info_shutdownfailed": "Failed to shutdown server.\nHTTP code: ",
+    "server_info_gone": "Server is gone: ",
+
+
+    "panel_title": "About...",
+
+    "panel_packageinfofail": "Error",
+
+    "panel_card_opensource_title": "Open source",
+    "panel_card_opensource_subtitle": "Source code for this app can be found on GitHub.",
+
+    "panel_card_donate_title": "Donate",
+    "panel_card_donate_subtitle": "Found the app useful? Feel free to throw some coffee my way."
+}

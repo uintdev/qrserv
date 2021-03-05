@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  intl: ^0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,7 +45,6 @@ dependencies:
   flutter_statusbarcolor: ^0.2.3
   auto_size_text: ^2.1.0
   oktoast: ^2.3.2
-  flutter_translate: ^1.6.0
 
   window_size:
     git:
@@ -67,9 +67,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  assets:
-    - assets/i18n/
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

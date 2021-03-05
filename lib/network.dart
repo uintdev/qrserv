@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'server.dart';
 import 'filepicker.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Network {
   // Default port number
@@ -47,7 +48,7 @@ class Network {
   }
 
   // Get full list of IPs and unused port
-  Future<Map<String, dynamic>> fetchInterfaces() async {
+  Future<Map<String, dynamic>> fetchInterfaces(BuildContext context) async {
     // Prepare interface list and fetch unused port for server
     await _internalIP();
 
@@ -57,14 +58,15 @@ class Network {
       await Server().http().onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
-        showToast(translate('info.exception.portinuse.msg') + error.toString());
+        showToast(AppLocalizations.of(context).info_exception_portinuse +
+            error.toString());
         Server.serverException = true;
       });
     }
 
     // Shutdown server if marked
     if (!Server().fileExists(FilePicker().readInfo()['path'])) {
-      await Server().shutdownServer();
+      await Server().shutdownServer(context);
     }
 
     Map<String, dynamic> networkData = {

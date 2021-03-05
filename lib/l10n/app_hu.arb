@@ -1,0 +1,67 @@
+{
+    "@@locale": "hu",
+
+    "page_landing_label": "Válassz fájlt",
+    "page_landing_msg": "Válassz egy fájlt a megosztáshoz...",
+
+    "page_info_noconnection_label": "Nincs internetkapcsolat",
+    "page_info_noconnection_msg": "Ellenőrizd a hálózatot, és próbáld újra.",
+
+    "page_info_snapshoterror_label": "Hiba",
+    "page_info_snapshoterror_msg": "Hiba történt a hálózati információk lekérdezésekor.",
+
+    "page_info_fileremoved_label": "Fájl törölve",
+    "page_info_fileremoved_msg": "A kiválasztott fájl törölve lett.",
+
+    "page_info_permissiondenied_label": "Hiba",
+    "page_info_permissiondenied_msg": "Tárhely hozzáférés megtagadva.",
+
+    "page_info_portinuse_label": "Hiba",
+    "page_info_portinuse_msg": "Egy már használt porton próbált indulni a szerver.",
+
+    "page_info_fallback_label": "Hiba",
+    "page_info_fallback_msg": "Egy hiba történt.\nKód: ",
+
+    "page_imported_file": "Fájl",
+    "page_imported_size": "Méret",
+    "page_imported_decimalseparator": ",",
+
+    "page_imported_sizesymbol_b": "B",
+    "page_imported_sizesymbol_kb": "KB",
+    "page_imported_sizesymbol_mb": "MB",
+    "page_imported_sizesymbol_gb": "GB",
+    "page_imported_sizesymbol_tb": "TB",
+
+
+    "fab_shutdownserver_label": "Szerver leállítása",
+    "fab_selectfile_label": "Fájl kiválasztása",
+
+
+    "info_exception_statusbar": "Nem sikerült az értesítési sáv színének a megváltoztatása: ",
+    "info_exception_navigationbar": "Nem sikerült a navigációs sáv színének a megváltoztatása: ",
+    "info_exception_fileselection": "Nem sikerült kiválasztani a következő fájlt: ",
+    "info_exception_shutdownfailed": "Sikertelen szerver leállítás",
+    "info_exception_fileremoval": "Nem sikerült törölni a gyorsítótárazott fájlt: ",
+    "info_exception_portinuse": "Nem sikerült a következő port használata: ",
+    "info_exception_linkopenfailed": "Nem sikerült a link megnyitása",
+
+    "info_pending_fileprocessing": "Fájl feldolgozása...",
+    "info_pending_servershutdown": "Szerver leállítás folyamatban...",
+    "info_pending_appinfo": "Betöltés...",
+
+
+    "server_info_tokenmismatch": "Nem egyező szerver token",
+    "server_info_shutdownfailed": "Sikertelen szerver leállás.\nHTTP kód: ",
+    "server_info_gone": "A szerver eltűnt: ",
+
+
+    "panel_title": "Névjegy...",
+
+    "panel_packageinfofail": "Hiba",
+
+    "panel_card_opensource_title": "Nyílt forráskód",
+    "panel_card_opensource_subtitle": "Az app forráskódja megtalálható GitHubon.",
+
+    "panel_card_donate_title": "Támogatás",
+    "panel_card_donate_subtitle": "Hasznosnak találtad az appot? Nyugodtan adományozz egy kávéra valót."
+}

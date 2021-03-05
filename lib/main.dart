@@ -1,4 +1,3 @@
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,7 @@ import 'package:window_size/window_size.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,15 +23,13 @@ void main() async {
     setWindowMaxSize(Size.infinite);
   }
 
-  // Clear cache on launch
-  CacheManager().deleteCache();
-
   // TODO: Potentially rework i18n
-  var delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'en',
-      supportedLocales: ['en', 'fr', 'de', 'es', 'hu', 'pt']);
+  // var delegate = await LocalizationDelegate.create(
+  //     fallbackLocale: 'en',
+  //     supportedLocales: ['en', 'fr', 'de', 'es', 'hu', 'pt']
+  //   );
 
-  runApp(MaterialApp(home: LocalizedApp(delegate, QRServ())));
+  runApp(MaterialApp(home: QRServ()));
 }
 
 class QRServ extends StatelessWidget {
@@ -44,7 +41,9 @@ class QRServ extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    var localizationDelegate = LocalizedApp.of(context).delegate;
+    // Clear cache on launch
+    // TODO: check if executes even after launch
+    CacheManager().deleteCache(context);
 
     return OKToast(
         // Toast properties
@@ -53,19 +52,24 @@ class QRServ extends StatelessWidget {
         backgroundColor: Color.fromRGBO(60, 60, 60, 1.0),
         duration: Duration(milliseconds: 3500),
         radius: 30,
-        child: LocalizationProvider(
-          state: LocalizationProvider.of(context).state,
-          child: MaterialApp(
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              localizationDelegate
-            ],
-            supportedLocales: localizationDelegate.supportedLocales,
-            locale: localizationDelegate.currentLocale,
-            theme: FlutterDark.dark(ThemeData.dark()),
-            home: PageState(),
-          ),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          // localizationsDelegates: [
+          //   GlobalMaterialLocalizations.delegate,
+          //   GlobalWidgetsLocalizations.delegate,
+          //   AppLocalizations.delegate,
+          // ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          // supportedLocales: [
+          //   const Locale('en', ''),
+          //   // const Locale('fr', ''),
+          //   // const Locale('de', ''),
+          //   // const Locale('es', ''),
+          //   // const Locale('hu', ''),
+          //   // const Locale('pt', ''),
+          // ],
+          theme: FlutterDark.dark(ThemeData.dark()),
+          home: PageState(),
         ));
   }
 }
@@ -132,7 +136,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         _useWhiteNavigationBarForeground = false;
       }
     } on PlatformException catch (e) {
-      showToast(translate('info.exception.statusbar.msg') + e.toString());
+      showToast(AppLocalizations.of(context).info_exception_statusbar +
+          e.toString());
     }
   }
 
@@ -140,7 +145,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     try {
       await FlutterStatusbarcolor.setNavigationBarColor(color, animate: true);
     } on PlatformException catch (e) {
-      showToast(translate('info.exception.navigationbar.msg') + e.toString());
+      showToast(AppLocalizations.of(context).info_exception_navigationbar +
+          e.toString());
     }
   }
 
@@ -152,7 +158,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   void importFile() async {
     // Prevent further execution if still loading
     if (_actionButtonLoading) {
-      showToast(translate('info.pending.fileprocessing.msg'));
+      showToast(AppLocalizations.of(context).info_pending_fileprocessing);
       return;
     }
 
@@ -162,7 +168,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     });
 
     // Attempt file import
-    await FilePicker().selectFile().whenComplete(() {
+    await FilePicker().selectFile(context).whenComplete(() {
       if (FilePicker.fileImported) {
         // Update state
         setState(() {
@@ -182,8 +188,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // User cancelled selection...
       } else {
         // Unknown exception -- inform user
-        showToast(
-            translate('info.exception.fileselection.msg') + _exceptionData);
+        showToast(AppLocalizations.of(context).info_exception_fileselection +
+            _exceptionData);
       }
       // Revert FAB state
       _actionButtonLoading = false;
@@ -192,15 +198,15 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   // Handle server shutdown via FAB
   void shutdownFAB() async {
-    await Server().shutdownServer().whenComplete(() {
+    await Server().shutdownServer(context).whenComplete(() {
       if (!Server.serverRunning) {
         setState(() {
           FilePicker.fileImported = false;
           _stateView = StateManagerPage();
         });
-        CacheManager().deleteCache();
+        CacheManager().deleteCache(context);
       } else {
-        showToast(translate('info.exception.shutdownfailed.msg'));
+        showToast(AppLocalizations.of(context).info_exception_shutdownfailed);
       }
     });
   }
@@ -290,16 +296,16 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                                 !Server.serverPoweringDown) {
                               shutdownFAB();
                             } else {
-                              showToast(
-                                  translate('info.pending.servershutdown.msg'));
+                              showToast(AppLocalizations.of(context)
+                                  .info_pending_servershutdown);
                             }
                           },
                           child: Icon(
                             Icons.power_settings_new,
                             color: Colors.white,
                             size: 22.5,
-                            semanticLabel:
-                                translate('fab.shutdownserver.label'),
+                            semanticLabel: AppLocalizations.of(context)
+                                .fab_shutdownserver_label,
                           ),
                         ),
                 ),
@@ -321,7 +327,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                             Icons.insert_drive_file,
                             color: Colors.white,
                             size: 20.0,
-                            semanticLabel: translate('fab.selectfile.label'),
+                            semanticLabel: AppLocalizations.of(context)
+                                .fab_selectfile_label,
                           ),
                   ),
                 ),

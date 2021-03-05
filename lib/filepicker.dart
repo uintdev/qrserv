@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:path/path.dart';
 import 'cachemanager.dart';
@@ -20,13 +21,13 @@ class FilePicker {
     };
   }
 
-  Future selectFile() async {
+  Future selectFile(BuildContext context) async {
     await FilePickerCross.importFromStorage().then((file) {
       // Cache handling
       if (_currentFile != '' &&
           _currentFile != file.fileName &&
           Server().fileExists(_currentFile)) {
-        CacheManager().deleteCache(_currentFile);
+        CacheManager().deleteCache(context, _currentFile);
       }
 
       // Set file information

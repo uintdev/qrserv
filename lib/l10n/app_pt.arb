@@ -1,0 +1,67 @@
+{
+    "@@locale": "pt",
+
+    "page_landing_label": "Selecione ficheiro",
+    "page_landing_msg": "Selecione um ficheiro para compartilhar...",
+
+    "page_info_noconnection_label": "Sem conexão",
+    "page_info_noconnection_msg": "Conecte-se a uma rede e tente novamente.",
+
+    "page_info_snapshoterror_label": "Erro",
+    "page_info_snapshoterror_msg": "Erro ao coletar informações de rede.",
+
+    "page_info_fileremoved_label": "Ficheiro removido",
+    "page_info_fileremoved_msg": "O ficheiro selecionado foi removido.",
+
+    "page_info_permissiondenied_label": "Erro",
+    "page_info_permissiondenied_msg": "A permissão de armazenamento foi negada.",
+
+    "page_info_portinuse_label": "Erro",
+    "page_info_portinuse_msg": "O servidor tente começar com uma porta já vinculada.",
+
+    "page_info_fallback_label": "Erro",
+    "page_info_fallback_msg": "Ocorreu um erro.\nCódigo: ",
+
+    "page_imported_file": "Ficheiro",
+    "page_imported_size": "Tamanho",
+    "page_imported_decimalseparator": ",",
+
+    "page_imported_sizesymbol_b": "B",
+    "page_imported_sizesymbol_kb": "KB",
+    "page_imported_sizesymbol_mb": "MB",
+    "page_imported_sizesymbol_gb": "GB",
+    "page_imported_sizesymbol_tb": "TB",
+
+
+    "fab_shutdownserver_label": "Desligar servidor",
+    "fab_selectfile_label": "Selecione ficheiro",
+
+
+    "info_exception_statusbar": "Falha ao alterar a cor da barra de status: ",
+    "info_exception_navigationbar": "Falha ao alterar a cor da barra de navegação: ",
+    "info_exception_fileselection": "Falha ao selecionar ficheiro: ",
+    "info_exception_shutdownfailed": "Falha ao desligar servidor",
+    "info_exception_fileremoval": "Falha ao remover ficheiro em cache: ",
+    "info_exception_portinuse": "Porta já vinculada erro: ",
+    "info_exception_linkopenfailed": "Incapaz de abrir o link",
+
+    "info_pending_fileprocessing": "Processando ficheiro atualmente...",
+    "info_pending_servershutdown": "Desligamento do servidor pendente...",
+    "info_pending_appinfo": "Carregando...",
+
+
+    "server_info_tokenmismatch": "Incompatibilidade de token de servidor",
+    "server_info_shutdownfailed": "Falha ao desligar servidor.\nCódigo HTTP: ",
+    "server_info_gone": "Servidor desaparecido: ",
+
+
+    "panel_title": "Sobre...",
+
+    "panel_packageinfofail": "Erro",
+
+    "panel_card_opensource_title": "Código aberto",
+    "panel_card_opensource_subtitle": "O código-fonte deste aplicativo pode ser encontrado no GitHub.",
+
+    "panel_card_donate_title": "Doar",
+    "panel_card_donate_subtitle": "Achou o aplicativo útil? Sinta-se à vontade para jogar um pouco de café meu caminho."
+}

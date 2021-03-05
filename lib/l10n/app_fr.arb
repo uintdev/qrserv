@@ -1,0 +1,67 @@
+{
+    "@@locale": "fr",
+
+    "page_landing_label": "Sélectionner fichier",
+    "page_landing_msg": "Sélectionnez un fichier à partager...",
+
+    "page_info_noconnection_label": "Pas de connection",
+    "page_info_noconnection_msg": "Connectez-vous à un réseau et réessayez.",
+
+    "page_info_snapshoterror_label": "Erreur",
+    "page_info_snapshoterror_msg": "Erreur lors de la collecte des informations réseau.",
+
+    "page_info_fileremoved_label": "Fichier supprimé",
+    "page_info_fileremoved_msg": "Le fichier sélectionné a été supprimé.",
+
+    "page_info_permissiondenied_label": "Erreur",
+    "page_info_permissiondenied_msg": "L'autorisation d'entreposage a été refusée.",
+
+    "page_info_portinuse_label": "Erreur",
+    "page_info_portinuse_msg": "Serveur a essayé de démarrer avec port déjà lié.",
+
+    "page_info_fallback_label": "Erreur",
+    "page_info_fallback_msg": "Une erreur est survenue.\nCode: ",
+
+    "page_imported_file": "Ficher",
+    "page_imported_size": "Taille",
+    "page_imported_decimalseparator": ",",
+
+    "page_imported_sizesymbol_b": "O",
+    "page_imported_sizesymbol_kb": "Ko",
+    "page_imported_sizesymbol_mb": "Mo",
+    "page_imported_sizesymbol_gb": "Go",
+    "page_imported_sizesymbol_tb": "To",
+
+
+    "fab_shutdownserver_label": "Arrêter le serveur",
+    "fab_selectfile_label": "Sélectionner fichier",
+
+
+    "info_exception_statusbar": "Échec de la modification de la couleur de la barre d'état: ",
+    "info_exception_navigationbar": "Échec de la modification de la couleur de la barre de navigation: ",
+    "info_exception_fileselection": "Échec de la sélection du fichier: ",
+    "info_exception_shutdownfailed": "Échec de l'arrêt du serveur.",
+    "info_exception_fileremoval": "Échec de la suppression du fichier mis en cache: ",
+    "info_exception_portinuse": "Error port déjà lié: ",
+    "info_exception_linkopenfailed": "Impossible d'ouvrir le lien",
+
+    "info_pending_fileprocessing": "Fichier en cours de traitement...",
+    "info_pending_servershutdown": "Arrêt du serveur en attente...",
+    "info_pending_appinfo": "Chargement...",
+
+
+    "server_info_tokenmismatch": "Jeton de serveur est invalide",
+    "server_info_shutdownfailed": "Échec de l'arrêt du serveur.\nHTTP code: ",
+    "server_info_gone": "Serveur est parti: ",
+
+
+    "panel_title": "À propos de...",
+
+    "panel_packageinfofail": "Erreur",
+
+    "panel_card_opensource_title": "Open source",
+    "panel_card_opensource_subtitle": "Le code source de cette application est disponible sur GitHub.",
+
+    "panel_card_donate_title": "Faire un don",
+    "panel_card_donate_subtitle": "Vous avez trouvé l'application utile? N'hésitez pas à jeter du café à ma façon."
+}

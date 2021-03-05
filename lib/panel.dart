@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Panel {
   // URL launch management
-  _launchURL(String url) async {
+  _launchURL(String url, BuildContext context) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      showToast(translate('info.exception.linkopenfailed.msg'));
+      showToast(AppLocalizations.of(context).info_exception_linkopenfailed);
     }
   }
 
@@ -40,7 +40,7 @@ class Panel {
         title: Text(title),
         subtitle: Text(subtitle),
         onTap: () {
-          _launchURL(url);
+          _launchURL(url, context);
         },
       ),
     );
@@ -84,7 +84,7 @@ class Panel {
         String version = '';
 
         if (snapshot.hasError) {
-          packageInfo = translate('panel.packageinfofail.msg');
+          packageInfo = AppLocalizations.of(context).panel_packageinfofail;
         } else if (snapshot.hasData) {
           if (snapshot.data == null) {
             appName = '(null)';
@@ -95,7 +95,7 @@ class Panel {
           }
           packageInfo = '$appName v$version';
         } else {
-          packageInfo = translate('info.pending.appinfo.msg');
+          packageInfo = AppLocalizations.of(context).info_pending_appinfo;
         }
 
         return MediaQuery.removePadding(
@@ -112,7 +112,7 @@ class Panel {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    translate('panel.title.msg'),
+                    AppLocalizations.of(context).panel_title,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 24.0,
@@ -140,8 +140,8 @@ class Panel {
               ),
               cardClickable(
                 Icons.code,
-                translate('panel.card.opensource.title'),
-                translate('panel.card.opensource.subtitle'),
+                AppLocalizations.of(context).panel_card_opensource_title,
+                AppLocalizations.of(context).panel_card_opensource_subtitle,
                 'https://github.com/uintdev/qrserv',
                 context,
               ),
@@ -150,8 +150,8 @@ class Panel {
               ),
               cardClickable(
                 Icons.local_cafe,
-                translate('panel.card.donate.title'),
-                translate('panel.card.donate.subtitle'),
+                AppLocalizations.of(context).panel_card_donate_title,
+                AppLocalizations.of(context).panel_card_donate_subtitle,
                 'https://ko-fi.com/uintdev',
                 context,
               ),

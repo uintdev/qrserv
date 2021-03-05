@@ -127,13 +127,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_device_locale:
-    dependency: transitive
-    description:
-      name: flutter_device_locale
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -163,13 +156,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_translate:
-    dependency: "direct main"
-    description:
-      name: flutter_translate
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.6.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -200,7 +186,7 @@ packages:
     source: sdk
     version: "0.0.0"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"
