@@ -26,7 +26,7 @@ dependencies:
   path_provider: ^1.6.27
   # ns not available -- could bundle it instead
   filesize: ^1.0.4
-  # [qr_flutter] recently got ns but has yet to go on pub
+  # [qr_flutter] has a merge request with ns but not merged
   #! Blocking !
   qr_flutter: ^3.1.0
   watcher: ^0.9.7+15
