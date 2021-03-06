@@ -24,6 +24,7 @@ dependencies:
     git:
       url: git://github.com/uintdev/file_picker_cross.git
   path_provider: ^1.6.27
+  # ns not available -- could bundle it instead
   filesize: ^1.0.4
   # [qr_flutter] recently got ns but has yet to go on pub
   #! Blocking !
