@@ -15,18 +15,23 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
 
-
+  # ns in general is unavailable for dependency
+  #! Blocking !
   sliding_up_panel: ^1.0.2
   ##file_picker_cross: ^4.2.7
+  # Master branch on original has untested ns
   file_picker_cross:
     git:
       url: git://github.com/uintdev/file_picker_cross.git
   path_provider: ^1.6.27
   filesize: ^1.0.4
+  # [qr_flutter] recently got ns but has yet to go on pub
+  #! Blocking !
   qr_flutter: ^3.1.0
   watcher: ^0.9.7+15
   package_info_plus: ^0.6.3
   url_launcher: ^5.7.10
+  # Use [flutter_statusbarcolor_ns] instead
   flutter_statusbarcolor: ^0.2.3
   auto_size_text: ^2.1.0
   oktoast: ^2.3.2
