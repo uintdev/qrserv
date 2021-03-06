@@ -105,13 +105,13 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.6"
+    version: "2.1.7"
   file_picker_cross:
     dependency: "direct main"
     description:
       path: "."
       ref: HEAD
-      resolved-ref: f7cede234e5093902e157f991a54536f2b23f0b3
+      resolved-ref: f2e1d267d930e32dbcc4b41934188beb7e5a0704
       url: "git://github.com/uintdev/file_picker_cross.git"
     source: git
     version: "4.2.7"
@@ -324,7 +324,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.0"
+    version: "1.11.0"
   platform:
     dependency: transitive
     description:
@@ -345,7 +345,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety.2"
+    version: "1.0.3"
   process:
     dependency: transitive
     description:
@@ -531,7 +531,7 @@ packages:
     description:
       path: "plugins/window_size"
       ref: HEAD
-      resolved-ref: "405e6c5476fbdfd3859cf2f8570b21afb692ea3a"
+      resolved-ref: "7812516a5c1fc8ef379e244106953a2b534432b9"
       url: "git://github.com/google/flutter-desktop-embedding.git"
     source: git
     version: "0.1.0"
