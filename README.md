@@ -2,7 +2,8 @@
 
 **NOTE:** THIS IS PRE-RELEASE SOFTWARE. PLEASE WAIT FOR IT TO BE FINALISED BEFORE USE (ETA: WITHIN THIS MONTH). OFFICIALLY COMPILED BUILDS ARE UNAVAILABLE FOR PUBLIC DURING THIS TIME.
 
-**UPDATE 2:** After some time trying to prepare the application for null safety, the unusual issue seemed to had been corrected. It should be ready soon as I work on helping sort out the null-safety migrations for a few required packages.
+**UPDATE 2:** After some time trying to prepare the app for null-safety, the unusual issue seemed to had been corrected. It should be ready soon as I work on helping sort out the null-safety migrations for a few required packages.
+
 **UPDATE:** Due to a bug in the initial release of Flutter 2, an unknown component of the project is causing builds to fail regardless of the target platform. This is being looked into and will meanwhile further delay the release.
 
 ![Banner with app icon, app name 'QRServ' followed by 'transfer files with ease'](docs/banner/banner.png)
