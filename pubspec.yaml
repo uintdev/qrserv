@@ -3,10 +3,10 @@ description: Transfer files with ease over a network.
 
 publish_to: 'none'
 
-version: 0.9.0+2
+version: 0.9.5
 
 environment:
-  sdk: ">=2.9.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -15,31 +15,40 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
 
-  # ns in general is unavailable for dependency
-  #! Blocking !
-  sliding_up_panel: ^1.0.2
+  # To be merged https://github.com/akshathjain/sliding_up_panel/pull/230
+  ##sliding_up_panel: ^1.0.2
+  sliding_up_panel:
+    git:
+      url: https://github.com/uintdev/sliding_up_panel.git
+  
+  # To be merged...
   ##file_picker_cross: ^4.2.7
-  # Master branch on original has untested ns
   file_picker_cross:
     git:
-      url: git://github.com/uintdev/file_picker_cross.git
-  path_provider: ^1.6.27
-  # ns not available -- could bundle it instead
-  filesize: ^1.0.4
-  # [qr_flutter] has a merge request with ns but not merged
-  #! Blocking !
-  qr_flutter: ^3.1.0
-  watcher: ^0.9.7+15
-  package_info_plus: ^0.6.3
-  url_launcher: ^5.7.10
-  # Use [flutter_statusbarcolor_ns] instead
-  flutter_statusbarcolor: ^0.2.3
-  auto_size_text: ^2.1.0
-  oktoast: ^2.3.2
+      url: https://github.com/uintdev/file_picker_cross.git
+      #url: https://gitlab.com/testapp-system/file_picker_cross.git
+  
+  path_provider: ^2.0.1
+  filesize_ns: ^1.1.0
+
+  # [qr_flutter] has a pull request regarding ns but not merged
+  # https://github.com/theyakka/qr.flutter/pull/128
+  ##qr_flutter: ^3.1.0
+  qr_flutter:
+    git:
+      url: https://github.com/jonas-zebari/qr.flutter.git
+      ref: 5a9902ad0d7eb91521e5f6f5b4bd1c08e31098f1
+  
+  watcher: ^1.0.0
+  package_info_plus: ^1.0.0
+  url_launcher: ^6.0.2
+  flutter_statusbarcolor_ns: ^0.3.0-nullsafety
+  auto_size_text: ^3.0.0-nullsafety.0
+  oktoast: ^3.0.0
 
   window_size:
     git:
-      url: git://github.com/google/flutter-desktop-embedding.git
+      url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: 405e6c5476fbdfd3859cf2f8570b21afb692ea3a
 

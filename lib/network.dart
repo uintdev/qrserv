@@ -58,7 +58,7 @@ class Network {
       await Server().http().onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
-        showToast(AppLocalizations.of(context).info_exception_portinuse +
+        showToast(AppLocalizations.of(context)!.info_exception_portinuse +
             error.toString());
         Server.serverException = true;
       });
@@ -78,7 +78,10 @@ class Network {
   }
 
   // Determine IP version
-  bool checkIPV4(String ip) {
+  bool checkIPV4(String? ip) {
+
+    if (ip == null) return true;
+
     bool _versionType;
 
     RegExp regExp = new RegExp(

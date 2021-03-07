@@ -10,7 +10,7 @@ class Panel {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      showToast(AppLocalizations.of(context).info_exception_linkopenfailed);
+      showToast(AppLocalizations.of(context)!.info_exception_linkopenfailed);
     }
   }
 
@@ -84,18 +84,19 @@ class Panel {
         String version = '';
 
         if (snapshot.hasError) {
-          packageInfo = AppLocalizations.of(context).panel_packageinfofail;
+          packageInfo = AppLocalizations.of(context)!.panel_packageinfofail;
         } else if (snapshot.hasData) {
-          if (snapshot.data == null) {
-            appName = '(null)';
-            version = '(null)';
+          if (snapshot.data?.appName == null ||
+              snapshot.data?.version == null) {
+            appName = '(unknown)';
+            version = '(unknown)';
           } else {
-            appName = snapshot.data.appName;
-            version = snapshot.data.version;
+            appName = snapshot.data!.appName;
+            version = snapshot.data!.version;
           }
           packageInfo = '$appName v$version';
         } else {
-          packageInfo = AppLocalizations.of(context).info_pending_appinfo;
+          packageInfo = AppLocalizations.of(context)!.info_pending_appinfo;
         }
 
         return MediaQuery.removePadding(
@@ -112,7 +113,7 @@ class Panel {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    AppLocalizations.of(context).panel_title,
+                    AppLocalizations.of(context)!.panel_title,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 24.0,
@@ -140,8 +141,8 @@ class Panel {
               ),
               cardClickable(
                 Icons.code,
-                AppLocalizations.of(context).panel_card_opensource_title,
-                AppLocalizations.of(context).panel_card_opensource_subtitle,
+                AppLocalizations.of(context)!.panel_card_opensource_title,
+                AppLocalizations.of(context)!.panel_card_opensource_subtitle,
                 'https://github.com/uintdev/qrserv',
                 context,
               ),
@@ -150,8 +151,8 @@ class Panel {
               ),
               cardClickable(
                 Icons.local_cafe,
-                AppLocalizations.of(context).panel_card_donate_title,
-                AppLocalizations.of(context).panel_card_donate_subtitle,
+                AppLocalizations.of(context)!.panel_card_donate_title,
+                AppLocalizations.of(context)!.panel_card_donate_subtitle,
                 'https://ko-fi.com/uintdev',
                 context,
               ),

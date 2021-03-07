@@ -113,17 +113,17 @@ class Server {
         // Server had shutdown successfully
       } else if (response.statusCode == 401) {
         // Provided token did not match
-        showToast(AppLocalizations.of(context).server_info_tokenmismatch);
+        showToast(AppLocalizations.of(context)!.server_info_tokenmismatch);
       } else {
         // Unhandled HTTP code (misc)
-        showToast(AppLocalizations.of(context).server_info_shutdownfailed +
+        showToast(AppLocalizations.of(context)!.server_info_shutdownfailed +
             response.statusCode.toString());
       }
       serverPoweringDown = false;
     }).onError((error, _) {
       // Server not found, so probably already gone
       showToast(
-          AppLocalizations.of(context).server_info_gone + error.toString());
+          AppLocalizations.of(context)!.server_info_gone + error.toString());
       serverRunning = false;
       serverPoweringDown = false;
     });

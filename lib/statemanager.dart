@@ -3,7 +3,7 @@ import 'dart:io';
 import 'filepicker.dart';
 import 'server.dart';
 import 'network.dart';
-import 'package:filesize/filesize.dart';
+import 'package:filesize_ns/filesize_ns.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -60,13 +60,13 @@ class StateManager extends State<StateManagerPage> {
                     color: Colors.white,
                     size: 80.0,
                     semanticLabel:
-                        AppLocalizations.of(context).page_landing_label,
+                        AppLocalizations.of(context)!.page_landing_label,
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   AutoSizeText(
-                    AppLocalizations.of(context).page_landing_msg,
+                    AppLocalizations.of(context)!.page_landing_msg,
                     style: TextStyle(fontSize: 15.5),
                     textAlign: TextAlign.center,
                     minFontSize: 14,
@@ -125,8 +125,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.signal_wifi_off,
-            'label': AppLocalizations.of(context).page_info_noconnection_label,
-            'msg': AppLocalizations.of(context).page_info_noconnection_msg,
+            'label': AppLocalizations.of(context)!.page_info_noconnection_label,
+            'msg': AppLocalizations.of(context)!.page_info_noconnection_msg,
           };
         }
         break;
@@ -136,8 +136,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': AppLocalizations.of(context).page_info_snapshoterror_label,
-            'msg': AppLocalizations.of(context).page_info_snapshoterror_msg,
+            'label': AppLocalizations.of(context)!.page_info_snapshoterror_label,
+            'msg': AppLocalizations.of(context)!.page_info_snapshoterror_msg,
           };
         }
         break;
@@ -147,8 +147,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.block,
-            'label': AppLocalizations.of(context).page_info_fileremoved_label,
-            'msg': AppLocalizations.of(context).page_info_fileremoved_msg,
+            'label': AppLocalizations.of(context)!.page_info_fileremoved_label,
+            'msg': AppLocalizations.of(context)!.page_info_fileremoved_msg,
           };
         }
         break;
@@ -159,8 +159,8 @@ class StateManager extends State<StateManagerPage> {
           _msgInfo = {
             'icon': Icons.error,
             'label':
-                AppLocalizations.of(context).page_info_permissiondenied_label,
-            'msg': AppLocalizations.of(context).page_info_permissiondenied_msg,
+                AppLocalizations.of(context)!.page_info_permissiondenied_label,
+            'msg': AppLocalizations.of(context)!.page_info_permissiondenied_msg,
           };
         }
         break;
@@ -170,8 +170,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': AppLocalizations.of(context).page_info_portinuse_label,
-            'msg': AppLocalizations.of(context).page_info_portinuse_msg,
+            'label': AppLocalizations.of(context)!.page_info_portinuse_label,
+            'msg': AppLocalizations.of(context)!.page_info_portinuse_msg,
           };
         }
         break;
@@ -180,8 +180,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': AppLocalizations.of(context).page_info_fallback_label,
-            'msg': AppLocalizations.of(context).page_info_fallback_msg +
+            'label': AppLocalizations.of(context)!.page_info_fallback_label,
+            'msg': AppLocalizations.of(context)!.page_info_fallback_msg +
                 type.toString(),
           };
         }
@@ -228,7 +228,7 @@ class StateManager extends State<StateManagerPage> {
 
   // Imported page
   String defaultIP = '';
-  String selectedIP = '';
+  String? selectedIP = '';
 
   Widget importedPage(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
@@ -247,25 +247,25 @@ class StateManager extends State<StateManagerPage> {
           // Human readable file size
           String _sizeHuman = filesize(_fileInfo['length'], 2);
           _sizeHuman = _sizeHuman.replaceAll(
-              'TB', AppLocalizations.of(context).page_imported_sizesymbol_tb);
+              'TB', AppLocalizations.of(context)!.page_imported_sizesymbol_tb);
           _sizeHuman = _sizeHuman.replaceAll(
-              'GB', AppLocalizations.of(context).page_imported_sizesymbol_gb);
+              'GB', AppLocalizations.of(context)!.page_imported_sizesymbol_gb);
           _sizeHuman = _sizeHuman.replaceAll(
-              'MB', AppLocalizations.of(context).page_imported_sizesymbol_mb);
+              'MB', AppLocalizations.of(context)!.page_imported_sizesymbol_mb);
           _sizeHuman = _sizeHuman.replaceAll(
-              'KB', AppLocalizations.of(context).page_imported_sizesymbol_kb);
+              'KB', AppLocalizations.of(context)!.page_imported_sizesymbol_kb);
           _sizeHuman = _sizeHuman.replaceAll(' B',
-              ' ' + AppLocalizations.of(context).page_imported_sizesymbol_b);
+              ' ' + AppLocalizations.of(context)!.page_imported_sizesymbol_b);
           _sizeHuman = _sizeHuman.replaceAll(
-              '.', AppLocalizations.of(context).page_imported_decimalseparator);
+              '.', AppLocalizations.of(context)!.page_imported_decimalseparator);
 
           // Only update on next full run or if selected IP is gone
-          if (!snapshot.data['interfaces'].contains(selectedIP.toString())) {
+          if (!snapshot.data!['interfaces'].contains(selectedIP.toString())) {
             // Use empty string if no initial IP address to choose from
-            if (snapshot.data['interfaces'].isEmpty) {
+            if (snapshot.data!['interfaces'].isEmpty) {
               defaultIP = '';
             } else {
-              defaultIP = snapshot.data['interfaces'][0];
+              defaultIP = snapshot.data!['interfaces'][0];
             }
 
             // If no interfaces available, return network error page
@@ -284,7 +284,7 @@ class StateManager extends State<StateManagerPage> {
             return msgPage(4);
           }
 
-          String _hostFormatted;
+          String? _hostFormatted;
 
           // Formatting for IPv6
           if (!Network().checkIPV4(selectedIP)) {
@@ -294,7 +294,7 @@ class StateManager extends State<StateManagerPage> {
           }
 
           String _hostName =
-              'http://$_hostFormatted:${snapshot.data['port'].toString()}/';
+              'http://$_hostFormatted:${snapshot.data!['port'].toString()}/';
 
           fileExists = Server().fileExists(_fileInfo['path']);
 
@@ -375,13 +375,13 @@ class StateManager extends State<StateManagerPage> {
                               isExpanded: true,
                               elevation: 4,
                               underline: SizedBox(),
-                              onChanged: (String newValue) {
+                              onChanged: (String? newValue) {
                                 setState(() {
-                                  selectedIP = newValue ?? '';
+                                  selectedIP = newValue;
                                 });
                               },
                               style: TextStyle(color: Colors.white),
-                              items: snapshot.data['interfaces']
+                              items: snapshot.data!['interfaces']
                                   .map<DropdownMenuItem<String>>(
                                       (String value) {
                                 return DropdownMenuItem<String>(
@@ -412,7 +412,7 @@ class StateManager extends State<StateManagerPage> {
                                       EdgeInsets.only(right: 10, bottom: 10),
                                   child: Center(
                                     child: Text(
-                                      AppLocalizations.of(context)
+                                      AppLocalizations.of(context)!
                                           .page_imported_file,
                                       style: TextStyle(fontSize: 14),
                                     ),
@@ -447,7 +447,7 @@ class StateManager extends State<StateManagerPage> {
                                   padding: EdgeInsets.only(right: 10),
                                   child: Center(
                                     child: Text(
-                                      AppLocalizations.of(context)
+                                      AppLocalizations.of(context)!
                                           .page_imported_size,
                                       style: TextStyle(fontSize: 14),
                                     ),

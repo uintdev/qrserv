@@ -28,7 +28,7 @@ class CacheManager {
       try {
         await cachePath.delete();
       } catch (e) {
-        showToast(AppLocalizations.of(context).info_exception_fileremoval +
+        showToast(AppLocalizations.of(context)!.info_exception_fileremoval +
             e.toString());
       }
     }

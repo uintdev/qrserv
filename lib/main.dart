@@ -9,7 +9,7 @@ import 'server.dart';
 import 'panel.dart';
 import 'package:window_size/window_size.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -36,7 +36,6 @@ class QRServ extends StatelessWidget {
     ]);
 
     // Clear cache on launch
-    // TODO: check if executes even after launch
     CacheManager().deleteCache(context);
 
     return OKToast(
@@ -56,7 +55,7 @@ class QRServ extends StatelessWidget {
 }
 
 class PageState extends StatefulWidget {
-  PageState({Key key}) : super(key: key);
+  PageState({Key? key}) : super(key: key);
 
   @override
   _Page createState() => _Page();
@@ -117,7 +116,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         _useWhiteNavigationBarForeground = false;
       }
     } on PlatformException catch (e) {
-      showToast(AppLocalizations.of(context).info_exception_statusbar +
+      showToast(AppLocalizations.of(context)!.info_exception_statusbar +
           e.toString());
     }
   }
@@ -126,7 +125,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     try {
       await FlutterStatusbarcolor.setNavigationBarColor(color, animate: true);
     } on PlatformException catch (e) {
-      showToast(AppLocalizations.of(context).info_exception_navigationbar +
+      showToast(AppLocalizations.of(context)!.info_exception_navigationbar +
           e.toString());
     }
   }
@@ -139,7 +138,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   void importFile() async {
     // Prevent further execution if still loading
     if (_actionButtonLoading) {
-      showToast(AppLocalizations.of(context).info_pending_fileprocessing);
+      showToast(AppLocalizations.of(context)!.info_pending_fileprocessing);
       return;
     }
 
@@ -158,7 +157,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         });
       }
     }).onError((error, _) {
-      String _exceptionData = error.reason();
+      String _exceptionData = error.toString();
+
+      print(_exceptionData);
 
       if (_exceptionData == 'read_external_storage_denied') {
         // System denied storage access
@@ -169,7 +170,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // User cancelled selection...
       } else {
         // Unknown exception -- inform user
-        showToast(AppLocalizations.of(context).info_exception_fileselection +
+        showToast(AppLocalizations.of(context)!.info_exception_fileselection +
             _exceptionData);
       }
       // Revert FAB state
@@ -187,7 +188,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         });
         CacheManager().deleteCache(context);
       } else {
-        showToast(AppLocalizations.of(context).info_exception_shutdownfailed);
+        showToast(AppLocalizations.of(context)!.info_exception_shutdownfailed);
       }
     });
   }
@@ -277,7 +278,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                                 !Server.serverPoweringDown) {
                               shutdownFAB();
                             } else {
-                              showToast(AppLocalizations.of(context)
+                              showToast(AppLocalizations.of(context)!
                                   .info_pending_servershutdown);
                             }
                           },
@@ -285,7 +286,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                             Icons.power_settings_new,
                             color: Colors.white,
                             size: 22.5,
-                            semanticLabel: AppLocalizations.of(context)
+                            semanticLabel: AppLocalizations.of(context)!
                                 .fab_shutdownserver_label,
                           ),
                         ),
@@ -308,7 +309,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                             Icons.insert_drive_file,
                             color: Colors.white,
                             size: 20.0,
-                            semanticLabel: AppLocalizations.of(context)
+                            semanticLabel: AppLocalizations.of(context)!
                                 .fab_selectfile_label,
                           ),
                   ),
