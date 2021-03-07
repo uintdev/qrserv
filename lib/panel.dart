@@ -86,14 +86,8 @@ class Panel {
         if (snapshot.hasError) {
           packageInfo = AppLocalizations.of(context)!.panel_packageinfofail;
         } else if (snapshot.hasData) {
-          if (snapshot.data?.appName == null ||
-              snapshot.data?.version == null) {
-            appName = '(unknown)';
-            version = '(unknown)';
-          } else {
-            appName = snapshot.data!.appName;
-            version = snapshot.data!.version;
-          }
+          appName = snapshot.data?.appName ?? '(unknown)';
+          version = snapshot.data?.version ?? '(unknown)';
           packageInfo = '$appName v$version';
         } else {
           packageInfo = AppLocalizations.of(context)!.info_pending_appinfo;
