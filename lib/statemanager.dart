@@ -112,7 +112,7 @@ class StateManager extends State<StateManagerPage> {
   }
 
   // Error pages
-  Widget msgPage(int type) {
+  Widget msgPage(int type, BuildContext context) {
     Map _msgInfo;
 
     // Reset state bypass
@@ -235,7 +235,7 @@ class StateManager extends State<StateManagerPage> {
       future: Network().fetchInterfaces(context),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
-          return msgPage(1);
+          return msgPage(1, context);
         } else if (snapshot.hasData && interfaceUpdate ||
             snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
@@ -271,7 +271,7 @@ class StateManager extends State<StateManagerPage> {
             // If no interfaces available, return network error page
             if (defaultIP == '') {
               Server().shutdownServer(context);
-              return msgPage(0);
+              return msgPage(0, context);
             }
 
             // Set default IP
@@ -281,7 +281,7 @@ class StateManager extends State<StateManagerPage> {
           // Check if server exception occurred
           if (Server.serverException) {
             Server.serverException = false;
-            return msgPage(4);
+            return msgPage(4, context);
           }
 
           String? _hostFormatted;
@@ -299,7 +299,7 @@ class StateManager extends State<StateManagerPage> {
           fileExists = Server().fileExists(_fileInfo['path']);
 
           if (!fileExists) {
-            return msgPage(2);
+            return msgPage(2, context);
           }
 
           // File monitoring

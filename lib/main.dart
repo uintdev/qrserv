@@ -159,12 +159,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     }).onError((error, _) {
       String _exceptionData = error.toString();
 
-      print(_exceptionData);
-
       if (_exceptionData == 'read_external_storage_denied') {
         // System denied storage access
         setState(() {
-          _stateView = StateManager().msgPage(3);
+          _stateView = StateManager().msgPage(3, context);
         });
       } else if (_exceptionData == 'selection_canceled') {
         // User cancelled selection...
