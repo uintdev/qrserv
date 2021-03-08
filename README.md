@@ -38,6 +38,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
     - Spanish (Español)
     - Portuguese (Português) 
     - Hungarian (Magyar)
+    - Polish (Polski)
 
 ## Releases
 
@@ -74,6 +75,7 @@ The '[MIT license](LICENSE)' is used for this project.
 
 ## Credits
 
-| User                                        | Contribution          |
-| ------------------------------------------- | --------------------- |
-| [miklosakos](https://github.com/miklosakos) | Hungarian translation |
+| User                                             | Contribution          |
+| ------------------------------------------------ | --------------------- |
+| [miklosakos](https://github.com/miklosakos)      | Hungarian translation |
+| [FurryFan2003](https://twitter.com/FurryFan2003) | Polish translation    |
