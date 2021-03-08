@@ -97,7 +97,7 @@ packages:
     description:
       path: "plugins/file_chooser"
       ref: HEAD
-      resolved-ref: "3e57266ca324f52837e764c17bbfaca018a338c9"
+      resolved-ref: "6d2a672df02a9882550504ce2df2be71c0d968be"
       url: "https://github.com/uintdev/file_chooser.git"
     source: git
     version: "1.0.0"
@@ -113,7 +113,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6701fefdd996b84ef96ceb13b683cf2eeae3bf9e"
+      resolved-ref: a2fce7ac59d65fb95869530722fe87c52be35794
       url: "https://github.com/uintdev/file_picker_cross.git"
     source: git
     version: "4.2.9"
