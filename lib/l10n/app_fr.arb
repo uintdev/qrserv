@@ -4,7 +4,7 @@
     "page_landing_label": "Sélectionner fichier",
     "page_landing_msg": "Sélectionnez un fichier à partager...",
 
-    "page_info_noconnection_label": "Pas de connection",
+    "page_info_noconnection_label": "Pas de connexion réseau",
     "page_info_noconnection_msg": "Connectez-vous à un réseau et réessayez.",
 
     "page_info_snapshoterror_label": "Erreur",

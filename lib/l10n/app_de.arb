@@ -4,7 +4,7 @@
     "page_landing_label": "Datei auswählen",
     "page_landing_msg": "Wählen Sie eine Datei zum Teilen aus...",
 
-    "page_info_noconnection_label": "Keine Verbindung",
+    "page_info_noconnection_label": "Keine Netzwerk Verbindung",
     "page_info_noconnection_msg": "Verbinden Sie sich mit einem Netzwerk und versuchen Sie es erneut.",
 
     "page_info_snapshoterror_label": "Error",

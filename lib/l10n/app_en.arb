@@ -4,7 +4,7 @@
     "page_landing_label": "Select file",
     "page_landing_msg": "Select a file to share...",
 
-    "page_info_noconnection_label": "No connection",
+    "page_info_noconnection_label": "No network connection",
     "page_info_noconnection_msg": "Connect to a network and try again.",
 
     "page_info_snapshoterror_label": "Error",

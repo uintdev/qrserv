@@ -4,7 +4,7 @@
     "page_landing_label": "Válassz fájlt",
     "page_landing_msg": "Válassz egy fájlt a megosztáshoz...",
 
-    "page_info_noconnection_label": "Nincs internetkapcsolat",
+    "page_info_noconnection_label": "Nincs hálózati kapcsolat",
     "page_info_noconnection_msg": "Ellenőrizd a hálózatot, és próbáld újra.",
 
     "page_info_snapshoterror_label": "Hiba",
