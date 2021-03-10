@@ -224,15 +224,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           ]),
           child: AppBar(
             elevation: 0,
-            title:  Padding(
+            textTheme: Theme.of(context).textTheme,
+            title: Padding(
               padding: EdgeInsets.only(left: 5),
-              child: Text(
-                'QRServ',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Poppins'
-                ),
-              ),
+              child: Text('QRServ'),
             ),
           ),
         )

@@ -13,6 +13,10 @@ class FlutterDark {
       indicatorColor: Color.fromRGBO(91, 93, 213, 1),
       accentColor: Color.fromRGBO(91, 93, 213, 1),
       textTheme: TextTheme(
+        headline6: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16,
+        ),
         bodyText2: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 13.5,
