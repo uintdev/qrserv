@@ -201,7 +201,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     }
 
     // Height of panel when fully expanded
-    _panelHeightOpen = 460;
+    _panelHeightOpen = 480;
 
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
@@ -210,10 +210,13 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       extendBodyBehindAppBar: true,
 
       appBar: AppBar(
-        title: Text(
-          'QRServ',
-          style: TextStyle(
-            fontSize: 18,
+        title: Padding(
+          padding: EdgeInsets.only(left: 5),
+          child: Text(
+            'QRServ',
+            style: TextStyle(
+              fontSize: 16,
+            ),
           ),
         ),
         backgroundColor: Theme.of(context).primaryColor,
@@ -228,8 +231,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             boxShadow: kElevationToShadow[3],
             color: Theme.of(context).bottomAppBarColor,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
             ),
             onPanelSlide: (double pos) => setState(() {
               _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +

@@ -37,8 +37,18 @@ class Panel {
             ),
           ],
         ),
-        title: Text(title),
-        subtitle: Text(subtitle),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 14.8,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            fontSize: 12,
+          ),
+        ),
         onTap: () {
           _launchURL(url, context);
         },
@@ -98,7 +108,7 @@ class Panel {
           removeTop: true,
           child: ListView(
             controller: sc,
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+            padding: const EdgeInsets.only(left: 30.0, right: 30.0),
             children: <Widget>[
               SizedBox(
                 height: 70.0,
@@ -110,7 +120,7 @@ class Panel {
                     AppLocalizations.of(context)!.panel_title,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
-                      fontSize: 24.0,
+                      fontSize: 28.0,
                     ),
                   ),
                 ],
@@ -125,7 +135,7 @@ class Panel {
                     packageInfo,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
-                      fontSize: 12.3,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -141,7 +151,7 @@ class Panel {
                 context,
               ),
               SizedBox(
-                height: 5.0,
+                height: 8.0,
               ),
               cardClickable(
                 Icons.local_cafe,

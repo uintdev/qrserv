@@ -67,9 +67,8 @@ class StateManager extends State<StateManagerPage> {
                   ),
                   AutoSizeText(
                     AppLocalizations.of(context)!.page_landing_msg,
-                    style: TextStyle(fontSize: 15.5),
                     textAlign: TextAlign.center,
-                    minFontSize: 14,
+                    minFontSize: 11,
                   ),
                 ],
               ),
@@ -213,9 +212,9 @@ class StateManager extends State<StateManagerPage> {
                   ),
                   AutoSizeText(
                     _msgInfo['msg'],
-                    style: TextStyle(fontSize: 15.5),
+                    style: TextStyle(fontSize: 13),
                     textAlign: TextAlign.center,
-                    minFontSize: 14,
+                    minFontSize: 11,
                   ),
                 ],
               ),
@@ -344,7 +343,6 @@ class StateManager extends State<StateManagerPage> {
               SizedBox(height: 25),
               Text(
                 _hostName,
-                style: TextStyle(fontSize: 15),
               ),
               SizedBox(height: 25),
               ConstrainedBox(
@@ -380,7 +378,10 @@ class StateManager extends State<StateManagerPage> {
                                   selectedIP = newValue;
                                 });
                               },
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 13.5,
+                              ),
                               items: snapshot.data!['interfaces']
                                   .map<DropdownMenuItem<String>>(
                                       (String value) {
@@ -414,7 +415,7 @@ class StateManager extends State<StateManagerPage> {
                                     child: Text(
                                       AppLocalizations.of(context)!
                                           .page_imported_file,
-                                      style: TextStyle(fontSize: 14),
+                                      style: TextStyle(fontSize: 13),
                                     ),
                                   ),
                                 ),
@@ -426,14 +427,13 @@ class StateManager extends State<StateManagerPage> {
                                       showDuration: Duration(seconds: 5),
                                       padding: EdgeInsets.all(10),
                                       textStyle: TextStyle(
-                                        fontSize: 14,
                                         color: Colors.black,
                                       ),
                                       child: Center(
                                         child: AutoSizeText(
                                           _fileInfo['name'],
-                                          style: TextStyle(fontSize: 14),
-                                          minFontSize: 14,
+                                          style: TextStyle(fontSize: 13),
+                                          minFontSize: 11,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                         ),
@@ -449,19 +449,16 @@ class StateManager extends State<StateManagerPage> {
                                     child: Text(
                                       AppLocalizations.of(context)!
                                           .page_imported_size,
-                                      style: TextStyle(fontSize: 14),
+                                      style: TextStyle(fontSize: 13),
                                     ),
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 10),
                                   child: Center(
-                                    child: AutoSizeText(
+                                    child: Text(
                                       _sizeHuman,
-                                      style: TextStyle(fontSize: 14),
-                                      minFontSize: 14,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
+                                      style: TextStyle(fontSize: 13),
                                     ),
                                   ),
                                 ),
