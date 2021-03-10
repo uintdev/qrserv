@@ -378,10 +378,7 @@ class StateManager extends State<StateManagerPage> {
                                   selectedIP = newValue;
                                 });
                               },
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 13.5,
-                              ),
+                              style: Theme.of(context).textTheme.bodyText2,
                               items: snapshot.data!['interfaces']
                                   .map<DropdownMenuItem<String>>(
                                       (String value) {
