@@ -135,7 +135,8 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label': AppLocalizations.of(context)!.page_info_snapshoterror_label,
+            'label':
+                AppLocalizations.of(context)!.page_info_snapshoterror_label,
             'msg': AppLocalizations.of(context)!.page_info_snapshoterror_msg,
           };
         }
@@ -255,8 +256,8 @@ class StateManager extends State<StateManagerPage> {
               'KB', AppLocalizations.of(context)!.page_imported_sizesymbol_kb);
           _sizeHuman = _sizeHuman.replaceAll(' B',
               ' ' + AppLocalizations.of(context)!.page_imported_sizesymbol_b);
-          _sizeHuman = _sizeHuman.replaceAll(
-              '.', AppLocalizations.of(context)!.page_imported_decimalseparator);
+          _sizeHuman = _sizeHuman.replaceAll('.',
+              AppLocalizations.of(context)!.page_imported_decimalseparator);
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data!['interfaces'].contains(selectedIP.toString())) {

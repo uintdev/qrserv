@@ -197,7 +197,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Apply bar colours
       changeStatusColor(Theme.of(context).primaryColor);
       changeNavigationColor(Theme.of(context).bottomAppBarColor);
-      
+
       // Clear cache
       CacheManager().deleteCache(context);
     }
@@ -212,26 +212,25 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       extendBodyBehindAppBar: true,
 
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).primaryColor,
-              offset: Offset(0, 3),
-              spreadRadius: 25,
-              blurRadius: 15,
-            )
-          ]),
-          child: AppBar(
-            elevation: 0,
-            textTheme: Theme.of(context).textTheme,
-            title: Padding(
-              padding: EdgeInsets.only(left: 5),
-              child: Text('QRServ'),
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).primaryColor,
+                offset: Offset(0, 3),
+                spreadRadius: 25,
+                blurRadius: 15,
+              )
+            ]),
+            child: AppBar(
+              elevation: 0,
+              textTheme: Theme.of(context).textTheme,
+              title: Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text('QRServ'),
+              ),
             ),
-          ),
-        )
-      ),
+          )),
 
       // Body here...
       body: Stack(
