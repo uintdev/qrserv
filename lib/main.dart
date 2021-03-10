@@ -218,6 +218,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             'QRServ',
             style: TextStyle(
               fontSize: 16,
+              fontFamily: 'Poppins'
             ),
           ),
         ),
