@@ -252,7 +252,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             maxHeight: _panelHeightOpen,
             minHeight: _panelHeightClosed,
             parallaxEnabled: true,
-            parallaxOffset: .50,
+            parallaxOffset: .5,
             panelBuilder: (sc) => Panel().panelInterface(sc, context),
             header: Panel().panelHeader(context),
 
