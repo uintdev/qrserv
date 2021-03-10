@@ -119,7 +119,6 @@ class Panel {
                   Text(
                     AppLocalizations.of(context)!.panel_title,
                     style: TextStyle(
-                      fontWeight: FontWeight.normal,
                       fontSize: 28.0,
                     ),
                   ),
