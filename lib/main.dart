@@ -35,9 +35,6 @@ class QRServ extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    // Clear cache on launch
-    CacheManager().deleteCache(context);
-
     return OKToast(
         // Toast properties
         position: ToastPosition.bottom,
@@ -193,11 +190,16 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // Apply bar colours
+    // Code to run on initial launch
     if (_initRun && !StateManager().isDesktop) {
       _initRun = false;
+
+      // Apply bar colours
       changeStatusColor(Theme.of(context).primaryColor);
       changeNavigationColor(Theme.of(context).bottomAppBarColor);
+      
+      // Clear cache
+      CacheManager().deleteCache(context);
     }
 
     // Height of panel when fully expanded
