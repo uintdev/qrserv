@@ -217,8 +217,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           decoration: BoxDecoration(boxShadow: [
             BoxShadow(
               color: Theme.of(context).primaryColor,
-              offset: Offset(0, 20),
-              blurRadius: 10,
+              offset: Offset(0, 3),
+              spreadRadius: 25,
+              blurRadius: 15,
             )
           ]),
           child: AppBar(
