@@ -203,7 +203,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     }
 
     // Height of panel when fully expanded
-    _panelHeightOpen = 480;
+    _panelHeightOpen = 500;
 
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
@@ -211,19 +211,30 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       extendBody: true,
       extendBodyBehindAppBar: true,
 
-      appBar: AppBar(
-        title: Padding(
-          padding: EdgeInsets.only(left: 5),
-          child: Text(
-            'QRServ',
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'Poppins'
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColor,
+              offset: Offset(0, 20),
+              blurRadius: 10,
+            )
+          ]),
+          child: AppBar(
+            elevation: 0,
+            title:  Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: Text(
+                'QRServ',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Poppins'
+                ),
+              ),
             ),
           ),
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
+        )
       ),
 
       // Body here...
@@ -245,7 +256,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             maxHeight: _panelHeightOpen,
             minHeight: _panelHeightClosed,
             parallaxEnabled: true,
-            parallaxOffset: .15,
+            parallaxOffset: .50,
             panelBuilder: (sc) => Panel().panelInterface(sc, context),
             header: Panel().panelHeader(context),
 
