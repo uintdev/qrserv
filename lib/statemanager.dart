@@ -380,7 +380,8 @@ class StateManager extends State<StateManagerPage> {
                                     child: ButtonTheme(
                                       alignedDropdown: true,
                                       shape: new RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(15.0),
+                                        borderRadius:
+                                            new BorderRadius.circular(15.0),
                                       ),
                                       child: DropdownButton<String>(
                                         dropdownColor:
@@ -394,8 +395,9 @@ class StateManager extends State<StateManagerPage> {
                                             selectedIP = newValue;
                                           });
                                         },
-                                        style:
-                                            Theme.of(context).textTheme.bodyText2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
                                         items: snapshot.data!['interfaces']
                                             .map<DropdownMenuItem<String>>(
                                                 (String value) {
@@ -452,7 +454,11 @@ class StateManager extends State<StateManagerPage> {
                                       !isDesktop ? Icons.share : Icons.copy,
                                       size: 17,
                                       color: Colors.white,
-                                      semanticLabel: !isDesktop ? AppLocalizations.of(context)!.page_imported_share_sheet_label : AppLocalizations.of(context)!.page_imported_share_clipboard_label,
+                                      semanticLabel: !isDesktop
+                                          ? AppLocalizations.of(context)!
+                                              .page_imported_share_sheet_label
+                                          : AppLocalizations.of(context)!
+                                              .page_imported_share_clipboard_label,
                                     ),
                                   ),
                                 ),
