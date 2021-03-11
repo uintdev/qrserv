@@ -342,7 +342,7 @@ class StateManager extends State<StateManagerPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 40),
               ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: 330,
