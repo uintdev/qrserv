@@ -240,8 +240,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             boxShadow: kElevationToShadow[3],
             color: Theme.of(context).bottomAppBarColor,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             ),
             onPanelSlide: (double pos) => setState(() {
               _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
