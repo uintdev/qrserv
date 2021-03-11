@@ -22,6 +22,8 @@
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "An error has occurred.\nCode: ",
 
+    "page_imported_share_sheet_label": "Share",
+    "page_imported_share_clipboard_label": "Copy",
     "page_imported_share_clipboard": "Copied",
 
     "page_imported_file": "File",

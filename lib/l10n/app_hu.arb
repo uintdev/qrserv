@@ -22,6 +22,8 @@
     "page_info_fallback_label": "Hiba",
     "page_info_fallback_msg": "Egy hiba történt.\nKód: ",
 
+    "page_imported_share_sheet_label": "Megosztás",
+    "page_imported_share_clipboard_label": "Másolás",
     "page_imported_share_clipboard": "Átmásolva",
 
     "page_imported_file": "Fájl",
