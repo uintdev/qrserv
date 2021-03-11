@@ -113,7 +113,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: a2fce7ac59d65fb95869530722fe87c52be35794
+      resolved-ref: f0cf1953b220d1aff70fb62cd5cdc2c9ad8b5a36
       url: "https://github.com/uintdev/file_picker_cross.git"
     source: git
     version: "4.2.9"
@@ -359,9 +359,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "5a9902ad0d7eb91521e5f6f5b4bd1c08e31098f1"
-      resolved-ref: "5a9902ad0d7eb91521e5f6f5b4bd1c08e31098f1"
-      url: "https://github.com/jonas-zebari/qr.flutter.git"
+      ref: "2f8c8b7b0aa3869f03a24f181724069c3f5ee6cd"
+      resolved-ref: "2f8c8b7b0aa3869f03a24f181724069c3f5ee6cd"
+      url: "https://github.com/fzyzcjy/qr.flutter.git"
     source: git
     version: "4.0.0"
   share:
