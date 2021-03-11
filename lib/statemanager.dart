@@ -410,8 +410,23 @@ class StateManager extends State<StateManagerPage> {
                                   width: 48,
                                   child: TextButton(
                                     style: ButtonStyle(
-                                      overlayColor: MaterialStateProperty.all(
-                                          Colors.white30),
+                                      overlayColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.focused)) {
+                                          return Colors.white12;
+                                        }
+                                        if (states
+                                            .contains(MaterialState.hovered)) {
+                                          return Colors.white24;
+                                        }
+                                        if (states
+                                            .contains(MaterialState.pressed)) {
+                                          return Colors.white30;
+                                        }
+                                        return Colors.white30;
+                                      }),
                                       shape: MaterialStateProperty.all(
                                         new RoundedRectangleBorder(
                                           borderRadius:
