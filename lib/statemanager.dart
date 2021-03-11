@@ -494,7 +494,9 @@ class StateManager extends State<StateManagerPage> {
                                   padding:
                                       EdgeInsets.only(left: 10, bottom: 10),
                                   child: Tooltip(
-                                      message: _fileInfo['name'],
+                                      message: !isDesktop
+                                          ? _fileInfo['name']
+                                          : _fileInfo['path'],
                                       showDuration: Duration(seconds: 5),
                                       padding: EdgeInsets.all(10),
                                       textStyle: TextStyle(
