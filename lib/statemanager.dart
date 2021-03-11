@@ -377,30 +377,36 @@ class StateManager extends State<StateManagerPage> {
                                   elevation: 2,
                                   child: Container(
                                     padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                    child: DropdownButton<String>(
-                                      dropdownColor:
-                                          Color.fromRGBO(58, 58, 58, 1),
-                                      value: selectedIP,
-                                      isExpanded: true,
-                                      elevation: 4,
-                                      underline: SizedBox(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedIP = newValue;
-                                        });
-                                      },
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                      items: snapshot.data!['interfaces']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Center(
-                                            child: Text(value),
-                                          ),
-                                        );
-                                      }).toList(),
+                                    child: ButtonTheme(
+                                      alignedDropdown: true,
+                                      shape: new RoundedRectangleBorder(
+                                        borderRadius: new BorderRadius.circular(15.0),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        dropdownColor:
+                                            Color.fromRGBO(58, 58, 58, 1),
+                                        value: selectedIP,
+                                        isExpanded: true,
+                                        elevation: 4,
+                                        underline: SizedBox(),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectedIP = newValue;
+                                          });
+                                        },
+                                        style:
+                                            Theme.of(context).textTheme.bodyText2,
+                                        items: snapshot.data!['interfaces']
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Center(
+                                              child: Text(value),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
                                     ),
                                   ),
                                 ),
