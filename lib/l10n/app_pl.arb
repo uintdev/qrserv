@@ -22,6 +22,8 @@
     "page_info_fallback_label": "Błąd",
     "page_info_fallback_msg": "Wystąpił nieuwzględniony błąd.\nKod: ",
 
+    "page_imported_share_clipboard": "Skopiowano",
+
     "page_imported_file": "Plik",
     "page_imported_size": "Rozmiar",
     "page_imported_decimalseparator": ",",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qrserv/sharemanager.dart';
 import 'dart:io';
 import 'filepicker.dart';
 import 'server.dart';
@@ -341,11 +342,7 @@ class StateManager extends State<StateManagerPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
-              Text(
-                _hostName,
-              ),
-              SizedBox(height: 25),
+              SizedBox(height: 30),
               ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: 330,
@@ -360,38 +357,86 @@ class StateManager extends State<StateManagerPage> {
                     padding: EdgeInsets.all(30),
                     child: Column(
                       children: <Widget>[
-                        Card(
-                          color: Color.fromRGBO(42, 42, 42, 1),
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(10.0),
-                          ),
-                          elevation: 2,
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                            child: DropdownButton<String>(
-                              dropdownColor: Color.fromRGBO(58, 58, 58, 1),
-                              value: selectedIP,
-                              isExpanded: true,
-                              elevation: 4,
-                              underline: SizedBox(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedIP = newValue;
-                                });
-                              },
-                              style: Theme.of(context).textTheme.bodyText2,
-                              items: snapshot.data!['interfaces']
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Center(
-                                    child: Text(value),
+                        Table(
+                          defaultVerticalAlignment:
+                              TableCellVerticalAlignment.middle,
+                          columnWidths: {
+                            0: FlexColumnWidth(15),
+                            1: FlexColumnWidth(0.5),
+                            2: FlexColumnWidth(3.8),
+                          },
+                          children: [
+                            TableRow(
+                              children: [
+                                Card(
+                                  color: Color.fromRGBO(42, 42, 42, 1),
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.0),
                                   ),
-                                );
-                              }).toList(),
+                                  elevation: 2,
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                    child: DropdownButton<String>(
+                                      dropdownColor:
+                                          Color.fromRGBO(58, 58, 58, 1),
+                                      value: selectedIP,
+                                      isExpanded: true,
+                                      elevation: 4,
+                                      underline: SizedBox(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedIP = newValue;
+                                        });
+                                      },
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                      items: snapshot.data!['interfaces']
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Center(
+                                            child: Text(value),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                SizedBox(
+                                  height: 48,
+                                  width: 48,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      overlayColor: MaterialStateProperty.all(
+                                          Colors.white30),
+                                      shape: MaterialStateProperty.all(
+                                        new RoundedRectangleBorder(
+                                          borderRadius:
+                                              new BorderRadius.circular(10.0),
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        Color.fromRGBO(42, 42, 42, 1),
+                                      ),
+                                      elevation: MaterialStateProperty.all(2),
+                                    ),
+                                    onPressed: () {
+                                      ShareManager().share(_hostName, context);
+                                    },
+                                    child: Icon(
+                                      !isDesktop ? Icons.share : Icons.copy,
+                                      size: 17,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                          ],
                         ),
                         SizedBox(
                           height: 20,

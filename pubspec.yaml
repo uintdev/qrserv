@@ -52,6 +52,8 @@ dependencies:
       path: plugins/window_size
       ref: 405e6c5476fbdfd3859cf2f8570b21afb692ea3a
 
+  share: ^2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

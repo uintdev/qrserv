@@ -22,6 +22,8 @@
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "Ein Fehler ist aufgetreten.\nCode: ",
 
+    "page_imported_share_clipboard": "Kopiert",
+
     "page_imported_file": "Datei",
     "page_imported_size": "Größe",
     "page_imported_decimalseparator": ",",
