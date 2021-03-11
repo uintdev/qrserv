@@ -452,6 +452,7 @@ class StateManager extends State<StateManagerPage> {
                                       !isDesktop ? Icons.share : Icons.copy,
                                       size: 17,
                                       color: Colors.white,
+                                      semanticLabel: !isDesktop ? AppLocalizations.of(context)!.page_imported_share_sheet_label : AppLocalizations.of(context)!.page_imported_share_clipboard_label,
                                     ),
                                   ),
                                 ),
