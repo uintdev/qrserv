@@ -1,22 +1,31 @@
 # QRServ
 
-**NOTE:** THIS IS PRE-RELEASE SOFTWARE. PLEASE WAIT FOR IT TO BE FINALISED BEFORE USE (ETA: WITHIN THIS MONTH). OFFICIALLY COMPILED BUILDS ARE UNAVAILABLE FOR PUBLIC DURING THIS TIME.
-
 ![Banner with app icon, app name 'QRServ' followed by 'transfer files with ease'](docs/banner/banner.png)
-
-Transfer files with ease over a network.
-
-[Play Store badge...]&nbsp;&nbsp;&nbsp;&nbsp;[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F33NTWK)
-
+<br>
+<p align="center">
+    Transfer files with ease over a network.
+    <br>
+    <br>
+    <a href="releases/latest" title="Latest release"><img src="https://img.shields.io/github/v/release/uintdev/qrserv" alt="Version"></a>
+    &nbsp;&nbsp;
+    <a href="LICENSE" title="License"><img src="https://img.shields.io/github/license/uintdev/qrserv" alt="License"></a>
+    <br>
+    <br>
+    <a href="https://play.google.com/store/apps/details?id=dev.uint.qrserv"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80"></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://ko-fi.com/uintdev" title="ko-fi"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Donate" height="80" width="300"></a>
+</p>
 <br>
 <details>
     <summary>Screenshots</summary>
     <br>
-    <img src="docs/screenshots/1.jpg" alt="Screenshot of app after selecting a file" height="450px">
-    &nbsp;&nbsp;
-    <img src="docs/screenshots/2.jpg" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="450px">
-    &nbsp;&nbsp;
-    <img src="docs/screenshots/3.jpg" alt="Screenshot of app after opening IP address list" height="450px">
+    <p align="center">
+        <img src="docs/screenshots/1.jpg" alt="Screenshot of app after selecting a file" height="420">
+        &nbsp;&nbsp;
+        <img src="docs/screenshots/2.jpg" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="420">
+        &nbsp;&nbsp;
+        <img src="docs/screenshots/3.jpg" alt="Screenshot of app after opening IP address list" height="420">
+    </p>
 </details>
 <br>
 
@@ -27,9 +36,9 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 ## Features
 
 - QR Code
+- Share / Copy to clipboard option
 - Various IP addresses from different network interfaces can be chosen
 - HTTP server uses an unused ("random") port
-- Animated user experience
 - Supports Android and Windows platforms
 - Supports various languages:
     - English
@@ -42,11 +51,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 
 ## Releases
 
-Android version is soon be made available on the Play Store...
-
-All builds are to be finalised not too long from now. Keep an eye out.
-
-~~Android and Windows builds can be found in the 'releases' section of this repository.~~
+Android and Windows builds can be found in the [releases](releases) section of this repository.
 
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B and vice versa.
 
@@ -56,7 +61,7 @@ Note: Android builds on GitHub will have a different certificate than builds on 
 
 If you wish to have debugging symbols for an app bundle release, ensure you have the Android NDK installed. You may need to specify the `ndk.dir` in the `local.properties` file.
 <br>
-However, if you do not plan to do any Play Store release, you may remove the `ndk` block from `android.defaultConfig` in the gradle build file.
+However, if you do not plan to do a Play Store release, you may remove the `ndk` block from `android.defaultConfig` in the gradle build file.
 
 ### Windows
 
@@ -66,16 +71,20 @@ Windows builds normally require `Visual C++ Redistributable for Visual Studio 20
 
 You could [package builds as a MSIX](https://pub.dev/packages/msix) but that is only practical if you plan to get or already have a code signing certificate.
 
-
 ## Licencing
 
-[Legal attribution soon goes here...]
+Google Play and the Google Play logo are trademarks of Google LLC.
 
-The '[MIT license](LICENSE)' is used for this project.
+Poppins (the font) is licenced under [OFL-1.1](fonts/OFL.txt).
 
-## Credits
+QRServ is licenced under the [MIT license](LICENSE).
 
-| User                                             | Contribution          |
-| ------------------------------------------------ | --------------------- |
-| [miklosakos](https://github.com/miklosakos)      | Hungarian translation |
-| [FurryFan2003](https://twitter.com/FurryFan2003) | Polish translation    |
+## Translators
+
+Thanks to the following people for helping out with language translation:
+
+| User                                             | Language(s) |
+| ------------------------------------------------ | ----------- |
+| [miklosakos](https://github.com/miklosakos)      | Hungarian   |
+| [FurryFan2003](https://twitter.com/FurryFan2003) | Polish      |
+| [utf-4096](https://github.com/utf-4096)          | French      |
