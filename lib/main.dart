@@ -19,7 +19,7 @@ void main() async {
   // Window information for desktop platforms
   if (StateManager().isDesktop) {
     setWindowTitle('QRServ');
-    setWindowMinSize(const Size(650, 1210));
+    setWindowMinSize(const Size(650, 1200));
     setWindowMaxSize(Size.infinite);
   }
 
