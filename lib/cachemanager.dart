@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CacheManager {
   Future<void> deleteCache(BuildContext context, [String file = ""]) async {

@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
-import 'filepicker.dart';
-import 'server.dart';
-import 'network.dart';
-import 'sharemanager.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:filesize_ns/filesize_ns.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'filepicker.dart';
+import 'server.dart';
+import 'network.dart';
+import 'sharemanager.dart';
 
 class StateManagerPage extends StatefulWidget {
   @override
