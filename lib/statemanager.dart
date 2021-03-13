@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:qrserv/sharemanager.dart';
 import 'dart:io';
 import 'filepicker.dart';
 import 'server.dart';
 import 'network.dart';
+import 'sharemanager.dart';
 import 'package:filesize_ns/filesize_ns.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
