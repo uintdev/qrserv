@@ -51,7 +51,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 
 ## Releases
 
-Android, Windows and Linux builds can be found in the [../../releases](releases) section of this repository.
+Android, Windows and Linux builds can be found in the [releases](../../releases) section of this repository.
 
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B and vice versa.
 
