@@ -46,13 +46,15 @@ class QRServ extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: FlutterDark.dark(ThemeData.dark()),
-          home: PageState(),
+          home: PageState(title: 'QRServ'),
         ));
   }
 }
 
 class PageState extends StatefulWidget {
-  PageState({Key? key}) : super(key: key);
+  PageState({Key? key, required this.title}) : super(key: key);
+
+  final String title;
 
   @override
   _Page createState() => _Page();
@@ -227,7 +229,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               textTheme: Theme.of(context).textTheme,
               title: Padding(
                 padding: EdgeInsets.only(left: 5),
-                child: Text('QRServ'),
+                child: Text(widget.title),
               ),
             ),
           )),
