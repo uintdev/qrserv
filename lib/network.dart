@@ -79,7 +79,6 @@ class Network {
 
   // Determine IP version
   bool checkIPV4(String? ip) {
-
     if (ip == null) return true;
 
     bool _versionType;
