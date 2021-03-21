@@ -45,20 +45,20 @@ class StateManager extends State<StateManagerPage> {
     return Column(
       children: <Widget>[
         Container(
-          constraints: BoxConstraints(maxWidth: 300),
+          constraints: const BoxConstraints(maxWidth: 300),
           child: Card(
-            color: Color.fromRGBO(34, 34, 34, 1),
-            shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(15.0),
+            color: const Color.fromRGBO(34, 34, 34, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
             ),
             elevation: 1,
             child: Container(
-              padding: EdgeInsets.all(40),
+              padding: const EdgeInsets.all(40),
               child: Column(
                 children: <Widget>[
                   Icon(
                     Icons.insert_drive_file,
-                    color: Colors.white,
+                    color: const Color.fromRGBO(255, 255, 255, 1.0),
                     size: 80.0,
                     semanticLabel:
                         AppLocalizations.of(context)!.page_landing_label,
@@ -85,15 +85,16 @@ class StateManager extends State<StateManagerPage> {
     return Column(
       children: <Widget>[
         Card(
-          color: Color.fromRGBO(34, 34, 34, 1),
-          shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(40.0),
+          color: const Color.fromRGBO(34, 34, 34, 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40.0),
           ),
           elevation: 1,
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  const Color.fromRGBO(255, 255, 255, 1.0)),
             ),
           ),
         ),
@@ -102,11 +103,12 @@ class StateManager extends State<StateManagerPage> {
   }
 
   Widget loadingIndicator() {
-    return SizedBox(
+    return const SizedBox(
       width: 30,
       height: 30,
       child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        valueColor: AlwaysStoppedAnimation<Color>(
+            const Color.fromRGBO(255, 255, 255, 1.0)),
       ),
     );
   }
@@ -192,29 +194,27 @@ class StateManager extends State<StateManagerPage> {
     return Column(
       children: <Widget>[
         Container(
-          constraints: BoxConstraints(maxWidth: 300),
+          constraints: const BoxConstraints(maxWidth: 300),
           child: Card(
-            color: Color.fromRGBO(34, 34, 34, 1),
-            shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(15.0),
+            color: const Color.fromRGBO(34, 34, 34, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
             ),
             elevation: 1,
             child: Container(
-              padding: EdgeInsets.all(40),
+              padding: const EdgeInsets.all(40),
               child: Column(
                 children: <Widget>[
                   Icon(
                     _msgInfo['icon'],
-                    color: Colors.white,
+                    color: const Color.fromRGBO(255, 255, 255, 1.0),
                     size: 80.0,
                     semanticLabel: _msgInfo['label'],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   AutoSizeText(
                     _msgInfo['msg'],
-                    style: TextStyle(fontSize: 13),
+                    style: const TextStyle(fontSize: 13),
                     textAlign: TextAlign.center,
                     minFontSize: 11,
                   ),
@@ -325,9 +325,9 @@ class StateManager extends State<StateManagerPage> {
           return Column(
             children: <Widget>[
               Card(
-                color: Color.fromRGBO(34, 34, 34, 1),
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(15),
+                color: const Color.fromRGBO(34, 34, 34, 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 elevation: 1,
                 child: ClipRRect(
@@ -336,60 +336,60 @@ class StateManager extends State<StateManagerPage> {
                     data: _hostName,
                     version: QrVersions.auto,
                     size: (MediaQuery.of(context).size.height * .23),
-                    backgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
+                    backgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
                     padding: EdgeInsets.all(
                         (MediaQuery.of(context).size.height * .029)),
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: 330,
                 ),
                 child: Card(
-                  color: Color.fromRGBO(34, 34, 34, 1),
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(15.0),
+                  color: const Color.fromRGBO(34, 34, 34, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                   elevation: 1,
                   child: Container(
-                    padding: EdgeInsets.all(30),
+                    padding: const EdgeInsets.all(30),
                     child: Column(
                       children: <Widget>[
                         Table(
                           defaultVerticalAlignment:
                               TableCellVerticalAlignment.middle,
                           columnWidths: {
-                            0: FlexColumnWidth(15),
-                            1: FlexColumnWidth(0.5),
-                            2: FlexColumnWidth(3.8),
+                            0: const FlexColumnWidth(15),
+                            1: const FlexColumnWidth(0.5),
+                            2: const FlexColumnWidth(3.8),
                           },
                           children: [
                             TableRow(
                               children: [
                                 Card(
-                                  color: Color.fromRGBO(42, 42, 42, 1),
-                                  shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(10.0),
+                                  color: const Color.fromRGBO(42, 42, 42, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   elevation: 2,
                                   child: Container(
-                                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(16, 0, 16, 0),
                                     child: ButtonTheme(
                                       alignedDropdown: true,
-                                      shape: new RoundedRectangleBorder(
+                                      shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(15.0),
+                                            BorderRadius.circular(15.0),
                                       ),
                                       child: DropdownButton<String>(
                                         dropdownColor:
-                                            Color.fromRGBO(58, 58, 58, 1),
+                                            const Color.fromRGBO(58, 58, 58, 1),
                                         value: selectedIP,
                                         isExpanded: true,
                                         elevation: 4,
-                                        underline: SizedBox(),
+                                        underline: const SizedBox(),
                                         onChanged: (String? newValue) {
                                           setState(() {
                                             selectedIP = newValue;
@@ -412,7 +412,7 @@ class StateManager extends State<StateManagerPage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 15),
+                                const SizedBox(width: 15),
                                 SizedBox(
                                   height: 48,
                                   width: 48,
@@ -436,14 +436,14 @@ class StateManager extends State<StateManagerPage> {
                                         return Colors.white30;
                                       }),
                                       shape: MaterialStateProperty.all(
-                                        new RoundedRectangleBorder(
+                                        RoundedRectangleBorder(
                                           borderRadius:
-                                              new BorderRadius.circular(10.0),
+                                              BorderRadius.circular(10.0),
                                         ),
                                       ),
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                        Color.fromRGBO(42, 42, 42, 1),
+                                        const Color.fromRGBO(42, 42, 42, 1),
                                       ),
                                       elevation: MaterialStateProperty.all(2),
                                     ),
@@ -453,7 +453,8 @@ class StateManager extends State<StateManagerPage> {
                                     child: Icon(
                                       !isDesktop ? Icons.share : Icons.copy,
                                       size: 17,
-                                      color: Colors.white,
+                                      color: const Color.fromRGBO(
+                                          255, 255, 255, 1.0),
                                       semanticLabel: !isDesktop
                                           ? AppLocalizations.of(context)!
                                               .page_imported_share_sheet_label
@@ -466,46 +467,45 @@ class StateManager extends State<StateManagerPage> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         Table(
                           defaultVerticalAlignment:
                               TableCellVerticalAlignment.middle,
                           columnWidths: {
-                            0: FlexColumnWidth(2.3),
-                            1: FlexColumnWidth(4),
+                            0: const FlexColumnWidth(2.3),
+                            1: const FlexColumnWidth(4),
                           },
                           children: [
                             TableRow(
                               children: [
                                 Container(
-                                  padding:
-                                      EdgeInsets.only(right: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(
+                                      right: 10, bottom: 10),
                                   child: Center(
                                     child: Text(
                                       AppLocalizations.of(context)!
                                           .page_imported_file,
-                                      style: TextStyle(fontSize: 13),
+                                      style: const TextStyle(fontSize: 13),
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding:
-                                      EdgeInsets.only(left: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(
+                                      left: 10, bottom: 10),
                                   child: Tooltip(
                                       message: !isDesktop
                                           ? _fileInfo['name']
                                           : _fileInfo['path'],
-                                      showDuration: Duration(seconds: 5),
-                                      padding: EdgeInsets.all(10),
-                                      textStyle: TextStyle(
-                                        color: Colors.black,
+                                      showDuration: const Duration(seconds: 5),
+                                      padding: const EdgeInsets.all(10),
+                                      textStyle: const TextStyle(
+                                        color:
+                                            const Color.fromRGBO(0, 0, 0, 1.0),
                                       ),
                                       child: Center(
                                         child: AutoSizeText(
                                           _fileInfo['name'],
-                                          style: TextStyle(fontSize: 13),
+                                          style: const TextStyle(fontSize: 13),
                                           minFontSize: 11,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
@@ -517,21 +517,21 @@ class StateManager extends State<StateManagerPage> {
                             TableRow(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.only(right: 10),
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: Center(
                                     child: Text(
                                       AppLocalizations.of(context)!
                                           .page_imported_size,
-                                      style: TextStyle(fontSize: 13),
+                                      style: const TextStyle(fontSize: 13),
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Center(
                                     child: Text(
                                       _sizeHuman,
-                                      style: TextStyle(fontSize: 13),
+                                      style: const TextStyle(fontSize: 13),
                                     ),
                                   ),
                                 ),

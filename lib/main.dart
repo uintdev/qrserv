@@ -38,9 +38,9 @@ class QRServ extends StatelessWidget {
     return OKToast(
         // Toast properties
         position: ToastPosition.bottom,
-        textPadding: EdgeInsets.fromLTRB(25, 16, 25, 16),
-        backgroundColor: Color.fromRGBO(60, 60, 60, 1.0),
-        duration: Duration(milliseconds: 3500),
+        textPadding: const EdgeInsets.fromLTRB(25, 16, 25, 16),
+        backgroundColor: const Color.fromRGBO(60, 60, 60, 1.0),
+        duration: const Duration(milliseconds: 3500),
         radius: 30,
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -219,7 +219,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 color: Theme.of(context).primaryColor,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
                 spreadRadius: 25,
                 blurRadius: 15,
               )
@@ -228,7 +228,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               elevation: 0,
               textTheme: Theme.of(context).textTheme,
               title: Padding(
-                padding: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 5),
                 child: Text(widget.title),
               ),
             ),
@@ -241,9 +241,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           SlidingUpPanel(
             boxShadow: kElevationToShadow[3],
             color: Theme.of(context).bottomAppBarColor,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+            borderRadius: const BorderRadius.only(
+              topLeft: const Radius.circular(20),
+              topRight: const Radius.circular(20),
             ),
             onPanelSlide: (double pos) => setState(() {
               _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
@@ -284,7 +284,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                       : FloatingActionButton(
                           elevation: 3,
                           backgroundColor: Theme.of(context).buttonColor,
-                          foregroundColor: Colors.white,
+                          foregroundColor:
+                              const Color.fromRGBO(255, 255, 255, 1.0),
                           onPressed: () {
                             if (Server.serverRunning &&
                                 !Server.serverPoweringDown) {
@@ -296,7 +297,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                           },
                           child: Icon(
                             Icons.power_settings_new,
-                            color: Colors.white,
+                            color: const Color.fromRGBO(255, 255, 255, 1.0),
                             size: 22.5,
                             semanticLabel: AppLocalizations.of(context)!
                                 .fab_shutdownserver_label,
@@ -306,7 +307,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 FloatingActionButton(
                   elevation: 3,
                   backgroundColor: Theme.of(context).accentColor,
-                  foregroundColor: Colors.white,
+                  foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
                   onPressed: () {
                     importFile();
                   },
@@ -319,7 +320,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                         ? StateManager().loadingIndicator()
                         : Icon(
                             Icons.insert_drive_file,
-                            color: Colors.white,
+                            color: const Color.fromRGBO(255, 255, 255, 1.0),
                             size: 20.0,
                             semanticLabel: AppLocalizations.of(context)!
                                 .fab_selectfile_label,
@@ -340,7 +341,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                           _initFabHeight;
                 });
               });
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ),
         ],

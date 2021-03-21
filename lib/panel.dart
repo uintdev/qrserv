@@ -23,7 +23,7 @@ class Panel {
       ),
       elevation: 1,
       child: ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+        visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
@@ -33,19 +33,19 @@ class Panel {
           children: <Widget>[
             Icon(
               iconData,
-              color: Colors.white,
+              color: const Color.fromRGBO(255, 255, 255, 1.0),
             ),
           ],
         ),
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14.8,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
           ),
         ),
@@ -73,7 +73,8 @@ class Panel {
                     height: 5,
                     decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0))),
                   ),
                 ],
               ),
@@ -110,38 +111,32 @@ class Panel {
             controller: sc,
             padding: const EdgeInsets.only(left: 30.0, right: 30.0),
             children: <Widget>[
-              SizedBox(
-                height: 70.0,
-              ),
+              const SizedBox(height: 70.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     AppLocalizations.of(context)!.panel_title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28.0,
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 30.0,
-              ),
+              const SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     packageInfo,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 30.0,
-              ),
+              const SizedBox(height: 30.0),
               cardClickable(
                 Icons.code,
                 AppLocalizations.of(context)!.panel_card_opensource_title,
@@ -149,9 +144,7 @@ class Panel {
                 'https://github.com/uintdev/qrserv',
                 context,
               ),
-              SizedBox(
-                height: 8.0,
-              ),
+              const SizedBox(height: 8.0),
               cardClickable(
                 Icons.local_cafe,
                 AppLocalizations.of(context)!.panel_card_donate_title,
@@ -159,9 +152,7 @@ class Panel {
                 'https://ko-fi.com/uintdev',
                 context,
               ),
-              SizedBox(
-                height: 25.0,
-              ),
+              const SizedBox(height: 25.0),
             ],
           ),
         );
