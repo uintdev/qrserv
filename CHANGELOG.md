@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+All:
+- Improved UI performance
+
 ## 1.0.1
 Desktop:
 - Reduced minimum window height
