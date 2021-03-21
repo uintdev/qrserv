@@ -31,13 +31,7 @@ dependencies:
   path_provider: ^2.0.1
   filesize_ns: ^1.1.0
 
-  # [qr_flutter] has a pull request regarding ns but not merged
-  # https://github.com/theyakka/qr.flutter/pull/129
-  ##qr_flutter: ^3.1.0
-  qr_flutter:
-    git:
-      url: https://github.com/fzyzcjy/qr.flutter.git
-      ref: 2f8c8b7b0aa3869f03a24f181724069c3f5ee6cd
+  qr_flutter: ^4.0.0
   
   watcher: ^1.0.0
   package_info_plus: ^1.0.0

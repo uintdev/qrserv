@@ -358,11 +358,9 @@ packages:
   qr_flutter:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "2f8c8b7b0aa3869f03a24f181724069c3f5ee6cd"
-      resolved-ref: "2f8c8b7b0aa3869f03a24f181724069c3f5ee6cd"
-      url: "https://github.com/fzyzcjy/qr.flutter.git"
-    source: git
+      name: qr_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "4.0.0"
   share:
     dependency: "direct main"
