@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+All:
+- Added 'include filename in path' toggle
+
 ## 1.0.2
 All:
 - Improved UI performance
