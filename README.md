@@ -37,17 +37,19 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 
 - QR Code
 - Share / Copy to clipboard option
+- Show and hide filename in download URL path
+  - Long press the share button to toggle
 - Various IP addresses from different network interfaces can be chosen
 - HTTP server uses an unused ("random") port
 - Supports Android, Windows and Linux platforms
 - Supports various languages:
-    - English
-    - French (Français)
-    - German (Deutsch)
-    - Spanish (Español)
-    - Portuguese (Português) 
-    - Hungarian (Magyar)
-    - Polish (Polski)
+  - English
+  - French (Français)
+  - German (Deutsch)
+  - Spanish (Español)
+  - Portuguese (Português) 
+  - Hungarian (Magyar)
+  - Polish (Polski)
 
 ## Releases
 
