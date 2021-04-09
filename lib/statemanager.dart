@@ -5,6 +5,7 @@ import 'package:filesize_ns/filesize_ns.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:oktoast/oktoast.dart';
 import 'filepicker.dart';
 import 'server.dart';
 import 'network.dart';
@@ -41,6 +42,7 @@ class StateManager extends State<StateManagerPage> {
     return _outputState;
   }
 
+  // Landing view
   Widget landingPage(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -80,7 +82,7 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  // Loading page
+  // Loading view
   Widget loadingPage() {
     return Column(
       children: <Widget>[
@@ -113,7 +115,7 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  // Error pages
+  // Error view
   Widget msgPage(int type, BuildContext context) {
     Map _msgInfo;
 
@@ -227,9 +229,10 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  // Imported page
+  // Imported view
   String defaultIP = '';
   String? selectedIP = '';
+  bool fileInPath = false;
 
   Widget importedPage(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
@@ -286,6 +289,7 @@ class StateManager extends State<StateManagerPage> {
           }
 
           String? _hostFormatted;
+          String? _filePath;
 
           // Formatting for IPv6
           if (!Network().checkIPV4(selectedIP)) {
@@ -294,8 +298,15 @@ class StateManager extends State<StateManagerPage> {
             _hostFormatted = selectedIP;
           }
 
+          // Check if to include file name in path
+          if (fileInPath) {
+            _filePath = Uri.encodeComponent(_fileInfo['name']);
+          } else {
+            _filePath = '';
+          }
+
           String _hostName =
-              'http://$_hostFormatted:${snapshot.data!['port'].toString()}/';
+              'http://$_hostFormatted:${snapshot.data!['port'].toString()}/$_filePath';
 
           fileExists = Server().fileExists(_fileInfo['path']);
 
@@ -321,7 +332,7 @@ class StateManager extends State<StateManagerPage> {
             setFileStatus(false);
           }
 
-          // Actual import page
+          // Import layout
           return Column(
             children: <Widget>[
               Card(
@@ -449,6 +460,18 @@ class StateManager extends State<StateManagerPage> {
                                     ),
                                     onPressed: () {
                                       ShareManager().share(_hostName, context);
+                                    },
+                                    onLongPress: () {
+                                      if (!fileInPath) {
+                                        showToast(AppLocalizations.of(context)!
+                                            .page_imported_fileinpath_enabled);
+                                      } else {
+                                        showToast(AppLocalizations.of(context)!
+                                            .page_imported_fileinpath_disabled);
+                                      }
+                                      setState(() {
+                                        fileInPath = !fileInPath;
+                                      });
                                     },
                                     child: Icon(
                                       !isDesktop ? Icons.share : Icons.copy,
