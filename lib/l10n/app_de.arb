@@ -26,6 +26,9 @@
     "page_imported_share_clipboard_label": "Kopieren",
     "page_imported_share_clipboard": "Kopiert",
 
+    "page_imported_fileinpath_enabled": "Aktiviert: Dateiname im Pfad",
+    "page_imported_fileinpath_disabled": "Untauglich: Dateiname im Pfad",
+
     "page_imported_file": "Datei",
     "page_imported_size": "Größe",
     "page_imported_decimalseparator": ",",

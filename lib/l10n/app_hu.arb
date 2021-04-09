@@ -26,6 +26,9 @@
     "page_imported_share_clipboard_label": "Másolás",
     "page_imported_share_clipboard": "Átmásolva",
 
+    "page_imported_fileinpath_enabled": "Engedélyezve: fájlnév az elérési útban",
+    "page_imported_fileinpath_disabled": "Letiltva: fájlnév az elérési útban",
+
     "page_imported_file": "Fájl",
     "page_imported_size": "Méret",
     "page_imported_decimalseparator": ",",

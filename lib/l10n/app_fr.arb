@@ -26,6 +26,9 @@
     "page_imported_share_clipboard_label": "Copier",
     "page_imported_share_clipboard": "Copie effectuée",
 
+    "page_imported_fileinpath_enabled": "Activé: nom de fichier dans chemin",
+    "page_imported_fileinpath_disabled": "Désactivée: nom de fichier dans chemin",
+
     "page_imported_file": "Fichier",
     "page_imported_size": "Taille",
     "page_imported_decimalseparator": ",",
