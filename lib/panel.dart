@@ -43,11 +43,16 @@ class Panel {
             fontSize: 14.8,
           ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(
-            fontSize: 12,
-          ),
+        subtitle: Column(
+          children: [
+            const SizedBox(height: 2.0),
+            Text(
+              subtitle,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            )
+          ],
         ),
         onTap: () {
           _launchURL(url, context);
