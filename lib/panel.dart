@@ -102,8 +102,8 @@ class Panel {
         if (snapshot.hasError) {
           packageInfo = AppLocalizations.of(context)!.panel_packageinfofail;
         } else if (snapshot.hasData) {
-          appName = snapshot.data?.appName ?? '(unknown)';
-          version = snapshot.data?.version ?? '(unknown)';
+          appName = snapshot.data?.appName ?? '(null)';
+          version = snapshot.data?.version ?? '(null)';
           packageInfo = '$appName v$version';
         } else {
           packageInfo = AppLocalizations.of(context)!.info_pending_appinfo;
