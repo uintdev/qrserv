@@ -377,12 +377,10 @@ packages:
   sliding_up_panel:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: ae1f003365617ce8c07377343abf38dad48a17a1
-      url: "https://github.com/uintdev/sliding_up_panel.git"
-    source: git
-    version: "1.0.2"
+      name: sliding_up_panel
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+1"
   source_span:
     dependency: transitive
     description:

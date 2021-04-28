@@ -15,11 +15,7 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
 
-  # To be merged https://github.com/akshathjain/sliding_up_panel/pull/230
-  ##sliding_up_panel: ^1.0.2
-  sliding_up_panel:
-    git:
-      url: https://github.com/uintdev/sliding_up_panel.git
+  sliding_up_panel: ^2.0.0+1
   
   # To be merged...
   ##file_picker_cross: ^4.2.7
