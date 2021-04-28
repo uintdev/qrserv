@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1
+Linux:
+- Fixed minimum window size bug
+
+All:
+- Increased spacing between card title and subtitle
+
 ## 1.1.0
 All:
 - Added 'include filename in path' toggle
