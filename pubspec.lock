@@ -63,7 +63,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   disk_space_ns:
     dependency: transitive
     description:
@@ -347,7 +347,7 @@ packages:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.2.1"
   qr:
     dependency: transitive
     description:
@@ -431,7 +431,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:
@@ -494,7 +494,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.1-nullsafety.1"
+    version: "6.1.0+1"
   watcher:
     dependency: "direct main"
     description:
@@ -520,8 +520,8 @@ packages:
     dependency: "direct main"
     description:
       path: "plugins/window_size"
-      ref: "405e6c5476fbdfd3859cf2f8570b21afb692ea3a"
-      resolved-ref: "405e6c5476fbdfd3859cf2f8570b21afb692ea3a"
+      ref: "1d3bff412f8e93087243995570db3a56eba415e5"
+      resolved-ref: "1d3bff412f8e93087243995570db3a56eba415e5"
       url: "https://github.com/google/flutter-desktop-embedding.git"
     source: git
     version: "0.1.0"
