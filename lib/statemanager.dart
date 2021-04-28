@@ -289,7 +289,7 @@ class StateManager extends State<StateManagerPage> {
           }
 
           String? _hostFormatted;
-          String? _filePath;
+          String _filePath;
 
           // Formatting for IPv6
           if (!Network().checkIPV4(selectedIP)) {
@@ -462,13 +462,13 @@ class StateManager extends State<StateManagerPage> {
                                       ShareManager().share(_hostName, context);
                                     },
                                     onLongPress: () {
-                                      if (!fileInPath) {
-                                        showToast(AppLocalizations.of(context)!
-                                            .page_imported_fileinpath_enabled);
-                                      } else {
-                                        showToast(AppLocalizations.of(context)!
-                                            .page_imported_fileinpath_disabled);
-                                      }
+                                      !fileInPath
+                                          ? showToast(AppLocalizations.of(
+                                                  context)!
+                                              .page_imported_fileinpath_enabled)
+                                          : showToast(AppLocalizations.of(
+                                                  context)!
+                                              .page_imported_fileinpath_disabled);
                                       setState(() {
                                         fileInPath = !fileInPath;
                                       });

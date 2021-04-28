@@ -29,9 +29,6 @@ class Network {
             addr.rawAddress[1] == 168 &&
             addr.rawAddress[3] < 2);
         if (filterList) {
-          // print(interface.name);
-          // print(addr.address);
-
           // Organise IPs into their own version lists
           if (addr.type.name == 'IPv4') {
             ipv4List.add(addr.address);
