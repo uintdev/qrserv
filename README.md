@@ -85,8 +85,8 @@ QRServ is licenced under the [MIT license](LICENSE).
 
 Thanks to the following people for helping out with language translation:
 
-| User                                             | Language(s) |
-| ------------------------------------------------ | ----------- |
-| [miklosakos](https://github.com/miklosakos)      | Hungarian   |
-| [FurryFan2003](https://twitter.com/FurryFan2003) | Polish      |
-| [utf-4096](https://github.com/utf-4096)          | French      |
+| User                                         | Language(s) |
+| -------------------------------------------- | ----------- |
+| [miklosakos](https://github.com/miklosakos)  | Hungarian   |
+| [MrRocketFX](https://twitter.com/MrRocketFX) | Polish      |
+| [utf-4096](https://github.com/utf-4096)      | French      |
