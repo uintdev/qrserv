@@ -11,7 +11,6 @@ class FlutterDark {
       cardColor: Color.fromRGBO(54, 54, 54, 1),
       buttonColor: Color.fromRGBO(194, 41, 33, 1),
       indicatorColor: Color.fromRGBO(91, 93, 213, 1),
-      accentColor: Color.fromRGBO(91, 93, 213, 1),
       colorScheme: themeData.colorScheme.copyWith(
         secondary: Color.fromRGBO(91, 93, 213, 1),
       ),
