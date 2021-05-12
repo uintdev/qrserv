@@ -306,7 +306,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 ),
                 FloatingActionButton(
                   elevation: 3,
-                  backgroundColor: Theme.of(context).accentColor,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
                   foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
                   onPressed: () {
                     importFile();
