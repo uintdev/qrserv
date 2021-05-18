@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+Android:
+- Reduced minimum API/SDK version requirement to 16 (Jelly Bean)
+
 ## 1.1.1
 Linux:
 - Fixed minimum window size bug
