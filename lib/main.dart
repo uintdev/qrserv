@@ -283,7 +283,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                       ? SizedBox()
                       : FloatingActionButton(
                           elevation: 3,
-                          backgroundColor: Theme.of(context).buttonColor,
+                          backgroundColor: const Color.fromRGBO(194, 41, 33, 1),
                           foregroundColor:
                               const Color.fromRGBO(255, 255, 255, 1.0),
                           onPressed: () {

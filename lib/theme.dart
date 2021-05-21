@@ -9,7 +9,6 @@ class FlutterDark {
       primaryColor: Color.fromRGBO(20, 20, 20, 1),
       bottomAppBarColor: Color.fromRGBO(44, 44, 44, 1),
       cardColor: Color.fromRGBO(54, 54, 54, 1),
-      buttonColor: Color.fromRGBO(194, 41, 33, 1),
       indicatorColor: Color.fromRGBO(91, 93, 213, 1),
       colorScheme: themeData.colorScheme.copyWith(
         secondary: Color.fromRGBO(91, 93, 213, 1),
