@@ -14,7 +14,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   auto_size_text:
     dependency: "direct main"
     description:
@@ -95,7 +95,7 @@ packages:
   file_chooser:
     dependency: transitive
     description:
-      path: "plugins/file_chooser"
+      path: "plugins\\file_chooser"
       ref: HEAD
       resolved-ref: "6d2a672df02a9882550504ce2df2be71c0d968be"
       url: "https://github.com/uintdev/file_chooser.git"
@@ -117,13 +117,13 @@ packages:
       url: "https://github.com/uintdev/file_picker_cross.git"
     source: git
     version: "4.2.9"
-  filesize_ns:
+  filesize:
     dependency: "direct main"
     description:
-      name: filesize_ns
+      name: filesize
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -517,7 +517,7 @@ packages:
   window_size:
     dependency: "direct main"
     description:
-      path: "plugins/window_size"
+      path: "plugins\\window_size"
       ref: "1d3bff412f8e93087243995570db3a56eba415e5"
       resolved-ref: "1d3bff412f8e93087243995570db3a56eba415e5"
       url: "https://github.com/google/flutter-desktop-embedding.git"
