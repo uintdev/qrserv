@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3
+Android:
+- Increased minimum API/SDK version requirement to 21 (Lollipop)
+
 ## 1.1.2
 Android:
 - Reduced minimum API/SDK version requirement to 16 (Jelly Bean)
