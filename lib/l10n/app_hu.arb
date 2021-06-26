@@ -46,7 +46,11 @@
 
     "info_exception_statusbar": "Nem sikerült az értesítési sáv színének a megváltoztatása: ",
     "info_exception_navigationbar": "Nem sikerült a navigációs sáv színének a megváltoztatása: ",
-    "info_exception_fileselection": "Nem sikerült kiválasztani a következő fájlt: ",
+
+    "info_exception_fileselection_badpath": "A fájlválasztó érvénytelen elérési utat adott meg.",
+    "info_exception_fileselection_multiselection": "Több fájl kiválasztása nem támogatott.",
+    "info_exception_fileselection_fallback": "Nem sikerült kiválasztani a következő fájlt: ",
+    
     "info_exception_shutdownfailed": "Sikertelen szerver leállítás",
     "info_exception_fileremoval": "Nem sikerült törölni a gyorsítótárazott fájlt: ",
     "info_exception_portinuse": "Nem sikerült a következő port használata: ",

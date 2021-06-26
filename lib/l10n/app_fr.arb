@@ -46,7 +46,11 @@
 
     "info_exception_statusbar": "Échec de la modification de la couleur de la barre d'état: ",
     "info_exception_navigationbar": "Échec de la modification de la couleur de la barre de navigation: ",
-    "info_exception_fileselection": "Échec de la sélection du fichier: ",
+
+    "info_exception_fileselection_badpath": "Sélecteur de fichiers a fourni un chemin non valide.",
+    "info_exception_fileselection_multiselection": "Sélection multiple de fichiers non prise en charge.",
+    "info_exception_fileselection_fallback": "Échec de la sélection du fichier: ",
+    
     "info_exception_shutdownfailed": "Échec de l'arrêt du serveur.",
     "info_exception_fileremoval": "Échec de la suppression du fichier mis en cache: ",
     "info_exception_portinuse": "Échec de la liaison au port: ",

@@ -46,7 +46,11 @@
 
     "info_exception_statusbar": "Nie udało się zmienić koloru paska powiadomień: ",
     "info_exception_navigationbar": "Nie udało się zmienić kolor paska nawigacji: ",
-    "info_exception_fileselection": "Problem z wyborem pliku: ",
+
+    "info_exception_fileselection_badpath": "Selektor plików podał nieprawidłową ścieżkę.",
+    "info_exception_fileselection_multiselection": "Wielokrotny wybór plików nie obsługiwany.",
+    "info_exception_fileselection_fallback": "Problem z wyborem pliku: ",
+    
     "info_exception_shutdownfailed": "Nie udało się zamknąć serwera",
     "info_exception_fileremoval": "Nie można usunąć pliku z pamięci podręcznej: ",
     "info_exception_portinuse": "Nie udało się powiązać portu sieciowego: ",

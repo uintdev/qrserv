@@ -46,7 +46,11 @@
 
     "info_exception_statusbar": "Fehler beim Ändern der Farbe der Statusleiste: ",
     "info_exception_navigationbar": "Fehler beim Ändern der Navigationsleiste Farbe: ",
-    "info_exception_fileselection": "Fehler beim Auswählen der Datei: ",
+
+    "info_exception_fileselection_badpath": "Datei-Picker lieferte einen ungültigen Pfad.",
+    "info_exception_fileselection_multiselection": "Mehrfachauswahl von Dateien wird nicht unterstützt.",
+    "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei: ",
+    
     "info_exception_shutdownfailed": "Server könnte nicht heruntergefahren werden",
     "info_exception_fileremoval": "Fehler beim Entfernen der zwischengespeicherten Datei: ",
     "info_exception_portinuse": "Fehler beim Binden des Ports: ",
