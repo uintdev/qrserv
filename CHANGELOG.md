@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+Android:
+- Added additional user-friendly messages for certain file selection cases
+
 ## 1.1.3
 Android:
 - Increased minimum API/SDK version requirement to 21 (Lollipop)
