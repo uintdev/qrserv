@@ -2,6 +2,10 @@
 
 ## 1.1.4
 Android:
+- Removed debugging information from non-fallback file selection toasts
+
+## 1.1.4
+Android:
 - Added additional user-friendly messages for certain file selection cases
 
 ## 1.1.3
