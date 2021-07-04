@@ -178,8 +178,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         case 'unknown_path':
           {
             showToast(AppLocalizations.of(context)!
-                    .info_exception_fileselection_badpath +
-                _exceptionData);
+                .info_exception_fileselection_badpath);
           }
           break;
 
@@ -187,8 +186,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         case 'Bad state: Too many elements':
           {
             showToast(AppLocalizations.of(context)!
-                    .info_exception_fileselection_multiselection +
-                _exceptionData);
+                .info_exception_fileselection_multiselection);
           }
           break;
 
