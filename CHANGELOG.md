@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.1.4
+## 1.1.6
+Android:
+- Fixed an issue where URLs cannot be launched on Android 11 and later
+
+## 1.1.5
 Android:
 - Removed debugging information from non-fallback file selection toasts
 
