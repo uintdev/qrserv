@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.7
+Android:
+- Fixed an issue where the HTTP server can shutdown right before the download is done resulting in a download interruption (corrected the content length)
+- When the server gets shutdown by means that do not involve the shutdown button, the app state is now properly reset
+
 ## 1.1.6
 Android:
 - Fixed an issue where URLs cannot be launched on Android 11 and later
