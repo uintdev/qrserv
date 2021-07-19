@@ -52,7 +52,7 @@ class Network {
     // Server init
     if (!Server.serverRunning &&
         Server().fileExists(FilePicker().readInfo()['path'])) {
-      await Server().http().onError((error, _) {
+      await Server().http(context).onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
         showToast(AppLocalizations.of(context)!.info_exception_portinuse +

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import 'cachemanager.dart';
 import 'filepicker.dart';
 import 'network.dart';
 
@@ -43,7 +44,7 @@ class Server {
   }
 
   // Web server
-  Future http() async {
+  Future http(context) async {
     await HttpServer.bind(InternetAddress.anyIPv6, 0).then((server) {
       // Update server status
       serverRunning = true;
@@ -88,7 +89,13 @@ class Server {
         response.close();
 
         // Shutdown server on error
-        if (!serverRunning) server.close();
+        if (!serverRunning) {
+          server.close();
+          serverRunning = false;
+          serverPoweringDown = false;
+          FilePicker.fileImported = false;
+          CacheManager().deleteCache(context);
+        }
       });
     });
   }
@@ -126,6 +133,8 @@ class Server {
           AppLocalizations.of(context)!.server_info_gone + error.toString());
       serverRunning = false;
       serverPoweringDown = false;
+      FilePicker.fileImported = false;
+      CacheManager().deleteCache(context);
     });
   }
 }
