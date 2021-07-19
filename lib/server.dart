@@ -68,14 +68,18 @@ class Server {
             response.statusCode = HttpStatus.unauthorized;
           }
         } else if (await targetFile.exists()) {
-          // File exists, serve it
+          // File exists, prepare response headers
           response.statusCode = HttpStatus.ok;
-          response.headers
-              .add(HttpHeaders.contentLengthHeader, fileInfo['length']);
           response.headers
               .add(HttpHeaders.contentTypeHeader, 'application/octet-stream');
           response.headers.add('Content-Disposition',
               'filename="${Uri.encodeComponent(fileInfo['name'])}"');
+          // Get content length
+          RandomAccessFile openedFile = targetFile.openSync();
+          response.headers
+              .add(HttpHeaders.contentLengthHeader, openedFile.lengthSync());
+          openedFile.closeSync();
+          // Serve file
           try {
             await response.addStream(targetFile.openRead());
           } catch (_) {
