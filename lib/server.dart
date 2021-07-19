@@ -82,7 +82,9 @@ class Server {
           // Serve file
           try {
             await response.addStream(targetFile.openRead());
-          } catch (_) {
+          } catch (error) {
+            showToast(AppLocalizations.of(context)!.server_info_gone +
+                error.toString());
             serverRunning = false;
           }
         } else {
