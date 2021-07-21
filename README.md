@@ -83,7 +83,7 @@ QRServ is licenced under the [MIT license](LICENSE).
 
 ## Translators
 
-Thanks to the following people for helping out with language translation:
+Thanks to the following users for helping out with language translation:
 
 | User                                         | Language(s) |
 | -------------------------------------------- | ----------- |
