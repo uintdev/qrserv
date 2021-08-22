@@ -43,6 +43,7 @@ dependencies:
       ref: 1d3bff412f8e93087243995570db3a56eba415e5
 
   share_plus: ^2.1.4
+  receive_sharing_intent: ^1.4.5
 
 dev_dependencies:
   flutter_test:
