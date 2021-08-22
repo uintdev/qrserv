@@ -30,11 +30,11 @@ dependencies:
   qr_flutter: ^4.0.0
   
   watcher: ^1.0.0
-  package_info_plus: ^1.0.4
+  package_info_plus: ^1.0.5
   url_launcher: ^6.0.9
   flutter_statusbarcolor_ns: ^0.3.0-nullsafety
   auto_size_text: ^3.0.0-nullsafety.0
-  oktoast: ^3.0.0
+  oktoast: ^3.1.1
 
   window_size:
     git:
