@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+Android:
+- Added the option to import a file via the sharesheet.
+
 ## 1.1.7
 Android:
 - Fixed an issue where the HTTP server can shutdown right before the download is done resulting in a download interruption (corrected the content length)
