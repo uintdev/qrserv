@@ -2,7 +2,7 @@
 
 ## 1.2.0
 Android:
-- Added the option to import a file via the sharesheet.
+- Added the option to import a file via the sharesheet
 - Improved start up times
 
 ## 1.1.7
