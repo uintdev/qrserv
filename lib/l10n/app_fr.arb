@@ -47,6 +47,8 @@
     "info_exception_statusbar": "Échec de la modification de la couleur de la barre d'état: ",
     "info_exception_navigationbar": "Échec de la modification de la couleur de la barre de navigation: ",
 
+    "info_exception_intentstream": "getIntentDataStream erreur: ",
+
     "info_exception_fileselection_badpath": "Sélecteur de fichiers a fourni un chemin non valide.",
     "info_exception_fileselection_multiselection": "Sélection multiple de fichiers non prise en charge.",
     "info_exception_fileselection_fallback": "Échec de la sélection du fichier: ",

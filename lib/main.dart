@@ -114,7 +114,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           CacheManager().deleteCache(context);
         }
       }, onError: (err) {
-        print("getIntentDataStream error: $err");
+        showToast(
+            AppLocalizations.of(context)!.info_exception_intentstream + err);
       });
 
       // Intent share receiver (when closed)

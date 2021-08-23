@@ -47,6 +47,8 @@
     "info_exception_statusbar": "Falha ao alterar a cor da barra de status: ",
     "info_exception_navigationbar": "Falha ao alterar a cor da barra de navegação: ",
 
+    "info_exception_intentstream": "getIntentDataStream erro: ",
+
     "info_exception_fileselection_badpath": "Selector de ficheiros forneceu um caminho inválido.",
     "info_exception_fileselection_multiselection": "A selecção múltipla de ficheiros não é suportada.",
     "info_exception_fileselection_fallback": "Falha ao selecionar ficheiro: ",

@@ -47,6 +47,8 @@
     "info_exception_statusbar": "Fehler beim Ändern der Farbe der Statusleiste: ",
     "info_exception_navigationbar": "Fehler beim Ändern der Navigationsleiste Farbe: ",
 
+    "info_exception_intentstream": "getIntentDataStream error: ",
+
     "info_exception_fileselection_badpath": "Datei-Picker lieferte einen ungültigen Pfad.",
     "info_exception_fileselection_multiselection": "Mehrfachauswahl von Dateien wird nicht unterstützt.",
     "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei: ",
