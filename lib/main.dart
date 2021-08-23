@@ -1,15 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:window_size/window_size.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'theme.dart';
 import 'filepicker.dart';
 import 'cachemanager.dart';
 import 'statemanager.dart';
+import 'sharemanager.dart';
 import 'server.dart';
 import 'panel.dart';
 
@@ -73,17 +76,70 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   bool _useWhiteStatusBarForeground = false;
   bool _useWhiteNavigationBarForeground = false;
 
+  late StreamSubscription _intentDataStreamSubscription;
+
   @override
   void initState() {
     super.initState();
 
     _fabHeight = _initFabHeight;
     WidgetsBinding.instance?.addObserver(this);
+
+    // Import via share receiver
+    void importShare(file) async {
+      ShareManager().importShared(context, file).whenComplete(() {
+        if (FilePicker.fileImported) {
+          // Update state
+          setState(() {
+            _stateView = StateManagerPage();
+          });
+        }
+      });
+    }
+
+    if (!StateManager().isDesktop) {
+      // Intent share receiver (when in memory)
+      _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
+          .listen((List<SharedMediaFile> value) {
+        for (var file in value) {
+          importShare(file.path);
+          break;
+        }
+
+        // Clear cache
+        if (value.length > 0) {
+          CacheManager()
+              .deleteCache(context, FilePicker().readInfo()['path'], true);
+        } else {
+          CacheManager().deleteCache(context);
+        }
+      }, onError: (err) {
+        print("getIntentDataStream error: $err");
+      });
+
+      // Intent share receiver (when closed)
+      ReceiveSharingIntent.getInitialMedia()
+          .then((List<SharedMediaFile> value) {
+        for (var file in value) {
+          importShare(file.path);
+          break;
+        }
+
+        // Clear cache
+        if (value.length > 0) {
+          CacheManager()
+              .deleteCache(context, FilePicker().readInfo()['path'], true);
+        } else {
+          CacheManager().deleteCache(context);
+        }
+      });
+    }
   }
 
   @override
   dispose() {
     WidgetsBinding.instance?.removeObserver(this);
+    _intentDataStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -229,9 +285,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Apply bar colours
       changeStatusColor(Theme.of(context).primaryColor);
       changeNavigationColor(Theme.of(context).bottomAppBarColor);
-
-      // Clear cache
-      CacheManager().deleteCache(context);
     }
 
     // Height of panel when fully expanded

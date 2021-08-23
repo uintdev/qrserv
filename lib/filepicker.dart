@@ -5,36 +5,36 @@ import 'cachemanager.dart';
 import 'server.dart';
 
 class FilePicker {
-  static String _currentFile = '';
-  static String _currentFullPath = '';
-  static String _currentPath = '';
-  static int _currentLength = 0;
+  static String currentFile = '';
+  static String currentFullPath = '';
+  static String currentPath = '';
+  static int currentLength = 0;
 
   static bool fileImported = false;
 
   Map<String, dynamic> readInfo() {
     return {
-      'name': _currentFile,
-      'path': _currentFullPath,
-      'pathpart': _currentPath,
-      'length': _currentLength
+      'name': currentFile,
+      'path': currentFullPath,
+      'pathpart': currentPath,
+      'length': currentLength
     };
   }
 
   Future selectFile(BuildContext context) async {
     await FilePickerCross.importFromStorage().then((file) {
       // Cache handling
-      if (_currentFile != '' &&
-          _currentFile != file.fileName &&
-          Server().fileExists(_currentFile)) {
-        CacheManager().deleteCache(context, _currentFile);
+      if (currentFullPath != '' &&
+          currentFullPath != file.path &&
+          Server().fileExists(currentFullPath)) {
+        CacheManager().deleteCache(context, currentFullPath);
       }
 
       // Set file information
-      FilePicker._currentFile = file.fileName;
-      FilePicker._currentFullPath = file.path;
-      FilePicker._currentPath = dirname(file.path);
-      FilePicker._currentLength = file.length;
+      FilePicker.currentFile = file.fileName;
+      FilePicker.currentFullPath = file.path;
+      FilePicker.currentPath = dirname(file.path);
+      FilePicker.currentLength = file.length;
 
       // Set import status
       FilePicker.fileImported = true;
