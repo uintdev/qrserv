@@ -309,7 +309,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             ]),
             child: AppBar(
               elevation: 0,
-              textTheme: Theme.of(context).textTheme,
+              titleTextStyle: Theme.of(context).textTheme.headline6,
+              backgroundColor: Theme.of(context).primaryColor,
               title: Padding(
                 padding: const EdgeInsets.only(left: 5),
                 child: Text(widget.title),
