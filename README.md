@@ -20,11 +20,13 @@
     <summary>Screenshots</summary>
     <br>
     <p align="center">
-        <img src="docs/screenshots/1.jpg" alt="Screenshot of app after selecting a file" height="420">
+        <img src="docs/screenshots/1.jpg" alt="Screenshot of app on the main screen" height="380">
         &nbsp;&nbsp;
-        <img src="docs/screenshots/2.jpg" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="420">
+        <img src="docs/screenshots/2.jpg" alt="Screenshot of app after selecting a file" height="380">
         &nbsp;&nbsp;
-        <img src="docs/screenshots/3.jpg" alt="Screenshot of app after opening IP address list" height="420">
+        <img src="docs/screenshots/3.jpg" alt="Screenshot of app after opening IP address list" height="380">
+        &nbsp;&nbsp;
+        <img src="docs/screenshots/4.jpg" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="380">
     </p>
 </details>
 <br>
