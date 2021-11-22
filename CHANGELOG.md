@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+Android:
+- Added port number in the file information section
+
 ## 1.2.0
 Android:
 - Added the option to import a file via the sharesheet
