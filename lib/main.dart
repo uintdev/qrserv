@@ -298,7 +298,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       extendBodyBehindAppBar: true,
 
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
+          preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Container(
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
