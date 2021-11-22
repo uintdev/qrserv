@@ -502,8 +502,7 @@ class StateManager extends State<StateManagerPage> {
                             TableRow(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.only(
-                                      right: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: Center(
                                     child: Text(
                                       AppLocalizations.of(context)!
@@ -513,27 +512,26 @@ class StateManager extends State<StateManagerPage> {
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Tooltip(
-                                      message: !isDesktop
-                                          ? _fileInfo['name']
-                                          : _fileInfo['path'],
-                                      showDuration: const Duration(seconds: 5),
-                                      padding: const EdgeInsets.all(10),
-                                      textStyle: const TextStyle(
-                                        color:
-                                            const Color.fromRGBO(0, 0, 0, 1.0),
+                                    message: !isDesktop
+                                        ? _fileInfo['name']
+                                        : _fileInfo['path'],
+                                    showDuration: const Duration(seconds: 5),
+                                    padding: const EdgeInsets.all(10),
+                                    textStyle: const TextStyle(
+                                      color: const Color.fromRGBO(0, 0, 0, 1.0),
+                                    ),
+                                    child: Center(
+                                      child: AutoSizeText(
+                                        _fileInfo['name'],
+                                        style: const TextStyle(fontSize: 13),
+                                        minFontSize: 11,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
                                       ),
-                                      child: Center(
-                                        child: AutoSizeText(
-                                          _fileInfo['name'],
-                                          style: const TextStyle(fontSize: 13),
-                                          minFontSize: 11,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                        ),
-                                      )),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -554,6 +552,28 @@ class StateManager extends State<StateManagerPage> {
                                   child: Center(
                                     child: Text(
                                       _sizeHuman,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Center(
+                                    child: Text(
+                                      'Port',
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Center(
+                                    child: Text(
+                                      snapshot.data!['port'].toString(),
                                       style: const TextStyle(fontSize: 13),
                                     ),
                                   ),
