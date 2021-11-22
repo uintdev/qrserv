@@ -31,6 +31,7 @@
 
     "page_imported_file": "Archivo",
     "page_imported_size": "Tamaño",
+    "page_imported_port": "Puerto",
     "page_imported_decimalseparator": ",",
 
     "page_imported_sizesymbol_b": "B",

@@ -564,7 +564,8 @@ class StateManager extends State<StateManagerPage> {
                                   padding: const EdgeInsets.only(right: 10),
                                   child: Center(
                                     child: Text(
-                                      'Port',
+                                      AppLocalizations.of(context)!
+                                          .page_imported_port,
                                       style: const TextStyle(fontSize: 13),
                                     ),
                                   ),

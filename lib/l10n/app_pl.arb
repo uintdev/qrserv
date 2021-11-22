@@ -31,6 +31,7 @@
 
     "page_imported_file": "Plik",
     "page_imported_size": "Rozmiar",
+    "page_imported_port": "Port",
     "page_imported_decimalseparator": ",",
 
     "page_imported_sizesymbol_b": "B",

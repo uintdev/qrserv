@@ -31,6 +31,7 @@
 
     "page_imported_file": "File",
     "page_imported_size": "Size",
+    "page_imported_port": "Port",
     "page_imported_decimalseparator": ".",
 
     "page_imported_sizesymbol_b": "B",
