@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:oktoast/oktoast.dart';
+import 'statemanager.dart';
 
 class CacheManager {
   Future<void> deleteCache(BuildContext context,
       [String file = '', bool exclude = false]) async {
+    // Disallow desktop platforms
+    if (StateManager().isDesktop) return;
+
     if (file == '' || file != '' && exclude) {
       // Recursive file removal
       String cacheDir = (await getTemporaryDirectory()).path;
