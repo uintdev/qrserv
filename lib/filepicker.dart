@@ -31,9 +31,9 @@ class FilePicker {
       }
 
       // Set file information
-      FilePicker.currentFile = file.fileName;
-      FilePicker.currentFullPath = file.path;
-      FilePicker.currentPath = dirname(file.path);
+      FilePicker.currentFile = file.fileName ?? '';
+      FilePicker.currentFullPath = file.path ?? '';
+      FilePicker.currentPath = dirname(file.path ?? '');
       FilePicker.currentLength = file.length;
 
       // Set import status
