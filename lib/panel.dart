@@ -6,7 +6,7 @@ import 'package:oktoast/oktoast.dart';
 
 class Panel {
   // URL launch management
-  _launchURL(String url, BuildContext context) async {
+  void _launchURL(String url, BuildContext context) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
