@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+Android:
+- When a URL fails to open, it is now displayed in the presented error message
+- Migrated to official file picker package with merged custom-made patches
+
 ## 1.3.0
 Android:
 - Added port number in the file information section
