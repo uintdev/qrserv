@@ -16,7 +16,6 @@ dependencies:
   intl: ^0.17.0
 
   sliding_up_panel: ^2.0.0+1
-  file_picker_cross: ^4.5.0
   path_provider: ^2.0.7
   filesize: ^2.0.1
   qr_flutter: ^4.0.0
@@ -28,6 +27,13 @@ dependencies:
   oktoast: ^3.1.5
   share_plus: ^3.0.4
   receive_sharing_intent: ^1.4.5
+
+  # To be merged...
+  ##file_picker_cross: ^4.2.7
+  file_picker_cross:
+    git:
+      url: https://github.com/uintdev/file_picker_cross.git
+      #url: https://gitlab.com/testapp-system/file_picker_cross.git
 
   window_size:
     git:

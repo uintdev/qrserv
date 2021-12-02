@@ -57,13 +57,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  cross_file:
-    dependency: transitive
-    description:
-      name: cross_file
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.2"
   crypto:
     dependency: transitive
     description:
@@ -71,13 +64,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  disk_space:
+  disk_space_ns:
     dependency: transitive
     description:
-      name: disk_space
+      name: disk_space_ns
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "0.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -99,62 +92,31 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  file_chooser:
+    dependency: transitive
+    description:
+      path: "plugins/file_chooser"
+      ref: HEAD
+      resolved-ref: "6d2a672df02a9882550504ce2df2be71c0d968be"
+      url: "https://github.com/uintdev/file_chooser.git"
+    source: git
+    version: "1.0.0"
   file_picker:
     dependency: transitive
     description:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.7"
+    version: "3.0.4"
   file_picker_cross:
     dependency: "direct main"
     description:
-      name: file_picker_cross
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.5.0"
-  file_selector:
-    dependency: transitive
-    description:
-      name: file_selector
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.2+1"
-  file_selector_linux:
-    dependency: transitive
-    description:
-      name: file_selector_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2+1"
-  file_selector_macos:
-    dependency: transitive
-    description:
-      name: file_selector_macos
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4+1"
-  file_selector_platform_interface:
-    dependency: transitive
-    description:
-      name: file_selector_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
-  file_selector_web:
-    dependency: transitive
-    description:
-      name: file_selector_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.1+2"
-  file_selector_windows:
-    dependency: transitive
-    description:
-      name: file_selector_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2+1"
+      path: "."
+      ref: HEAD
+      resolved-ref: f0cf1953b220d1aff70fb62cd5cdc2c9ad8b5a36
+      url: "https://github.com/uintdev/file_picker_cross.git"
+    source: git
+    version: "4.2.9"
   filesize:
     dependency: "direct main"
     description:
