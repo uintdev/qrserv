@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2
+Android:
+- Reverted migration
+
 ## 1.3.1
 Android:
 - When a URL fails to open, it is now displayed in the presented error message
