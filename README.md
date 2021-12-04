@@ -49,10 +49,11 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
   - English
   - French (Français)
   - German (Deutsch)
-  - Spanish (Español)
-  - Portuguese (Português) 
   - Hungarian (Magyar)
+  - Italian (Italiano)
   - Polish (Polski)
+  - Portuguese (Português)
+  - Spanish (Español)
 
 ## Releases
 
