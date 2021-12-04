@@ -93,3 +93,4 @@ Thanks to the following users for helping out with language translation:
 | [miklosakos](https://github.com/miklosakos)  | Hungarian   |
 | [MrRocketFX](https://twitter.com/MrRocketFX) | Polish      |
 | [utf-4096](https://github.com/utf-4096)      | French      |
+| [SimoneG97](https://github.com/SimoneG97)    | Italian     |
