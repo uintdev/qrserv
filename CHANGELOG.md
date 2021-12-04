@@ -1,16 +1,20 @@
 # Changelog
 
+## 1.4.0
+All:
+- Added Italian translation
+
 ## 1.3.2
-Android:
+All:
 - Reverted migration
 
 ## 1.3.1
-Android:
+All:
 - When a URL fails to open, it is now displayed in the presented error message
 - Migrated to official file picker package with merged custom-made patches
 
 ## 1.3.0
-Android:
+All:
 - Added port number in the file information section
 
 ## 1.2.0
@@ -19,7 +23,7 @@ Android:
 - Improved start up times
 
 ## 1.1.7
-Android:
+All:
 - Fixed an issue where the HTTP server can shutdown right before the download is done resulting in a download interruption (corrected the content length)
 - When the server gets shutdown by means that do not involve the shutdown button, the app state is now properly reset
 
@@ -28,11 +32,11 @@ Android:
 - Fixed an issue where URLs cannot be launched on Android 11 and later
 
 ## 1.1.5
-Android:
+All:
 - Removed debugging information from non-fallback file selection toasts
 
 ## 1.1.4
-Android:
+All:
 - Added additional user-friendly messages for certain file selection cases
 
 ## 1.1.3
