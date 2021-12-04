@@ -10,9 +10,8 @@ class Panel {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      showToast(AppLocalizations.of(context)!.info_exception_linkopenfailed +
-          ': ' +
-          url);
+      showToast(
+          AppLocalizations.of(context)!.info_exception_linkopenfailed + url);
     }
   }
 

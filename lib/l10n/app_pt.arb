@@ -57,7 +57,7 @@
     "info_exception_shutdownfailed": "Falha ao desligar servidor",
     "info_exception_fileremoval": "Falha ao remover ficheiro em cache: ",
     "info_exception_portinuse": "Porta já vinculada erro: ",
-    "info_exception_linkopenfailed": "Incapaz de abrir o link",
+    "info_exception_linkopenfailed": "Incapaz de abrir o link: ",
 
     "info_pending_fileprocessing": "Processando ficheiro atualmente...",
     "info_pending_servershutdown": "Desligamento do servidor pendente...",

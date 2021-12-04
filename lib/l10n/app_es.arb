@@ -57,7 +57,7 @@
     "info_exception_shutdownfailed": "No se pudo apagar el servidor",
     "info_exception_fileremoval": "No se pudo borrar el archivo en caché: ",
     "info_exception_portinuse": "Error de puerto de enlace: ",
-    "info_exception_linkopenfailed": "No se puede abrir el enlace",
+    "info_exception_linkopenfailed": "No se puede abrir el enlace: ",
 
     "info_pending_fileprocessing": "Actualmente procesando archivo...",
     "info_pending_servershutdown": "Cierre del servidor pendiente...",
