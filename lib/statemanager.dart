@@ -11,6 +11,15 @@ import 'server.dart';
 import 'network.dart';
 import 'sharemanager.dart';
 
+enum PageMsg {
+  noconnection,
+  snapshoterror,
+  fileremoved,
+  permissiondenied,
+  portinuse,
+  fallback
+}
+
 class StateManagerPage extends StatefulWidget {
   @override
   StateManager createState() => StateManager();
@@ -116,16 +125,16 @@ class StateManager extends State<StateManagerPage> {
   }
 
   // Error view
-  Widget msgPage(int type, BuildContext context) {
+  Widget msgPage(PageMsg pageType, BuildContext context) {
     Map _msgInfo;
 
     // Reset state bypass
     interfaceUpdate = false;
 
-    switch (type) {
+    switch (pageType) {
 
       // No network
-      case 0:
+      case PageMsg.noconnection:
         {
           _msgInfo = {
             'icon': Icons.signal_wifi_off,
@@ -136,7 +145,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Snapshot error while gathering interface list
-      case 1:
+      case PageMsg.snapshoterror:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -148,7 +157,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Selected file was removed
-      case 2:
+      case PageMsg.snapshoterror:
         {
           _msgInfo = {
             'icon': Icons.block,
@@ -159,7 +168,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Storage permission declined
-      case 3:
+      case PageMsg.permissiondenied:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -171,7 +180,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Port reuse
-      case 4:
+      case PageMsg.portinuse:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -187,7 +196,7 @@ class StateManager extends State<StateManagerPage> {
             'icon': Icons.error,
             'label': AppLocalizations.of(context)!.page_info_fallback_label,
             'msg': AppLocalizations.of(context)!.page_info_fallback_msg +
-                type.toString(),
+                pageType.toString(),
           };
         }
         break;
@@ -239,7 +248,7 @@ class StateManager extends State<StateManagerPage> {
       future: Network().fetchInterfaces(context),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
-          return msgPage(1, context);
+          return msgPage(PageMsg.snapshoterror, context);
         } else if (snapshot.hasData && interfaceUpdate ||
             snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
@@ -275,7 +284,7 @@ class StateManager extends State<StateManagerPage> {
             // If no interfaces available, return network error page
             if (defaultIP == '') {
               Server().shutdownServer(context);
-              return msgPage(0, context);
+              return msgPage(PageMsg.noconnection, context);
             }
 
             // Set default IP
@@ -285,7 +294,7 @@ class StateManager extends State<StateManagerPage> {
           // Check if server exception occurred
           if (Server.serverException) {
             Server.serverException = false;
-            return msgPage(4, context);
+            return msgPage(PageMsg.portinuse, context);
           }
 
           String? _hostFormatted;
@@ -311,7 +320,7 @@ class StateManager extends State<StateManagerPage> {
           fileExists = Server().fileExists(_fileInfo['path']);
 
           if (!fileExists) {
-            return msgPage(2, context);
+            return msgPage(PageMsg.fileremoved, context);
           }
 
           // File monitoring

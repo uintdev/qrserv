@@ -221,7 +221,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         case 'read_external_storage_denied':
           {
             setState(() {
-              _stateView = StateManager().msgPage(3, context);
+              _stateView =
+                  StateManager().msgPage(PageMsg.permissiondenied, context);
             });
           }
           break;
