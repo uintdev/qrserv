@@ -6,53 +6,52 @@ publish_to: 'none'
 version: 1.4.0+27
 
 environment:
-  sdk: ">=2.15.0-268.18.beta <3.0.0"
+    sdk: '>=2.15.0-268.18.beta <3.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  intl: ^0.17.0
+    flutter:
+        sdk: flutter
+    flutter_localizations:
+        sdk: flutter
+    intl: ^0.17.0
 
-  sliding_up_panel: ^2.0.0+1
-  path_provider: ^2.0.7
-  filesize: ^2.0.1
-  qr_flutter: ^4.0.0
-  watcher: ^1.0.1
-  package_info_plus: ^1.3.0
-  url_launcher: ^6.0.17
-  flutter_statusbarcolor_ns: ^0.3.0-nullsafety
-  auto_size_text: ^3.0.0
-  oktoast: ^3.1.5
-  share_plus: ^3.0.4
-  receive_sharing_intent: ^1.4.5
+    sliding_up_panel: ^2.0.0+1
+    path_provider: ^2.0.8
+    filesize: ^2.0.1
+    qr_flutter: ^4.0.0
+    watcher: ^1.0.1
+    package_info_plus: ^1.3.0
+    url_launcher: ^6.0.18
+    flutter_statusbarcolor_ns: ^0.3.0-nullsafety
+    auto_size_text: ^3.0.0
+    oktoast: ^3.1.5
+    share_plus: ^3.0.4
+    receive_sharing_intent: ^1.4.5
 
-  # To be merged...
-  ##file_picker_cross: ^4.2.7
-  file_picker_cross:
-    git:
-      url: https://github.com/uintdev/file_picker_cross.git
-      #url: https://gitlab.com/testapp-system/file_picker_cross.git
+    # To be merged...
+    ##file_picker_cross: ^4.2.7
+    file_picker_cross:
+        git:
+            url: https://github.com/uintdev/file_picker_cross.git
+            #url: https://gitlab.com/testapp-system/file_picker_cross.git
 
-  window_size:
-    git:
-      url: https://github.com/google/flutter-desktop-embedding.git
-      path: plugins/window_size
-      ref: 1d3bff412f8e93087243995570db3a56eba415e5
-
+    window_size:
+        git:
+            url: https://github.com/google/flutter-desktop-embedding.git
+            path: plugins/window_size
+            ref: 1d3bff412f8e93087243995570db3a56eba415e5
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  integration_test:
-    sdk: flutter
+    flutter_test:
+        sdk: flutter
+    integration_test:
+        sdk: flutter
 
 flutter:
-  uses-material-design: true
-  generate: true
+    uses-material-design: true
+    generate: true
 
-  fonts:
-    - family: Poppins
-      fonts:
-      - asset: fonts/Poppins-Regular.ttf
+    fonts:
+        - family: Poppins
+          fonts:
+              - asset: fonts/Poppins-Regular.ttf
