@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'cachemanager.dart';
 import 'server.dart';
 
-class FilePicker {
+class FileManager {
   static String currentFile = '';
   static String currentFullPath = '';
   static String currentPath = '';
@@ -31,13 +31,13 @@ class FilePicker {
       }
 
       // Set file information
-      FilePicker.currentFile = file.fileName;
-      FilePicker.currentFullPath = file.path;
-      FilePicker.currentPath = dirname(file.path);
-      FilePicker.currentLength = file.length;
+      FileManager.currentFile = file.fileName;
+      FileManager.currentFullPath = file.path;
+      FileManager.currentPath = dirname(file.path);
+      FileManager.currentLength = file.length;
 
       // Set import status
-      FilePicker.fileImported = true;
+      FileManager.fileImported = true;
     });
   }
 }

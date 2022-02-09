@@ -7,7 +7,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'statemanager.dart';
 import 'cachemanager.dart';
-import 'filepicker.dart';
+import 'filemanager.dart';
 import 'server.dart';
 
 class ShareManager {
@@ -37,19 +37,19 @@ class ShareManager {
   // Manage sent content
   Future importShared(BuildContext context, String file) async {
     // Cache handling
-    if (FilePicker.currentFullPath != '' &&
-        FilePicker.currentFullPath != file &&
-        Server().fileExists(FilePicker.currentFullPath)) {
-      CacheManager().deleteCache(context, FilePicker.currentFullPath);
+    if (FileManager.currentFullPath != '' &&
+        FileManager.currentFullPath != file &&
+        Server().fileExists(FileManager.currentFullPath)) {
+      CacheManager().deleteCache(context, FileManager.currentFullPath);
     }
 
     // Set file information
-    FilePicker.currentFile = basename(file);
-    FilePicker.currentFullPath = file;
-    FilePicker.currentPath = dirname(file);
-    FilePicker.currentLength = File(file).lengthSync();
+    FileManager.currentFile = basename(file);
+    FileManager.currentFullPath = file;
+    FileManager.currentPath = dirname(file);
+    FileManager.currentLength = File(file).lengthSync();
 
     // Set import status
-    FilePicker.fileImported = true;
+    FileManager.fileImported = true;
   }
 }

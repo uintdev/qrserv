@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'server.dart';
-import 'filepicker.dart';
+import 'filemanager.dart';
 
 class Network {
   // Default port number
@@ -51,7 +51,7 @@ class Network {
 
     // Server init
     if (!Server.serverRunning &&
-        Server().fileExists(FilePicker().readInfo()['path'])) {
+        Server().fileExists(FileManager().readInfo()['path'])) {
       await Server().http(context).onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
@@ -62,7 +62,7 @@ class Network {
     }
 
     // Shutdown server if marked
-    if (!Server().fileExists(FilePicker().readInfo()['path'])) {
+    if (!Server().fileExists(FileManager().readInfo()['path'])) {
       await Server().shutdownServer(context);
     }
 

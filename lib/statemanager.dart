@@ -6,7 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:oktoast/oktoast.dart';
-import 'filepicker.dart';
+import 'filemanager.dart';
 import 'server.dart';
 import 'network.dart';
 import 'sharemanager.dart';
@@ -43,7 +43,7 @@ class StateManager extends State<StateManagerPage> {
   @override
   Widget build(BuildContext context) {
     Widget _outputState;
-    if (FilePicker.fileImported) {
+    if (FileManager.fileImported) {
       _outputState = importedPage(context);
     } else {
       _outputState = landingPage(context);
@@ -255,7 +255,7 @@ class StateManager extends State<StateManagerPage> {
           // Enable state bypass
           interfaceUpdate = true;
           // File information
-          Map<String, dynamic> _fileInfo = FilePicker().readInfo();
+          Map<String, dynamic> _fileInfo = FileManager().readInfo();
 
           // Human readable file size
           String _sizeHuman = filesize(_fileInfo['length'], 2);

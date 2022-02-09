@@ -9,7 +9,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'theme.dart';
-import 'filepicker.dart';
+import 'filemanager.dart';
 import 'cachemanager.dart';
 import 'statemanager.dart';
 import 'sharemanager.dart';
@@ -88,7 +88,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     // Import via share receiver
     void importShare(file) async {
       ShareManager().importShared(context, file).whenComplete(() {
-        if (FilePicker.fileImported) {
+        if (FileManager.fileImported) {
           // Update state
           setState(() {
             _stateView = StateManagerPage();
@@ -109,7 +109,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // Clear cache
         if (value.length > 0) {
           CacheManager()
-              .deleteCache(context, FilePicker().readInfo()['path'], true);
+              .deleteCache(context, FileManager().readInfo()['path'], true);
         } else {
           CacheManager().deleteCache(context);
         }
@@ -129,7 +129,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // Clear cache
         if (value.length > 0) {
           CacheManager()
-              .deleteCache(context, FilePicker().readInfo()['path'], true);
+              .deleteCache(context, FileManager().readInfo()['path'], true);
         } else {
           CacheManager().deleteCache(context);
         }
@@ -204,8 +204,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     });
 
     // Attempt file import
-    await FilePicker().selectFile(context).whenComplete(() {
-      if (FilePicker.fileImported) {
+    await FileManager().selectFile(context).whenComplete(() {
+      if (FileManager.fileImported) {
         // Update state
         setState(() {
           _stateView = StateManagerPage();
@@ -268,7 +268,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     await Server().shutdownServer(context).whenComplete(() {
       if (!Server.serverRunning) {
         setState(() {
-          FilePicker.fileImported = false;
+          FileManager.fileImported = false;
           _stateView = StateManagerPage();
         });
         CacheManager().deleteCache(context);

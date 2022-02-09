@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'cachemanager.dart';
-import 'filepicker.dart';
+import 'filemanager.dart';
 import 'network.dart';
 
 class Server {
@@ -56,7 +56,7 @@ class Server {
       server.listen((HttpRequest request) async {
         final token = request.uri.queryParameters['token'] ?? '';
         final response = request.response;
-        final fileInfo = FilePicker().readInfo();
+        final fileInfo = FileManager().readInfo();
         File targetFile = File(fileInfo['path']);
 
         if (token != '') {
@@ -99,7 +99,7 @@ class Server {
           server.close();
           serverRunning = false;
           serverPoweringDown = false;
-          FilePicker.fileImported = false;
+          FileManager.fileImported = false;
           CacheManager().deleteCache(context);
         }
       });
@@ -139,7 +139,7 @@ class Server {
           AppLocalizations.of(context)!.server_info_gone + error.toString());
       serverRunning = false;
       serverPoweringDown = false;
-      FilePicker.fileImported = false;
+      FileManager.fileImported = false;
       CacheManager().deleteCache(context);
     });
   }
