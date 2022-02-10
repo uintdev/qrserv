@@ -157,7 +157,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Selected file was removed
-      case PageMsg.snapshoterror:
+      case PageMsg.fileremoved:
         {
           _msgInfo = {
             'icon': Icons.block,
