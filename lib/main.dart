@@ -369,7 +369,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                           foregroundColor:
                               const Color.fromRGBO(255, 255, 255, 1.0),
                           onPressed: () {
-                            if (Server.serverRunning &&
+                            if (_actionButtonLoading) {
+                              showToast(AppLocalizations.of(context)!
+                                  .info_pending_servershutdown);
+                            } else if (Server.serverRunning &&
                                 !Server.serverPoweringDown) {
                               shutdownFAB();
                             } else {
