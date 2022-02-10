@@ -27,13 +27,7 @@ dependencies:
     oktoast: ^3.1.5
     share_plus: ^3.0.4
     receive_sharing_intent: ^1.4.5
-
-    # To be merged...
-    ##file_picker_cross: ^4.2.7
-    file_picker_cross:
-        git:
-            url: https://github.com/uintdev/file_picker_cross.git
-            #url: https://gitlab.com/testapp-system/file_picker_cross.git
+    file_picker: ^4.3.3
 
     window_size:
         git:

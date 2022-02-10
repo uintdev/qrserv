@@ -204,16 +204,20 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     });
 
     // Attempt file import
-    await FileManager().selectFile(context).whenComplete(() {
-      if (FileManager.fileImported) {
-        // Update state
+    try {
+      await FileManager().selectFile(context).whenComplete(() {
+        if (FileManager.fileImported) {
+          // Update state
+          setState(() {
+            _stateView = StateManagerPage();
+          });
+        }
         setState(() {
-          _stateView = StateManagerPage();
           _actionButtonLoading = false;
         });
-      }
-    }).onError((error, _) {
-      String _exceptionData = error.toString();
+      });
+    } on PlatformException catch (error) {
+      String _exceptionData = error.code;
 
       switch (_exceptionData) {
 
@@ -260,7 +264,11 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
       // Revert FAB state
       _actionButtonLoading = false;
-    });
+    } catch (error) {
+      showToast(
+          AppLocalizations.of(context)!.info_exception_fileselection_fallback +
+              error.toString());
+    }
   }
 
   // Handle server shutdown via FAB
