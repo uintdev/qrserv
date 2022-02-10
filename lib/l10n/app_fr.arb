@@ -51,7 +51,6 @@
     "info_exception_intentstream": "getIntentDataStream erreur: ",
 
     "info_exception_fileselection_badpath": "Sélecteur de fichiers a fourni un chemin non valide.",
-    "info_exception_fileselection_multiselection": "Sélection multiple de fichiers non prise en charge.",
     "info_exception_fileselection_fallback": "Échec de la sélection du fichier: ",
     
     "info_exception_shutdownfailed": "Échec de l'arrêt du serveur.",

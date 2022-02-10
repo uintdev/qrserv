@@ -51,7 +51,6 @@
     "info_exception_intentstream": "getIntentDataStream błąd: ",
 
     "info_exception_fileselection_badpath": "Selektor plików podał nieprawidłową ścieżkę.",
-    "info_exception_fileselection_multiselection": "Wielokrotny wybór plików nie obsługiwany.",
     "info_exception_fileselection_fallback": "Problem z wyborem pliku: ",
     
     "info_exception_shutdownfailed": "Nie udało się zamknąć serwera",

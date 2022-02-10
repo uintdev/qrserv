@@ -49,7 +49,6 @@
     "info_exception_navigationbar": "Non è stato possibile cambiare il colore della navigation bar: ",
 
     "info_exception_fileselection_badpath": "Il file picker ha fornito un percorso non valido.",
-    "info_exception_fileselection_multiselection": "La selezione di più file non è supportata.",
     "info_exception_fileselection_fallback": "Errore nella selezione del file: ",
 
     "info_exception_intentstream": "Errore getIntentDataStream: ",

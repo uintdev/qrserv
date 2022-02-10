@@ -51,7 +51,6 @@
     "info_exception_intentstream": "getIntentDataStream error: ",
 
     "info_exception_fileselection_badpath": "Datei-Picker lieferte einen ungültigen Pfad.",
-    "info_exception_fileselection_multiselection": "Mehrfachauswahl von Dateien wird nicht unterstützt.",
     "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei: ",
     
     "info_exception_shutdownfailed": "Server könnte nicht heruntergefahren werden",

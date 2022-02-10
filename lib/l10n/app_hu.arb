@@ -51,7 +51,6 @@
     "info_exception_intentstream": "getIntentDataStream hiba: ",
 
     "info_exception_fileselection_badpath": "A fájlválasztó érvénytelen elérési utat adott meg.",
-    "info_exception_fileselection_multiselection": "Több fájl kiválasztása nem támogatott.",
     "info_exception_fileselection_fallback": "Nem sikerült kiválasztani a következő fájlt: ",
     
     "info_exception_shutdownfailed": "Sikertelen szerver leállítás",

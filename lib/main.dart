@@ -231,24 +231,12 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           }
           break;
 
-        // User cancelled selection
-        case 'selection_canceled':
-          {}
-          break;
-
         // Bad path provided by file selector
+        // TODO: exception when storage is full -- change message and use normal view instead if can't recover
         case 'unknown_path':
           {
             showToast(AppLocalizations.of(context)!
                 .info_exception_fileselection_badpath);
-          }
-          break;
-
-        // Attempt made to select multiple files
-        case 'Bad state: Too many elements':
-          {
-            showToast(AppLocalizations.of(context)!
-                .info_exception_fileselection_multiselection);
           }
           break;
 

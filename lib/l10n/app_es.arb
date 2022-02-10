@@ -51,7 +51,6 @@
     "info_exception_intentstream": "getIntentDataStream error: ",
 
     "info_exception_fileselection_badpath": "Selector de archivos proporcionó una ruta no válida.",
-    "info_exception_fileselection_multiselection": "No se admite la selección de varios archivos.",
     "info_exception_fileselection_fallback": "No se pudo seleccionar el archivo: ",
     
     "info_exception_shutdownfailed": "No se pudo apagar el servidor",

@@ -49,7 +49,6 @@
     "info_exception_navigationbar": "Failed to change navigation bar colour: ",
 
     "info_exception_fileselection_badpath": "File picker provided an invalid path.",
-    "info_exception_fileselection_multiselection": "Multiple selection of files not supported.",
     "info_exception_fileselection_fallback": "Failed to select file: ",
 
     "info_exception_intentstream": "getIntentDataStream error: ",
