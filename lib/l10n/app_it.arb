@@ -5,22 +5,22 @@
     "page_landing_msg": "Seleziona un file da condividere...",
 
     "page_info_noconnection_label": "Nessuna connessione di rete",
-    "page_info_noconnection_msg": "Connettiti ad una rete e prova di nuovo.",
+    "page_info_noconnection_msg": "Connettiti ad una rete e prova di nuovo",
 
     "page_info_snapshoterror_label": "Errore",
-    "page_info_snapshoterror_msg": "Errore nel raccoglimento delle informazioni sulla rete.",
+    "page_info_snapshoterror_msg": "Errore nel raccoglimento delle informazioni sulla rete",
 
     "page_info_fileremoved_label": "File rimosso",
-    "page_info_fileremoved_msg": "Il file selezionato è stato rimosso.",
+    "page_info_fileremoved_msg": "Il file selezionato è stato rimosso",
 
     "page_info_permissiondenied_label": "Errore",
-    "page_info_permissiondenied_msg": "Il permesso di accesso alla memoria interna è stato rifiutato.",
+    "page_info_permissiondenied_msg": "Il permesso di accesso alla memoria interna è stato rifiutato",
 
     "page_info_insufficientstorage_label": "Errore",
     "page_info_insufficientstorage_msg": "Stoccaggio insufficiente",
 
     "page_info_portinuse_label": "Errore",
-    "page_info_portinuse_msg": "Il server ha cercato di usare una porta già in utilizzo.",
+    "page_info_portinuse_msg": "Il server ha cercato di usare una porta già in utilizzo",
 
     "page_info_fallback_label": "Errore",
     "page_info_fallback_msg": "C'è stato un errore.\nCodice: ",

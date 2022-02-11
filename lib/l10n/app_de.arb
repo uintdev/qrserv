@@ -5,22 +5,22 @@
     "page_landing_msg": "Wählen Sie eine Datei zum Teilen aus...",
 
     "page_info_noconnection_label": "Keine Netzwerk Verbindung",
-    "page_info_noconnection_msg": "Verbinden Sie sich mit einem Netzwerk und versuchen Sie es erneut.",
+    "page_info_noconnection_msg": "Verbinden Sie sich mit einem Netzwerk und versuchen Sie es erneut",
 
     "page_info_snapshoterror_label": "Error",
-    "page_info_snapshoterror_msg": "Fehler beim Sammeln von Netzwerkinformationen.",
+    "page_info_snapshoterror_msg": "Fehler beim Sammeln von Netzwerkinformationen",
 
     "page_info_fileremoved_label": "Datei entfernt",
-    "page_info_fileremoved_msg": "Ausgewählte Datei wurde entfernt.",
+    "page_info_fileremoved_msg": "Ausgewählte Datei wurde entfernt",
 
     "page_info_permissiondenied_label": "Error",
-    "page_info_permissiondenied_msg": "Speichererlaubnis wurde verweigert.",
+    "page_info_permissiondenied_msg": "Speichererlaubnis wurde verweigert",
 
     "page_info_insufficientstorage_label": "Error",
     "page_info_insufficientstorage_msg": "Unzureichende Speicherung",
 
     "page_info_portinuse_label": "Error",
-    "page_info_portinuse_msg": "Server hat versucht, mit dem bereits gebundenen Port zu beginnen.",
+    "page_info_portinuse_msg": "Server hat versucht, mit dem bereits gebundenen Port zu beginnen",
 
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "Ein Fehler ist aufgetreten.\nCode: ",

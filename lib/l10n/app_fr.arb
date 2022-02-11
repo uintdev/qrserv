@@ -5,22 +5,22 @@
     "page_landing_msg": "Sélectionnez un fichier à partager...",
 
     "page_info_noconnection_label": "Pas de connexion réseau",
-    "page_info_noconnection_msg": "Connectez-vous à un réseau et réessayez.",
+    "page_info_noconnection_msg": "Connectez-vous à un réseau et réessayez",
 
     "page_info_snapshoterror_label": "Erreur",
-    "page_info_snapshoterror_msg": "Erreur lors de la collecte des informations réseau.",
+    "page_info_snapshoterror_msg": "Erreur lors de la collecte des informations réseau",
 
     "page_info_fileremoved_label": "Fichier supprimé",
-    "page_info_fileremoved_msg": "Le fichier sélectionné a été supprimé.",
+    "page_info_fileremoved_msg": "Le fichier sélectionné a été supprimé",
 
     "page_info_permissiondenied_label": "Erreur",
-    "page_info_permissiondenied_msg": "La demande de stockage a été refusée.",
+    "page_info_permissiondenied_msg": "La demande de stockage a été refusée",
 
     "page_info_insufficientstorage_label": "Erreur",
     "page_info_insufficientstorage_msg": "Stockage insuffisant",
 
     "page_info_portinuse_label": "Erreur",
-    "page_info_portinuse_msg": "Le serveur a essayé de démarrer avec un port en utilisation.",
+    "page_info_portinuse_msg": "Le serveur a essayé de démarrer avec un port en utilisation",
 
     "page_info_fallback_label": "Erreur",
     "page_info_fallback_msg": "Une erreur est survenue.\nCode: ",

@@ -5,22 +5,22 @@
     "page_landing_msg": "Seleccione un archivo para compartir...",
 
     "page_info_noconnection_label": "No hay conexión de red",
-    "page_info_noconnection_msg": "Conéctese a una red y vuelva a intentarlo.",
+    "page_info_noconnection_msg": "Conéctese a una red y vuelva a intentarlo",
 
     "page_info_snapshoterror_label": "Error",
-    "page_info_snapshoterror_msg": "EError al recopilar información de red.",
+    "page_info_snapshoterror_msg": "EError al recopilar información de red",
 
     "page_info_fileremoved_label": "Archivo eliminado",
-    "page_info_fileremoved_msg": "El archivo seleccionado fue eliminado.",
+    "page_info_fileremoved_msg": "El archivo seleccionado fue eliminado",
 
     "page_info_permissiondenied_label": "Error",
-    "page_info_permissiondenied_msg": "Se denegó el permiso de almacenamiento.",
+    "page_info_permissiondenied_msg": "Se denegó el permiso de almacenamiento",
 
     "page_info_insufficientstorage_label": "Error",
     "page_info_insufficientstorage_msg": "Almacenamiento insuficiente",
 
     "page_info_portinuse_label": "Error",
-    "page_info_portinuse_msg": "El servidor intentó comenzar con el puerto ya enlazado.",
+    "page_info_portinuse_msg": "El servidor intentó comenzar con el puerto ya enlazado",
 
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "Se ha producido un error.\nCódigo: ",

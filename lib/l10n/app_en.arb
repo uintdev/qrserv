@@ -5,22 +5,22 @@
     "page_landing_msg": "Select a file to share...",
 
     "page_info_noconnection_label": "No network connection",
-    "page_info_noconnection_msg": "Connect to a network and try again.",
+    "page_info_noconnection_msg": "Connect to a network and try again",
 
     "page_info_snapshoterror_label": "Error",
-    "page_info_snapshoterror_msg": "Error collecting network information.",
+    "page_info_snapshoterror_msg": "Error collecting network information",
 
     "page_info_fileremoved_label": "File removed",
-    "page_info_fileremoved_msg": "Selected file was removed.",
+    "page_info_fileremoved_msg": "Selected file was removed",
 
     "page_info_permissiondenied_label": "Error",
-    "page_info_permissiondenied_msg": "Storage permission was denied.",
+    "page_info_permissiondenied_msg": "Storage permission was denied",
 
     "page_info_insufficientstorage_label": "Error",
     "page_info_insufficientstorage_msg": "Insufficient storage",
 
     "page_info_portinuse_label": "Error",
-    "page_info_portinuse_msg": "Server tried to start with already binded port.",
+    "page_info_portinuse_msg": "Server tried to start with already binded port",
 
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "An error has occurred.\nCode: ",

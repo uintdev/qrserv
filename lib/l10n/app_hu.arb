@@ -5,22 +5,22 @@
     "page_landing_msg": "Válassz egy fájlt a megosztáshoz...",
 
     "page_info_noconnection_label": "Nincs hálózati kapcsolat",
-    "page_info_noconnection_msg": "Ellenőrizd a hálózatot, és próbáld újra.",
+    "page_info_noconnection_msg": "Ellenőrizd a hálózatot, és próbáld újra",
 
     "page_info_snapshoterror_label": "Hiba",
-    "page_info_snapshoterror_msg": "Hiba történt a hálózati információk lekérdezésekor.",
+    "page_info_snapshoterror_msg": "Hiba történt a hálózati információk lekérdezésekor",
 
     "page_info_fileremoved_label": "Fájl törölve",
-    "page_info_fileremoved_msg": "A kiválasztott fájl törölve lett.",
+    "page_info_fileremoved_msg": "A kiválasztott fájl törölve lett",
 
     "page_info_permissiondenied_label": "Hiba",
-    "page_info_permissiondenied_msg": "Tárhely hozzáférés megtagadva.",
+    "page_info_permissiondenied_msg": "Tárhely hozzáférés megtagadva",
 
     "page_info_insufficientstorage_label": "Hiba",
     "page_info_insufficientstorage_msg": "Elégtelen tárolás",
 
     "page_info_portinuse_label": "Hiba",
-    "page_info_portinuse_msg": "Egy már használt porton próbált indulni a szerver.",
+    "page_info_portinuse_msg": "Egy már használt porton próbált indulni a szerver",
 
     "page_info_fallback_label": "Hiba",
     "page_info_fallback_msg": "Egy hiba történt.\nKód: ",

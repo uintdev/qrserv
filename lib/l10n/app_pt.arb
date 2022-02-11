@@ -5,22 +5,22 @@
     "page_landing_msg": "Selecione um ficheiro para compartilhar...",
 
     "page_info_noconnection_label": "Nenhuma conexão de rede",
-    "page_info_noconnection_msg": "Conecte-se a uma rede e tente novamente.",
+    "page_info_noconnection_msg": "Conecte-se a uma rede e tente novamente",
 
     "page_info_snapshoterror_label": "Erro",
-    "page_info_snapshoterror_msg": "Erro ao coletar informações de rede.",
+    "page_info_snapshoterror_msg": "Erro ao coletar informações de rede",
 
     "page_info_fileremoved_label": "Ficheiro removido",
-    "page_info_fileremoved_msg": "O ficheiro selecionado foi removido.",
+    "page_info_fileremoved_msg": "O ficheiro selecionado foi removido",
 
     "page_info_permissiondenied_label": "Erro",
-    "page_info_permissiondenied_msg": "A permissão de armazenamento foi negada.",
+    "page_info_permissiondenied_msg": "A permissão de armazenamento foi negada",
 
     "page_info_insufficientstorage_label": "Erro",
     "page_info_insufficientstorage_msg": "Armazenamento insuficiente",
 
     "page_info_portinuse_label": "Erro",
-    "page_info_portinuse_msg": "O servidor tente começar com uma porta já vinculada.",
+    "page_info_portinuse_msg": "O servidor tente começar com uma porta já vinculada",
 
     "page_info_fallback_label": "Erro",
     "page_info_fallback_msg": "Ocorreu um erro.\nCódigo: ",

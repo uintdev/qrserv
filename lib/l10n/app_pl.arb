@@ -5,22 +5,22 @@
     "page_landing_msg": "Wybiesz plik do wysłania...",
 
     "page_info_noconnection_label": "Brak połączenia z siecią",
-    "page_info_noconnection_msg": "połącz się z siecią i spróbuj ponownie.",
+    "page_info_noconnection_msg": "połącz się z siecią i spróbuj ponownie",
 
     "page_info_snapshoterror_label": "Błąd",
-    "page_info_snapshoterror_msg": "Błąd podczas zbierania informacji o sieci.",
+    "page_info_snapshoterror_msg": "Błąd podczas zbierania informacji o sieci",
 
     "page_info_fileremoved_label": "Plik usunięty",
     "page_info_fileremoved_msg": "Wybrany plik został usunięty",
 
     "page_info_permissiondenied_label": "Błąd",
-    "page_info_permissiondenied_msg": "Odmówiono pozwolenia na zapisywanie do pamięci urządzenia.",
+    "page_info_permissiondenied_msg": "Odmówiono pozwolenia na zapisywanie do pamięci urządzenia",
 
     "page_info_insufficientstorage_label": "Błąd",
     "page_info_insufficientstorage_msg": "Niewystarczające składowanie",
 
     "page_info_portinuse_label": "Błąd",
-    "page_info_portinuse_msg": "Serwer próbował uruchomić z już powiązanym portem sieciowym.",
+    "page_info_portinuse_msg": "Serwer próbował uruchomić z już powiązanym portem sieciowym",
 
     "page_info_fallback_label": "Błąd",
     "page_info_fallback_msg": "Wystąpił nieuwzględniony błąd.\nKod: ",
