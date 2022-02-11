@@ -27,8 +27,8 @@ class FileManager {
   Future selectFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: allowMultipleFiles,
-        // withReadStream: true,
         onFileLoading: (selectionStatus) {
+          // TODO: potentially use for status
           print(selectionStatus);
         });
     print(result);
@@ -56,36 +56,6 @@ class FileManager {
             Server().fileExists(currentFullPath)) {
           CacheManager().deleteCache(context, currentFullPath);
         }
-
-        // if (result.files.first.readStream != null) {
-        //   // TODO: add storage check
-        //   StorageSpace freeSpace = await getStorageSpace(
-        //     lowOnSpaceThreshold: 50 * 1024 * 1024, // 2GB
-        //     fractionDigits:
-        //         1, // How many digits to use for the human-readable values
-        //   );
-
-        //   print(freeSpace.free);
-
-        //   int fileSize = 0;
-        //   // double percentageProgress = 0;
-        //   var test = result.files.first.readStream!
-        //       .listen((event) {
-        //         print(event.length);
-        //         fileSize = (fileSize + event.length);
-        //         // percentageProgress = (fileSize / result.files.first.size) * 100;
-        //         // print(percentageProgress.toString() + '%');
-        //       })
-        //       .asFuture()
-        //       .catchError((e) => print(e))
-        //       .then((value) {
-        //         print(fileSize);
-        //       });
-        //   print(test);
-        //   // var test = result.files.first.readStream!.transform(UTF8.decoder).listen((event) {
-        //   //   print(event);
-        //   // });
-        // }
 
         // Set file information
         FileManager.currentFile = result.files.first.name;
