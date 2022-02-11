@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Błąd",
     "page_info_permissiondenied_msg": "Odmówiono pozwolenia na zapisywanie do pamięci urządzenia.",
 
+    "page_info_insufficientstorage_label": "Błąd",
+    "page_info_insufficientstorage_msg": "Niewystarczające składowanie",
+
     "page_info_portinuse_label": "Błąd",
     "page_info_portinuse_msg": "Serwer próbował uruchomić z już powiązanym portem sieciowym.",
 
@@ -40,17 +43,14 @@
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
 
-
     "fab_shutdownserver_label": "Zamknąć serwer",
     "fab_selectfile_label": "Wybiesz plik",
-
 
     "info_exception_statusbar": "Nie udało się zmienić koloru paska powiadomień: ",
     "info_exception_navigationbar": "Nie udało się zmienić kolor paska nawigacji: ",
 
     "info_exception_intentstream": "getIntentDataStream błąd: ",
 
-    "info_exception_fileselection_badpath": "Selektor plików podał nieprawidłową ścieżkę.",
     "info_exception_fileselection_fallback": "Problem z wyborem pliku: ",
     
     "info_exception_shutdownfailed": "Nie udało się zamknąć serwera",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Zamknięcie serwera jest teraz w toku...",
     "info_pending_appinfo": "Ładowanie...",
 
-
     "server_info_tokenmismatch": "Niezgodność z tokenu serwera",
     "server_info_shutdownfailed": "Nie udało się pomyślnie zamknąć serwera.\nHTTP kod: ",
     "server_info_gone": "Serwer zaginął: ",
-
 
     "panel_title": "Na temat...",
 

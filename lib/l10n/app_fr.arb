@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Erreur",
     "page_info_permissiondenied_msg": "La demande de stockage a été refusée.",
 
+    "page_info_insufficientstorage_label": "Erreur",
+    "page_info_insufficientstorage_msg": "Stockage insuffisant",
+
     "page_info_portinuse_label": "Erreur",
     "page_info_portinuse_msg": "Le serveur a essayé de démarrer avec un port en utilisation.",
 
@@ -40,17 +43,14 @@
     "page_imported_sizesymbol_gb": "Go",
     "page_imported_sizesymbol_tb": "To",
 
-
     "fab_shutdownserver_label": "Arrêter le serveur",
     "fab_selectfile_label": "Sélectionner un fichier",
-
 
     "info_exception_statusbar": "Échec de la modification de la couleur de la barre d'état: ",
     "info_exception_navigationbar": "Échec de la modification de la couleur de la barre de navigation: ",
 
     "info_exception_intentstream": "getIntentDataStream erreur: ",
 
-    "info_exception_fileselection_badpath": "Sélecteur de fichiers a fourni un chemin non valide.",
     "info_exception_fileselection_fallback": "Échec de la sélection du fichier: ",
     
     "info_exception_shutdownfailed": "Échec de l'arrêt du serveur.",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Arrêt du serveur en cours...",
     "info_pending_appinfo": "Chargement en cours...",
 
-
     "server_info_tokenmismatch": "Le jeton du serveur est invalide",
     "server_info_shutdownfailed": "Échec de l'arrêt du serveur.\ncode HTTP: ",
     "server_info_gone": "Le serveur est parti: ",
-
 
     "panel_title": "À propos de...",
 

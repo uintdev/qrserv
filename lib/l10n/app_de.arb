@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Speichererlaubnis wurde verweigert.",
 
+    "page_info_insufficientstorage_label": "Error",
+    "page_info_insufficientstorage_msg": "Unzureichende Speicherung",
+
     "page_info_portinuse_label": "Error",
     "page_info_portinuse_msg": "Server hat versucht, mit dem bereits gebundenen Port zu beginnen.",
 
@@ -40,17 +43,14 @@
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
 
-
     "fab_shutdownserver_label": "Server herunterfahren",
     "fab_selectfile_label": "Datei auswählen",
-
 
     "info_exception_statusbar": "Fehler beim Ändern der Farbe der Statusleiste: ",
     "info_exception_navigationbar": "Fehler beim Ändern der Navigationsleiste Farbe: ",
 
     "info_exception_intentstream": "getIntentDataStream error: ",
 
-    "info_exception_fileselection_badpath": "Datei-Picker lieferte einen ungültigen Pfad.",
     "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei: ",
     
     "info_exception_shutdownfailed": "Server könnte nicht heruntergefahren werden",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Server heruntergefahren ausstehend...",
     "info_pending_appinfo": "Laden...",
 
-
     "server_info_tokenmismatch": "Server-Token-Fehlanpassung",
     "server_info_shutdownfailed": "Server könnte nicht heruntergefahren werden.\nHTTP code: ",
     "server_info_gone": "Server ist weg: ",
-
 
     "panel_title": "Über...",
 

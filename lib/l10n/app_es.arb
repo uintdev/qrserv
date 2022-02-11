@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Se denegó el permiso de almacenamiento.",
 
+    "page_info_insufficientstorage_label": "Error",
+    "page_info_insufficientstorage_msg": "Almacenamiento insuficiente",
+
     "page_info_portinuse_label": "Error",
     "page_info_portinuse_msg": "El servidor intentó comenzar con el puerto ya enlazado.",
 
@@ -40,17 +43,14 @@
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
 
-
     "fab_shutdownserver_label": "Apagar el servidor",
     "fab_selectfile_label": "Seleccione archivo",
-
 
     "info_exception_statusbar": "No se pudo cambiar el color de la barra de estado: ",
     "info_exception_navigationbar": "No se pudo cambiar el color de la barra de navegación: ",
 
     "info_exception_intentstream": "getIntentDataStream error: ",
 
-    "info_exception_fileselection_badpath": "Selector de archivos proporcionó una ruta no válida.",
     "info_exception_fileselection_fallback": "No se pudo seleccionar el archivo: ",
     
     "info_exception_shutdownfailed": "No se pudo apagar el servidor",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Cierre del servidor pendiente...",
     "info_pending_appinfo": "Cargando...",
 
-
     "server_info_tokenmismatch": "Falta de coincidencia del token del servidor",
     "server_info_shutdownfailed": "No se pudo apagar el servidor.\nCódigo HTTP: ",
     "server_info_gone": "El servidor se ha ido: ",
-
 
     "panel_title": "Sobre...",
     

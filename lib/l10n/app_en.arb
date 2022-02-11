@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Storage permission was denied.",
 
+    "page_info_insufficientstorage_label": "Error",
+    "page_info_insufficientstorage_msg": "Insufficient storage",
+
     "page_info_portinuse_label": "Error",
     "page_info_portinuse_msg": "Server tried to start with already binded port.",
 
@@ -40,15 +43,12 @@
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
 
-
     "fab_shutdownserver_label": "Shutdown server",
     "fab_selectfile_label": "Select file",
-
 
     "info_exception_statusbar": "Failed to change status bar colour: ",
     "info_exception_navigationbar": "Failed to change navigation bar colour: ",
 
-    "info_exception_fileselection_badpath": "File picker provided an invalid path.",
     "info_exception_fileselection_fallback": "Failed to select file: ",
 
     "info_exception_intentstream": "getIntentDataStream error: ",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Server shutdown pending...",
     "info_pending_appinfo": "Loading...",
 
-
     "server_info_tokenmismatch": "Server token mismatch",
     "server_info_shutdownfailed": "Failed to shutdown server.\nHTTP code: ",
     "server_info_gone": "Server is gone: ",
-
 
     "panel_title": "About...",
 

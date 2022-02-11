@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Erro",
     "page_info_permissiondenied_msg": "A permissão de armazenamento foi negada.",
 
+    "page_info_insufficientstorage_label": "Erro",
+    "page_info_insufficientstorage_msg": "Armazenamento insuficiente",
+
     "page_info_portinuse_label": "Erro",
     "page_info_portinuse_msg": "O servidor tente começar com uma porta já vinculada.",
 
@@ -40,17 +43,14 @@
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
 
-
     "fab_shutdownserver_label": "Desligar servidor",
     "fab_selectfile_label": "Selecione ficheiro",
-
 
     "info_exception_statusbar": "Falha ao alterar a cor da barra de status: ",
     "info_exception_navigationbar": "Falha ao alterar a cor da barra de navegação: ",
 
     "info_exception_intentstream": "getIntentDataStream erro: ",
 
-    "info_exception_fileselection_badpath": "Selector de ficheiros forneceu um caminho inválido.",
     "info_exception_fileselection_fallback": "Falha ao selecionar ficheiro: ",
     
     "info_exception_shutdownfailed": "Falha ao desligar servidor",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Desligamento do servidor pendente...",
     "info_pending_appinfo": "Carregando...",
 
-
     "server_info_tokenmismatch": "Incompatibilidade de token de servidor",
     "server_info_shutdownfailed": "Falha ao desligar servidor.\nCódigo HTTP: ",
     "server_info_gone": "Servidor desaparecido: ",
-
 
     "panel_title": "Sobre...",
 

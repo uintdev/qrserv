@@ -16,6 +16,7 @@ enum PageMsg {
   snapshoterror,
   fileremoved,
   permissiondenied,
+  insufficientstorage,
   portinuse,
   fallback
 }
@@ -175,6 +176,19 @@ class StateManager extends State<StateManagerPage> {
             'label':
                 AppLocalizations.of(context)!.page_info_permissiondenied_label,
             'msg': AppLocalizations.of(context)!.page_info_permissiondenied_msg,
+          };
+        }
+        break;
+
+      // Insufficient storage
+      case PageMsg.insufficientstorage:
+        {
+          _msgInfo = {
+            'icon': Icons.disc_full,
+            'label': AppLocalizations.of(context)!
+                .page_info_insufficientstorage_label,
+            'msg':
+                AppLocalizations.of(context)!.page_info_insufficientstorage_msg,
           };
         }
         break;

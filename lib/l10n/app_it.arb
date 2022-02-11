@@ -16,6 +16,9 @@
     "page_info_permissiondenied_label": "Errore",
     "page_info_permissiondenied_msg": "Il permesso di accesso alla memoria interna è stato rifiutato.",
 
+    "page_info_insufficientstorage_label": "Errore",
+    "page_info_insufficientstorage_msg": "Stoccaggio insufficiente",
+
     "page_info_portinuse_label": "Errore",
     "page_info_portinuse_msg": "Il server ha cercato di usare una porta già in utilizzo.",
 
@@ -40,18 +43,15 @@
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
 
-
     "fab_shutdownserver_label": "Spegni server",
     "fab_selectfile_label": "Seleziona file",
-
 
     "info_exception_statusbar": "Non è stato possibile cambiare il colore della status bar: ",
     "info_exception_navigationbar": "Non è stato possibile cambiare il colore della navigation bar: ",
 
-    "info_exception_fileselection_badpath": "Il file picker ha fornito un percorso non valido.",
-    "info_exception_fileselection_fallback": "Errore nella selezione del file: ",
-
     "info_exception_intentstream": "Errore getIntentDataStream: ",
+
+    "info_exception_fileselection_fallback": "Errore nella selezione del file: ",
     
     "info_exception_shutdownfailed": "Non è stato possibile spegnere il server",
     "info_exception_fileremoval": "Non è stato possibile rimuovere i file cache: ",
@@ -63,11 +63,9 @@
     "info_pending_servershutdown": "Spegnimento del server in corso...",
     "info_pending_appinfo": "Caricamento...",
 
-
     "server_info_tokenmismatch": "Il token del server non corrisponde",
     "server_info_shutdownfailed": "Non è stato possibile spegnere il server.\nCodice HTTP: ",
     "server_info_gone": "Il server è sparito: ",
-
 
     "panel_title": "Informazioni...",
 

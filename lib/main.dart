@@ -231,12 +231,14 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           }
           break;
 
-        // Bad path provided by file selector
-        // TODO: exception when storage is full -- change message and use normal view instead if can't recover
+        // Insufficient storage
         case 'unknown_path':
           {
-            showToast(AppLocalizations.of(context)!
-                .info_exception_fileselection_badpath);
+            Server().shutdownServer(context);
+            setState(() {
+              _stateView =
+                  StateManager().msgPage(PageMsg.insufficientstorage, context);
+            });
           }
           break;
 
