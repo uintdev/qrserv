@@ -31,9 +31,11 @@ class StateManager extends State<StateManagerPage> {
   bool interfaceUpdate = false;
 
   bool setFileStatus(bool state) {
-    setState(() {
-      fileExists = state;
-    });
+    if (mounted) {
+      setState(() {
+        fileExists = state;
+      });
+    }
 
     return state;
   }
@@ -339,7 +341,7 @@ class StateManager extends State<StateManagerPage> {
 
           // File monitoring
           try {
-            var watcher = DirectoryWatcher(_fileInfo['pathpart']);
+            DirectoryWatcher watcher = DirectoryWatcher(_fileInfo['pathpart']);
             watcher.events.listen((event) {
               // Check if selected file was removed
               if (event.type.toString() == 'remove' &&
