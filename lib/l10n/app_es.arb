@@ -8,7 +8,7 @@
     "page_info_noconnection_msg": "Conéctese a una red y vuelva a intentarlo",
 
     "page_info_snapshoterror_label": "Error",
-    "page_info_snapshoterror_msg": "EError al recopilar información de red",
+    "page_info_snapshoterror_msg": "Error al recopilar información de red",
 
     "page_info_fileremoved_label": "Archivo eliminado",
     "page_info_fileremoved_msg": "Archivo fue eliminado",
