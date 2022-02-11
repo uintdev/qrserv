@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:oktoast/oktoast.dart';
+import 'cachemanager.dart';
 import 'filemanager.dart';
 import 'server.dart';
 import 'network.dart';
@@ -217,6 +218,8 @@ class StateManager extends State<StateManagerPage> {
         }
         break;
     }
+
+    CacheManager().deleteCache(context);
 
     return Column(
       children: <Widget>[
