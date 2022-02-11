@@ -11,7 +11,7 @@
     "page_info_snapshoterror_msg": "Errore nel raccoglimento delle informazioni sulla rete",
 
     "page_info_fileremoved_label": "File rimosso",
-    "page_info_fileremoved_msg": "Il file selezionato è stato rimosso",
+    "page_info_fileremoved_msg": "File è stato rimosso",
 
     "page_info_permissiondenied_label": "Errore",
     "page_info_permissiondenied_msg": "Il permesso di accesso alla memoria interna è stato rifiutato",

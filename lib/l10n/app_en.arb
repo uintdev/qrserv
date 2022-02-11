@@ -11,7 +11,7 @@
     "page_info_snapshoterror_msg": "Error collecting network information",
 
     "page_info_fileremoved_label": "File removed",
-    "page_info_fileremoved_msg": "Selected file was removed",
+    "page_info_fileremoved_msg": "File was removed",
 
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Storage permission was denied",
