@@ -373,7 +373,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                           onPressed: () {
                             if (_actionButtonLoading) {
                               showToast(AppLocalizations.of(context)!
-                                  .info_pending_servershutdown);
+                                  .info_pending_fileprocessing_shutdown);
                             } else if (Server.serverRunning &&
                                 !Server.serverPoweringDown) {
                               shutdownFAB();
