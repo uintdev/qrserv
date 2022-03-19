@@ -83,7 +83,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     super.initState();
 
     _fabHeight = _initFabHeight;
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     // Import via share receiver
     void importShare(file) async {
@@ -139,7 +139,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   @override
   dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _intentDataStreamSubscription.cancel();
     super.dispose();
   }
@@ -421,7 +421,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           // Rebuild FAB with new position on resize
           LayoutBuilder(
             builder: (context, constraints) {
-              SchedulerBinding.instance?.addPostFrameCallback((_) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
                 setState(() {
                   _fabHeight =
                       _fabPos * (_panelHeightOpen - _panelHeightClosed) +
