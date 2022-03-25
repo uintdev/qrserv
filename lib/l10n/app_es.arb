@@ -5,13 +5,13 @@
     "page_landing_msg": "Seleccione un archivo para compartir...",
 
     "page_info_noconnection_label": "No hay conexión de red",
-    "page_info_noconnection_msg": "Conéctese a una red y vuelva a intentarlo",
+    "page_info_noconnection_msg": "Conéctate a una red y vuelve a intentarlo",
 
     "page_info_snapshoterror_label": "Error",
     "page_info_snapshoterror_msg": "Error al recopilar información de red",
 
     "page_info_fileremoved_label": "Archivo eliminado",
-    "page_info_fileremoved_msg": "Archivo fue eliminado",
+    "page_info_fileremoved_msg": "El archivo fue eliminado",
 
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Se denegó el permiso de almacenamiento",
@@ -20,7 +20,7 @@
     "page_info_insufficientstorage_msg": "Almacenamiento insuficiente",
 
     "page_info_portinuse_label": "Error",
-    "page_info_portinuse_msg": "El servidor intentó comenzar con el puerto ya enlazado",
+    "page_info_portinuse_msg": "El servidor intentó ejecutarse con un puerto en uso",
 
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "Se ha producido un error.\nCódigo: ",
@@ -55,7 +55,7 @@
     
     "info_exception_shutdownfailed": "No se pudo apagar el servidor",
     "info_exception_fileremoval": "No se pudo borrar el archivo en caché: ",
-    "info_exception_portinuse": "Error de puerto de enlace: ",
+    "info_exception_portinuse": "Error asignando puerto: ",
     "info_exception_linkopenfailed": "No se puede abrir el enlace: ",
 
     "info_pending_fileprocessing": "Actualmente procesando archivo...",
@@ -63,17 +63,17 @@
     "info_pending_servershutdown": "Cierre del servidor pendiente...",
     "info_pending_appinfo": "Cargando...",
 
-    "server_info_tokenmismatch": "Falta de coincidencia del token del servidor",
+    "server_info_tokenmismatch": "El token del servidor no coincide",
     "server_info_shutdownfailed": "No se pudo apagar el servidor.\nCódigo HTTP: ",
     "server_info_gone": "El servidor se ha ido: ",
 
-    "panel_title": "Sobre...",
+    "panel_title": "Acerca de...",
     
     "panel_packageinfofail": "Error",
 
-    "panel_card_opensource_title": "Fuente abierta",
-    "panel_card_opensource_subtitle": "El código fuente de esta aplicación se puede encontrar en GitHub.",
+    "panel_card_opensource_title": "Código fuente abierto",
+    "panel_card_opensource_subtitle": "Lo puedes encontrar en GitHub.",
 
     "panel_card_donate_title": "Donar",
-    "panel_card_donate_subtitle": "¿Te pareció útil la aplicación? No dudes en envía un café a mi manera."
+    "panel_card_donate_subtitle": "¿Te pareció útil la aplicación? Siéntete libre de enviarme un café."
 }
