@@ -5,7 +5,7 @@
     "page_landing_msg": "Seleccione un archivo para compartir...",
 
     "page_info_noconnection_label": "No hay conexión de red",
-    "page_info_noconnection_msg": "Conéctate a una red y vuelva a intentarlo",
+    "page_info_noconnection_msg": "Conéctate a una red y vuelve a intentarlo",
 
     "page_info_snapshoterror_label": "Error",
     "page_info_snapshoterror_msg": "Error al recopilar información de red",
