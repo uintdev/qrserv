@@ -48,6 +48,18 @@ class QRServ extends StatelessWidget {
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          localeListResolutionCallback: (locales, supportedLocales) {
+            for (Locale locale in (locales ?? [])) {
+              String langCode = locale.toString();
+              langCode = langCode.split('_')[0];
+              Locale langCodeLocale = Locale(langCode);
+              List<Locale> supportedLanguages = supportedLocales.toList();
+              if (supportedLanguages.contains(langCodeLocale)) {
+                return Locale(langCode);
+              }
+            }
+            return Locale('en');
+          },
           theme: FlutterDark.dark(ThemeData.dark()),
           home: PageState(title: 'QRServ'),
         ));
