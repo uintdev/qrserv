@@ -8,7 +8,7 @@ class Panel {
   // URL launch management
   void _launchURL(Uri url, BuildContext context) async {
     if (await canLaunchUrl(url)) {
-      await await launchUrl(
+      await launchUrl(
         url,
         mode: LaunchMode.externalApplication,
       );
