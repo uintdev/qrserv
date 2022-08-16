@@ -6,18 +6,18 @@ import 'package:oktoast/oktoast.dart';
 
 class Panel {
   // URL launch management
-  void _launchURL(String url, BuildContext context) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  void _launchURL(Uri url, BuildContext context) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
-      showToast(
-          AppLocalizations.of(context)!.info_exception_linkopenfailed + url);
+      showToast(AppLocalizations.of(context)!.info_exception_linkopenfailed +
+          url.toString());
     }
   }
 
   // Clickable card template
   Widget cardClickable(IconData iconData, String title, String subtitle,
-      String url, BuildContext context) {
+      Uri url, BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
@@ -147,7 +147,10 @@ class Panel {
                 Icons.code,
                 AppLocalizations.of(context)!.panel_card_opensource_title,
                 AppLocalizations.of(context)!.panel_card_opensource_subtitle,
-                'https://github.com/uintdev/qrserv',
+                Uri(
+                    scheme: 'https',
+                    host: 'github.com',
+                    path: 'uintdev/qrserv'),
                 context,
               ),
               const SizedBox(height: 8.0),
@@ -155,7 +158,7 @@ class Panel {
                 Icons.local_cafe,
                 AppLocalizations.of(context)!.panel_card_donate_title,
                 AppLocalizations.of(context)!.panel_card_donate_subtitle,
-                'https://ko-fi.com/uintdev',
+                Uri(scheme: 'https', host: 'ko-fi.com', path: 'uintdev'),
                 context,
               ),
               const SizedBox(height: 25.0),
