@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:filesize/filesize.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -277,19 +276,8 @@ class StateManager extends State<StateManagerPage> {
           Map<String, dynamic> _fileInfo = FileManager().readInfo();
 
           // Human readable file size
-          String _sizeHuman = filesize(_fileInfo['length'], 2);
-          _sizeHuman = _sizeHuman.replaceAll(
-              'TB', AppLocalizations.of(context)!.page_imported_sizesymbol_tb);
-          _sizeHuman = _sizeHuman.replaceAll(
-              'GB', AppLocalizations.of(context)!.page_imported_sizesymbol_gb);
-          _sizeHuman = _sizeHuman.replaceAll(
-              'MB', AppLocalizations.of(context)!.page_imported_sizesymbol_mb);
-          _sizeHuman = _sizeHuman.replaceAll(
-              'KB', AppLocalizations.of(context)!.page_imported_sizesymbol_kb);
-          _sizeHuman = _sizeHuman.replaceAll(' B',
-              ' ' + AppLocalizations.of(context)!.page_imported_sizesymbol_b);
-          _sizeHuman = _sizeHuman.replaceAll('.',
-              AppLocalizations.of(context)!.page_imported_decimalseparator);
+          String _sizeHuman =
+              FileManager().fileSizeHuman(_fileInfo['length'], 2, context);
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data!['interfaces'].contains(selectedIP.toString())) {
@@ -358,6 +346,33 @@ class StateManager extends State<StateManagerPage> {
             setFileStatus(false);
           } catch (_) {
             setFileStatus(false);
+          }
+
+          String fileDataTip() {
+            String fileResult = '';
+            List archivedFile = [];
+            if (!isDesktop) {
+              List archivedList = FileManager().readInfo()['archived'];
+
+              if (archivedList.length > 0) {
+                archivedList.forEach((element) {
+                  print(element);
+                  print(element['file']);
+                  print(element['size']);
+                  archivedFile.add(element['file'] +
+                      ' (' +
+                      FileManager().fileSizeHuman(element['size'], 2, context) +
+                      ')');
+                });
+
+                fileResult = archivedFile.join('\n');
+              } else {
+                fileResult = _fileInfo['name'];
+              }
+            } else {
+              fileResult = _fileInfo['path'];
+            }
+            return fileResult;
           }
 
           // Import layout
@@ -542,9 +557,7 @@ class StateManager extends State<StateManagerPage> {
                                 Container(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Tooltip(
-                                    message: !isDesktop
-                                        ? _fileInfo['name']
-                                        : _fileInfo['path'],
+                                    message: fileDataTip(),
                                     showDuration: const Duration(seconds: 5),
                                     padding: const EdgeInsets.all(10),
                                     textStyle: const TextStyle(

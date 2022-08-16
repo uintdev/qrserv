@@ -30,13 +30,18 @@ class Server {
   static String _serverToken = '';
 
   // Create unique token
-  String _tokenGenerator() {
-    String _characters =
-        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  String tokenGenerator({String characters = '', int length = 32}) {
+    String _characters = '';
+    if (characters == '') {
+      _characters =
+          '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    } else {
+      _characters = characters;
+    }
     String _generateStore = '';
 
     final _random = new Random();
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < length; i++) {
       _generateStore += _characters[_random.nextInt(_characters.length - 1)];
     }
 
@@ -51,7 +56,7 @@ class Server {
       // Update port
       Network.port = server.port;
       // Set unique token
-      _serverToken = _tokenGenerator();
+      _serverToken = tokenGenerator();
 
       server.listen((HttpRequest request) async {
         final token = request.uri.queryParameters['token'] ?? '';

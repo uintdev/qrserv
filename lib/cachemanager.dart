@@ -1,38 +1,48 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:oktoast/oktoast.dart';
 import 'statemanager.dart';
+import 'filemanager.dart';
 
 class CacheManager {
   Future<void> deleteCache(BuildContext context,
-      [String file = '', bool exclude = false]) async {
+      [List<String> file = const [], bool exclude = false]) async {
     // Disallow desktop platforms
     if (StateManager().isDesktop) return;
 
-    if (file == '' || file != '' && exclude) {
+    if (file.length == 0 || file.length > 0 && exclude) {
+      // Reset archivedLast state
+      if (file.length == 0) FileManager.archivedLast = '';
+      // TODO: there are prints here!
+
       // Recursive file removal
-      String cacheDir = (await getTemporaryDirectory()).path;
+      String cacheDir = await FileManager().filePickerPath();
       Directory cachePath = new Directory(cacheDir);
 
       if (cachePath.existsSync()) {
+        print('TO EXCLUDE: ' + file.toString());
         cachePath.listSync().forEach((e) {
-          if (e.path != file && !exclude) {
+          print('FOUND: ' + e.path);
+          if (!file.contains(e.path)) {
+            print('DELETED: ' + e.path);
             e.deleteSync(recursive: true);
           }
         });
       }
     } else {
       // Individual file removal
-      String cacheDir = file;
-      File cachePath = new File(cacheDir);
+      List<String> cacheDir = file;
 
-      try {
-        await cachePath.delete();
-      } catch (e) {
-        showToast(AppLocalizations.of(context)!.info_exception_fileremoval +
-            e.toString());
+      for (int i = 0; i < cacheDir.length; i++) {
+        File cachePath = new File(cacheDir[i]);
+
+        try {
+          await cachePath.delete();
+        } catch (e) {
+          showToast(AppLocalizations.of(context)!.info_exception_fileremoval +
+              e.toString());
+        }
       }
     }
   }
