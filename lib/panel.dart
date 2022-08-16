@@ -8,7 +8,10 @@ class Panel {
   // URL launch management
   void _launchURL(Uri url, BuildContext context) async {
     if (await canLaunchUrl(url)) {
-      await launchUrl(url);
+      await await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
     } else {
       showToast(AppLocalizations.of(context)!.info_exception_linkopenfailed +
           url.toString());
