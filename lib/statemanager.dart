@@ -336,7 +336,8 @@ class StateManager extends State<StateManagerPage> {
             watcher.events.listen((event) {
               // Check if selected file was removed
               if (event.type.toString() == 'remove' &&
-                  event.path == _fileInfo['path']) {
+                  event.path == _fileInfo['path'] &&
+                  FileManager.allowWatcher) {
                 if (!Server().fileExists(_fileInfo['path'])) {
                   setFileStatus(false);
                 }
@@ -356,9 +357,6 @@ class StateManager extends State<StateManagerPage> {
 
               if (archivedList.length > 0) {
                 archivedList.forEach((element) {
-                  print(element);
-                  print(element['file']);
-                  print(element['size']);
                   archivedFile.add(element['file'] +
                       ' (' +
                       FileManager().fileSizeHuman(element['size'], 2, context) +

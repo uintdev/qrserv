@@ -21,6 +21,7 @@ class FileManager {
 
   static bool fileImported = false;
   static bool multipleFiles = false;
+  static bool allowWatcher = false;
   final bool allowMultipleFiles = (Platform.isAndroid);
 
   Map<String, dynamic> readInfo() {
@@ -57,31 +58,20 @@ class FileManager {
   }
 
   Future selectFile(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: allowMultipleFiles,
-        onFileLoading: (selectionStatus) {
-          // TODO: potentially use for status
-          print(selectionStatus);
-        });
-    print(result);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: allowMultipleFiles);
 
     if (result != null) {
-      print(result.files);
-      print(result.files.length);
+      FileManager.allowWatcher = false;
 
       multipleFiles = (result.files.length > 1);
 
       List<String> cacheExceptionList = [];
       for (int i = 0; i < result.files.length; i++) {
-        print('-------- FILE --------');
-        print(result.files[i].name);
-        print(result.files[i].path);
-        print(result.files[i].size);
         archivedFiles
             .add({'file': result.files[i].name, 'size': result.files[i].size});
         cacheExceptionList.add(result.files[i].path ?? '');
       }
-      print(multipleFiles);
 
       // Empty last archive entry if current selection does not contain multiple files
       if (!multipleFiles) archivedLast = '';
@@ -92,10 +82,7 @@ class FileManager {
       }
 
       // Cache handling
-      // TODO: BUG -- after selecting a single file and then going with multi-selection, cache removes files to the point where the file was removed screen would show
-      CacheManager().deleteCache(context, cacheExceptionList, true);
-
-      print(cacheExceptionList);
+      await CacheManager().deleteCache(context, cacheExceptionList, true);
 
       String _currentFile = '';
       String _currentFullPath = '';
@@ -103,7 +90,6 @@ class FileManager {
       int _currentLength = 0;
 
       if (multipleFiles) {
-        // TODO: implement zip functionality, remove each file as they get added from cache, set archive as main file, list added files in tooltip
         // Prepare archive name
         String archiveName =
             Server().tokenGenerator(characters: 'ABCDEF1234567890', length: 8) +
@@ -124,21 +110,20 @@ class FileManager {
             await File(result.files[i].path ??
                     fullPickerPath + '/' + result.files[i].name)
                 .exists()
-                .then((value) => print('File exists: ' + value.toString()));
-            await archiveWriter.writeFile(
-                result.files[i].name,
-                File(result.files[i].path ??
-                    fullPickerPath + '/' + result.files[i].name));
-            // TODO: half the time, there is a problem with removing a file (refer to cache clearing early on)
-            await File(result.files[i].path ??
-                    fullPickerPath + '/' + result.files[i].name)
-                .delete();
+                .then((_) async {
+              await archiveWriter.writeFile(
+                  result.files[i].name,
+                  File(result.files[i].path ??
+                      fullPickerPath + '/' + result.files[i].name));
+              await File(result.files[i].path ??
+                      fullPickerPath + '/' + result.files[i].name)
+                  .delete();
+            });
           }
         } on ZipException catch (ex) {
           // TODO: show msgpage
 
-          // TODO: Could not create Zip file: Cannot write file "File: '/data/user/0/dev.uint.qrserv/cache/file_picker/AlwaysTrustUserCerts.zip'" to entry "AlwaysTrustUserCerts.zip" (also refer to previous)
-          print('Could not create Zip file: ${ex.message}');
+          print('Could not create zip file: ${ex.message}');
         } finally {
           await archiveWriter.close();
         }
@@ -152,7 +137,7 @@ class FileManager {
         _currentLength = archiveSize;
 
         if (archivedLast != '') {
-          CacheManager().deleteCache(context, [archivedLast]);
+          await CacheManager().deleteCache(context, [archivedLast]);
         }
 
         archivedLast = _currentFullPath;
@@ -171,6 +156,7 @@ class FileManager {
       FileManager.currentPath = _currentPath;
       FileManager.currentLength = _currentLength;
       FileManager.fileImported = true;
+      FileManager.allowWatcher = true;
     }
   }
 }
