@@ -15,7 +15,6 @@ class FileManager {
   static String currentFullPath = '';
   static String currentPath = '';
   static int currentLength = 0;
-  // TODO: use for file name tooltip
   static List archivedFiles = [];
   static String archivedLast = '';
 
@@ -121,9 +120,9 @@ class FileManager {
             });
           }
         } on ZipException catch (ex) {
-          // TODO: show msgpage
-
-          print('Could not create zip file: ${ex.message}');
+          showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
+              ex.message);
+          return;
         } finally {
           await archiveWriter.close();
         }

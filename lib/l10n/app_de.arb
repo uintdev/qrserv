@@ -25,6 +25,8 @@
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "Ein Fehler ist aufgetreten.\nCode: ",
 
+    "page_imported_archive_failed": "Archivdatei konnte nicht erstellt werden: ",
+
     "page_imported_share_sheet_label": "Teilen",
     "page_imported_share_clipboard_label": "Kopieren",
     "page_imported_share_clipboard": "Kopiert",

@@ -25,6 +25,8 @@
     "page_info_fallback_label": "Błąd",
     "page_info_fallback_msg": "Wystąpił nieuwzględniony błąd.\nKod: ",
 
+    "page_imported_archive_failed": "Nie można utworzyć pliku archiwum: ",
+
     "page_imported_share_sheet_label": "Udostępnianie",
     "page_imported_share_clipboard_label": "Kopiuj",
     "page_imported_share_clipboard": "Skopiowano",
