@@ -40,7 +40,7 @@ class ShareManager {
     if (FileManager.currentFullPath != '' &&
         FileManager.currentFullPath != file &&
         Server().fileExists(FileManager.currentFullPath)) {
-      CacheManager().deleteCache(context, [FileManager.currentFullPath]);
+      await CacheManager().deleteCache(context, [FileManager.currentFullPath]);
     }
 
     // Set file information

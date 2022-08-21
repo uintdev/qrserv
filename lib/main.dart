@@ -112,7 +112,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     if (!StateManager().isDesktop) {
       // Intent share receiver (when in memory)
       _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
-          .listen((List<SharedMediaFile> value) {
+          .listen((List<SharedMediaFile> value) async {
         for (var file in value) {
           importShare(file.path);
           break;
@@ -120,10 +120,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
         // Clear cache
         if (value.length > 0) {
-          CacheManager()
+          await CacheManager()
               .deleteCache(context, FileManager().readInfo()['path'], true);
         } else {
-          CacheManager().deleteCache(context);
+          await CacheManager().deleteCache(context);
         }
       }, onError: (err) {
         showToast(
@@ -132,7 +132,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
       // Intent share receiver (when closed)
       ReceiveSharingIntent.getInitialMedia()
-          .then((List<SharedMediaFile> value) {
+          .then((List<SharedMediaFile> value) async {
         for (var file in value) {
           importShare(file.path);
           break;
@@ -140,10 +140,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
         // Clear cache
         if (value.length > 0) {
-          CacheManager()
+          await CacheManager()
               .deleteCache(context, FileManager().readInfo()['path'], true);
         } else {
-          CacheManager().deleteCache(context);
+          await CacheManager().deleteCache(context);
         }
       });
     }
@@ -217,7 +217,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
     // Attempt file import
     try {
-      await FileManager().selectFile(context).whenComplete(() {
+      await FileManager().selectFile(context).then((value) {
         if (FileManager.fileImported) {
           // Update state
           setState(() {
@@ -246,7 +246,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // Insufficient storage
         case 'unknown_path':
           {
-            Server().shutdownServer(context);
+            await Server().shutdownServer(context);
             setState(() {
               _stateView =
                   StateManager().msgPage(PageMsg.insufficientstorage, context);
@@ -275,13 +275,13 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   // Handle server shutdown via FAB
   void shutdownFAB() async {
-    await Server().shutdownServer(context).whenComplete(() {
+    await Server().shutdownServer(context).whenComplete(() async {
       if (!Server.serverRunning) {
         setState(() {
           FileManager.fileImported = false;
           _stateView = StateManagerPage();
         });
-        CacheManager().deleteCache(context);
+        await CacheManager().deleteCache(context);
       } else {
         showToast(AppLocalizations.of(context)!.info_exception_shutdownfailed);
       }

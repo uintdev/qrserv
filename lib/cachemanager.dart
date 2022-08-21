@@ -14,19 +14,15 @@ class CacheManager {
     if (file.length == 0 || file.length > 0 && exclude) {
       // Reset archivedLast state
       if (file.length == 0) FileManager.archivedLast = '';
-      // TODO: there are prints here!
 
       // Recursive file removal
       String cacheDir = await FileManager().filePickerPath();
       Directory cachePath = new Directory(cacheDir);
 
       if (cachePath.existsSync()) {
-        print('TO EXCLUDE: ' + file.toString());
-        cachePath.listSync().forEach((e) {
-          print('FOUND: ' + e.path);
+        cachePath.listSync().forEach((e) async {
           if (!file.contains(e.path)) {
-            print('DELETED: ' + e.path);
-            e.deleteSync(recursive: true);
+            await e.delete(recursive: true);
           }
         });
       }

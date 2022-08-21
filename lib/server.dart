@@ -105,7 +105,7 @@ class Server {
           serverRunning = false;
           serverPoweringDown = false;
           FileManager.fileImported = false;
-          CacheManager().deleteCache(context);
+          await CacheManager().deleteCache(context);
         }
       });
     });
@@ -138,14 +138,14 @@ class Server {
             response.statusCode.toString());
       }
       serverPoweringDown = false;
-    }).onError((error, _) {
+    }).onError((error, _) async {
       // Server not found, so probably already gone
       showToast(
           AppLocalizations.of(context)!.server_info_gone + error.toString());
       serverRunning = false;
       serverPoweringDown = false;
       FileManager.fileImported = false;
-      CacheManager().deleteCache(context);
+      await CacheManager().deleteCache(context);
     });
   }
 }
