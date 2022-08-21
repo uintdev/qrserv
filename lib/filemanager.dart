@@ -122,10 +122,11 @@ class FileManager {
         } on ZipException catch (ex) {
           showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
               ex.message);
-          return;
-        } finally {
           await archiveWriter.close();
+          return;
         }
+
+        await archiveWriter.close();
 
         // Get length of created archive
         int archiveSize = await File(fullArchivePath).length();
