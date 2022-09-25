@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Échec de l'arrêt du serveur.\ncode HTTP: ",
     "server_info_gone": "Le serveur est parti: ",
 
-    "panel_title": "À propos de...",
+    "info_title": "À propos de...",
 
-    "panel_packageinfofail": "Erreur",
+    "info_packageinfofail": "Erreur",
 
-    "panel_card_opensource_title": "Open source",
-    "panel_card_opensource_subtitle": "Le code source de cette application est disponible sur GitHub.",
+    "info_opensource_title": "Open source",
 
-    "panel_card_donate_title": "Faire un don",
-    "panel_card_donate_subtitle": "Vous avez trouvé l'application utile? N'hésitez pas à m'envoyer un café."
+    "info_donate_title": "Faire un don",
+
+    "info_close": "Fermer"
 }

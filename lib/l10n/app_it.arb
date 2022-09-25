@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Non è stato possibile spegnere il server.\nCodice HTTP: ",
     "server_info_gone": "Il server è sparito: ",
 
-    "panel_title": "Informazioni...",
+    "info_title": "Informazioni...",
 
-    "panel_packageinfofail": "Errore",
+    "info_packageinfofail": "Errore",
 
-    "panel_card_opensource_title": "Open source",
-    "panel_card_opensource_subtitle": "Il codice sorgente di quest'app può essere trovato su GitHub.",
+    "info_opensource_title": "Open source",
 
-    "panel_card_donate_title": "Dona",
-    "panel_card_donate_subtitle": "Hai trovato l'app utile? Sentiti libero di offrirmi un caffè."
+    "info_donate_title": "Dona",
+
+    "info_close": "Chiudere"
 }

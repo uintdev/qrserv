@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "No se pudo apagar el servidor.\nCódigo HTTP: ",
     "server_info_gone": "El servidor se ha ido: ",
 
-    "panel_title": "Acerca de...",
+    "info_title": "Acerca de...",
     
-    "panel_packageinfofail": "Error",
+    "info_packageinfofail": "Error",
 
-    "panel_card_opensource_title": "Código fuente abierto",
-    "panel_card_opensource_subtitle": "Lo puedes encontrar en GitHub.",
+    "info_opensource_title": "Código fuente abierto",
 
-    "panel_card_donate_title": "Donar",
-    "panel_card_donate_subtitle": "¿Te pareció útil la aplicación? Siéntete libre de enviarme un café."
+    "info_donate_title": "Donar",
+
+    "info_close": "Cerrar"
 }

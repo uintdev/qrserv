@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Server könnte nicht heruntergefahren werden.\nHTTP code: ",
     "server_info_gone": "Server ist weg: ",
 
-    "panel_title": "Über...",
+    "info_title": "Über...",
 
-    "panel_packageinfofail": "Error",
+    "info_packageinfofail": "Error",
 
-    "panel_card_opensource_title": "Open source",
-    "panel_card_opensource_subtitle": "Der Quellcode für diese Anwendung ist auf GitHub zu finden.",
+    "info_opensource_title": "Open source",
 
-    "panel_card_donate_title": "Spenden",
-    "panel_card_donate_subtitle": "Haben Sie die Anwendung nützlich gefunden? Fühlen Sie sich frei, etwas Kaffee meinen Weg zu werfen."
+    "info_donate_title": "Spenden",
+
+    "info_close": "Schließen Sie"
 }

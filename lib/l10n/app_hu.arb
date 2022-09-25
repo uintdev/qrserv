@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Sikertelen szerver leállás.\nHTTP kód: ",
     "server_info_gone": "A szerver eltűnt: ",
 
-    "panel_title": "Névjegy...",
+    "info_title": "Névjegy...",
 
-    "panel_packageinfofail": "Hiba",
+    "info_packageinfofail": "Hiba",
 
-    "panel_card_opensource_title": "Nyílt forráskód",
-    "panel_card_opensource_subtitle": "Az app forráskódja megtalálható GitHubon.",
+    "info_opensource_title": "Nyílt forráskód",
 
-    "panel_card_donate_title": "Támogatás",
-    "panel_card_donate_subtitle": "Hasznosnak találtad az appot? Nyugodtan adományozz egy kávéra valót."
+    "info_donate_title": "Támogatás",
+    
+    "info_close": "Bezár"
 }

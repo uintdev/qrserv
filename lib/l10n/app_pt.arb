@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Falha ao desligar servidor.\nCódigo HTTP: ",
     "server_info_gone": "Servidor desaparecido: ",
 
-    "panel_title": "Sobre...",
+    "info_title": "Sobre...",
 
-    "panel_packageinfofail": "Erro",
+    "info_packageinfofail": "Erro",
 
-    "panel_card_opensource_title": "Código aberto",
-    "panel_card_opensource_subtitle": "O código-fonte deste aplicativo pode ser encontrado no GitHub.",
+    "info_opensource_title": "Código aberto",
 
-    "panel_card_donate_title": "Doar",
-    "panel_card_donate_subtitle": "Achou o aplicativo útil? Sinta-se à vontade para jogar um pouco de café meu caminho."
+    "info_donate_title": "Doar",
+
+    "info_close": "Fechar"
 }

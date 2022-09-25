@@ -1,10 +1,8 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:window_size/window_size.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -14,7 +12,7 @@ import 'cachemanager.dart';
 import 'statemanager.dart';
 import 'sharemanager.dart';
 import 'server.dart';
-import 'panel.dart';
+import 'info.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +24,10 @@ void main() async {
     setWindowMaxSize(Size.infinite);
   }
 
-  runApp(MaterialApp(home: QRServ()));
+  runApp(MaterialApp(
+    home: QRServ(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
 class QRServ extends StatelessWidget {
@@ -60,8 +61,9 @@ class QRServ extends StatelessWidget {
             }
             return Locale('en');
           },
-          theme: FlutterDark.dark(ThemeData.dark()),
+          theme: FlutterDark.dark(ThemeData.dark(useMaterial3: true)),
           home: PageState(title: 'QRServ'),
+          debugShowCheckedModeBanner: false,
         ));
   }
 }
@@ -77,11 +79,6 @@ class PageState extends StatefulWidget {
 
 class _Page extends State<PageState> with WidgetsBindingObserver {
   // Panel
-  final double _initFabHeight = 77.0;
-  double _fabHeight = 0;
-  double _fabPos = 0;
-  double _panelHeightOpen = 0;
-  double _panelHeightClosed = 45.0;
   bool _initRun = true;
 
   // Bar themes
@@ -93,8 +90,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
-    _fabHeight = _initFabHeight;
     WidgetsBinding.instance.addObserver(this);
 
     // Import via share receiver
@@ -215,6 +210,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       _actionButtonLoading = true;
     });
 
+    // TODO: sort out shutdown button not showing at first after file selection (set, but state not updated in time)
+
     // Attempt file import
     try {
       await FileManager().selectFile(context).then((value) {
@@ -232,7 +229,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       String _exceptionData = error.code;
 
       switch (_exceptionData) {
-
         // System denied storage access
         case 'read_external_storage_denied':
           {
@@ -288,6 +284,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     });
   }
 
+  void infoDialogInvoker(BuildContext context) async {
+    await Info().infoDialog(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Code to run on initial launch
@@ -298,9 +298,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       changeStatusColor(Theme.of(context).primaryColor);
       changeNavigationColor(Theme.of(context).bottomAppBarColor);
     }
-
-    // Height of panel when fully expanded
-    _panelHeightOpen = 500;
 
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
@@ -327,6 +324,15 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 padding: const EdgeInsets.only(left: 5),
                 child: Text(widget.title),
               ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    infoDialogInvoker(context);
+                  },
+                  icon: Icon(Icons.info_outline),
+                ),
+                SizedBox(width: 15)
+              ],
             ),
           )),
 
@@ -334,37 +340,16 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       body: Stack(
         alignment: Alignment.topCenter,
         children: <Widget>[
-          SlidingUpPanel(
-            boxShadow: kElevationToShadow[3],
-            color: Theme.of(context).bottomAppBarColor,
-            borderRadius: const BorderRadius.only(
-              topLeft: const Radius.circular(20),
-              topRight: const Radius.circular(20),
-            ),
-            onPanelSlide: (double pos) => setState(() {
-              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
-                  _initFabHeight;
-              _fabPos = pos;
-            }),
-            maxHeight: _panelHeightOpen,
-            minHeight: _panelHeightClosed,
-            parallaxEnabled: true,
-            parallaxOffset: .5,
-            panelBuilder: (sc) => Panel().panelInterface(sc, context),
-            header: Panel().panelHeader(context),
-
-            // Main content
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[_stateView],
-              ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[_stateView],
             ),
           ),
 
           // FAB layout
           Positioned(
-            bottom: _fabHeight,
+            bottom: 65.0,
             left: 35,
             right: 35,
             child: Row(
@@ -379,9 +364,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                       ? SizedBox()
                       : FloatingActionButton(
                           elevation: 3,
-                          backgroundColor: const Color.fromRGBO(194, 41, 33, 1),
-                          foregroundColor:
-                              const Color.fromRGBO(255, 255, 255, 1.0),
+                          backgroundColor: Colors.red.shade700,
+                          foregroundColor: Colors.red.shade100,
                           onPressed: () {
                             if (_actionButtonLoading) {
                               showToast(AppLocalizations.of(context)!
@@ -396,7 +380,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                           },
                           child: Icon(
                             Icons.power_settings_new,
-                            color: const Color.fromRGBO(255, 255, 255, 1.0),
+                            color: Colors.red.shade100,
                             size: 22.5,
                             semanticLabel: AppLocalizations.of(context)!
                                 .fab_shutdownserver_label,
@@ -405,8 +389,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 ),
                 FloatingActionButton(
                   elevation: 3,
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.secondaryContainer,
+                  foregroundColor: Theme.of(context).colorScheme.secondary,
                   onPressed: () {
                     importFile();
                   },
@@ -419,7 +404,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                         ? StateManager().loadingIndicator()
                         : Icon(
                             Icons.insert_drive_file,
-                            color: const Color.fromRGBO(255, 255, 255, 1.0),
+                            color: Theme.of(context).colorScheme.secondary,
                             size: 20.0,
                             semanticLabel: AppLocalizations.of(context)!
                                 .fab_selectfile_label,
@@ -428,20 +413,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 ),
               ],
             ),
-          ),
-
-          // Rebuild FAB with new position on resize
-          LayoutBuilder(
-            builder: (context, constraints) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  _fabHeight =
-                      _fabPos * (_panelHeightOpen - _panelHeightClosed) +
-                          _initFabHeight;
-                });
-              });
-              return const SizedBox.shrink();
-            },
           ),
         ],
       ),

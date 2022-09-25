@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Nie udało się pomyślnie zamknąć serwera.\nHTTP kod: ",
     "server_info_gone": "Serwer zaginął: ",
 
-    "panel_title": "Na temat...",
+    "info_title": "Na temat...",
 
-    "panel_packageinfofail": "Błąd",
+    "info_packageinfofail": "Błąd",
 
-    "panel_card_opensource_title": "Oprogramowanie open source",
-    "panel_card_opensource_subtitle": "Kod programu dla tej aplikacji można zobaczyć na serwisie GitHub.",
+    "info_opensource_title": "Oprogramowanie open source",
 
-    "panel_card_donate_title": "Podaruj kawę",
-    "panel_card_donate_subtitle": "Czy ta aplikacja była dla Ciebie przydatna? Zapraszam do przekazania trochę gotówki na kawę dla mnie."
+    "info_donate_title": "Podaruj kawę",
+
+    "info_close": "Zamknij"
 }

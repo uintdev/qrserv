@@ -69,13 +69,13 @@
     "server_info_shutdownfailed": "Failed to shutdown server.\nHTTP code: ",
     "server_info_gone": "Server is gone: ",
 
-    "panel_title": "About...",
+    "info_title": "About...",
 
-    "panel_packageinfofail": "Error",
+    "info_packageinfofail": "Error",
 
-    "panel_card_opensource_title": "Open source",
-    "panel_card_opensource_subtitle": "Source code for this app can be found on GitHub.",
+    "info_opensource_title": "Open source",
 
-    "panel_card_donate_title": "Donate",
-    "panel_card_donate_subtitle": "Found the app useful? Feel free to throw some coffee my way."
+    "info_donate_title": "Donate",
+    
+    "info_close": "Close"
 }

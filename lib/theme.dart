@@ -5,13 +5,13 @@ class FlutterDark {
     var themeData = template;
     var newThemeData = themeData.copyWith(
       backgroundColor: Color.fromRGBO(28, 32, 42, 1),
-      canvasColor: Color.fromRGBO(20, 20, 20, 1),
-      primaryColor: Color.fromRGBO(20, 20, 20, 1),
-      bottomAppBarColor: Color.fromRGBO(44, 44, 44, 1),
-      cardColor: Color.fromRGBO(54, 54, 54, 1),
+      canvasColor: Color.fromRGBO(28, 27, 30, 1),
+      primaryColor: Color.fromRGBO(28, 27, 30, 1),
+      bottomAppBarColor: Color.fromRGBO(28, 27, 30, 1),
       indicatorColor: Color.fromRGBO(91, 93, 213, 1),
       colorScheme: themeData.colorScheme.copyWith(
-        secondary: Color.fromRGBO(91, 93, 213, 1),
+        secondaryContainer: Color.fromRGBO(91, 93, 213, 1),
+        secondary: Color.fromARGB(255, 191, 180, 229),
       ),
       textTheme: TextTheme(
         headline6: TextStyle(
@@ -24,7 +24,6 @@ class FlutterDark {
         ),
       ),
     );
-
     return newThemeData;
   }
 }
