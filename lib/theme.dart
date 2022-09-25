@@ -14,11 +14,11 @@ class FlutterDark {
         secondary: Color.fromARGB(255, 191, 180, 229),
       ),
       textTheme: TextTheme(
-        headline6: TextStyle(
+        titleLarge: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
         ),
-        bodyText2: TextStyle(
+        bodyMedium: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 13.5,
         ),

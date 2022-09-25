@@ -135,7 +135,6 @@ class StateManager extends State<StateManagerPage> {
     interfaceUpdate = false;
 
     switch (pageType) {
-
       // No network
       case PageMsg.noconnection:
         {
@@ -449,7 +448,7 @@ class StateManager extends State<StateManagerPage> {
                                         },
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText2,
+                                            .bodyMedium,
                                         items: snapshot.data!['interfaces']
                                             .map<DropdownMenuItem<String>>(
                                                 (String value) {
