@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:filesize/filesize.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:async_zip/async_zip.dart';
+import 'package:flutter_archive/flutter_archive.dart';
 import 'package:path/path.dart';
 import 'package:oktoast/oktoast.dart';
 import 'cachemanager.dart';
@@ -96,37 +96,36 @@ class FileManager {
         String fullPickerPath = await filePickerPath();
         String fullArchivePath = fullPickerPath + '/' + archiveName;
 
-        final archiveWriter = ZipFileWriterAsync();
-        try {
-          await archiveWriter.create(File(fullArchivePath));
+        // TODO: re-implement archive process
+        String cacheDir = await FileManager().filePickerPath();
+        final sourceDir = Directory(cacheDir);
+        List<File> files = [];
 
-          // Write a file to the archive
-          for (int i = 0; i < result.files.length; i++) {
-            showToast('File ' +
-                (i + 1).toString() +
-                ' out of ' +
-                result.files.length.toString());
-            await File(result.files[i].path ??
-                    fullPickerPath + '/' + result.files[i].name)
-                .exists()
-                .then((_) async {
-              await archiveWriter.writeFile(
-                  result.files[i].name,
-                  File(result.files[i].path ??
-                      fullPickerPath + '/' + result.files[i].name));
-              await File(result.files[i].path ??
-                      fullPickerPath + '/' + result.files[i].name)
-                  .delete();
-            });
-          }
-        } on ZipException catch (ex) {
-          showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
-              ex.message);
-          await archiveWriter.close();
-          return;
+        for (int i = 0; i < result.files.length; i++) {
+          await File(result.files[i].path ??
+                  fullPickerPath + '/' + result.files[i].name)
+              .exists()
+              .then((_) async {
+            files.add(File(result.files[i].path ??
+                fullPickerPath + '/' + result.files[i].name));
+          });
         }
-
-        await archiveWriter.close();
+        final zipFile = File(fullArchivePath);
+        try {
+          await ZipFile.createFromFiles(
+                  sourceDir: sourceDir, files: files, zipFile: zipFile)
+              .then((_) async => {
+                    for (int i = 0; i < result.files.length; i++)
+                      {
+                        await File(result.files[i].path ??
+                                fullPickerPath + '/' + result.files[i].name)
+                            .delete()
+                      }
+                  });
+        } catch (e) {
+          showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
+              e.toString());
+        }
 
         // Get length of created archive
         int archiveSize = await File(fullArchivePath).length();
