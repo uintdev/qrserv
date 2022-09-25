@@ -15,7 +15,6 @@ dependencies:
         sdk: flutter
     intl: ^0.17.0
 
-    sliding_up_panel: ^2.0.0+1
     path_provider: ^2.0.11
     filesize: ^2.0.1
     qr_flutter: ^4.0.0
@@ -27,8 +26,8 @@ dependencies:
     oktoast: ^3.2.0
     share_plus: ^4.0.10+1
     receive_sharing_intent: ^1.4.5
-    file_picker: ^4.5.1
-    async_zip: ^0.0.2
+    file_picker: ^5.2.0
+    flutter_archive: ^5.0.0
 
     window_size:
         git:
