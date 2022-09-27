@@ -125,6 +125,7 @@ class FileManager {
         } catch (e) {
           showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
               e.toString());
+              return;
         }
 
         // Get length of created archive
