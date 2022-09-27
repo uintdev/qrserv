@@ -96,7 +96,6 @@ class FileManager {
         String fullPickerPath = await filePickerPath();
         String fullArchivePath = fullPickerPath + '/' + archiveName;
 
-        // TODO: re-implement archive process
         String cacheDir = await FileManager().filePickerPath();
         final sourceDir = Directory(cacheDir);
         List<File> files = [];
@@ -125,7 +124,7 @@ class FileManager {
         } catch (e) {
           showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
               e.toString());
-              return;
+          return;
         }
 
         // Get length of created archive
