@@ -75,9 +75,7 @@ class FileManager {
           .pickFiles(allowMultiple: allowMultipleFiles);
 
       if (resultFilePicker != null) {
-        print('File picker was used!');
         for (int i = 0; i < resultFilePicker.files.length; i++) {
-          print('before');
           result['files'].addAll({
             i: {
               'name': resultFilePicker.files[i].name,
@@ -85,28 +83,18 @@ class FileManager {
               'size': resultFilePicker.files[i].size,
             }
           });
-          print('after');
-          print(result);
-          print(result['files']);
-          print(result['files'][i]);
         }
       }
     } else {
-      print('Share sheet mode');
       // Move files selected via share sheet into usual directory for archiving
       for (int i = 0; i < fileSelection['files'].length; i++) {
         File fileRename = File(fileSelection['files'][i]['path']);
         File fileRenamed = await fileRename
             .rename(cacheDir + '/' + fileSelection['files'][i]['name']);
         fileSelection['files'][i]['path'] = fileRenamed.path;
-        print(fileRenamed);
       }
       result = fileSelection;
     }
-
-    print(result);
-    print(result.length);
-    print(result['files'].length);
 
     if (result.containsKey('files') && result['files'].length > 0) {
       FileManager.allowWatcher = false;
