@@ -1,14 +1,10 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'statemanager.dart';
-import 'cachemanager.dart';
 import 'filemanager.dart';
-import 'server.dart';
 
 class ShareManager {
   // Share sheet
@@ -35,21 +31,7 @@ class ShareManager {
   }
 
   // Manage sent content
-  Future importShared(BuildContext context, String file) async {
-    // Cache handling
-    if (FileManager.currentFullPath != '' &&
-        FileManager.currentFullPath != file &&
-        Server().fileExists(FileManager.currentFullPath)) {
-      await CacheManager().deleteCache(context, [FileManager.currentFullPath]);
-    }
-
-    // Set file information
-    FileManager.currentFile = basename(file);
-    FileManager.currentFullPath = file;
-    FileManager.currentPath = dirname(file);
-    FileManager.currentLength = File(file).lengthSync();
-
-    // Set import status
-    FileManager.fileImported = true;
+  Future importShared(BuildContext context, Map<String, dynamic> file) async {
+    await FileManager().selectFile(context, file);
   }
 }

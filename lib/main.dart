@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,6 +7,7 @@ import 'package:window_size/window_size.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:path/path.dart' as Path;
 import 'theme.dart';
 import 'filemanager.dart';
 import 'cachemanager.dart';
@@ -93,8 +95,22 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     // Import via share receiver
-    void importShare(file) async {
-      ShareManager().importShared(context, file).whenComplete(() {
+    void importShare(List fileData) async {
+      Map<String, dynamic> fileSelection = {'files': {}};
+      int index = 0;
+      for (var file in fileData) {
+        int fileSize = File(file.path).lengthSync();
+        fileSelection['files'].addAll({
+          index: {
+            'name': Path.basename(file.path),
+            'path': file.path,
+            'size': fileSize,
+          }
+        });
+        index++;
+      }
+
+      ShareManager().importShared(context, fileSelection).whenComplete(() {
         if (FileManager.fileImported) {
           // Update state
           setState(() {
@@ -108,38 +124,19 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Intent share receiver (when in memory)
       _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
           .listen((List<SharedMediaFile> value) async {
-        for (var file in value) {
-          importShare(file.path);
-          break;
-        }
-
-        // Clear cache
-        if (value.length > 0) {
-          await CacheManager()
-              .deleteCache(context, FileManager().readInfo()['path'], true);
-        } else {
-          await CacheManager().deleteCache(context);
-        }
+        importShare(value);
       }, onError: (err) {
         showToast(
             AppLocalizations.of(context)!.info_exception_intentstream + err);
       });
 
       // Intent share receiver (when closed)
-      ReceiveSharingIntent.getInitialMedia()
-          .then((List<SharedMediaFile> value) async {
-        for (var file in value) {
-          importShare(file.path);
-          break;
-        }
-
-        // Clear cache
-        if (value.length > 0) {
-          await CacheManager()
-              .deleteCache(context, FileManager().readInfo()['path'], true);
-        } else {
-          await CacheManager().deleteCache(context);
-        }
+      ReceiveSharingIntent.getInitialMedia().then(
+          (List<SharedMediaFile> value) async {
+        importShare(value);
+      }, onError: (err) {
+        showToast(
+            AppLocalizations.of(context)!.info_exception_intentstream + err);
       });
     }
   }

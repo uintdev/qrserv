@@ -56,20 +56,70 @@ class FileManager {
     return _sizeHuman;
   }
 
-  Future selectFile(BuildContext context) async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowMultiple: allowMultipleFiles);
+  Future selectFile(BuildContext context,
+      [Map<String, dynamic> fileSelection = const {}]) async {
+    Map<String, dynamic> result = {'files': {}};
 
-    if (result != null) {
+    String cacheDir = await FileManager().filePickerPath();
+    Directory sourceDir = Directory(cacheDir);
+
+    // Ensure file picker cache directory exists first
+    bool dirExists = await sourceDir.exists();
+    if (!dirExists) {
+      Directory sourceDirCreated = await sourceDir.create();
+      sourceDir = sourceDirCreated;
+    }
+
+    if (fileSelection.length == 0) {
+      FilePickerResult? resultFilePicker = await FilePicker.platform
+          .pickFiles(allowMultiple: allowMultipleFiles);
+
+      if (resultFilePicker != null) {
+        print('File picker was used!');
+        for (int i = 0; i < resultFilePicker.files.length; i++) {
+          print('before');
+          result['files'].addAll({
+            i: {
+              'name': resultFilePicker.files[i].name,
+              'path': resultFilePicker.files[i].path,
+              'size': resultFilePicker.files[i].size,
+            }
+          });
+          print('after');
+          print(result);
+          print(result['files']);
+          print(result['files'][i]);
+        }
+      }
+    } else {
+      print('Share sheet mode');
+      // Move files selected via share sheet into usual directory for archiving
+      for (int i = 0; i < fileSelection['files'].length; i++) {
+        File fileRename = File(fileSelection['files'][i]['path']);
+        File fileRenamed = await fileRename
+            .rename(cacheDir + '/' + fileSelection['files'][i]['name']);
+        fileSelection['files'][i]['path'] = fileRenamed.path;
+        print(fileRenamed);
+      }
+      result = fileSelection;
+    }
+
+    print(result);
+    print(result.length);
+    print(result['files'].length);
+
+    if (result.containsKey('files') && result['files'].length > 0) {
       FileManager.allowWatcher = false;
 
-      multipleFiles = (result.files.length > 1);
+      multipleFiles = (result['files'].length > 1);
 
       List<String> cacheExceptionList = [];
-      for (int i = 0; i < result.files.length; i++) {
-        archivedFiles
-            .add({'file': result.files[i].name, 'size': result.files[i].size});
-        cacheExceptionList.add(result.files[i].path ?? '');
+      for (int i = 0; i < result['files'].length; i++) {
+        archivedFiles.add({
+          'file': result['files'][i]['name'],
+          'size': result['files'][i]['size']
+        });
+        cacheExceptionList.add(result['files'][i]['path'] ?? '');
       }
 
       // Empty last archive entry if current selection does not contain multiple files
@@ -96,17 +146,15 @@ class FileManager {
         String fullPickerPath = await filePickerPath();
         String fullArchivePath = fullPickerPath + '/' + archiveName;
 
-        String cacheDir = await FileManager().filePickerPath();
-        final sourceDir = Directory(cacheDir);
         List<File> files = [];
 
-        for (int i = 0; i < result.files.length; i++) {
-          await File(result.files[i].path ??
-                  fullPickerPath + '/' + result.files[i].name)
+        for (int i = 0; i < result['files'].length; i++) {
+          await File(result['files'][i]['path'] ??
+                  fullPickerPath + '/' + result['files'][i]['name'])
               .exists()
               .then((_) async {
-            files.add(File(result.files[i].path ??
-                fullPickerPath + '/' + result.files[i].name));
+            files.add(File(result['files'][i]['path'] ??
+                fullPickerPath + '/' + result['files'][i]['name']));
           });
         }
         final zipFile = File(fullArchivePath);
@@ -114,10 +162,12 @@ class FileManager {
           await ZipFile.createFromFiles(
                   sourceDir: sourceDir, files: files, zipFile: zipFile)
               .then((_) async => {
-                    for (int i = 0; i < result.files.length; i++)
+                    for (int i = 0; i < result['files'].length; i++)
                       {
-                        await File(result.files[i].path ??
-                                fullPickerPath + '/' + result.files[i].name)
+                        await File(result['files'][i]['path'] ??
+                                fullPickerPath +
+                                    '/' +
+                                    result['files'][i]['name'])
                             .delete()
                       }
                   });
@@ -141,10 +191,10 @@ class FileManager {
 
         archivedLast = _currentFullPath;
       } else {
-        _currentFile = result.files.first.name;
-        _currentFullPath = result.files.first.path ?? '';
-        _currentPath = dirname(result.files.first.path ?? '');
-        _currentLength = result.files.first.size;
+        _currentFile = result['files'][0]['name'];
+        _currentFullPath = result['files'][0]['path'] ?? '';
+        _currentPath = dirname(result['files'][0]['path'] ?? '');
+        _currentLength = result['files'][0]['size'];
         archivedFiles = [];
         archivedLast = '';
       }
