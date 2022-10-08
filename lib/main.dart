@@ -296,7 +296,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
       // Apply bar colours
       changeStatusColor(Theme.of(context).primaryColor);
-      changeNavigationColor(Theme.of(context).bottomAppBarColor);
+      changeNavigationColor(Theme.of(context).primaryColor);
     }
 
     return Scaffold(
