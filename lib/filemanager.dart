@@ -75,6 +75,7 @@ class FileManager {
           .pickFiles(allowMultiple: allowMultipleFiles);
 
       if (resultFilePicker != null) {
+        // File picker handler
         for (int i = 0; i < resultFilePicker.files.length; i++) {
           result['files'].addAll({
             i: {
@@ -86,6 +87,7 @@ class FileManager {
         }
       }
     } else {
+      // Share sheet handler
       // Move files selected via share sheet into usual directory for archiving
       for (int i = 0; i < fileSelection['files'].length; i++) {
         File fileRename = File(fileSelection['files'][i]['path']);
@@ -96,6 +98,7 @@ class FileManager {
       result = fileSelection;
     }
 
+    // Only perform file processing if at least one file is selected
     if (result.containsKey('files') && result['files'].length > 0) {
       FileManager.allowWatcher = false;
 
