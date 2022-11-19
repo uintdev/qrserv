@@ -2,6 +2,7 @@
 
 ![Banner with app icon, app name 'QRServ' followed by 'transfer files with ease'](docs/banner/banner.png)
 <br>
+
 <p align="center">
     Transfer files with ease over a network.
     <br>
@@ -37,27 +38,29 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 
 ## Features
 
-- QR Code
-- Share / Copy to clipboard option
-- Import via sharesheet (Android only)
-- Show and hide filename in download URL path
-  - Long press the share button to toggle
-- Various IP addresses from different network interfaces can be chosen
-- HTTP server uses an unused ("random") port
-- Supports Android, Windows and Linux platforms
-- Supports various languages:
-  - English
-  - French (Français)
-  - German (Deutsch)
-  - Hungarian (Magyar)
-  - Italian (Italiano)
-  - Polish (Polski)
-  - Portuguese (Português)
-  - Spanish (Español)
+-   QR Code
+-   Share / Copy to clipboard option
+-   Import via sharesheet (Android only)
+-   Show and hide filename in download URL path
+    -   Long press the share button to toggle
+-   Various IP addresses from different network interfaces can be chosen
+-   HTTP server uses an unused ("random") port
+-   Supports Android, Windows and Linux platforms
+-   Supports various languages:
+    -   English
+    -   French (Français)
+    -   German (Deutsch)
+    -   Hungarian (Magyar)
+    -   Italian (Italiano)
+    -   Polish (Polski)
+    -   Portuguese (Português)
+    -   Spanish (Español)
 
 ## Releases
 
 Android, Windows and Linux builds can be found in the [releases](../../releases) section of this repository.
+
+Last desktop versions can be found in the [releases section under v1.1.1](../../releases/tag/v1.1.1).
 
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B and vice versa.
 
@@ -72,6 +75,7 @@ However, if you do not plan to do a Play Store release, you may remove the `ndk`
 ### Windows
 
 Windows builds normally require `Visual C++ Redistributable for Visual Studio 2015` to run. There are two ways you could go about it:
+
 1. Install [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 2. Bundle the required files in the root directory of the compiled executable (`msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll`) -- ideal when distributing
 
@@ -95,4 +99,4 @@ Thanks to the following users for helping out with language translation:
 | [MrRocketFX](https://twitter.com/MrRocketFX) | Polish      |
 | [utf-4096](https://github.com/utf-4096)      | French      |
 | [SimoneG97](https://github.com/SimoneG97)    | Italian     |
-| [guidov2006](https://github.com/guidov2006)       | Spanish     |
+| [guidov2006](https://github.com/guidov2006)  | Spanish     |
