@@ -373,265 +373,277 @@ class StateManager extends State<StateManagerPage> {
           }
 
           // Import layout
-          return Column(
-            children: <Widget>[
-              Card(
-                color: const Color.fromRGBO(34, 34, 34, 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                elevation: 1,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: QrImage(
-                    data: _hostName,
-                    version: QrVersions.auto,
-                    size: (MediaQuery.of(context).size.height * .23),
-                    backgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
-                    padding: EdgeInsets.all(
-                        (MediaQuery.of(context).size.height * .029)),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
-              ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 330,
-                ),
-                child: Card(
-                  color: const Color.fromRGBO(34, 34, 34, 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  elevation: 1,
-                  child: Container(
-                    padding: const EdgeInsets.all(30),
-                    child: Column(
-                      children: <Widget>[
-                        Table(
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          columnWidths: {
-                            0: const FlexColumnWidth(15),
-                            1: const FlexColumnWidth(0.5),
-                            2: const FlexColumnWidth(3.8),
-                          },
-                          children: [
-                            TableRow(
-                              children: [
-                                Card(
-                                  color: const Color.fromRGBO(42, 42, 42, 1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 2,
-                                  child: Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      child: DropdownButton<String>(
-                                        dropdownColor:
-                                            const Color.fromRGBO(58, 58, 58, 1),
-                                        value: selectedIP,
-                                        isExpanded: true,
-                                        elevation: 4,
-                                        underline: const SizedBox(),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            selectedIP = newValue;
-                                          });
-                                        },
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                        items: snapshot.data!['interfaces']
-                                            .map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Center(
-                                              child: Text(value),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 15),
-                                SizedBox(
-                                  height: 48,
-                                  width: 48,
-                                  child: TextButton(
-                                    style: ButtonStyle(
-                                      overlayColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.focused)) {
-                                          return Colors.white12;
-                                        }
-                                        if (states
-                                            .contains(MaterialState.hovered)) {
-                                          return Colors.white24;
-                                        }
-                                        if (states
-                                            .contains(MaterialState.pressed)) {
-                                          return Colors.white30;
-                                        }
-                                        return Colors.white30;
-                                      }),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        const Color.fromRGBO(42, 42, 42, 1),
-                                      ),
-                                      elevation: MaterialStateProperty.all(2),
-                                    ),
-                                    onPressed: () {
-                                      ShareManager().share(_hostName, context);
-                                    },
-                                    onLongPress: () {
-                                      !fileInPath
-                                          ? showToast(AppLocalizations.of(
-                                                  context)!
-                                              .page_imported_fileinpath_enabled)
-                                          : showToast(AppLocalizations.of(
-                                                  context)!
-                                              .page_imported_fileinpath_disabled);
-                                      setState(() {
-                                        fileInPath = !fileInPath;
-                                      });
-                                    },
-                                    child: Icon(
-                                      !isDesktop ? Icons.share : Icons.copy,
-                                      size: 17,
-                                      color: const Color.fromRGBO(
-                                          255, 255, 255, 1.0),
-                                      semanticLabel: !isDesktop
-                                          ? AppLocalizations.of(context)!
-                                              .page_imported_share_sheet_label
-                                          : AppLocalizations.of(context)!
-                                              .page_imported_share_clipboard_label,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Table(
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          columnWidths: {
-                            0: const FlexColumnWidth(2.3),
-                            1: const FlexColumnWidth(4),
-                          },
-                          children: [
-                            TableRow(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .page_imported_file,
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Tooltip(
-                                    message: fileDataTip(),
-                                    showDuration: const Duration(seconds: 5),
-                                    padding: const EdgeInsets.all(10),
-                                    textStyle: const TextStyle(
-                                      color: const Color.fromRGBO(0, 0, 0, 1.0),
-                                    ),
-                                    child: Center(
-                                      child: AutoSizeText(
-                                        _fileInfo['name'],
-                                        style: const TextStyle(fontSize: 13),
-                                        minFontSize: 11,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .page_imported_size,
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Center(
-                                    child: Text(
-                                      _sizeHuman,
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .page_imported_port,
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Center(
-                                    child: Text(
-                                      snapshot.data!['port'].toString(),
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
+          return importedFileView(
+              _hostName, context, snapshot, fileDataTip, _fileInfo, _sizeHuman);
         } else {
           return loadingPage();
         }
       },
     );
   }
+
+  Column importedFileView(
+      String _hostName,
+      BuildContext context,
+      AsyncSnapshot<Map<String, dynamic>> snapshot,
+      String fileDataTip(),
+      Map<String, dynamic> _fileInfo,
+      String _sizeHuman) {
+    return Column(
+      children: <Widget>[
+        importedFileQR(_hostName, context),
+        const SizedBox(height: 40),
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 330,
+          ),
+          child: Card(
+            color: const Color.fromRGBO(34, 34, 34, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            elevation: 1,
+            child: Container(
+              padding: const EdgeInsets.all(30),
+              child: Column(
+                children: <Widget>[
+                  Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    columnWidths: {
+                      0: const FlexColumnWidth(15),
+                      1: const FlexColumnWidth(0.5),
+                      2: const FlexColumnWidth(3.8),
+                    },
+                    children: [
+                      TableRow(
+                        children: [
+                          importedFileInterfaces(context, snapshot),
+                          const SizedBox(width: 15),
+                          importedFileShare(_hostName, context),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  importedFileInfo(
+                      context, fileDataTip, _fileInfo, _sizeHuman, snapshot),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Card importedFileQR(String _hostName, BuildContext context) {
+    return Card(
+      color: const Color.fromRGBO(34, 34, 34, 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 1,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: QrImage(
+          data: _hostName,
+          version: QrVersions.auto,
+          size: (MediaQuery.of(context).size.height * .23),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
+          padding: EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
+        ),
+      ),
+    );
+  }
+
+  SizedBox importedFileShare(String _hostName, BuildContext context) {
+    return SizedBox(
+      height: 48,
+      width: 48,
+      child: TextButton(
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.white12;
+            }
+            if (states.contains(MaterialState.hovered)) {
+              return Colors.white24;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return Colors.white30;
+            }
+            return Colors.white30;
+          }),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.all(
+            const Color.fromRGBO(42, 42, 42, 1),
+          ),
+          elevation: MaterialStateProperty.all(2),
+        ),
+        onPressed: () {
+          ShareManager().share(_hostName, context);
+        },
+        onLongPress: () {
+          !fileInPath
+              ? showToast(AppLocalizations.of(context)!
+                  .page_imported_fileinpath_enabled)
+              : showToast(AppLocalizations.of(context)!
+                  .page_imported_fileinpath_disabled);
+          setState(() {
+            fileInPath = !fileInPath;
+          });
+        },
+        child: Icon(
+          !isDesktop ? Icons.share : Icons.copy,
+          size: 17,
+          color: const Color.fromRGBO(255, 255, 255, 1.0),
+          semanticLabel: !isDesktop
+              ? AppLocalizations.of(context)!.page_imported_share_sheet_label
+              : AppLocalizations.of(context)!
+                  .page_imported_share_clipboard_label,
+        ),
+      ),
+    );
+  }
+
+  Card importedFileInterfaces(
+      BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+    return Card(
+      color: const Color.fromRGBO(42, 42, 42, 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 2,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+        child: ButtonTheme(
+          alignedDropdown: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: DropdownButton<String>(
+            dropdownColor: const Color.fromRGBO(58, 58, 58, 1),
+            value: selectedIP,
+            isExpanded: true,
+            elevation: 4,
+            underline: const SizedBox(),
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedIP = newValue;
+              });
+            },
+            style: Theme.of(context).textTheme.bodyMedium,
+            items: snapshot.data!['interfaces']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Center(
+                  child: Text(value),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Table importedFileInfo(
+    BuildContext context,
+    String fileDataTip(),
+    Map<String, dynamic> _fileInfo,
+    String _sizeHuman,
+    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+  return Table(
+    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+    columnWidths: {
+      0: const FlexColumnWidth(2.3),
+      1: const FlexColumnWidth(4),
+    },
+    children: [
+      TableRow(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.page_imported_file,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 10),
+            child: Tooltip(
+              message: fileDataTip(),
+              showDuration: const Duration(seconds: 5),
+              padding: const EdgeInsets.all(10),
+              textStyle: const TextStyle(
+                color: const Color.fromRGBO(0, 0, 0, 1.0),
+              ),
+              child: Center(
+                child: AutoSizeText(
+                  _fileInfo['name'],
+                  style: const TextStyle(fontSize: 13),
+                  minFontSize: 11,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      TableRow(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.page_imported_size,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 10),
+            child: Center(
+              child: Text(
+                _sizeHuman,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ),
+        ],
+      ),
+      TableRow(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.page_imported_port,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 10),
+            child: Center(
+              child: Text(
+                snapshot.data!['port'].toString(),
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
 }

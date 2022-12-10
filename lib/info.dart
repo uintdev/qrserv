@@ -53,104 +53,105 @@ class Info {
         child: Padding(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
           child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            child: infoDialogContents(context, packageInfo, contextDialog),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Column infoDialogContents(
+      BuildContext context, Widget packageInfo, BuildContext contextDialog) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            child: Text(
+              AppLocalizations.of(context)!.info_title,
+              style: const TextStyle(
+                fontSize: 25.0,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 2),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            child: Row(
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      AppLocalizations.of(context)!.info_title,
-                      style: const TextStyle(
-                        fontSize: 25.0,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Row(
-                      children: [
-                        packageInfo,
-                        Text(' ('),
-                        Text(kReleaseMode ? 'release' : 'debug'),
-                        Text(')'),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _launchURL(
-                          Uri(
-                              scheme: 'https',
-                              host: 'github.com',
-                              path: 'uintdev/qrserv'),
-                          context,
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.code),
-                          const SizedBox(width: 10),
-                          Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!
-                                    .info_opensource_title,
-                              ),
-                              Text(
-                                ' (GitHub)',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _launchURL(
-                            Uri(
-                                scheme: 'https',
-                                host: 'ko-fi.com',
-                                path: 'uintdev'),
-                            context);
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.local_cafe),
-                          const SizedBox(width: 10),
-                          Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.info_donate_title,
-                              ),
-                              Text(' (Ko-fi)'),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(contextDialog);
-                      },
-                      child: Text(AppLocalizations.of(context)!.info_close),
-                    ),
-                  ],
-                ),
+                packageInfo,
+                Text(' ('),
+                Text(kReleaseMode ? 'release' : 'debug'),
+                Text(')'),
               ],
             ),
           ),
         ),
-      ),
+        const SizedBox(height: 10),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                _launchURL(
+                  Uri(
+                      scheme: 'https',
+                      host: 'github.com',
+                      path: 'uintdev/qrserv'),
+                  context,
+                );
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.code),
+                  const SizedBox(width: 10),
+                  Row(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.info_opensource_title,
+                      ),
+                      Text(
+                        ' (GitHub)',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _launchURL(
+                    Uri(scheme: 'https', host: 'ko-fi.com', path: 'uintdev'),
+                    context);
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.local_cafe),
+                  const SizedBox(width: 10),
+                  Row(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.info_donate_title,
+                      ),
+                      Text(' (Ko-fi)'),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(contextDialog);
+              },
+              child: Text(AppLocalizations.of(context)!.info_close),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
