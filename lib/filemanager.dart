@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 import 'package:oktoast/oktoast.dart';
 import 'cachemanager.dart';
 import 'server.dart';
+import 'network.dart';
 
 class FileManager {
   static String currentFile = '';
@@ -195,6 +196,9 @@ class FileManager {
       FileManager.currentLength = _currentLength;
       FileManager.fileImported = true;
       FileManager.allowWatcher = true;
+
+      // Initiate server
+      await Network().fetchInterfaces(context);
     }
   }
 }

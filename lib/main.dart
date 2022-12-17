@@ -207,11 +207,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       _actionButtonLoading = true;
     });
 
-    // TODO: sort out shutdown button not showing at first after file selection (set, but state not updated in time)
-
-    // Attempt file import
+    // Prompt file import
     try {
-      await FileManager().selectFile(context).then((value) {
+      await FileManager().selectFile(context).whenComplete(() {
         if (FileManager.fileImported) {
           // Update state
           setState(() {
