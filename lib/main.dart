@@ -396,7 +396,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               importFile();
             },
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 250),
               transitionBuilder: (Widget child, Animation<double> animation) =>
                   ScaleTransition(child: child, scale: animation),
               child: _actionButtonLoading
