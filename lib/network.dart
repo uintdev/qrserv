@@ -82,8 +82,6 @@ class Network {
 
     RegExp regExp = new RegExp(
       r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$",
-      caseSensitive: false,
-      multiLine: false,
     );
 
     _versionType = regExp.hasMatch(ip);
