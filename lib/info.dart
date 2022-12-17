@@ -104,44 +104,47 @@ class Info {
                   context,
                 );
               },
-              child: Row(
-                children: [
-                  Icon(Icons.code),
-                  const SizedBox(width: 10),
-                  Row(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                child: Row(
+                  children: [
+                    Icon(Icons.code),
+                    const SizedBox(width: 15),
+                    Row(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.info_opensource_title,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            ElevatedButton(
+                onPressed: () {
+                  _launchURL(
+                    Uri(scheme: 'https', host: 'ko-fi.com', path: 'uintdev'),
+                    context,
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                  child: Row(
                     children: [
-                      Text(
-                        AppLocalizations.of(context)!.info_opensource_title,
-                      ),
-                      Text(
-                        ' (GitHub)',
-                      ),
+                      Icon(Icons.local_cafe),
+                      const SizedBox(width: 15),
+                      Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.info_donate_title,
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _launchURL(
-                    Uri(scheme: 'https', host: 'ko-fi.com', path: 'uintdev'),
-                    context);
-              },
-              child: Row(
-                children: [
-                  Icon(Icons.local_cafe),
-                  const SizedBox(width: 10),
-                  Row(
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.info_donate_title,
-                      ),
-                      Text(' (Ko-fi)'),
-                    ],
-                  )
-                ],
-              ),
-            ),
+                )),
             const SizedBox(height: 8),
             TextButton(
               onPressed: () {
