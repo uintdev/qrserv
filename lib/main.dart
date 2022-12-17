@@ -10,7 +10,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:path/path.dart' as Path;
 import 'theme.dart';
 import 'filemanager.dart';
-import 'cachemanager.dart';
 import 'statemanager.dart';
 import 'sharemanager.dart';
 import 'server.dart';
@@ -272,7 +271,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           FileManager.fileImported = false;
           _stateView = StateManagerPage();
         });
-        await CacheManager().deleteCache(context);
       } else {
         showToast(AppLocalizations.of(context)!.info_exception_shutdownfailed);
       }

@@ -99,9 +99,9 @@ class Server {
         }
         response.close();
 
-        // Shutdown server on error
+        // Shutdown server
         if (!serverRunning) {
-          server.close();
+          await server.close();
           serverRunning = false;
           serverPoweringDown = false;
           FileManager.fileImported = false;

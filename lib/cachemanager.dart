@@ -19,8 +19,8 @@ class CacheManager {
       String cacheDir = await FileManager().filePickerPath();
       Directory cachePath = new Directory(cacheDir);
 
-      if (cachePath.existsSync()) {
-        cachePath.listSync().forEach((e) async {
+      if (await cachePath.exists()) {
+        await cachePath.list().forEach((e) async {
           if (!file.contains(e.path)) {
             await e.delete(recursive: true);
           }
