@@ -117,9 +117,7 @@ class FileManager {
       if (!multipleFiles) archivedLast = '';
 
       // Exclude previously created archive (if any) initially
-      if (archivedLast != '') {
-        cacheExceptionList.add(archivedLast);
-      }
+      if (archivedLast.isEmpty) cacheExceptionList.add(archivedLast);
 
       // Cache handling
       await CacheManager().deleteCache(context, cacheExceptionList, true);
