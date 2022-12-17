@@ -51,7 +51,7 @@ class Info {
       context: context,
       builder: (contextDialog) => Dialog(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+          padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
           child: Container(
             child: infoDialogContents(context, packageInfo, contextDialog),
           ),
