@@ -355,6 +355,8 @@ class StateManager extends State<StateManagerPage> {
               List archivedList = FileManager().readInfo()['archived'];
 
               if (archivedList.length > 0) {
+                archivedFile.add(_fileInfo['name']);
+
                 archivedList.forEach((element) {
                   archivedFile.add(element['file'] +
                       ' (' +
