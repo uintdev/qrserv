@@ -94,57 +94,21 @@ class Info {
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                _launchURL(
-                  Uri(
-                      scheme: 'https',
-                      host: 'github.com',
-                      path: 'uintdev/qrserv'),
-                  context,
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                child: Row(
-                  children: [
-                    Icon(Icons.code),
-                    const SizedBox(width: 15),
-                    Row(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!.info_opensource_title,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            listButton(
+              context,
+              Icons.code,
+              'github.com',
+              'uintdev/qrserv',
+              AppLocalizations.of(context)!.info_opensource_title,
             ),
             const SizedBox(height: 4),
-            ElevatedButton(
-                onPressed: () {
-                  _launchURL(
-                    Uri(scheme: 'https', host: 'ko-fi.com', path: 'uintdev'),
-                    context,
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                  child: Row(
-                    children: [
-                      Icon(Icons.local_cafe),
-                      const SizedBox(width: 15),
-                      Row(
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.info_donate_title,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )),
+            listButton(
+              context,
+              Icons.local_cafe,
+              'ko-fi.com',
+              'uintdev',
+              AppLocalizations.of(context)!.info_donate_title,
+            ),
             const SizedBox(height: 8),
             TextButton(
               onPressed: () {
@@ -155,6 +119,34 @@ class Info {
           ],
         ),
       ],
+    );
+  }
+
+  ElevatedButton listButton(BuildContext context, IconData icon, String host,
+      String path, String label) {
+    return ElevatedButton(
+      onPressed: () {
+        _launchURL(
+          Uri(scheme: 'https', host: host, path: path),
+          context,
+        );
+      },
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+        child: Row(
+          children: [
+            Icon(icon),
+            const SizedBox(width: 15),
+            Row(
+              children: [
+                Text(
+                  label,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
