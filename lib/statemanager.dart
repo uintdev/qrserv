@@ -462,7 +462,7 @@ class StateManager extends State<StateManagerPage> {
     return SizedBox(
       height: 48,
       width: 48,
-      child: TextButton(
+      child: ElevatedButton(
         style: ButtonStyle(
           overlayColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
