@@ -509,7 +509,6 @@ class StateManager extends State<StateManagerPage> {
       ),
       elevation: 2,
       child: ButtonTheme(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         alignedDropdown: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
