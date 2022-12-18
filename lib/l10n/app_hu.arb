@@ -1,8 +1,8 @@
 {
     "@@locale": "hu",
 
-    "page_landing_label": "Válassz fájlt",
-    "page_landing_msg": "Válassz egy fájlt a megosztáshoz...",
+    "page_landing_label": "Fájl(ok) kiválasztása",
+    "page_landing_msg": "Megosztható fájlok kiválasztása...",
 
     "page_info_noconnection_label": "Nincs hálózati kapcsolat",
     "page_info_noconnection_msg": "Ellenőrizd a hálózatot, és próbáld újra",
@@ -46,21 +46,21 @@
     "page_imported_sizesymbol_tb": "TB",
 
     "fab_shutdownserver_label": "Szerver leállítása",
-    "fab_selectfile_label": "Fájl kiválasztása",
+    "fab_selectfile_label": "Fájl(ok) kiválasztása",
 
     "info_exception_statusbar": "Nem sikerült az értesítési sáv színének a megváltoztatása: ",
     "info_exception_navigationbar": "Nem sikerült a navigációs sáv színének a megváltoztatása: ",
 
     "info_exception_intentstream": "getIntentDataStream hiba: ",
 
-    "info_exception_fileselection_fallback": "Nem sikerült kiválasztani a következő fájlt: ",
+    "info_exception_fileselection_fallback": "Nem sikerült kiválasztani a fájl(t/okat): ",
     
     "info_exception_shutdownfailed": "Sikertelen szerver leállítás",
-    "info_exception_fileremoval": "Nem sikerült törölni a gyorsítótárazott fájlt: ",
+    "info_exception_fileremoval": "Nem sikerült eltávolítani a gyorsítótárazott fájl(t/okat): ",
     "info_exception_portinuse": "Nem sikerült a következő port használata: ",
     "info_exception_linkopenfailed": "Nem sikerült a link megnyitása: ",
 
-    "info_pending_fileprocessing": "Fájl feldolgozása...",
+    "info_pending_fileprocessing": "Jelenleg a fájl kiválasztása feldolgozása zajlik...",
     "info_pending_fileprocessing_shutdown": "Nem lehet leállítani a kiszolgálót a fájl választás feldolgozása közben",
     "info_pending_servershutdown": "Szerver leállítás folyamatban...",
     "info_pending_appinfo": "Betöltés...",

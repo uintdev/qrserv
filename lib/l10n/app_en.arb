@@ -1,8 +1,8 @@
 {
     "@@locale": "en",
 
-    "page_landing_label": "Select file",
-    "page_landing_msg": "Select a file to share...",
+    "page_landing_label": "Select file(s)",
+    "page_landing_msg": "Select files to share...",
 
     "page_info_noconnection_label": "No network connection",
     "page_info_noconnection_msg": "Connect to a network and try again",
@@ -46,21 +46,21 @@
     "page_imported_sizesymbol_tb": "TB",
 
     "fab_shutdownserver_label": "Shutdown server",
-    "fab_selectfile_label": "Select file",
+    "fab_selectfile_label": "Select file(s)",
 
     "info_exception_statusbar": "Failed to change status bar colour: ",
     "info_exception_navigationbar": "Failed to change navigation bar colour: ",
 
-    "info_exception_fileselection_fallback": "Failed to select file: ",
+    "info_exception_fileselection_fallback": "Failed to select file(s): ",
 
     "info_exception_intentstream": "getIntentDataStream error: ",
     
     "info_exception_shutdownfailed": "Failed to shutdown server",
-    "info_exception_fileremoval": "Failed to remove cached file: ",
+    "info_exception_fileremoval": "Failed to remove cached file(s): ",
     "info_exception_portinuse": "Error binding port: ",
     "info_exception_linkopenfailed": "Unable to open link: ",
 
-    "info_pending_fileprocessing": "Currently processing file...",
+    "info_pending_fileprocessing": "Currently processing file selection...",
     "info_pending_fileprocessing_shutdown": "Cannot shutdown server while processing file selection",
     "info_pending_servershutdown": "Server shutdown pending...",
     "info_pending_appinfo": "Loading...",

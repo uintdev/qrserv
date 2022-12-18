@@ -1,8 +1,8 @@
 {
     "@@locale": "de",
 
-    "page_landing_label": "Datei auswählen",
-    "page_landing_msg": "Wählen Sie eine Datei zum Teilen aus...",
+    "page_landing_label": "Datei(en) auswählen",
+    "page_landing_msg": "Dateien zum Teilen auswählen...",
 
     "page_info_noconnection_label": "Keine Netzwerk Verbindung",
     "page_info_noconnection_msg": "Verbinden Sie sich mit einem Netzwerk und versuchen Sie es erneut",
@@ -46,21 +46,21 @@
     "page_imported_sizesymbol_tb": "TB",
 
     "fab_shutdownserver_label": "Server herunterfahren",
-    "fab_selectfile_label": "Datei auswählen",
+    "fab_selectfile_label": "Datei(en) auswählen",
 
     "info_exception_statusbar": "Fehler beim Ändern der Farbe der Statusleiste: ",
     "info_exception_navigationbar": "Fehler beim Ändern der Navigationsleiste Farbe: ",
 
     "info_exception_intentstream": "getIntentDataStream error: ",
 
-    "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei: ",
+    "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei(en): ",
     
     "info_exception_shutdownfailed": "Server könnte nicht heruntergefahren werden",
-    "info_exception_fileremoval": "Fehler beim Entfernen der zwischengespeicherten Datei: ",
+    "info_exception_fileremoval": "Fehler beim Entfernen der zwischengespeicherten Datei(en): ",
     "info_exception_portinuse": "Fehler beim Binden des Ports: ",
     "info_exception_linkopenfailed": "Link kann nicht geöffnet werden: ",
 
-    "info_pending_fileprocessing": "Datei wird gerade verarbeitet...",
+    "info_pending_fileprocessing": "Datei(en) wird gerade verarbeitet...",
     "info_pending_fileprocessing_shutdown": "Server kann während der Verarbeitung der Dateiauswahl nicht heruntergefahren werden",
     "info_pending_servershutdown": "Server heruntergefahren ausstehend...",
     "info_pending_appinfo": "Laden...",

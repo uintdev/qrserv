@@ -1,8 +1,8 @@
 {
     "@@locale": "it",
 
-    "page_landing_label": "Seleziona file",
-    "page_landing_msg": "Seleziona un file da condividere...",
+    "page_landing_label": "Seleziona i(l) file",
+    "page_landing_msg": "Seleziona i file da condividere...",
 
     "page_info_noconnection_label": "Nessuna connessione di rete",
     "page_info_noconnection_msg": "Connettiti ad una rete e prova di nuovo",
@@ -46,21 +46,21 @@
     "page_imported_sizesymbol_tb": "TB",
 
     "fab_shutdownserver_label": "Spegni server",
-    "fab_selectfile_label": "Seleziona file",
+    "fab_selectfile_label": "Seleziona i(l) file",
 
     "info_exception_statusbar": "Non è stato possibile cambiare il colore della status bar: ",
     "info_exception_navigationbar": "Non è stato possibile cambiare il colore della navigation bar: ",
 
     "info_exception_intentstream": "Errore getIntentDataStream: ",
 
-    "info_exception_fileselection_fallback": "Errore nella selezione del file: ",
+    "info_exception_fileselection_fallback": "Errore durante la selezione de(i/l) file: ",
     
     "info_exception_shutdownfailed": "Non è stato possibile spegnere il server",
-    "info_exception_fileremoval": "Non è stato possibile rimuovere i file cache: ",
+    "info_exception_fileremoval": "Impossibile rimuovere i(l) file memorizzati nella cache: ",
     "info_exception_portinuse": "Errore nel binding delle porte: ",
     "info_exception_linkopenfailed": "Impossibile aprire il link: ",
 
-    "info_pending_fileprocessing": "Sto processando il file...",
+    "info_pending_fileprocessing": "Selezione dei file attualmente in elaborazione...",
     "info_pending_fileprocessing_shutdown": "Impossibile spegnere il server durante l'elaborazione della selezione dei file",
     "info_pending_servershutdown": "Spegnimento del server in corso...",
     "info_pending_appinfo": "Caricamento...",
