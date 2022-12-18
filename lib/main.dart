@@ -79,7 +79,7 @@ class PageState extends StatefulWidget {
 }
 
 class _Page extends State<PageState> with WidgetsBindingObserver {
-  // Panel
+  // UI theme
   bool _initRun = true;
 
   // Bar themes
@@ -355,60 +355,67 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250),
-            transitionBuilder: (Widget child, Animation<double> animation) =>
-                ScaleTransition(child: child, scale: animation),
-            child: !Server.serverRunning
-                ? SizedBox()
-                : FloatingActionButton(
-                    elevation: 3,
-                    backgroundColor: Colors.red.shade700,
-                    foregroundColor: Colors.red.shade100,
-                    onPressed: () {
-                      if (_actionButtonLoading) {
-                        showToast(AppLocalizations.of(context)!
-                            .info_pending_fileprocessing_shutdown);
-                      } else if (Server.serverRunning &&
-                          !Server.serverPoweringDown) {
-                        shutdownFAB();
-                      } else {
-                        showToast(AppLocalizations.of(context)!
-                            .info_pending_servershutdown);
-                      }
-                    },
-                    child: Icon(
-                      Icons.power_settings_new,
-                      color: Colors.red.shade100,
-                      size: 22.5,
-                      semanticLabel: AppLocalizations.of(context)!
-                          .fab_shutdownserver_label,
-                    ),
-                  ),
-          ),
-          FloatingActionButton(
-            elevation: 3,
-            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-            foregroundColor: Theme.of(context).colorScheme.secondary,
-            onPressed: () {
-              importFile();
-            },
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
-              transitionBuilder: (Widget child, Animation<double> animation) =>
-                  ScaleTransition(child: child, scale: animation),
-              child: _actionButtonLoading
-                  ? StateManager().loadingIndicator()
-                  : Icon(
-                      Icons.insert_drive_file,
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: 20.0,
-                      semanticLabel:
-                          AppLocalizations.of(context)!.fab_selectfile_label,
-                    ),
-            ),
-          ),
+          fabShutdown(context),
+          fabImport(context),
         ],
+      ),
+    );
+  }
+
+  AnimatedSwitcher fabShutdown(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (Widget child, Animation<double> animation) =>
+          ScaleTransition(child: child, scale: animation),
+      child: !Server.serverRunning
+          ? SizedBox()
+          : FloatingActionButton(
+              elevation: 3,
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.red.shade100,
+              onPressed: () {
+                if (_actionButtonLoading) {
+                  showToast(AppLocalizations.of(context)!
+                      .info_pending_fileprocessing_shutdown);
+                } else if (Server.serverRunning && !Server.serverPoweringDown) {
+                  shutdownFAB();
+                } else {
+                  showToast(AppLocalizations.of(context)!
+                      .info_pending_servershutdown);
+                }
+              },
+              child: Icon(
+                Icons.power_settings_new,
+                color: Colors.red.shade100,
+                size: 22.5,
+                semanticLabel:
+                    AppLocalizations.of(context)!.fab_shutdownserver_label,
+              ),
+            ),
+    );
+  }
+
+  FloatingActionButton fabImport(BuildContext context) {
+    return FloatingActionButton(
+      elevation: 3,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      foregroundColor: Theme.of(context).colorScheme.secondary,
+      onPressed: () {
+        importFile();
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        transitionBuilder: (Widget child, Animation<double> animation) =>
+            ScaleTransition(child: child, scale: animation),
+        child: _actionButtonLoading
+            ? StateManager().loadingIndicator()
+            : Icon(
+                Icons.insert_drive_file,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 20.0,
+                semanticLabel:
+                    AppLocalizations.of(context)!.fab_selectfile_label,
+              ),
       ),
     );
   }
