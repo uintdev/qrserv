@@ -394,7 +394,7 @@ class StateManager extends State<StateManagerPage> {
     return Column(
       children: <Widget>[
         importedFileQR(_hostName, context),
-        const SizedBox(height: 40),
+        const SizedBox(height: 30),
         ConstrainedBox(
           constraints: const BoxConstraints(
             maxWidth: 330,
@@ -464,19 +464,6 @@ class StateManager extends State<StateManagerPage> {
       width: 48,
       child: ElevatedButton(
         style: ButtonStyle(
-          overlayColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.focused)) {
-              return Colors.white12;
-            }
-            if (states.contains(MaterialState.hovered)) {
-              return Colors.white24;
-            }
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.white30;
-            }
-            return Colors.white30;
-          }),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -521,35 +508,40 @@ class StateManager extends State<StateManagerPage> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 2,
-      child: Container(
+      child: ButtonTheme(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-        child: ButtonTheme(
-          alignedDropdown: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+        alignedDropdown: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: DropdownButton<String>(
+          icon: Row(
+            children: [
+              Icon(Icons.arrow_drop_down),
+              SizedBox(width: 10),
+            ],
           ),
-          child: DropdownButton<String>(
-            dropdownColor: const Color.fromRGBO(58, 58, 58, 1),
-            value: selectedIP,
-            isExpanded: true,
-            elevation: 4,
-            underline: const SizedBox(),
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedIP = newValue;
-              });
-            },
-            style: Theme.of(context).textTheme.bodyMedium,
-            items: snapshot.data!['interfaces']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Center(
-                  child: Text(value),
-                ),
-              );
-            }).toList(),
-          ),
+          borderRadius: BorderRadius.circular(10.0),
+          dropdownColor: const Color.fromRGBO(58, 58, 58, 1),
+          value: selectedIP,
+          isExpanded: true,
+          elevation: 4,
+          underline: const SizedBox(),
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedIP = newValue;
+            });
+          },
+          style: Theme.of(context).textTheme.bodyMedium,
+          items: snapshot.data!['interfaces']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Center(
+                child: Text(value),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
