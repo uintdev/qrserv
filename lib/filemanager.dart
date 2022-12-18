@@ -106,6 +106,7 @@ class FileManager {
       multipleFiles = (result['files'].length > 1);
 
       List<String> cacheExceptionList = [];
+      archivedFiles = [];
       for (int i = 0; i < result['files'].length; i++) {
         archivedFiles.add({
           'file': result['files'][i]['name'],
