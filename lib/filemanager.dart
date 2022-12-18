@@ -175,11 +175,6 @@ class FileManager {
         _currentFullPath = fullArchivePath;
         _currentPath = fullPickerPath;
         _currentLength = archiveSize;
-
-        if (archivedLast != '') {
-          await CacheManager().deleteCache(context, [archivedLast]);
-        }
-
         archivedLast = _currentFullPath;
       } else {
         _currentFile = result['files'][0]['name'];

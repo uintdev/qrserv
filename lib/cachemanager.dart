@@ -8,12 +8,10 @@ import 'filemanager.dart';
 class CacheManager {
   Future<void> deleteCache(BuildContext context,
       [List<String> file = const [], bool exclude = false]) async {
-    print('init cache');
     // Disallow desktop platforms
     if (StateManager().isDesktop) return;
 
     if (file.length == 0 || file.length > 0 && exclude) {
-      print('dir loop');
       // Reset archivedLast state
       if (file.length == 0) FileManager.archivedLast = '';
 
@@ -29,7 +27,6 @@ class CacheManager {
         });
       }
     } else {
-      print('indiv cache');
       // Individual file removal
       List<String> cacheDir = file;
 
