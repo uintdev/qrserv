@@ -1,81 +1,56 @@
 {
     "@@locale": "pt",
-
     "page_landing_label": "Selecione ficheiro(s)",
     "page_landing_msg": "Selecione ficheiros para compartilhar...",
-
     "page_info_noconnection_label": "Nenhuma conexão de rede",
     "page_info_noconnection_msg": "Conecte-se a uma rede e tente novamente",
-
     "page_info_snapshoterror_label": "Erro",
     "page_info_snapshoterror_msg": "Erro ao coletar informações de rede",
-
     "page_info_fileremoved_label": "Ficheiro removido",
     "page_info_fileremoved_msg": "Ficheiro foi removido",
-
     "page_info_permissiondenied_label": "Erro",
     "page_info_permissiondenied_msg": "A permissão de armazenamento foi negada",
-
     "page_info_insufficientstorage_label": "Erro",
     "page_info_insufficientstorage_msg": "Armazenamento insuficiente",
-
     "page_info_portinuse_label": "Erro",
     "page_info_portinuse_msg": "O servidor tente começar com uma porta já vinculada",
-
     "page_info_fallback_label": "Erro",
     "page_info_fallback_msg": "Ocorreu um erro.\nCódigo: ",
-
     "page_imported_archive_failed": "Arquivo não pôde ser criado: ",
-
     "page_imported_share_sheet_label": "Partilhar",
     "page_imported_share_clipboard_label": "Copiar",
     "page_imported_share_clipboard": "Copiado",
-
     "page_imported_fileinpath_enabled": "Habilitado: nome do arquivo no caminho",
     "page_imported_fileinpath_disabled": "Desativado: nome do arquivo no caminho",
-
     "page_imported_file": "Ficheiro",
     "page_imported_size": "Tamanho",
     "page_imported_port": "Porta",
     "page_imported_decimalseparator": ",",
-
     "page_imported_sizesymbol_b": "B",
     "page_imported_sizesymbol_kb": "KB",
     "page_imported_sizesymbol_mb": "MB",
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
-
     "fab_shutdownserver_label": "Desligar servidor",
     "fab_selectfile_label": "Selecione ficheiro(s)",
-
     "info_exception_statusbar": "Falha ao alterar a cor da barra de status: ",
     "info_exception_navigationbar": "Falha ao alterar a cor da barra de navegação: ",
-
-    "info_exception_intentstream": "getIntentDataStream erro: ",
-
     "info_exception_fileselection_fallback": "Falha ao selecionar ficheiro(s): ",
-    
+    "info_exception_intentstream": "getIntentDataStream erro: ",
     "info_exception_shutdownfailed": "Falha ao desligar servidor",
     "info_exception_fileremoval": "Falha ao remover ficheiro(s) em cache: ",
     "info_exception_portinuse": "Porta já vinculada erro: ",
     "info_exception_linkopenfailed": "Incapaz de abrir o link: ",
-
     "info_pending_fileprocessing": "Ficheiro(s) de processamento atualmente...",
     "info_pending_fileprocessing_shutdown": "Não é possível desligar o servidor durante o processamento da selecção de ficheiros",
     "info_pending_servershutdown": "Desligamento do servidor pendente...",
     "info_pending_appinfo": "Carregando...",
-
     "server_info_tokenmismatch": "Incompatibilidade de token de servidor",
     "server_info_shutdownfailed": "Falha ao desligar servidor.\nCódigo HTTP: ",
     "server_info_gone": "Servidor desaparecido: ",
-
     "info_title": "Sobre...",
-
     "info_packageinfofail": "Erro",
-
     "info_opensource_title": "Código aberto",
-
     "info_donate_title": "Doar",
-
     "info_close": "Fechar"
 }

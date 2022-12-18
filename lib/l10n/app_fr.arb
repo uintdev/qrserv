@@ -1,81 +1,56 @@
 {
     "@@locale": "fr",
-
     "page_landing_label": "Sélectionner fichier·s",
     "page_landing_msg": "Sélectionnez des fichiers à partager...",
-
     "page_info_noconnection_label": "Aucune connexion réseau",
     "page_info_noconnection_msg": "Connectez-vous à un réseau et réessayez",
-
     "page_info_snapshoterror_label": "Erreur",
     "page_info_snapshoterror_msg": "Échec de la collecte des informations réseau",
-
     "page_info_fileremoved_label": "Fichier supprimé",
     "page_info_fileremoved_msg": "Le fichier a été supprimé",
-
     "page_info_permissiondenied_label": "Erreur",
     "page_info_permissiondenied_msg": "La demande de stockage a été refusée",
-
     "page_info_insufficientstorage_label": "Erreur",
     "page_info_insufficientstorage_msg": "Stockage insuffisant",
-
     "page_info_portinuse_label": "Erreur",
     "page_info_portinuse_msg": "Le serveur a essayé de démarrer avec un port en utilisation",
-
     "page_info_fallback_label": "Erreur",
     "page_info_fallback_msg": "Une erreur est survenue.\nCode: ",
-
     "page_imported_archive_failed": "Le fichier d'archive n'a pas pu être créé: ",
-
     "page_imported_share_sheet_label": "Partager",
     "page_imported_share_clipboard_label": "Copier",
     "page_imported_share_clipboard": "Copie effectuée",
-
     "page_imported_fileinpath_enabled": "Activé: nom de fichier dans chemin",
     "page_imported_fileinpath_disabled": "Désactivé: nom de fichier dans chemin",
-
     "page_imported_file": "Fichier",
     "page_imported_size": "Taille",
     "page_imported_port": "Port",
     "page_imported_decimalseparator": ",",
-
     "page_imported_sizesymbol_b": "o",
     "page_imported_sizesymbol_kb": "Ko",
     "page_imported_sizesymbol_mb": "Mo",
     "page_imported_sizesymbol_gb": "Go",
     "page_imported_sizesymbol_tb": "To",
-
     "fab_shutdownserver_label": "Arrêter le serveur",
     "fab_selectfile_label": "Sélectionner fichier·s",
-
     "info_exception_statusbar": "Échec de la modification de la couleur de la barre d'état: ",
     "info_exception_navigationbar": "Échec de la modification de la couleur de la barre de navigation: ",
-
-    "info_exception_intentstream": "erreur getIntentDataStream: ",
-
     "info_exception_fileselection_fallback": "Échec de la sélection des fichiers: ",
-    
+    "info_exception_intentstream": "erreur getIntentDataStream: ",
     "info_exception_shutdownfailed": "L'arrêt du serveur a échoué.",
     "info_exception_fileremoval": "La suppression des fichiers mis en cache a échoué: ",
     "info_exception_portinuse": "La liaison au port a échouée: ",
     "info_exception_linkopenfailed": "Impossible d'ouvrir le lien: ",
-
     "info_pending_fileprocessing": "Fichier·s en cours de traitement...",
     "info_pending_fileprocessing_shutdown": "Impossible d'arrêter le serveur pendant le traitement de la sélection de fichiers",
     "info_pending_servershutdown": "Arrêt du serveur en cours...",
     "info_pending_appinfo": "Chargement en cours...",
-
     "server_info_tokenmismatch": "Le jeton du serveur est invalide",
     "server_info_shutdownfailed": "Échec de l'arrêt du serveur.\ncode HTTP: ",
     "server_info_gone": "Le serveur est parti: ",
-
     "info_title": "À propos...",
-
     "info_packageinfofail": "Erreur",
-
     "info_opensource_title": "Open source",
-
     "info_donate_title": "Faire un don",
-
     "info_close": "Fermer"
 }

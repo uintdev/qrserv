@@ -1,81 +1,56 @@
 {
     "@@locale": "hu",
-
     "page_landing_label": "Fájl(ok) kiválasztása",
     "page_landing_msg": "Megosztható fájlok kiválasztása...",
-
     "page_info_noconnection_label": "Nincs hálózati kapcsolat",
     "page_info_noconnection_msg": "Ellenőrizd a hálózatot, és próbáld újra",
-
     "page_info_snapshoterror_label": "Hiba",
     "page_info_snapshoterror_msg": "Hiba történt a hálózati információk lekérdezésekor",
-
     "page_info_fileremoved_label": "Fájl törölve",
     "page_info_fileremoved_msg": "Fájl törölve lett",
-
     "page_info_permissiondenied_label": "Hiba",
     "page_info_permissiondenied_msg": "Tárhely hozzáférés megtagadva",
-
     "page_info_insufficientstorage_label": "Hiba",
     "page_info_insufficientstorage_msg": "Elégtelen tárolás",
-
     "page_info_portinuse_label": "Hiba",
     "page_info_portinuse_msg": "Egy már használt porton próbált indulni a szerver",
-
     "page_info_fallback_label": "Hiba",
     "page_info_fallback_msg": "Egy hiba történt.\nKód: ",
-
     "page_imported_archive_failed": "Az archívumfájlt nem sikerült létrehozni: ",
-
     "page_imported_share_sheet_label": "Megosztás",
     "page_imported_share_clipboard_label": "Másolás",
     "page_imported_share_clipboard": "Átmásolva",
-
     "page_imported_fileinpath_enabled": "Engedélyezve: fájlnév az elérési útban",
     "page_imported_fileinpath_disabled": "Letiltva: fájlnév az elérési útban",
-
     "page_imported_file": "Fájl",
     "page_imported_size": "Méret",
     "page_imported_port": "Port",
     "page_imported_decimalseparator": ",",
-
     "page_imported_sizesymbol_b": "B",
     "page_imported_sizesymbol_kb": "KB",
     "page_imported_sizesymbol_mb": "MB",
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
-
     "fab_shutdownserver_label": "Szerver leállítása",
     "fab_selectfile_label": "Fájl(ok) kiválasztása",
-
     "info_exception_statusbar": "Nem sikerült az értesítési sáv színének a megváltoztatása: ",
     "info_exception_navigationbar": "Nem sikerült a navigációs sáv színének a megváltoztatása: ",
-
-    "info_exception_intentstream": "getIntentDataStream hiba: ",
-
     "info_exception_fileselection_fallback": "Nem sikerült kiválasztani a fájl(t/okat): ",
-    
+    "info_exception_intentstream": "getIntentDataStream hiba: ",
     "info_exception_shutdownfailed": "Sikertelen szerver leállítás",
     "info_exception_fileremoval": "Nem sikerült eltávolítani a gyorsítótárazott fájl(t/okat): ",
     "info_exception_portinuse": "Nem sikerült a következő port használata: ",
     "info_exception_linkopenfailed": "Nem sikerült a link megnyitása: ",
-
     "info_pending_fileprocessing": "Jelenleg a fájl kiválasztása feldolgozása zajlik...",
     "info_pending_fileprocessing_shutdown": "Nem lehet leállítani a kiszolgálót a fájl választás feldolgozása közben",
     "info_pending_servershutdown": "Szerver leállítás folyamatban...",
     "info_pending_appinfo": "Betöltés...",
-
     "server_info_tokenmismatch": "Nem egyező szerver token",
     "server_info_shutdownfailed": "Sikertelen szerver leállás.\nHTTP kód: ",
     "server_info_gone": "A szerver eltűnt: ",
-
     "info_title": "Névjegy...",
-
     "info_packageinfofail": "Hiba",
-
     "info_opensource_title": "Nyílt forráskód",
-
     "info_donate_title": "Támogatás",
-    
     "info_close": "Bezár"
 }

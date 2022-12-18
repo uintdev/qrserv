@@ -1,81 +1,56 @@
 {
     "@@locale": "en",
-
     "page_landing_label": "Select file(s)",
     "page_landing_msg": "Select files to share...",
-
     "page_info_noconnection_label": "No network connection",
     "page_info_noconnection_msg": "Connect to a network and try again",
-
     "page_info_snapshoterror_label": "Error",
     "page_info_snapshoterror_msg": "Error collecting network information",
-
     "page_info_fileremoved_label": "File removed",
     "page_info_fileremoved_msg": "File was removed",
-
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Storage permission was denied",
-
     "page_info_insufficientstorage_label": "Error",
     "page_info_insufficientstorage_msg": "Insufficient storage",
-
     "page_info_portinuse_label": "Error",
     "page_info_portinuse_msg": "Server tried to start with already binded port",
-
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "An error has occurred.\nCode: ",
-
     "page_imported_archive_failed": "Archive file could not be created: ",
-
     "page_imported_share_sheet_label": "Share",
     "page_imported_share_clipboard_label": "Copy",
     "page_imported_share_clipboard": "Copied",
-
     "page_imported_fileinpath_enabled": "Enabled: filename in path",
     "page_imported_fileinpath_disabled": "Disabled: filename in path",
-
     "page_imported_file": "File",
     "page_imported_size": "Size",
     "page_imported_port": "Port",
     "page_imported_decimalseparator": ".",
-
     "page_imported_sizesymbol_b": "B",
     "page_imported_sizesymbol_kb": "KB",
     "page_imported_sizesymbol_mb": "MB",
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
-
     "fab_shutdownserver_label": "Shutdown server",
     "fab_selectfile_label": "Select file(s)",
-
     "info_exception_statusbar": "Failed to change status bar colour: ",
     "info_exception_navigationbar": "Failed to change navigation bar colour: ",
-
     "info_exception_fileselection_fallback": "Failed to select file(s): ",
-
     "info_exception_intentstream": "getIntentDataStream error: ",
-    
     "info_exception_shutdownfailed": "Failed to shutdown server",
     "info_exception_fileremoval": "Failed to remove cached file(s): ",
     "info_exception_portinuse": "Error binding port: ",
     "info_exception_linkopenfailed": "Unable to open link: ",
-
     "info_pending_fileprocessing": "Currently processing file selection...",
     "info_pending_fileprocessing_shutdown": "Cannot shutdown server while processing file selection",
     "info_pending_servershutdown": "Server shutdown pending...",
     "info_pending_appinfo": "Loading...",
-
     "server_info_tokenmismatch": "Server token mismatch",
     "server_info_shutdownfailed": "Failed to shutdown server.\nHTTP code: ",
     "server_info_gone": "Server is gone: ",
-
     "info_title": "About...",
-
     "info_packageinfofail": "Error",
-
     "info_opensource_title": "Open source",
-
     "info_donate_title": "Donate",
-    
     "info_close": "Close"
 }

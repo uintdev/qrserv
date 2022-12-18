@@ -1,81 +1,56 @@
 {
     "@@locale": "es",
-
     "page_landing_label": "Seleccione archivo(s)",
     "page_landing_msg": "Seleccione archivos para compartir...",
-
     "page_info_noconnection_label": "No hay conexión de red",
     "page_info_noconnection_msg": "Conéctate a una red y vuelve a intentarlo",
-
     "page_info_snapshoterror_label": "Error",
     "page_info_snapshoterror_msg": "Error al recopilar información de red",
-
     "page_info_fileremoved_label": "Archivo eliminado",
     "page_info_fileremoved_msg": "El archivo fue eliminado",
-
     "page_info_permissiondenied_label": "Error",
     "page_info_permissiondenied_msg": "Se denegó el permiso de almacenamiento",
-
     "page_info_insufficientstorage_label": "Error",
     "page_info_insufficientstorage_msg": "Almacenamiento insuficiente",
-
     "page_info_portinuse_label": "Error",
     "page_info_portinuse_msg": "El servidor intentó ejecutarse con un puerto en uso",
-
     "page_info_fallback_label": "Error",
     "page_info_fallback_msg": "Se ha producido un error.\nCódigo: ",
-
     "page_imported_archive_failed": "No se ha podido crear el archivo: ",
-
     "page_imported_share_sheet_label": "Compartir",
     "page_imported_share_clipboard_label": "Copiar",
     "page_imported_share_clipboard": "Copiado",
-
     "page_imported_fileinpath_enabled": "Habilitado: nombre de archivo en ruta",
     "page_imported_fileinpath_disabled": "Deshabilitado: nombre de archivo en ruta",
-
     "page_imported_file": "Archivo",
     "page_imported_size": "Tamaño",
     "page_imported_port": "Puerto",
     "page_imported_decimalseparator": ",",
-
     "page_imported_sizesymbol_b": "B",
     "page_imported_sizesymbol_kb": "KB",
     "page_imported_sizesymbol_mb": "MB",
     "page_imported_sizesymbol_gb": "GB",
     "page_imported_sizesymbol_tb": "TB",
-
     "fab_shutdownserver_label": "Apagar el servidor",
     "fab_selectfile_label": "Seleccione archivo(s)",
-
     "info_exception_statusbar": "No se pudo cambiar el color de la barra de estado: ",
     "info_exception_navigationbar": "No se pudo cambiar el color de la barra de navegación: ",
-
-    "info_exception_intentstream": "getIntentDataStream error: ",
-
     "info_exception_fileselection_fallback": "No se pudo seleccionar el archivo(s): ",
-    
+    "info_exception_intentstream": "getIntentDataStream error: ",
     "info_exception_shutdownfailed": "No se pudo apagar el servidor",
     "info_exception_fileremoval": "No se pudo borrar el archivo(s) en caché: ",
     "info_exception_portinuse": "Error asignando puerto: ",
     "info_exception_linkopenfailed": "No se puede abrir el enlace: ",
-
     "info_pending_fileprocessing": "Actualmente procesando selección de archivos...",
     "info_pending_fileprocessing_shutdown": "No se puede apagar el servidor mientras se procesa la selección de archivos",
     "info_pending_servershutdown": "Cierre del servidor pendiente...",
     "info_pending_appinfo": "Cargando...",
-
     "server_info_tokenmismatch": "El token del servidor no coincide",
     "server_info_shutdownfailed": "No se pudo apagar el servidor.\nCódigo HTTP: ",
     "server_info_gone": "El servidor se ha ido: ",
-
     "info_title": "Acerca de...",
-    
     "info_packageinfofail": "Error",
-
     "info_opensource_title": "Código fuente abierto",
-
     "info_donate_title": "Donar",
-
     "info_close": "Cerrar"
 }
