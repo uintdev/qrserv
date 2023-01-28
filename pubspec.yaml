@@ -28,7 +28,7 @@ dependencies:
     receive_sharing_intent:
         git:
             url: https://github.com/uintdev/receive_sharing_intent.git
-            ref: e4d659f1a006771086b8f265250ccc95dfe2daf5
+            ref: 573400b66d61824b85396bd84a5f06b6f1e757d9
 
     file_picker: ^5.2.5
     flutter_archive: ^5.0.0

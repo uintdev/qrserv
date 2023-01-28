@@ -360,8 +360,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: e4d659f1a006771086b8f265250ccc95dfe2daf5
-      resolved-ref: e4d659f1a006771086b8f265250ccc95dfe2daf5
+      ref: "573400b66d61824b85396bd84a5f06b6f1e757d9"
+      resolved-ref: "573400b66d61824b85396bd84a5f06b6f1e757d9"
       url: "https://github.com/uintdev/receive_sharing_intent.git"
     source: git
     version: "1.4.5"
