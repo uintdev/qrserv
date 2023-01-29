@@ -41,31 +41,32 @@ class QRServ extends StatelessWidget {
     ]);
 
     return OKToast(
-        // Toast properties
-        position: ToastPosition.bottom,
-        textPadding: const EdgeInsets.fromLTRB(25, 16, 25, 16),
-        backgroundColor: const Color.fromRGBO(60, 60, 60, 1.0),
-        duration: const Duration(milliseconds: 3500),
-        radius: 30,
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          localeListResolutionCallback: (locales, supportedLocales) {
-            for (Locale locale in (locales ?? [])) {
-              String langCode = locale.toString();
-              langCode = langCode.split('_')[0];
-              Locale langCodeLocale = Locale(langCode);
-              List<Locale> supportedLanguages = supportedLocales.toList();
-              if (supportedLanguages.contains(langCodeLocale)) {
-                return Locale(langCode);
-              }
+      // Toast properties
+      position: ToastPosition.bottom,
+      textPadding: const EdgeInsets.fromLTRB(25, 16, 25, 16),
+      backgroundColor: const Color.fromRGBO(60, 60, 60, 1.0),
+      duration: const Duration(milliseconds: 3500),
+      radius: 30,
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        localeListResolutionCallback: (locales, supportedLocales) {
+          for (Locale locale in (locales ?? [])) {
+            String langCode = locale.toString();
+            langCode = langCode.split('_')[0];
+            Locale langCodeLocale = Locale(langCode);
+            List<Locale> supportedLanguages = supportedLocales.toList();
+            if (supportedLanguages.contains(langCodeLocale)) {
+              return Locale(langCode);
             }
-            return Locale('en');
-          },
-          theme: FlutterDark.dark(ThemeData.dark(useMaterial3: true)),
-          home: PageState(title: 'QRServ'),
-          debugShowCheckedModeBanner: false,
-        ));
+          }
+          return Locale('en');
+        },
+        theme: FlutterDark.dark(ThemeData.dark(useMaterial3: true)),
+        home: PageState(title: 'QRServ'),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
   }
 }
 
