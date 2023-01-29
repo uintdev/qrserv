@@ -36,12 +36,12 @@ class StateManager extends State<StateManagerPage> {
         fileExists = state;
       });
     }
-
     return state;
   }
 
   // List of platforms considered to be desktop
-  bool isDesktop = (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
+  final bool isDesktop =
+      (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
 
   @override
   Widget build(BuildContext context) {
