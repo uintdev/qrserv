@@ -211,6 +211,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     try {
       await FileManager().selectFile(context).whenComplete(() {
         if (FileManager.fileImported) {
+          pageTypeCurrent = PageType.imported;
           // Update state
           setState(() {
             _stateView = StateManagerPage();
@@ -227,9 +228,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // System denied storage access
         case 'read_external_storage_denied':
           {
+            pageTypeCurrent = PageType.permissiondenied;
             setState(() {
-              _stateView =
-                  StateManager().msgPage(PageMsg.permissiondenied, context);
+              _stateView = StateManager().msgPage(context);
             });
           }
           break;
@@ -237,10 +238,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // Insufficient storage
         case 'unknown_path':
           {
+            pageTypeCurrent = PageType.insufficientstorage;
             await Server().shutdownServer(context);
             setState(() {
-              _stateView =
-                  StateManager().msgPage(PageMsg.insufficientstorage, context);
+              _stateView = StateManager().msgPage(context);
             });
           }
           break;
@@ -266,6 +267,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   // Handle server shutdown via FAB
   void shutdownFAB() async {
+    pageTypeCurrent = PageType.landing;
     await Server().shutdownServer(context).whenComplete(() async {
       if (!Server.serverRunning) {
         setState(() {

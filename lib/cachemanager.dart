@@ -31,7 +31,6 @@ class CacheManager {
       List<String> cacheDir = file;
 
       for (int i = 0; i < cacheDir.length; i++) {
-        print(cacheDir[i]);
         File cachePath = new File(cacheDir[i]);
 
         try {

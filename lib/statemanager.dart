@@ -11,7 +11,9 @@ import 'server.dart';
 import 'network.dart';
 import 'sharemanager.dart';
 
-enum PageMsg {
+enum PageType {
+  landing,
+  imported,
   noconnection,
   snapshoterror,
   fileremoved,
@@ -20,6 +22,8 @@ enum PageMsg {
   portinuse,
   fallback
 }
+
+PageType pageTypeCurrent = PageType.landing;
 
 class RebuildNotification extends Notification {}
 
@@ -48,52 +52,12 @@ class StateManager extends State<StateManagerPage> {
   @override
   Widget build(BuildContext context) {
     Widget _outputState;
-    if (FileManager.fileImported) {
+    if (pageTypeCurrent == PageType.imported) {
       _outputState = importedPage(context);
     } else {
-      _outputState = landingPage(context);
+      _outputState = msgPage(context);
     }
     return _outputState;
-  }
-
-  // Landing view
-  Widget landingPage(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          constraints: const BoxConstraints(maxWidth: 300),
-          child: Card(
-            color: const Color.fromRGBO(34, 34, 34, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation: 1,
-            child: Container(
-              padding: const EdgeInsets.all(40),
-              child: Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.insert_drive_file,
-                    color: const Color.fromRGBO(255, 255, 255, 1.0),
-                    size: 80.0,
-                    semanticLabel:
-                        AppLocalizations.of(context)!.page_landing_label,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  AutoSizeText(
-                    AppLocalizations.of(context)!.page_landing_msg,
-                    textAlign: TextAlign.center,
-                    minFontSize: 11,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   // Loading view
@@ -129,16 +93,29 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  // Error view
-  Widget msgPage(PageMsg pageType, BuildContext context) {
+  // Page view
+  Widget msgPage(BuildContext context) {
     Map _msgInfo;
 
     // Reset state bypass
     interfaceUpdate = false;
 
-    switch (pageType) {
+    PageType pageState = pageTypeCurrent;
+
+    switch (pageState) {
+      // Landing
+      case PageType.landing:
+        {
+          _msgInfo = {
+            'icon': Icons.insert_drive_file,
+            'label': AppLocalizations.of(context)!.page_landing_label,
+            'msg': AppLocalizations.of(context)!.page_landing_msg,
+          };
+        }
+        break;
+
       // No network
-      case PageMsg.noconnection:
+      case PageType.noconnection:
         {
           _msgInfo = {
             'icon': Icons.signal_wifi_off,
@@ -149,7 +126,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Snapshot error while gathering interface list
-      case PageMsg.snapshoterror:
+      case PageType.snapshoterror:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -161,7 +138,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Selected file was removed
-      case PageMsg.fileremoved:
+      case PageType.fileremoved:
         {
           _msgInfo = {
             'icon': Icons.block,
@@ -172,7 +149,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Storage permission declined
-      case PageMsg.permissiondenied:
+      case PageType.permissiondenied:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -184,7 +161,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Insufficient storage
-      case PageMsg.insufficientstorage:
+      case PageType.insufficientstorage:
         {
           _msgInfo = {
             'icon': Icons.disc_full,
@@ -197,7 +174,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Port reuse
-      case PageMsg.portinuse:
+      case PageType.portinuse:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -213,7 +190,7 @@ class StateManager extends State<StateManagerPage> {
             'icon': Icons.error,
             'label': AppLocalizations.of(context)!.page_info_fallback_label,
             'msg': AppLocalizations.of(context)!.page_info_fallback_msg +
-                pageType.toString(),
+                pageState.toString(),
           };
         }
         break;
@@ -267,7 +244,8 @@ class StateManager extends State<StateManagerPage> {
       future: Network().fetchInterfaces(context),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
-          return msgPage(PageMsg.snapshoterror, context);
+          pageTypeCurrent = PageType.snapshoterror;
+          return msgPage(context);
         } else if (snapshot.hasData && interfaceUpdate ||
             snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
@@ -291,8 +269,9 @@ class StateManager extends State<StateManagerPage> {
 
             // If no interfaces available, return network error page
             if (defaultIP == '') {
+              pageTypeCurrent = PageType.noconnection;
               Server().shutdownServer(context);
-              return msgPage(PageMsg.noconnection, context);
+              return msgPage(context);
             }
 
             // Set default IP
@@ -302,7 +281,8 @@ class StateManager extends State<StateManagerPage> {
           // Check if server exception occurred
           if (Server.serverException) {
             Server.serverException = false;
-            return msgPage(PageMsg.portinuse, context);
+            pageTypeCurrent = PageType.portinuse;
+            return msgPage(context);
           }
 
           String? _hostFormatted;
@@ -328,7 +308,8 @@ class StateManager extends State<StateManagerPage> {
           fileExists = Server().fileExists(_fileInfo['path']);
 
           if (!fileExists) {
-            return msgPage(PageMsg.fileremoved, context);
+            pageTypeCurrent = PageType.fileremoved;
+            return msgPage(context);
           }
 
           // File monitoring
