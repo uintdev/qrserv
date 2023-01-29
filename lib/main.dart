@@ -333,11 +333,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Body
       body: NotificationListener<RebuildNotification>(
         onNotification: (_) {
-          setState(() {
-            _actionButtonLoading = _actionButtonLoading;
-            Server.serverRunning = Server.serverRunning;
-            Server.serverPoweringDown = Server.serverPoweringDown;
-          });
+          setState(() {});
           return true;
         },
         child: Stack(
