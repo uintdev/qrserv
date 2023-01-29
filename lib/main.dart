@@ -295,10 +295,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
-
       extendBody: true,
       extendBodyBehindAppBar: true,
-
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Container(
@@ -331,19 +329,30 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           )),
 
       // Body
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[_stateView],
+      body: NotificationListener<RebuildNotification>(
+        onNotification: (_) {
+          setState(() {
+            _actionButtonLoading = _actionButtonLoading;
+            Server.serverRunning = Server.serverRunning;
+            Server.serverPoweringDown = Server.serverPoweringDown;
+          });
+          return true;
+        },
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _stateView,
+                ],
+              ),
             ),
-          ),
-
-          // FAB layout
-          fabLayout(context),
-        ],
+            // FAB layout
+            fabLayout(context),
+          ],
+        ),
       ),
     );
   }

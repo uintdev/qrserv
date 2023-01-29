@@ -21,6 +21,8 @@ enum PageMsg {
   fallback
 }
 
+class RebuildNotification extends Notification {}
+
 class StateManagerPage extends StatefulWidget {
   @override
   StateManager createState() => StateManager();

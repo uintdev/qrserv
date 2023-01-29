@@ -42,5 +42,6 @@ class CacheManager {
         }
       }
     }
+    RebuildNotification().dispatch(context);
   }
 }
