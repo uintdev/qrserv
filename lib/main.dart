@@ -97,6 +97,19 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
     // Import via share receiver
     void importShare(List fileData) async {
+      if (fileData.isEmpty) return;
+
+      // Prevent further execution if still loading
+      if (_actionButtonLoading) {
+        showToast(AppLocalizations.of(context)!.info_pending_fileprocessing);
+        return;
+      }
+
+      // Update button state
+      setState(() {
+        _actionButtonLoading = true;
+      });
+
       Map<String, dynamic> fileSelection = {'files': {}};
       int index = 0;
       for (var file in fileData) {
@@ -114,6 +127,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       ShareManager().importShared(context, fileSelection).whenComplete(() {
         // Update state
         setState(() {
+          _actionButtonLoading = false;
           _stateView = StateManagerPage();
         });
       });
