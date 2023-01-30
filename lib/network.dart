@@ -4,23 +4,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'server.dart';
 import 'filemanager.dart';
-import 'statemanager.dart';
 
 class Network {
   // Default port number
   static int port = 0;
 
   // Initialise interface lists
-  List<String> _interfaceList = [];
-  List<String> ipv4List = [];
-  List<String> ipv6List = [];
+  static List<String> interfaceList = [];
+  List<String> _ipv4List = [];
+  List<String> _ipv6List = [];
 
   // Interface list builder
-  Future _internalIP() async {
+  Future internalIP() async {
     // Reset lists
-    _interfaceList = [];
-    ipv4List = [];
-    ipv6List = [];
+    Network.interfaceList = [];
+    _ipv4List = [];
+    _ipv6List = [];
 
     // Collect currently used interfaces
     for (NetworkInterface interface in await NetworkInterface.list()) {
@@ -32,23 +31,24 @@ class Network {
         if (filterList) {
           // Organise IPs into their own version lists
           if (addr.type.name == 'IPv4') {
-            ipv4List.add(addr.address);
+            _ipv4List.add(addr.address);
           } else if (addr.type.name == 'IPv6') {
-            ipv6List.add(addr.address);
+            _ipv6List.add(addr.address);
           }
         }
       }
     }
     // Create and organise interface list
-    ipv4List = ipv4List..sort();
-    ipv6List = ipv6List..sort();
-    _interfaceList = new List.from(ipv4List.reversed)..addAll(ipv6List);
+    _ipv4List = _ipv4List..sort();
+    _ipv6List = _ipv6List..sort();
+    Network.interfaceList = new List.from(_ipv4List.reversed)
+      ..addAll(_ipv6List);
   }
 
   // Get full list of IPs and unused port
   Future<Map<String, dynamic>> fetchInterfaces(BuildContext context) async {
     // Prepare interface list and fetch unused port for server
-    await _internalIP();
+    await internalIP();
 
     // Server init
     if (!Server.serverRunning &&
@@ -68,7 +68,7 @@ class Network {
     }
 
     Map<String, dynamic> networkData = {
-      'interfaces': _interfaceList,
+      'interfaces': interfaceList,
       'port': port
     };
 

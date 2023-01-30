@@ -12,6 +12,7 @@ import 'theme.dart';
 import 'filemanager.dart';
 import 'statemanager.dart';
 import 'sharemanager.dart';
+import 'network.dart';
 import 'server.dart';
 import 'info.dart';
 
@@ -199,6 +200,12 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     // Prevent further execution if still loading
     if (_actionButtonLoading) {
       showToast(AppLocalizations.of(context)!.info_pending_fileprocessing);
+      return;
+    }
+
+    await Network().internalIP();
+    if (Network.interfaceList.isEmpty) {
+      showToast(AppLocalizations.of(context)!.page_info_noconnection_msg);
       return;
     }
 
