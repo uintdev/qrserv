@@ -112,12 +112,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       }
 
       ShareManager().importShared(context, fileSelection).whenComplete(() {
-        if (FileManager.fileImported) {
-          // Update state
-          setState(() {
-            _stateView = StateManagerPage();
-          });
-        }
+        // Update state
+        setState(() {
+          _stateView = StateManagerPage();
+        });
       });
     }
 
@@ -203,12 +201,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       return;
     }
 
-    await Network().internalIP();
-    if (Network.interfaceList.isEmpty) {
-      showToast(AppLocalizations.of(context)!.page_info_noconnection_msg);
-      return;
-    }
-
     // Update button state
     setState(() {
       _actionButtonLoading = true;
@@ -217,15 +209,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     // Prompt file import
     try {
       await FileManager().selectFile(context).whenComplete(() {
-        if (FileManager.fileImported) {
-          pageTypeCurrent = PageType.imported;
-          // Update state
-          setState(() {
-            _stateView = StateManagerPage();
-          });
-        }
         setState(() {
           _actionButtonLoading = false;
+          _stateView = StateManagerPage();
         });
       });
     } on PlatformException catch (error) {

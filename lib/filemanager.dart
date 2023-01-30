@@ -100,6 +100,15 @@ class FileManager {
       result = fileSelection;
     }
 
+    if (result.containsKey('files') && result['files'].length == 0) return;
+
+    await Network().internalIP();
+    if (Network.interfaceList.isEmpty) {
+      pageTypeCurrent = PageType.noconnection;
+      await Server().shutdownServer(context);
+      return;
+    }
+
     // Only perform file processing if at least one file is selected
     if (result.containsKey('files') && result['files'].length > 0) {
       FileManager.allowWatcher = false;
