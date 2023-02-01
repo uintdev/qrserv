@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'statemanager.dart';
-import 'filemanager.dart';
 
 class ShareManager {
   // Share sheet
@@ -28,10 +27,5 @@ class ShareManager {
       await _copyURL(url, context);
     }
     return;
-  }
-
-  // Manage sent content
-  Future importShared(BuildContext context, Map<String, dynamic> file) async {
-    await FileManager().selectFile(context, file);
   }
 }

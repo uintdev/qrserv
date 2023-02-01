@@ -11,7 +11,6 @@ import 'package:path/path.dart' as Path;
 import 'theme.dart';
 import 'filemanager.dart';
 import 'statemanager.dart';
-import 'sharemanager.dart';
 import 'server.dart';
 import 'info.dart';
 
@@ -123,7 +122,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         index++;
       }
 
-      ShareManager().importShared(context, fileSelection).whenComplete(() {
+      await FileManager().selectFile(context, fileSelection).whenComplete(() {
         // Update state
         setState(() {
           _actionButtonLoading = false;
