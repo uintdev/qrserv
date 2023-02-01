@@ -22,7 +22,10 @@ class CacheManager {
       if (await cachePath.exists()) {
         await cachePath.list().forEach((e) async {
           if (!file.contains(e.path)) {
-            await e.delete(recursive: true);
+            File filePath = new File(e.path);
+            await filePath.exists().then((fileExists) async {
+              if (fileExists) await e.delete(recursive: true);
+            });
           }
         });
       }
@@ -32,7 +35,6 @@ class CacheManager {
 
       for (int i = 0; i < cacheDir.length; i++) {
         File cachePath = new File(cacheDir[i]);
-
         try {
           await cachePath.delete();
         } catch (e) {
