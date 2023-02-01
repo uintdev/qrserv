@@ -305,35 +305,36 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).primaryColor,
-                offset: const Offset(0, 3),
-                spreadRadius: 25,
-                blurRadius: 15,
-              )
-            ]),
-            child: AppBar(
-              elevation: 0,
-              titleTextStyle: Theme.of(context).textTheme.titleLarge,
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: Text(widget.title),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    infoDialogInvoker(context);
-                  },
-                  icon: Icon(Icons.info_outline),
-                ),
-                SizedBox(width: 15)
-              ],
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColor,
+              offset: const Offset(0, 3),
+              spreadRadius: 25,
+              blurRadius: 15,
+            )
+          ]),
+          child: AppBar(
+            elevation: 0,
+            titleTextStyle: Theme.of(context).textTheme.titleLarge,
+            backgroundColor: Theme.of(context).primaryColor,
+            title: Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: Text(widget.title),
             ),
-          )),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  infoDialogInvoker(context);
+                },
+                icon: Icon(Icons.info_outline),
+              ),
+              SizedBox(width: 15)
+            ],
+          ),
+        ),
+      ),
 
       // Body
       body: NotificationListener<RebuildNotification>(
