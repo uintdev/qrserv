@@ -6,12 +6,17 @@ import 'statemanager.dart';
 import 'filemanager.dart';
 
 class CacheManager {
+  static bool cacheDeleteDir = false;
+  static bool cacheDeleteSpecific = false;
+
   Future<void> deleteCache(BuildContext context,
       [List<String> file = const [], bool exclude = false]) async {
     // Disallow desktop platforms
     if (StateManager().isDesktop) return;
 
     if (file.length == 0 || file.length > 0 && exclude) {
+      if (cacheDeleteDir) return;
+      cacheDeleteDir = true;
       // Reset archivedLast state
       if (file.length == 0) FileManager.archivedLast = '';
 
@@ -22,13 +27,14 @@ class CacheManager {
       if (await cachePath.exists()) {
         await cachePath.list().forEach((e) async {
           if (!file.contains(e.path)) {
-            try {
-              await e.delete(recursive: true);
-            } on PathNotFoundException catch (_) {}
+            await e.delete(recursive: true);
           }
         });
       }
+      cacheDeleteDir = false;
     } else {
+      if (cacheDeleteSpecific) return;
+      cacheDeleteSpecific = true;
       // Individual file removal
       List<String> cacheDir = file;
 
@@ -41,6 +47,7 @@ class CacheManager {
               e.toString());
         }
       }
+      cacheDeleteSpecific = false;
     }
     RebuildNotification().dispatch(context);
   }
