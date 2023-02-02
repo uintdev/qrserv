@@ -22,10 +22,9 @@ class CacheManager {
       if (await cachePath.exists()) {
         await cachePath.list().forEach((e) async {
           if (!file.contains(e.path)) {
-            File filePath = new File(e.path);
-            await filePath.exists().then((fileExists) async {
-              if (fileExists) await e.delete(recursive: true);
-            });
+            try {
+              await e.delete(recursive: true);
+            } on PathNotFoundException catch (_) {}
           }
         });
       }
