@@ -498,7 +498,7 @@ class StateManager extends State<StateManagerPage> {
         ),
         child: DropdownButton<String>(
           icon: Row(
-            children: [
+            children: const [
               Icon(Icons.arrow_drop_down),
               SizedBox(width: 10),
             ],
