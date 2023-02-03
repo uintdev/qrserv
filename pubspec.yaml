@@ -3,7 +3,7 @@ description: Transfer files with ease over a network.
 
 publish_to: 'none'
 
-version: 1.4.1+28
+version: 2.0.0+29
 
 environment:
     sdk: '>=2.19.0-255.2.beta <3.0.0'
@@ -48,7 +48,6 @@ dev_dependencies:
 flutter:
     uses-material-design: true
     generate: true
-
     fonts:
         - family: Poppins
           fonts:

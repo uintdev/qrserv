@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.0.0
+
+Android:
+
+-   Multi-file selection support
+    -   In-app and via sharesheet (i.e. selecting multiple images)
+    -   Will be made into a ZIP archive file
+    -   Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
+-   Themed icon support
+-   Target Android 13 (SDK 33)
+-   Fixed a crash that may occur when attempting to import video files via sharesheet
+
+All:
+
+-   Updated UI
+    -   Improved appearance of dropdown
+    -   Replaced slide panel with dialogue box
+-   Added Russian translation
+-   Reduced file selection FAB animation duration by 50ms
+-   Added network check during import process
+-   Improved state management
+-   General reliability improvements
+
 ## 1.4.1
 
 All:
