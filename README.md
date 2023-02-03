@@ -40,6 +40,9 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 
 -   QR Code
 -   Share / Copy to clipboard option
+-   Multi-file selection support (Android only)
+    -   Multi-file selection would result in a ZIP archive
+        -   Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
 -   Import via sharesheet (Android only)
 -   Show and hide filename in download URL path
     -   Long press the share button to toggle
@@ -55,6 +58,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
     -   Polish (Polski)
     -   Portuguese (Português)
     -   Spanish (Español)
+    -   Russian (Русский)
 
 ## Releases
 
@@ -89,7 +93,11 @@ Poppins (the font) is licenced under [OFL-1.1](fonts/OFL.txt).
 
 QRServ is licenced under the [MIT license](LICENSE).
 
-## Translators
+## Translations and translators
+
+For new and existing translations, it is encouraged to use the [Crowdin](https://crowdin.com/project/qrserv) page.
+<br>
+If a pull request or other means are far more convenient, that is fine too.
 
 Thanks to the following users for helping out with language translation:
 
@@ -100,3 +108,4 @@ Thanks to the following users for helping out with language translation:
 | [utf-4096](https://github.com/utf-4096)      | French      |
 | [SimoneG97](https://github.com/SimoneG97)    | Italian     |
 | [guidov2006](https://github.com/guidov2006)  | Spanish     |
+| [solelychloe](https://arciniega.one)         | Russian     |
