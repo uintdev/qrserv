@@ -66,7 +66,7 @@ class StateManager extends State<StateManagerPage> {
       children: <Widget>[
         Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40.0),
+            borderRadius: BorderRadius.circular(40),
           ),
           elevation: 1,
           child: Container(
@@ -213,7 +213,7 @@ class StateManager extends State<StateManagerPage> {
                 children: <Widget>[
                   Icon(
                     _msgInfo['icon'],
-                    size: 80.0,
+                    size: 80,
                     semanticLabel: _msgInfo['label'],
                   ),
                   const SizedBox(height: 20),
@@ -430,7 +430,7 @@ class StateManager extends State<StateManagerPage> {
           data: _hostName,
           version: QrVersions.auto,
           size: (MediaQuery.of(context).size.height * .23),
-          backgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
           padding: EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
         ),
       ),
@@ -445,7 +445,7 @@ class StateManager extends State<StateManagerPage> {
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
           backgroundColor: MaterialStateProperty.all(
@@ -484,13 +484,13 @@ class StateManager extends State<StateManagerPage> {
     return Card(
       color: Theme.of(context).canvasColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10),
       ),
       elevation: 2,
       child: ButtonTheme(
         alignedDropdown: true,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: DropdownButton<String>(
           icon: Row(
@@ -499,7 +499,7 @@ class StateManager extends State<StateManagerPage> {
               SizedBox(width: 10),
             ],
           ),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
           dropdownColor: Theme.of(context).canvasColor,
           value: selectedIP,
           isExpanded: true,
@@ -557,7 +557,7 @@ Table importedFileInfo(
               showDuration: const Duration(seconds: 5),
               padding: const EdgeInsets.all(10),
               textStyle: const TextStyle(
-                color: const Color.fromRGBO(0, 0, 0, 1.0),
+                color: const Color.fromRGBO(0, 0, 0, 1),
               ),
               child: Center(
                 child: AutoSizeText(
