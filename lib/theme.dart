@@ -24,6 +24,11 @@ class QRSTheme {
       cardTheme: CardTheme(
         color: Color.fromRGBO(227, 222, 233, 1),
       ),
+      tooltipTheme: TooltipThemeData(
+        textStyle: TextStyle(
+          color: Color.fromRGBO(255, 255, 255, 1),
+        ),
+      ),
       colorScheme: themeData.colorScheme.copyWith(
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
         secondary: const Color.fromRGBO(191, 180, 229, 1),
@@ -55,6 +60,11 @@ class QRSTheme {
       ),
       cardTheme: CardTheme(
         color: const Color.fromRGBO(46, 44, 54, 1),
+      ),
+      tooltipTheme: TooltipThemeData(
+        textStyle: TextStyle(
+          color: Color.fromRGBO(0, 0, 0, 1),
+        ),
       ),
       colorScheme: themeData.colorScheme.copyWith(
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),

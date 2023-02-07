@@ -556,9 +556,6 @@ Table importedFileInfo(
               message: fileDataTip(),
               showDuration: const Duration(seconds: 5),
               padding: const EdgeInsets.all(10),
-              textStyle: const TextStyle(
-                color: const Color.fromRGBO(0, 0, 0, 1),
-              ),
               child: Center(
                 child: AutoSizeText(
                   _fileInfo['name'],
