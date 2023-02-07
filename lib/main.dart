@@ -172,7 +172,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   void changeStatusColor(Color color) async {
     try {
-      await FlutterStatusbarcolor.setStatusBarColor(color, animate: true);
+      await FlutterStatusbarcolor.setStatusBarColor(color);
       if (useWhiteForeground(color)) {
         FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
         FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
@@ -192,7 +192,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   void changeNavigationColor(Color color) async {
     try {
-      await FlutterStatusbarcolor.setNavigationBarColor(color, animate: true);
+      await FlutterStatusbarcolor.setNavigationBarColor(color);
     } on PlatformException catch (e) {
       showToast(AppLocalizations.of(context)!.info_exception_navigationbar +
           e.toString());
