@@ -61,7 +61,8 @@ class QRServ extends StatelessWidget {
           }
           return Locale('en');
         },
-        theme: FlutterDark.dark(ThemeData.dark(useMaterial3: true)),
+        theme: QRSTheme.light(ThemeData.light(useMaterial3: true)),
+        darkTheme: QRSTheme.dark(ThemeData.dark(useMaterial3: true)),
         home: PageState(title: 'QRServ'),
         debugShowCheckedModeBanner: false,
       ),
@@ -79,9 +80,6 @@ class PageState extends StatefulWidget {
 }
 
 class _Page extends State<PageState> with WidgetsBindingObserver {
-  // UI theme
-  bool _initRun = true;
-
   // Bar themes
   bool _useWhiteStatusBarForeground = false;
   bool _useWhiteNavigationBarForeground = false;
@@ -292,12 +290,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     // Code to run on initial launch
-    if (_initRun && !StateManager().isDesktop) {
-      _initRun = false;
-
-      // Apply bar colours
-      changeStatusColor(Theme.of(context).primaryColor);
-      changeNavigationColor(Theme.of(context).primaryColor);
+    if (!StateManager().isDesktop) {
+      // Apply system UI colours
+      changeStatusColor(Theme.of(context).canvasColor);
+      changeNavigationColor(Theme.of(context).canvasColor);
     }
 
     return Scaffold(
@@ -309,7 +305,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         child: Container(
           decoration: BoxDecoration(boxShadow: [
             BoxShadow(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).canvasColor,
               offset: const Offset(0, 3),
               spreadRadius: 25,
               blurRadius: 15,
@@ -318,7 +314,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           child: AppBar(
             elevation: 0,
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme.of(context).canvasColor,
             title: Padding(
               padding: const EdgeInsets.only(left: 5),
               child: Text(widget.title),
@@ -422,7 +418,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         transitionBuilder: (Widget child, Animation<double> animation) =>
             ScaleTransition(child: child, scale: animation),
         child: _actionButtonLoading
-            ? StateManager().loadingIndicator()
+            ? StateManager().loadingIndicator(context)
             : Icon(
                 Icons.insert_drive_file,
                 color: Theme.of(context).colorScheme.secondary,

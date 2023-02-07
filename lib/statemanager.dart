@@ -65,7 +65,6 @@ class StateManager extends State<StateManagerPage> {
     return Column(
       children: <Widget>[
         Card(
-          color: const Color.fromRGBO(34, 34, 34, 1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40.0),
           ),
@@ -73,8 +72,8 @@ class StateManager extends State<StateManagerPage> {
           child: Container(
             padding: const EdgeInsets.all(20),
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  const Color.fromRGBO(255, 255, 255, 1.0)),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
             ),
           ),
         ),
@@ -82,13 +81,14 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  Widget loadingIndicator() {
-    return const SizedBox(
+  Widget loadingIndicator(BuildContext context) {
+    return SizedBox(
       width: 30,
       height: 30,
       child: CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(
-            const Color.fromRGBO(255, 255, 255, 1.0)),
+          Theme.of(context).colorScheme.secondary,
+        ),
       ),
     );
   }
@@ -203,9 +203,8 @@ class StateManager extends State<StateManagerPage> {
         Container(
           constraints: const BoxConstraints(maxWidth: 300),
           child: Card(
-            color: const Color.fromRGBO(34, 34, 34, 1),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(25),
             ),
             elevation: 1,
             child: Container(
@@ -214,7 +213,6 @@ class StateManager extends State<StateManagerPage> {
                 children: <Widget>[
                   Icon(
                     _msgInfo['icon'],
-                    color: const Color.fromRGBO(255, 255, 255, 1.0),
                     size: 80.0,
                     semanticLabel: _msgInfo['label'],
                   ),
@@ -383,9 +381,8 @@ class StateManager extends State<StateManagerPage> {
             maxWidth: 330,
           ),
           child: Card(
-            color: const Color.fromRGBO(34, 34, 34, 1),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(25),
             ),
             elevation: 1,
             child: Container(
@@ -396,14 +393,14 @@ class StateManager extends State<StateManagerPage> {
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     columnWidths: {
                       0: const FlexColumnWidth(15),
-                      1: const FlexColumnWidth(0.5),
+                      1: const FlexColumnWidth(1),
                       2: const FlexColumnWidth(3.8),
                     },
                     children: [
                       TableRow(
                         children: [
                           importedFileInterfaces(context, snapshot),
-                          const SizedBox(width: 15),
+                          const SizedBox(width: 20),
                           importedFileShare(_hostName, context),
                         ],
                       ),
@@ -423,13 +420,12 @@ class StateManager extends State<StateManagerPage> {
 
   Card importedFileQR(String _hostName, BuildContext context) {
     return Card(
-      color: const Color.fromRGBO(34, 34, 34, 1),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(25),
       ),
       elevation: 1,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(25),
         child: QrImage(
           data: _hostName,
           version: QrVersions.auto,
@@ -453,7 +449,7 @@ class StateManager extends State<StateManagerPage> {
             ),
           ),
           backgroundColor: MaterialStateProperty.all(
-            const Color.fromRGBO(42, 42, 42, 1),
+            Theme.of(context).canvasColor,
           ),
           elevation: MaterialStateProperty.all(2),
         ),
@@ -473,7 +469,7 @@ class StateManager extends State<StateManagerPage> {
         child: Icon(
           !isDesktop ? Icons.share : Icons.copy,
           size: 17,
-          color: const Color.fromRGBO(255, 255, 255, 1.0),
+          color: Theme.of(context).primaryColor,
           semanticLabel: !isDesktop
               ? AppLocalizations.of(context)!.page_imported_share_sheet_label
               : AppLocalizations.of(context)!
@@ -486,7 +482,7 @@ class StateManager extends State<StateManagerPage> {
   Card importedFileInterfaces(
       BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
     return Card(
-      color: const Color.fromRGBO(42, 42, 42, 1),
+      color: Theme.of(context).canvasColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -494,7 +490,7 @@ class StateManager extends State<StateManagerPage> {
       child: ButtonTheme(
         alignedDropdown: true,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: DropdownButton<String>(
           icon: Row(
@@ -504,7 +500,7 @@ class StateManager extends State<StateManagerPage> {
             ],
           ),
           borderRadius: BorderRadius.circular(10.0),
-          dropdownColor: const Color.fromRGBO(58, 58, 58, 1),
+          dropdownColor: Theme.of(context).canvasColor,
           value: selectedIP,
           isExpanded: true,
           elevation: 4,
