@@ -20,7 +20,7 @@ dependencies:
     qr_flutter: ^4.0.0
     watcher: ^1.0.2
     package_info_plus: ^3.0.2
-    url_launcher: ^6.1.8
+    url_launcher: ^6.1.9
     flutter_statusbarcolor_ns: ^0.5.0
     auto_size_text: ^3.0.0
     oktoast: ^3.3.1
