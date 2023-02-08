@@ -5,6 +5,8 @@
 Android:
 
 -   Potential bug fix on certain devices regarding system UI colour changing animation (status and navigation bar -- by not animating them)
+-   Unrestricted rotation for tablets
+    -   Note: this does not mean the UI is optimised for large displays -- this is just for convenience
 
 All:
 
@@ -13,8 +15,6 @@ All:
     -   Updated dark theme
     -   Changes depending on system theme
 -   Added Turkish translation
--   Unrestricted rotation for tablets
-    -   Note: this does not mean the UI is optimised for large displays -- this is just for convenience
 
 ## 2.0.0
 
