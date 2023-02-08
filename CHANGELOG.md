@@ -7,6 +7,7 @@ Android:
 -   Potential bug fix on certain devices regarding system UI colour changing animation (status and navigation bar -- by not animating them)
 -   Unrestricted rotation for tablets
     -   Note: this does not mean the UI is optimised for large displays -- this is just for convenience
+-   Added Turkish translation
 
 All:
 
@@ -14,7 +15,6 @@ All:
     -   New light theme
     -   Updated dark theme
     -   Changes depending on system theme
--   Added Turkish translation
 
 ## 2.0.0
 
@@ -26,6 +26,7 @@ Android:
     -   Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
 -   Themed icon support
 -   Target Android 13 (SDK 33)
+-   Added Russian translation
 -   Fixed a crash that may occur when attempting to import video files via sharesheet
 
 All:
@@ -33,7 +34,6 @@ All:
 -   Updated UI
     -   Improved appearance of dropdown
     -   Replaced slide panel with dialogue box
--   Added Russian translation
 -   Reduced file selection FAB animation duration by 50ms
 -   Added network check during import process
 -   Improved state management
