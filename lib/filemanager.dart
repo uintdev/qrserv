@@ -21,6 +21,7 @@ class FileManager {
   static String archivedLast = '';
 
   static bool fileImported = false;
+  static bool fileImportPending = false;
   static bool multipleFiles = false;
   static bool allowWatcher = false;
   final bool allowMultipleFiles = (Platform.isAndroid);
@@ -60,6 +61,7 @@ class FileManager {
 
   Future selectFile(BuildContext context,
       [Map<String, dynamic> fileSelection = const {}]) async {
+    FileManager.fileImportPending = true;
     Map<String, dynamic> result = {'files': {}};
 
     String cacheDir = await FileManager().filePickerPath();
@@ -100,7 +102,10 @@ class FileManager {
       result = fileSelection;
     }
 
-    if (result.containsKey('files') && result['files'].length == 0) return;
+    if (result.containsKey('files') && result['files'].length == 0) {
+      FileManager.fileImportPending = false;
+      return;
+    }
 
     await Network().internalIP();
     if (Network.interfaceList.isEmpty) {
@@ -207,5 +212,6 @@ class FileManager {
       // Initiate server
       await Network().fetchInterfaces(context);
     }
+    FileManager.fileImportPending = false;
   }
 }

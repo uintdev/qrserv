@@ -52,7 +52,9 @@ class StateManager extends State<StateManagerPage> {
   @override
   Widget build(BuildContext context) {
     Widget _outputState;
-    if (pageTypeCurrent == PageType.imported) {
+    if (FileManager.fileImportPending) {
+      _outputState = loadingPage();
+    } else if (pageTypeCurrent == PageType.imported) {
       _outputState = importedPage(context);
     } else {
       _outputState = msgPage(context);

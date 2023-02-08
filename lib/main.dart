@@ -120,13 +120,20 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         index++;
       }
 
-      await FileManager().selectFile(context, fileSelection).whenComplete(() {
-        // Update state
-        setState(() {
-          _actionButtonLoading = false;
-          _stateView = StateManagerPage();
+      try {
+        await FileManager().selectFile(context, fileSelection).whenComplete(() {
+          setState(() {
+            _actionButtonLoading = false;
+            _stateView = StateManagerPage();
+          });
         });
-      });
+      } catch (error) {
+        showToast(AppLocalizations.of(context)!
+                .info_exception_fileselection_fallback +
+            error.toString());
+      } finally {
+        FileManager.fileImportPending = false;
+      }
     }
 
     if (!StateManager().isDesktop) {
@@ -265,6 +272,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       showToast(
           AppLocalizations.of(context)!.info_exception_fileselection_fallback +
               error.toString());
+    } finally {
+      FileManager.fileImportPending = false;
     }
   }
 
