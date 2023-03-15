@@ -33,7 +33,7 @@ class Network {
           if (addr.type.name == 'IPv4') {
             _ipv4List.add(addr.address);
           } else if (addr.type.name == 'IPv6') {
-            _ipv6List.add(addr.address);
+            _ipv6List.add(addr.address.split('%')[0]);
           }
         }
       }
