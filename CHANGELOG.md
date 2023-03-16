@@ -4,7 +4,7 @@
 
 All:
 
--   Remove zone index from IPv6
+-   Removed zone index from IPv6
 
 ## 2.1.0
 
