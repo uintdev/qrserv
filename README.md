@@ -111,3 +111,11 @@ Thanks to the following users for helping out with language translation:
 | [guidov2006](https://github.com/guidov2006)  | Spanish     |
 | [solelychloe](https://arciniega.one)         | Russian     |
 | [metezd](https://github.com/metezd)          | Turkish     |
+
+## Note regarding the file import process
+
+If you had been using the Android application, you may had noticed how it can take time with large files or that a considerable amount of storage would be temporarily be used up.
+
+More information can be found in this blog post: [QRServ development and inconveniences of a cross-platform framework](https://blog.uint.dev/2023/04/03/qrserv-development-and-inconveniences-of-a-cross-platform-framework/)
+
+In short: using a cross-platform framework to perform platform specific tasks can be highly inconvenient.
