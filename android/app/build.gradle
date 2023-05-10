@@ -32,6 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace = "dev.uint.qrserv"
     compileSdkVersion 33
 
     sourceSets {
