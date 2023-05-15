@@ -2,7 +2,7 @@
 
 ## 2.1.3
 
-Android:
+All:
 
 -   Improved Portuguese translation
 
