@@ -98,6 +98,8 @@ QRServ is licenced under the [MIT license](LICENSE).
 
 For new and existing translations, it is encouraged to use the [Crowdin](https://crowdin.com/project/qrserv) page.
 <br>
+Please note that as there seems to be no notifications up-on activity under Crowdin, you should also notify (i.e. issue, email) if changes were made so that it could be reviewed at the earliest convenience.
+<br>
 If a pull request or other means are far more convenient, that is fine too.
 
 Thanks to the following users for helping out with language translation:
