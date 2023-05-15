@@ -102,15 +102,16 @@ If a pull request or other means are far more convenient, that is fine too.
 
 Thanks to the following users for helping out with language translation:
 
-| User                                         | Language(s) |
-| -------------------------------------------- | ----------- |
-| [miklosakos](https://github.com/miklosakos)  | Hungarian   |
-| [MrRocketFX](https://twitter.com/MrRocketFX) | Polish      |
-| [utf-4096](https://github.com/utf-4096)      | French      |
-| [SimoneG97](https://github.com/SimoneG97)    | Italian     |
-| [guidov2006](https://github.com/guidov2006)  | Spanish     |
-| [solelychloe](https://arciniega.one)         | Russian     |
-| [metezd](https://github.com/metezd)          | Turkish     |
+| User                                           | Language(s) |
+| ---------------------------------------------- | ----------- |
+| [miklosakos](https://github.com/miklosakos)    | Hungarian   |
+| [MrRocketFX](https://twitter.com/MrRocketFX)   | Polish      |
+| [utf-4096](https://github.com/utf-4096)        | French      |
+| [SimoneG97](https://github.com/SimoneG97)      | Italian     |
+| [guidov2006](https://github.com/guidov2006)    | Spanish     |
+| [solelychloe](https://arciniega.one)           | Russian     |
+| [metezd](https://github.com/metezd)            | Turkish     |
+| [princessmortix](https://princessmortix.link/) | Portuguese  |
 
 ## Note regarding the file import process
 
