@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.2
+
+Android:
+
+-   Added in-app immediate update check (Google Play Store)
+
 ## 2.1.1
 
 All:
