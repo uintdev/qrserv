@@ -428,7 +428,7 @@ class StateManager extends State<StateManagerPage> {
       elevation: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
-        child: QrImage(
+        child: QrImageView(
           data: _hostName,
           version: QrVersions.auto,
           size: (MediaQuery.of(context).size.height * .23),
