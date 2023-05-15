@@ -13,6 +13,7 @@ import 'filemanager.dart';
 import 'statemanager.dart';
 import 'server.dart';
 import 'info.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -296,9 +297,33 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     await Info().infoDialog(context);
   }
 
+  Future<void> checkForUpdate() async {
+    if (!Platform.isAndroid) return;
+
+    InAppUpdate.checkForUpdate().then((info) async {
+      if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+        await InAppUpdate.performImmediateUpdate().onError((error, _) {
+          showToast(error.toString());
+          return AppUpdateResult.inAppUpdateFailed;
+        });
+      }
+    }).onError((e, _) {
+      // TODO: potentially handle ERROR_API_NOT_AVAILABLE
+      // Surprisingly did not experience that.. yet.
+      showToast(e.toString());
+    });
+  }
+
+  bool initialLaunch = true;
+
   @override
   Widget build(BuildContext context) {
     // Code to run on initial launch
+    if (initialLaunch) {
+      initialLaunch = false;
+      checkForUpdate();
+    }
+
     if (!StateManager().isDesktop) {
       // Apply system UI colours
       changeStatusColor(Theme.of(context).canvasColor);
