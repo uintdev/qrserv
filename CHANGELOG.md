@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.3
+
+Android:
+
+-   Improved Portuguese translation
+
 ## 2.1.2
 
 Android:
