@@ -307,10 +307,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           return AppUpdateResult.inAppUpdateFailed;
         });
       }
-    }).onError((e, _) {
+    }).onError((error, _) {
       // TODO: potentially handle ERROR_API_NOT_AVAILABLE
       // Surprisingly did not experience that.. yet.
-      showToast(e.toString());
+      showToast(error.toString());
     });
   }
 
