@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.4
+
+Android:
+
+-   Removed in-app immediate update check (Google Play Store) -- oops, best to keep it purely FOSS
+
 ## 2.1.3
 
 All:
