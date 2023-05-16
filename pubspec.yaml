@@ -39,8 +39,6 @@ dependencies:
             path: plugins/window_size
             ref: a738913c8ce2c9f47515382d40827e794a334274
 
-    in_app_update: ^4.0.1
-
 dev_dependencies:
     flutter_test:
         sdk: flutter
