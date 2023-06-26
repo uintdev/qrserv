@@ -1,0 +1,33 @@
+# QRServ's Design Philosophy
+
+## Why are there very few features?
+
+The idea of QRServ is to serve as a simple-to-use tool. It does what it says on the tin, with a simple user interface and experience.
+<br>
+With that in mind, it is therefore fundamental to avoid deviating from that focus by adding features that may not fit in a way that is satisfactory. Visually or otherwise. This can mean sacrificing some potential improvements if there is no clear and reasonable path forward that fits well within the aim.
+
+In this case, the primary purpose is to simply make a file selection accessible through the connected network, to then (optionally) scan the QR code with a device that is on the same network to obtain said file selection.
+
+## Why does the app struggle with large files?
+
+QRServ was built using the Flutter UI framework.
+
+The file picker dependencies for the share sheet and the document UI would not allow gathering of the original path and instead would copy the selected file into cache. As a result, this temporarily uses up more storage and adds the extra processing of making a copy of the selection. How fast this would be depends on the SoC and NAND flash storage bandwidth. As you could imagine, this can especially be a struggle on lower end devices.
+
+The issue technically could be resolved when it comes to in-app file selection (less certain about the share sheet), but it would mean getting far more involved with Kotlin, which further complicates the project in its current stage. Ideally, the app would be built purely using Kotlin so that such things can work far more seamlessly together and function in a very specific way -- to higher satisfactory.
+
+It is worth noting that the limitations are not limited to this application in particular. Similar applications built using Flutter experience such limitations as well.
+
+## Why does the HTTP server not offer a secure connection?
+
+There was a bit of a debate regarding this concept that several other similar applications had adopted. Some better than others (i.e. generated certificate & keys vs. hardcoded).
+<br>
+I happen to have experience in software and web security, and have pushed for better security. With that said, it would feel rather negligent to include the aforementioned functionality.
+
+Right out the gate, we would be talking about self-signed certificates. These inherently will not be trusted by clients that impose certificate validation checks. These clients would usually be browsers.
+
+The main concern is essentially encouraging users to skip certificate warnings. In general, there are going to be man-in-the-middle risks before that self-signed certificate is temporarily trusted -- hence the certificate warning in the first place.
+<br>
+I do not want to encourage such bad practices, nor do I wish to participate in security theatre. It is not convenient or concise to the end user, nor is it an appropriate selling point bearing the aforementioned in mind. The bad outweighs the good. The solution has to be relatively solid.
+
+If concerned for privacy and data integrity, I would encourage trying using a trusted VPN that allows for reachability of other VPN clients, a network that can be trusted, or mobile tethering (mobile data not required -- just needs a 'local' network, as standard).

@@ -69,6 +69,10 @@ Last desktop versions can be found in the [releases section under v1.1.1](../../
 
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B and vice versa.
 
+## Contributing
+
+Before creating a new issue or putting together a pull request (particularly regarding feature requests or potential improvements), please refer to the [design philosophy](PHILOSOPHY.md). It also serves as a Q&A.
+
 ## Building
 
 ### Android
@@ -114,11 +118,3 @@ Thanks to the following users for helping out with language translation:
 | [solelychloe](https://arciniega.one)           | Russian     |
 | [metezd](https://github.com/metezd)            | Turkish     |
 | [princessmortix](https://princessmortix.link/) | Portuguese  |
-
-## Note regarding the file import process
-
-If you had been using the Android application, you may had noticed how it can take time with large files or that a considerable amount of storage would be temporarily be used up.
-
-More information can be found in this blog post: [QRServ development and inconveniences of a cross-platform framework](https://blog.uint.dev/2023/04/03/qrserv-development-and-inconveniences-of-a-cross-platform-framework/)
-
-In short: using a cross-platform framework to perform platform specific tasks can be highly inconvenient.
