@@ -4,7 +4,6 @@ class QRSTheme {
   static ThemeData light(ThemeData template) {
     var themeData = template;
     var newThemeData = themeData.copyWith(
-      useMaterial3: true,
       canvasColor: const Color.fromRGBO(237, 232, 243, 1),
       primaryColor: const Color.fromRGBO(0, 0, 0, 1),
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
@@ -41,7 +40,6 @@ class QRSTheme {
   static ThemeData dark(ThemeData template) {
     var themeData = template;
     var newThemeData = themeData.copyWith(
-      useMaterial3: true,
       canvasColor: const Color.fromRGBO(37, 35, 41, 1),
       primaryColor: const Color.fromRGBO(255, 255, 255, 1),
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
