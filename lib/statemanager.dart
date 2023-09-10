@@ -448,7 +448,7 @@ class StateManager extends State<StateManagerPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: const Color.fromRGBO(47, 45, 54, 1),
+          backgroundColor: const Color.fromRGBO(48, 45, 55, 1),
           elevation: 2,
           shadowColor: Colors.black,
         ),
