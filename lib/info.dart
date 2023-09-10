@@ -101,7 +101,7 @@ class Info {
               'uintdev/qrserv',
               AppLocalizations.of(context)!.info_opensource_title,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             listButton(
               context,
               Icons.local_cafe,
@@ -109,7 +109,7 @@ class Info {
               'uintdev',
               AppLocalizations.of(context)!.info_donate_title,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             TextButton(
               onPressed: () {
                 Navigator.pop(contextDialog);
