@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.5
+
+All:
+
+-   Adjusted 'about' dialogue box UI
+-   Fixes and workarounds relating to recent releases of Flutter
+    -   Increased Kotlin version -- there will be warnings from (abandoned) dependencies relying on the older version but nothing that would prevent building
+    -   Reconstructed share button due to recent ElevatedButton defects regarding child widget alignment
+
 ## 2.1.4
 
 Android:
