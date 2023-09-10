@@ -441,19 +441,16 @@ class StateManager extends State<StateManagerPage> {
 
   SizedBox importedFileShare(String _hostName, BuildContext context) {
     return SizedBox(
-      height: 48,
       width: 48,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+      height: 48,
+      child: TextButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: MaterialStateProperty.all(
-            Theme.of(context).canvasColor,
-          ),
-          elevation: MaterialStateProperty.all(2),
+          backgroundColor: const Color.fromRGBO(47, 45, 54, 1),
+          elevation: 2,
+          shadowColor: Colors.black,
         ),
         onPressed: () {
           ShareManager().share(_hostName, context);
