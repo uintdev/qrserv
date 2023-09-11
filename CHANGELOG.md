@@ -1,8 +1,11 @@
 # Changelog
 
-## 2.1.5
+## 2.1.6
 
-All:
+-   Fixed share button theming
+-   Reworked imported UI card structure (to keep widget sizes consistent)
+
+## 2.1.5
 
 -   Adjusted 'about' dialogue box UI
 -   Fixes and workarounds relating to recent releases of Flutter
