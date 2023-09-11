@@ -390,21 +390,24 @@ class StateManager extends State<StateManagerPage> {
             child: Container(
               padding: const EdgeInsets.all(30),
               child: Column(
-                children: <Widget>[
-                  Table(
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    columnWidths: {
-                      0: const FlexColumnWidth(15),
-                      1: const FlexColumnWidth(1),
-                      2: const FlexColumnWidth(3.8),
-                    },
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      TableRow(
-                        children: [
-                          importedFileInterfaces(context, snapshot),
-                          const SizedBox(width: 20),
-                          importedFileShare(_hostName, context),
-                        ],
+                      SizedBox(
+                        width: 196,
+                        child: importedFileInterfaces(
+                          context,
+                          snapshot,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        width: 56,
+                        child: importedFileShare(
+                          _hostName,
+                          context,
+                        ),
                       ),
                     ],
                   ),
@@ -439,40 +442,43 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  SizedBox importedFileShare(String _hostName, BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 48,
-      child: TextButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+  Card importedFileShare(String _hostName, BuildContext context) {
+    return Card(
+      color: Theme.of(context).canvasColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 2,
+      child: SizedBox(
+        height: 48,
+        child: TextButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
-          backgroundColor: const Color.fromRGBO(48, 45, 55, 1),
-          elevation: 2,
-          shadowColor: Colors.black,
-        ),
-        onPressed: () {
-          ShareManager().share(_hostName, context);
-        },
-        onLongPress: () {
-          !fileInPath
-              ? showToast(AppLocalizations.of(context)!
-                  .page_imported_fileinpath_enabled)
-              : showToast(AppLocalizations.of(context)!
-                  .page_imported_fileinpath_disabled);
-          setState(() {
-            fileInPath = !fileInPath;
-          });
-        },
-        child: Icon(
-          !isDesktop ? Icons.share : Icons.copy,
-          size: 17,
-          color: Theme.of(context).primaryColor,
-          semanticLabel: !isDesktop
-              ? AppLocalizations.of(context)!.page_imported_share_sheet_label
-              : AppLocalizations.of(context)!
-                  .page_imported_share_clipboard_label,
+          onPressed: () {
+            ShareManager().share(_hostName, context);
+          },
+          onLongPress: () {
+            !fileInPath
+                ? showToast(AppLocalizations.of(context)!
+                    .page_imported_fileinpath_enabled)
+                : showToast(AppLocalizations.of(context)!
+                    .page_imported_fileinpath_disabled);
+            setState(() {
+              fileInPath = !fileInPath;
+            });
+          },
+          child: Icon(
+            !isDesktop ? Icons.share : Icons.copy,
+            size: 17,
+            color: Theme.of(context).primaryColor,
+            semanticLabel: !isDesktop
+                ? AppLocalizations.of(context)!.page_imported_share_sheet_label
+                : AppLocalizations.of(context)!
+                    .page_imported_share_clipboard_label,
+          ),
         ),
       ),
     );
