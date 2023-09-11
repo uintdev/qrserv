@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class QRSTheme {
+  static String fontFamily = 'Poppins';
+  static double titleLargeSize = 16;
+  static double titleSmallSize = 13.5;
+
   static ThemeData light(ThemeData template) {
     var themeData = template;
     var newThemeData = themeData.copyWith(
@@ -9,15 +13,15 @@ class QRSTheme {
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
       textTheme: TextTheme(
-        titleLarge: const TextStyle(
+        titleLarge: TextStyle(
           color: const Color.fromRGBO(0, 0, 0, 1),
-          fontFamily: 'Poppins',
-          fontSize: 16,
+          fontFamily: fontFamily,
+          fontSize: titleLargeSize,
         ),
-        bodyMedium: const TextStyle(
+        bodyMedium: TextStyle(
           color: const Color.fromRGBO(0, 0, 0, 1),
-          fontFamily: 'Poppins',
-          fontSize: 13.5,
+          fontFamily: fontFamily,
+          fontSize: titleSmallSize,
         ),
       ),
       cardTheme: CardTheme(
@@ -45,15 +49,15 @@ class QRSTheme {
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
       textTheme: TextTheme(
-        titleLarge: const TextStyle(
+        titleLarge: TextStyle(
           color: const Color.fromRGBO(255, 255, 255, 1),
-          fontFamily: 'Poppins',
-          fontSize: 16,
+          fontFamily: fontFamily,
+          fontSize: titleLargeSize,
         ),
-        bodyMedium: const TextStyle(
+        bodyMedium: TextStyle(
           color: const Color.fromRGBO(255, 255, 255, 1),
-          fontFamily: 'Poppins',
-          fontSize: 13.5,
+          fontFamily: fontFamily,
+          fontSize: titleSmallSize,
         ),
       ),
       cardTheme: CardTheme(
