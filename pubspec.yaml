@@ -23,14 +23,14 @@ dependencies:
     url_launcher: ^6.1.14
     flutter_statusbarcolor_ns: ^0.5.0
     auto_size_text: ^3.0.0
-    oktoast: ^3.3.1
+    oktoast: ^3.3.2
     share_plus: ^7.1.0
     receive_sharing_intent:
         git:
             url: https://github.com/uintdev/receive_sharing_intent.git
             ref: 573400b66d61824b85396bd84a5f06b6f1e757d9
 
-    file_picker: ^5.5.0
+    file_picker: ^6.0.0
     flutter_archive: ^5.0.0
 
     window_size:
