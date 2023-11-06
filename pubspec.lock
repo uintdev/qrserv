@@ -93,10 +93,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "903dd4ba13eae7cef64acc480e91bf54c3ddd23b5b90b639c170f3911e489620"
+      sha256: "4e42aacde3b993c5947467ab640882c56947d9d27342a5b6f2895b23956954a6"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0"
+    version: "6.1.1"
   filesize:
     dependency: "direct main"
     description:
@@ -200,18 +200,10 @@ packages:
     dependency: transitive
     description:
       name: leak_tracker
-      sha256: f38a2c91c12f31726ca13015fbab3d2e9440edcb7c17b8b36ed9b85ed6eee6a2
+      sha256: "2c30f27ada446b4d36307aade893faaaeb6d8f55b2362b7f424a9668fcc43f4d"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.11"
-  leak_tracker_flutter_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_flutter_testing
-      sha256: "23770c69594f5260a79fe9d84e29f8b175d1b05d128e751c904b3cdf910e5dfc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.9"
+    version: "9.0.14"
   leak_tracker_testing:
     dependency: transitive
     description:
@@ -550,10 +542,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: a13d5503b4facefc515c8c587ce3cf69577a7b064a9f1220e005449cf1f64aad
+      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.0"
+    version: "13.0.0"
   watcher:
     dependency: "direct main"
     description:
@@ -570,14 +562,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
-  web_socket_channel:
-    dependency: transitive
-    description:
-      name: web_socket_channel
-      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.0"
   webdriver:
     dependency: transitive
     description:
