@@ -521,7 +521,13 @@ class StateManager extends State<StateManagerPage> {
             return DropdownMenuItem<String>(
               value: value,
               child: Center(
-                child: Text(value),
+                child: AutoSizeText(
+                  value,
+                  style: const TextStyle(fontSize: 13),
+                  minFontSize: 12,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ),
             );
           }).toList(),
