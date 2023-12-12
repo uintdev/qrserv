@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.7
+
+-   Long IPv6 addresses now visually limited to 2 lines (font size lowers when close to hard limit -- begins truncating when the limit is reached)
+-   Visually limited file name to one line (truncates if too long -- press and hold to display full file name in tooltip)
+-   Spaced out the file information table further
+-   Incremented compile and target SDK versions to 34 (Android 14)
+-   Removed GMS (Google Mobile Services) dependency from Gradle build config
+-   Use mavenCentral over jcenter
+-   Increased Kotlin version
+
 ## 2.1.6
 
 -   Fixed share button theming
