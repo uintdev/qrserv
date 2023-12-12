@@ -565,9 +565,9 @@ Table importedFileInfo(
                 child: AutoSizeText(
                   _fileInfo['name'],
                   style: const TextStyle(fontSize: 13),
-                  minFontSize: 11,
+                  minFontSize: 13,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+                  maxLines: 1,
                 ),
               ),
             ),
