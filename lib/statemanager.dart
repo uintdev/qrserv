@@ -543,6 +543,7 @@ Table importedFileInfo(
     Map<String, dynamic> _fileInfo,
     String _sizeHuman,
     AsyncSnapshot<Map<String, dynamic>> snapshot) {
+  const double tableGap = 2;
   return Table(
     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
     columnWidths: {
@@ -583,7 +584,7 @@ Table importedFileInfo(
       TableRow(
         children: [
           Container(
-            padding: const EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10, top: tableGap),
             child: Center(
               child: Text(
                 AppLocalizations.of(context)!.page_imported_size,
@@ -592,7 +593,7 @@ Table importedFileInfo(
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
               child: Text(
                 _sizeHuman,
@@ -605,7 +606,7 @@ Table importedFileInfo(
       TableRow(
         children: [
           Container(
-            padding: const EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10, top: tableGap),
             child: Center(
               child: Text(
                 AppLocalizations.of(context)!.page_imported_port,
@@ -614,7 +615,7 @@ Table importedFileInfo(
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
               child: Text(
                 snapshot.data!['port'].toString(),
