@@ -27,15 +27,11 @@ class CacheManager {
       if (await pickerPath.exists()) {
         await pickerPath.list().forEach((e) async {
           if (!file.contains(e.path)) {
-            debugPrint('about to reach recursive removal');
             if (FileManager().directModeDetect(e.path)) return;
-            debugPrint('attempted recursive removal');
-            // TODO: temp measure
-            //await e.delete(recursive: true);
+            await e.delete(recursive: true);
           }
         });
       }
-      print('cache wipe done');
       cacheDeleteDir = false;
     } else {
       if (cacheDeleteSpecific) return;
@@ -44,15 +40,12 @@ class CacheManager {
       List<String> pickerDir = file;
 
       for (int i = 0; i < pickerDir.length; i++) {
-        debugPrint('about to reach removal');
         if (FileManager().directModeDetect(pickerDir[i])) continue;
-        debugPrint('reached removal');
 
         File pickerPath = File(pickerDir[i]);
 
         try {
-          // TODO: temp measure
-          //await pickerPath.delete();
+          await pickerPath.delete();
         } catch (e) {
           showToast(AppLocalizations.of(context)!.info_exception_fileremoval +
               e.toString());
