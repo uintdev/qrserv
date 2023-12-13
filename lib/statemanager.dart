@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,6 +36,7 @@ class StateManagerPage extends StatefulWidget {
 class StateManager extends State<StateManagerPage> {
   bool fileExists = false;
   bool interfaceUpdate = false;
+  StreamSubscription<WatchEvent>? importWatchdog;
 
   bool setFileStatus(bool state) {
     if (mounted) {
@@ -52,6 +54,12 @@ class StateManager extends State<StateManagerPage> {
   @override
   Widget build(BuildContext context) {
     Widget _outputState;
+
+    if (!FileManager.allowWatcher) {
+      if (importWatchdog != null && importWatchdog?.cancel != null) {
+        importWatchdog?.cancel();
+      }
+    }
 
     if (FileManager.fileImportPending) {
       _outputState = loadingPage();
@@ -316,7 +324,7 @@ class StateManager extends State<StateManagerPage> {
           // File monitoring
           try {
             DirectoryWatcher watcher = DirectoryWatcher(_fileInfo['pathpart']);
-            watcher.events.listen((event) {
+            importWatchdog = watcher.events.listen((event) {
               if (event.type.toString() == 'remove' &&
                   event.path == _fileInfo['path'] &&
                   FileManager.allowWatcher) {

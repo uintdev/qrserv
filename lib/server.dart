@@ -105,6 +105,7 @@ class Server {
           serverRunning = false;
           serverPoweringDown = false;
           FileManager.fileImported = false;
+          FileManager.allowWatcher = false;
           await CacheManager().deleteCache(context);
         }
       });
@@ -145,6 +146,7 @@ class Server {
       serverRunning = false;
       serverPoweringDown = false;
       FileManager.fileImported = false;
+      FileManager.allowWatcher = false;
       await CacheManager().deleteCache(context);
     });
   }
