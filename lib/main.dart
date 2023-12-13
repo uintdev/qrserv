@@ -8,6 +8,9 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:path/path.dart' as Path;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:filesystem_picker/filesystem_picker.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'theme.dart';
 import 'filemanager.dart';
 import 'statemanager.dart';
@@ -223,9 +226,59 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       _actionButtonLoading = true;
     });
 
+    // TODO: add import option
+    Map<String, dynamic> fileSelection = {};
+
+    if (FileManager.directAccessMode) {
+      final Permission storagePerm;
+
+      if (!Platform.isAndroid) return;
+
+      final androidInfo = await DeviceInfoPlugin().androidInfo;
+      if (androidInfo.version.sdkInt <= 32) {
+        storagePerm = Permission.storage;
+      } else {
+        storagePerm = Permission.manageExternalStorage;
+      }
+
+      await storagePerm.onDeniedCallback(() {
+        FileManager.fileImportPending = false;
+        // TODO: show error message? file manager shows already.
+      }).onGrantedCallback(() {
+        FileManager.fileImportPending = false;
+      }).request();
+
+      final Directory rootPath = Directory(FileManager().directAccessPath);
+
+      String? path = await FilesystemPicker.open(
+        context: context,
+        rootDirectory: rootPath,
+        fsType: FilesystemType.file,
+        requestPermission: () async => await storagePerm.request().isGranted,
+      );
+
+      if (path == null) {
+        _actionButtonLoading = false;
+        FileManager.fileImportPending = false;
+        return;
+      }
+
+      fileSelection = {'files': {}};
+      final int fileSize = File(path).lengthSync();
+      fileSelection['files'].addAll(
+        {
+          0: {
+            'name': Path.basename(path),
+            'path': path,
+            'size': fileSize,
+          }
+        },
+      );
+    }
+
     // Prompt file import
     try {
-      await FileManager().selectFile(context).whenComplete(() {
+      await FileManager().selectFile(context, fileSelection).whenComplete(() {
         setState(() {
           _actionButtonLoading = false;
           _stateView = StateManagerPage();
@@ -269,6 +322,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Revert FAB state
       _actionButtonLoading = false;
     } catch (error) {
+      print('AN EXCEPTION OCCURRED');
+      print(error);
       showToast(
           AppLocalizations.of(context)!.info_exception_fileselection_fallback +
               error.toString());
@@ -328,6 +383,24 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               child: Text(widget.title),
             ),
             actions: [
+              !Platform.isAndroid
+                  ? SizedBox(width: 0)
+                  : IconButton(
+                      onPressed: () {
+                        // TODO: apply i18n to strings
+                        !FileManager.directAccessMode
+                            ? showToast('Enabled: Direct access mode')
+                            : showToast('Disabled: Direct access mode');
+                        setState(() {
+                          FileManager.directAccessMode =
+                              !FileManager.directAccessMode;
+                        });
+                      },
+                      icon: !FileManager.directAccessMode
+                          ? Icon(Icons.sd_card_outlined)
+                          : Icon(Icons.sd_card),
+                    ),
+              SizedBox(width: 10),
               IconButton(
                 onPressed: () {
                   infoDialogInvoker(context);
@@ -388,6 +461,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       child: !Server.serverRunning
           ? SizedBox()
           : FloatingActionButton(
+              heroTag: 'shutdown',
               elevation: 3,
               backgroundColor: Colors.red.shade700,
               foregroundColor: Colors.red.shade100,
@@ -415,6 +489,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   FloatingActionButton fabImport(BuildContext context) {
     return FloatingActionButton(
+      heroTag: 'import',
       elevation: 3,
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       foregroundColor: Theme.of(context).colorScheme.secondary,

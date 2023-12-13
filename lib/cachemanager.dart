@@ -21,27 +21,38 @@ class CacheManager {
       if (file.length == 0) FileManager.archivedLast = '';
 
       // Recursive file removal
-      String cacheDir = await FileManager().filePickerPath();
-      Directory cachePath = Directory(cacheDir);
+      String pickerDir = await FileManager().filePickerPath();
+      Directory pickerPath = Directory(pickerDir);
 
-      if (await cachePath.exists()) {
-        await cachePath.list().forEach((e) async {
+      if (await pickerPath.exists()) {
+        await pickerPath.list().forEach((e) async {
           if (!file.contains(e.path)) {
-            await e.delete(recursive: true);
+            debugPrint('about to reach recursive removal');
+            if (FileManager().directModeDetect(e.path)) return;
+            debugPrint('attempted recursive removal');
+            // TODO: temp measure
+            //await e.delete(recursive: true);
           }
         });
       }
+      print('cache wipe done');
       cacheDeleteDir = false;
     } else {
       if (cacheDeleteSpecific) return;
       cacheDeleteSpecific = true;
       // Individual file removal
-      List<String> cacheDir = file;
+      List<String> pickerDir = file;
 
-      for (int i = 0; i < cacheDir.length; i++) {
-        File cachePath = File(cacheDir[i]);
+      for (int i = 0; i < pickerDir.length; i++) {
+        debugPrint('about to reach removal');
+        if (FileManager().directModeDetect(pickerDir[i])) continue;
+        debugPrint('reached removal');
+
+        File pickerPath = File(pickerDir[i]);
+
         try {
-          await cachePath.delete();
+          // TODO: temp measure
+          //await pickerPath.delete();
         } catch (e) {
           showToast(AppLocalizations.of(context)!.info_exception_fileremoval +
               e.toString());

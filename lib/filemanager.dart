@@ -24,7 +24,11 @@ class FileManager {
   static bool fileImportPending = false;
   static bool multipleFiles = false;
   static bool allowWatcher = false;
+  static bool directAccessMode = false;
+  final String directAccessPath = '/storage/emulated/0';
   final bool allowMultipleFiles = (Platform.isAndroid);
+
+  // TODO: add path detection to cache to NOT wipe files under /sdcard
 
   Map<String, dynamic> readInfo() {
     return {
@@ -37,8 +41,20 @@ class FileManager {
   }
 
   Future<String> filePickerPath() async {
-    String cacheDir = (await getTemporaryDirectory()).path + '/file_picker';
-    return cacheDir;
+    String pickerDir = FileManager.directAccessMode
+        ? directAccessPath
+        : (await getTemporaryDirectory()).path + '/file_picker';
+    return pickerDir;
+  }
+
+  bool directModeDetect(String path) {
+    bool result = false;
+
+    if (path.startsWith(directAccessPath)) {
+      result = true;
+    }
+
+    return result;
   }
 
   String fileSizeHuman(length, round, context) {
@@ -64,17 +80,27 @@ class FileManager {
     FileManager.fileImportPending = true;
     Map<String, dynamic> result = {'files': {}};
 
-    String cacheDir = await FileManager().filePickerPath();
-    Directory sourceDir = Directory(cacheDir);
+    String pickerDir = await FileManager().filePickerPath();
+    Directory sourceDir = Directory(pickerDir);
 
-    // Ensure file picker cache directory exists first
+    // Ensure file picker directory exists first
     bool dirExists = await sourceDir.exists();
     if (!dirExists) {
+      if (directAccessMode) {
+        // TODO: i19n message
+        showToast('Path for direct access mode not found');
+        return;
+      }
       Directory sourceDirCreated = await sourceDir.create();
       sourceDir = sourceDirCreated;
     }
 
-    if (fileSelection.length == 0) {
+    debugPrint('APPROACHING METHODS');
+    print(directAccessMode);
+    print(fileSelection.length);
+
+    if (!directAccessMode && fileSelection.length == 0) {
+      print('METHOD 1');
       FilePickerResult? resultFilePicker = await FilePicker.platform
           .pickFiles(allowMultiple: allowMultipleFiles);
 
@@ -90,22 +116,32 @@ class FileManager {
           });
         }
       }
+    } else if (fileSelection.length > 0 &&
+        directModeDetect(fileSelection['files'][0]['path'])) {
+      print('METHOD 2');
+      result = fileSelection;
+      print('DIRECT MODE DETECTED');
+      // TODO: test if this condition gets hit
     } else {
+      print('METHOD 3');
       // Share sheet handler
       // Move files selected via share sheet into usual directory for archiving
       for (int i = 0; i < fileSelection['files'].length; i++) {
         File fileRename = File(fileSelection['files'][i]['path']);
         File fileRenamed = await fileRename
-            .rename(cacheDir + '/' + fileSelection['files'][i]['name']);
+            .rename(pickerDir + '/' + fileSelection['files'][i]['name']);
         fileSelection['files'][i]['path'] = fileRenamed.path;
       }
       result = fileSelection;
     }
 
     if (result.containsKey('files') && result['files'].length == 0) {
+      print('HALTING');
       FileManager.fileImportPending = false;
       return;
     }
+
+    print('CONFIG NETWORKING');
 
     await Network().internalIP();
     if (Network.interfaceList.isEmpty) {
@@ -116,6 +152,7 @@ class FileManager {
 
     // Only perform file processing if at least one file is selected
     if (result.containsKey('files') && result['files'].length > 0) {
+      print('PROCESSING');
       FileManager.allowWatcher = false;
 
       multipleFiles = (result['files'].length > 1);
@@ -137,7 +174,9 @@ class FileManager {
       if (archivedLast.isEmpty) cacheExceptionList.add(archivedLast);
 
       // Cache handling
+      print('cache run');
       await CacheManager().deleteCache(context, cacheExceptionList, true);
+      print('cache done');
 
       String _currentFile = '';
       String _currentFullPath = '';

@@ -52,6 +52,7 @@ class StateManager extends State<StateManagerPage> {
   @override
   Widget build(BuildContext context) {
     Widget _outputState;
+
     if (FileManager.fileImportPending) {
       _outputState = loadingPage();
     } else if (pageTypeCurrent == PageType.imported) {
@@ -316,7 +317,6 @@ class StateManager extends State<StateManagerPage> {
           try {
             DirectoryWatcher watcher = DirectoryWatcher(_fileInfo['pathpart']);
             watcher.events.listen((event) {
-              // Check if selected file was removed
               if (event.type.toString() == 'remove' &&
                   event.path == _fileInfo['path'] &&
                   FileManager.allowWatcher) {
