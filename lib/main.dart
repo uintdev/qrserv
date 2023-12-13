@@ -61,8 +61,8 @@ class QRServ extends StatelessWidget {
           }
           return Locale('en');
         },
-        theme: QRSTheme.light(ThemeData.light(useMaterial3: true)),
-        darkTheme: QRSTheme.dark(ThemeData.dark(useMaterial3: true)),
+        theme: QRSTheme.light(ThemeData.light()),
+        darkTheme: QRSTheme.dark(ThemeData.dark()),
         home: PageState(title: 'QRServ'),
         debugShowCheckedModeBanner: false,
       ),
