@@ -41,8 +41,7 @@ class Network {
     // Create and organise interface list
     _ipv4List = _ipv4List..sort();
     _ipv6List = _ipv6List..sort();
-    Network.interfaceList = new List.from(_ipv4List.reversed)
-      ..addAll(_ipv6List);
+    Network.interfaceList = List.from(_ipv4List.reversed)..addAll(_ipv6List);
   }
 
   // Get full list of IPs and unused port
@@ -81,7 +80,7 @@ class Network {
 
     bool _versionType;
 
-    RegExp regExp = new RegExp(
+    RegExp regExp = RegExp(
       r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$",
     );
 

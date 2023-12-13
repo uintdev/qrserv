@@ -22,7 +22,7 @@ class CacheManager {
 
       // Recursive file removal
       String cacheDir = await FileManager().filePickerPath();
-      Directory cachePath = new Directory(cacheDir);
+      Directory cachePath = Directory(cacheDir);
 
       if (await cachePath.exists()) {
         await cachePath.list().forEach((e) async {
@@ -39,7 +39,7 @@ class CacheManager {
       List<String> cacheDir = file;
 
       for (int i = 0; i < cacheDir.length; i++) {
-        File cachePath = new File(cacheDir[i]);
+        File cachePath = File(cacheDir[i]);
         try {
           await cachePath.delete();
         } catch (e) {

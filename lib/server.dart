@@ -13,7 +13,7 @@ class Server {
     bool _filePresent = false;
     if (file == '') return _filePresent;
 
-    File _filePath = new File(file);
+    File _filePath = File(file);
     if (_filePath.existsSync()) {
       _filePresent = true;
     }
@@ -40,7 +40,7 @@ class Server {
     }
     String _generateStore = '';
 
-    final _random = new Random();
+    final _random = Random();
     for (int i = 0; i < length; i++) {
       _generateStore += _characters[_random.nextInt(_characters.length - 1)];
     }
