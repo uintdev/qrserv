@@ -95,10 +95,6 @@ class FileManager {
       sourceDir = sourceDirCreated;
     }
 
-    debugPrint('APPROACHING METHODS');
-    print(directAccessMode);
-    print(fileSelection.length);
-
     if (!directAccessMode && fileSelection.length == 0) {
       print('METHOD 1');
       FilePickerResult? resultFilePicker = await FilePicker.platform
@@ -119,9 +115,8 @@ class FileManager {
     } else if (fileSelection.length > 0 &&
         directModeDetect(fileSelection['files'][0]['path'])) {
       print('METHOD 2');
-      result = fileSelection;
       print('DIRECT MODE DETECTED');
-      // TODO: test if this condition gets hit
+      result = fileSelection;
     } else {
       print('METHOD 3');
       // Share sheet handler
@@ -136,12 +131,9 @@ class FileManager {
     }
 
     if (result.containsKey('files') && result['files'].length == 0) {
-      print('HALTING');
       FileManager.fileImportPending = false;
       return;
     }
-
-    print('CONFIG NETWORKING');
 
     await Network().internalIP();
     if (Network.interfaceList.isEmpty) {
@@ -152,7 +144,6 @@ class FileManager {
 
     // Only perform file processing if at least one file is selected
     if (result.containsKey('files') && result['files'].length > 0) {
-      print('PROCESSING');
       FileManager.allowWatcher = false;
 
       multipleFiles = (result['files'].length > 1);
@@ -174,9 +165,7 @@ class FileManager {
       if (archivedLast.isEmpty) cacheExceptionList.add(archivedLast);
 
       // Cache handling
-      print('cache run');
       await CacheManager().deleteCache(context, cacheExceptionList, true);
-      print('cache done');
 
       String _currentFile = '';
       String _currentFullPath = '';
