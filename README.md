@@ -28,6 +28,10 @@
         <img src="docs/screenshots/3.png" alt="Screenshot of app after opening IP address list" height="380">
         &nbsp;&nbsp;
         <img src="docs/screenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="380">
+        &nbsp;&nbsp;
+        <img src="docs/screenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with original file names sizes of those included in the resulting file archive" height="380">
+        &nbsp;&nbsp;
+        <img src="docs/screenshots/6.png" alt="Screenshot of app showing that a 10 Gigabit file was selected -- this shows the ability to work with large files" height="380">
     </p>
 </details>
 <br>
@@ -43,6 +47,10 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 -   Multi-file selection support (Android only)
     -   Multi-file selection would result in a ZIP archive
         -   Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
+-   Direct access mode (Android only)
+    -   Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
+    -   The file manager for this mode only supports single file selection
+    -   The mode can be toggled by pressing on the SD card icon
 -   Import via sharesheet (Android only)
 -   Show and hide filename in download URL path
     -   Long press the share button to toggle
