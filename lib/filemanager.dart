@@ -56,8 +56,8 @@ class FileManager {
     return result;
   }
 
-  String fileSizeHuman(length, round, context) {
-    String _sizeHuman = filesize(length, round);
+  String fileSizeHuman(int length, BuildContext context) {
+    String _sizeHuman = filesize(length, 2);
     _sizeHuman = _sizeHuman.replaceAll(
         'TB', AppLocalizations.of(context)!.page_imported_sizesymbol_tb);
     _sizeHuman = _sizeHuman.replaceAll(

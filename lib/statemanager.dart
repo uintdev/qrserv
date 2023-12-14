@@ -271,7 +271,7 @@ class StateManager extends State<StateManagerPage> {
 
           // Human readable file size
           String _sizeHuman =
-              FileManager().fileSizeHuman(_fileInfo['length'], 2, context);
+              FileManager().fileSizeHuman(_fileInfo['length'], context);
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data!['interfaces'].contains(selectedIP.toString())) {
@@ -362,7 +362,7 @@ class StateManager extends State<StateManagerPage> {
                 archivedList.forEach((element) {
                   archivedFile.add(element['file'] +
                       ' (' +
-                      FileManager().fileSizeHuman(element['size'], 2, context) +
+                      FileManager().fileSizeHuman(element['size'], context) +
                       ')');
                 });
 
