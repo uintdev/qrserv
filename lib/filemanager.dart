@@ -24,6 +24,7 @@ class FileManager {
   static bool fileImportPending = false;
   static bool multipleFiles = false;
   static bool allowWatcher = false;
+  static bool lockWatcher = false;
   static bool directAccessMode = false;
   final String directAccessPath = '/storage/emulated/0';
   final bool allowMultipleFiles = (Platform.isAndroid);
@@ -140,6 +141,17 @@ class FileManager {
     if (result.containsKey('files') && result['files'].length > 0) {
       FileManager.allowWatcher = false;
 
+      // TODO: more subscriptions are made every time the state updates for the import page
+      if (!FileManager.allowWatcher) {
+        print('WATCHER SHOULD BE OFF');
+        if (StateManager.importWatchdog != null &&
+            StateManager.importWatchdog?.cancel != null) {
+          print('WATCHER BEGINNING SHUTDOWN');
+          await StateManager.importWatchdog?.cancel();
+          print('WATCHER SHUTTING DOWN');
+        }
+      }
+
       multipleFiles = (result['files'].length > 1);
 
       List<String> cacheExceptionList = [];
@@ -229,6 +241,8 @@ class FileManager {
       FileManager.currentLength = _currentLength;
       FileManager.fileImported = true;
       FileManager.allowWatcher = true;
+      FileManager.lockWatcher = false;
+      print('unlocked watcher');
       pageTypeCurrent = PageType.imported;
 
       // Initiate server

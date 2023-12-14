@@ -36,7 +36,8 @@ class StateManagerPage extends StatefulWidget {
 class StateManager extends State<StateManagerPage> {
   bool fileExists = false;
   bool interfaceUpdate = false;
-  StreamSubscription<WatchEvent>? importWatchdog;
+  static StreamSubscription<WatchEvent>? importWatchdog;
+  DirectoryWatcher? watcher;
 
   bool setFileStatus(bool state) {
     if (mounted) {
@@ -51,15 +52,20 @@ class StateManager extends State<StateManagerPage> {
   final bool isDesktop =
       (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
 
-  @override
-  Widget build(BuildContext context) {
-    Widget _outputState;
-
+  // Cancel watcher subscription on server shutdown
+  void watcherUnsubscriber() {
     if (!FileManager.allowWatcher) {
       if (importWatchdog != null && importWatchdog?.cancel != null) {
         importWatchdog?.cancel();
       }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget _outputState;
+
+    watcherUnsubscriber();
 
     if (FileManager.fileImportPending) {
       _outputState = loadingPage();
@@ -323,17 +329,25 @@ class StateManager extends State<StateManagerPage> {
 
           // File monitoring
           try {
-            DirectoryWatcher watcher = DirectoryWatcher(_fileInfo['pathpart']);
-            importWatchdog = watcher.events.listen((event) {
-              // Check if selected file was removed
-              if (event.type.toString() == 'remove' &&
-                  event.path == _fileInfo['path'] &&
-                  FileManager.allowWatcher) {
-                if (!Server().fileExists(_fileInfo['path'])) {
-                  setFileStatus(false);
+            print('accessing watcher');
+            print(FileManager.lockWatcher);
+            if (!FileManager.lockWatcher) {
+              FileManager.lockWatcher = true;
+              watcherUnsubscriber();
+              watcher = DirectoryWatcher(_fileInfo['pathpart']);
+              // TODO: use filewatcher once found how to prevent a re-run each state update
+              // FileWatcher watcher = FileWatcher(_fileInfo['path']);
+              importWatchdog = watcher?.events.listen((event) {
+                // Check if selected file was removed
+                if (event.type.toString() == 'remove' &&
+                    event.path == _fileInfo['path'] &&
+                    FileManager.allowWatcher) {
+                  if (!Server().fileExists(_fileInfo['path'])) {
+                    setFileStatus(false);
+                  }
                 }
-              }
-            });
+              });
+            }
           } on FileSystemException {
             setFileStatus(false);
           } catch (_) {
