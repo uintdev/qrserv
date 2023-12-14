@@ -107,6 +107,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Update button state
       setState(() {
         _actionButtonLoading = true;
+        FileManager.directAccessMode = false;
       });
 
       Map<String, dynamic> fileSelection = {'files': {}};
