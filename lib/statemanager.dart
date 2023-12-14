@@ -329,15 +329,11 @@ class StateManager extends State<StateManagerPage> {
 
           // File monitoring
           try {
-            print('accessing watcher');
-            print(FileManager.lockWatcher);
             if (!FileManager.lockWatcher) {
               FileManager.lockWatcher = true;
               watcherUnsubscriber();
-              watcher = DirectoryWatcher(_fileInfo['pathpart']);
-              // TODO: use filewatcher once found how to prevent a re-run each state update
-              // FileWatcher watcher = FileWatcher(_fileInfo['path']);
-              importWatchdog = watcher?.events.listen((event) {
+              FileWatcher watcher = FileWatcher(_fileInfo['path']);
+              importWatchdog = watcher.events.listen((event) {
                 // Check if selected file was removed
                 if (event.type.toString() == 'remove' &&
                     event.path == _fileInfo['path'] &&

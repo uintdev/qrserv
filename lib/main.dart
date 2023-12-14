@@ -324,8 +324,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Revert FAB state
       _actionButtonLoading = false;
     } catch (error) {
-      print('AN EXCEPTION OCCURRED');
-      print(error);
       showToast(
           AppLocalizations.of(context)!.info_exception_fileselection_fallback +
               error.toString());

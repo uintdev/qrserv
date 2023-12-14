@@ -141,14 +141,11 @@ class FileManager {
     if (result.containsKey('files') && result['files'].length > 0) {
       FileManager.allowWatcher = false;
 
-      // TODO: more subscriptions are made every time the state updates for the import page
+      // Clear out existing watcher subscription
       if (!FileManager.allowWatcher) {
-        print('WATCHER SHOULD BE OFF');
         if (StateManager.importWatchdog != null &&
             StateManager.importWatchdog?.cancel != null) {
-          print('WATCHER BEGINNING SHUTDOWN');
           await StateManager.importWatchdog?.cancel();
-          print('WATCHER SHUTTING DOWN');
         }
       }
 
@@ -242,7 +239,6 @@ class FileManager {
       FileManager.fileImported = true;
       FileManager.allowWatcher = true;
       FileManager.lockWatcher = false;
-      print('unlocked watcher');
       pageTypeCurrent = PageType.imported;
 
       // Initiate server
