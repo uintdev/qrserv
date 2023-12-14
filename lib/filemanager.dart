@@ -96,7 +96,6 @@ class FileManager {
     }
 
     if (!directAccessMode && fileSelection.length == 0) {
-      print('METHOD 1');
       FilePickerResult? resultFilePicker = await FilePicker.platform
           .pickFiles(allowMultiple: allowMultipleFiles);
 
@@ -114,11 +113,8 @@ class FileManager {
       }
     } else if (fileSelection.length > 0 &&
         directModeDetect(fileSelection['files'][0]['path'])) {
-      print('METHOD 2');
-      print('DIRECT MODE DETECTED');
       result = fileSelection;
     } else {
-      print('METHOD 3');
       // Share sheet handler
       // Move files selected via share sheet into usual directory for archiving
       for (int i = 0; i < fileSelection['files'].length; i++) {

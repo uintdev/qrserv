@@ -325,6 +325,7 @@ class StateManager extends State<StateManagerPage> {
           try {
             DirectoryWatcher watcher = DirectoryWatcher(_fileInfo['pathpart']);
             importWatchdog = watcher.events.listen((event) {
+              // Check if selected file was removed
               if (event.type.toString() == 'remove' &&
                   event.path == _fileInfo['path'] &&
                   FileManager.allowWatcher) {
