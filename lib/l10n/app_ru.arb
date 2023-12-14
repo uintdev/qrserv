@@ -52,5 +52,8 @@
     "info_packageinfofail": "Ошибка",
     "info_opensource_title": "Открытый исходный код",
     "info_donate_title": "Поддержать",
-    "info_close": "Закрыть"
+    "info_close": "Закрыть",
+    "dam_state_enabled": "Включено: Режим прямого доступа",
+    "dam_state_disabled": "Отключено: Режим прямого доступа",
+    "dam_path_not_found": "Ошибка: Путь для режима прямого доступа не найден"
 }

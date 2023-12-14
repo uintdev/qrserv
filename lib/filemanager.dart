@@ -86,8 +86,7 @@ class FileManager {
     bool dirExists = await sourceDir.exists();
     if (!dirExists) {
       if (directAccessMode) {
-        // TODO: i19n message
-        showToast('Path for direct access mode not found');
+        showToast(AppLocalizations.of(context)!.dam_path_not_found);
         return;
       }
       Directory sourceDirCreated = await sourceDir.create();

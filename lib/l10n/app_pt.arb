@@ -52,5 +52,8 @@
     "info_packageinfofail": "Erro",
     "info_opensource_title": "Código aberto",
     "info_donate_title": "Doar",
-    "info_close": "Fechar"
+    "info_close": "Fechar",
+    "dam_state_enabled": "Habilitado: modo de acesso direto",
+    "dam_state_disabled": "Desativado: modo de acesso direto",
+    "dam_path_not_found": "Erro: caminho para o modo de acesso direto não encontrado"
 }

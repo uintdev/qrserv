@@ -52,5 +52,8 @@
     "info_packageinfofail": "Error",
     "info_opensource_title": "Open source",
     "info_donate_title": "Spenden",
-    "info_close": "Schließen Sie"
+    "info_close": "Schließen Sie",
+    "dam_state_enabled": "Aktiviert: Direktzugriffsmodus",
+    "dam_state_disabled": "Untauglich: Direktzugriffsmodus",
+    "dam_path_not_found": "Error: Pfad für Direktzugriffsmodus nicht gefunden"
 }

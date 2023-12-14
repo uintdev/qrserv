@@ -243,7 +243,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
       await storagePerm.onDeniedCallback(() {
         FileManager.fileImportPending = false;
-        // TODO: show error message? file manager shows already.
       }).onGrantedCallback(() {
         FileManager.fileImportPending = false;
       }).request();
@@ -389,10 +388,11 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                   ? SizedBox(width: 0)
                   : IconButton(
                       onPressed: () {
-                        // TODO: apply i18n to strings
                         !FileManager.directAccessMode
-                            ? showToast('Enabled: Direct access mode')
-                            : showToast('Disabled: Direct access mode');
+                            ? showToast(
+                                AppLocalizations.of(context)!.dam_state_enabled)
+                            : showToast(AppLocalizations.of(context)!
+                                .dam_state_disabled);
                         setState(() {
                           FileManager.directAccessMode =
                               !FileManager.directAccessMode;

@@ -52,5 +52,8 @@
     "info_packageinfofail": "Błąd",
     "info_opensource_title": "Open source",
     "info_donate_title": "Podaruj kawę",
-    "info_close": "Zamknij"
+    "info_close": "Zamknij",
+    "dam_state_enabled": "Włączone: tryb dostępu bezpośredniego",
+    "dam_state_disabled": "Wyłączone: tryb dostępu bezpośredniego",
+    "dam_path_not_found": "Błąd: nie znaleziono ścieżki dla trybu dostępu bezpośredniego"
 }

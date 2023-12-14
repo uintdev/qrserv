@@ -52,5 +52,8 @@
     "info_packageinfofail": "Error",
     "info_opensource_title": "Open source",
     "info_donate_title": "Donate",
-    "info_close": "Close"
+    "info_close": "Close",
+    "dam_state_enabled": "Enabled: direct access mode",
+    "dam_state_disabled": "Disabled: direct access mode",
+    "dam_path_not_found": "Error: path for direct access mode not found"
 }

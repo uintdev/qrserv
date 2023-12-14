@@ -52,5 +52,8 @@
     "info_packageinfofail": "Hiba",
     "info_opensource_title": "Nyílt forráskód",
     "info_donate_title": "Támogatás",
-    "info_close": "Bezár"
+    "info_close": "Bezár",
+    "dam_state_enabled": "Engedélyezve: közvetlen hozzáférési mód",
+    "dam_state_disabled": "Letiltva: közvetlen hozzáférési mód",
+    "dam_path_not_found": "Hiba: a közvetlen elérési mód elérési útvonala nem található"
 }

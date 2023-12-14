@@ -52,5 +52,8 @@
     "info_packageinfofail": "Erreur",
     "info_opensource_title": "Open source",
     "info_donate_title": "Faire un don",
-    "info_close": "Fermer"
+    "info_close": "Fermer",
+    "dam_state_enabled": "Activé: mode d'accès direct",
+    "dam_state_disabled": "Désactivé: mode d'accès direct",
+    "dam_path_not_found": "Erreur: chemin d'accès au mode d'accès direct non trouvé"
 }

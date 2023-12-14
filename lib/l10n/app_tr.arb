@@ -52,5 +52,8 @@
     "info_packageinfofail": "Hata",
     "info_opensource_title": "Açık kaynak",
     "info_donate_title": "Bağış",
-    "info_close": "Kapat"
+    "info_close": "Kapat",
+    "dam_state_enabled": "Etkin: doğrudan erişim modu",
+    "dam_state_disabled": "Devre dışı: doğrudan erişim modu",
+    "dam_path_not_found": "Hata: doğrudan erişim modu için yol bulunamadı"
 }
