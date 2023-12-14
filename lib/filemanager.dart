@@ -28,8 +28,6 @@ class FileManager {
   final String directAccessPath = '/storage/emulated/0';
   final bool allowMultipleFiles = (Platform.isAndroid);
 
-  // TODO: add path detection to cache to NOT wipe files under /sdcard
-
   Map<String, dynamic> readInfo() {
     return {
       'name': currentFile,

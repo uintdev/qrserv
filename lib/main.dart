@@ -226,7 +226,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       _actionButtonLoading = true;
     });
 
-    // TODO: add import option
     Map<String, dynamic> fileSelection = {};
 
     if (FileManager.directAccessMode) {
