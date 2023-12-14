@@ -256,6 +256,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         requestPermission: () async => await storagePerm.request().isGranted,
       );
 
+      // User cancelled
       if (path == null) {
         setState(() {
           _actionButtonLoading = false;
@@ -266,7 +267,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       }
 
       fileSelection = {'files': {}};
-      final int fileSize = File(path).lengthSync();
+      final int fileSize = 0;
       fileSelection['files'].addAll(
         {
           0: {

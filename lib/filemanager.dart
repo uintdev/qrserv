@@ -95,6 +95,7 @@ class FileManager {
     }
 
     if (!directAccessMode && fileSelection.length == 0) {
+      // Default file picker
       FilePickerResult? resultFilePicker = await FilePicker.platform
           .pickFiles(allowMultiple: allowMultipleFiles);
 
@@ -112,6 +113,18 @@ class FileManager {
       }
     } else if (fileSelection.length > 0 &&
         directModeDetect(fileSelection['files'][0]['path'])) {
+      // Direct access mode
+      final File selectedFile = File(fileSelection['files'][0]['path']);
+
+      // File was selected but no longer exists
+      if (selectedFile.existsSync()) {
+        fileSelection['files'][0]['size'] = selectedFile.lengthSync();
+      } else {
+        // File was selected but no longer exists
+        pageTypeCurrent = PageType.fileremoved;
+        await Server().shutdownServer(context);
+        return;
+      }
       result = fileSelection;
     } else {
       // Share sheet handler
