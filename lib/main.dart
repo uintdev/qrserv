@@ -258,8 +258,11 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       );
 
       if (path == null) {
-        _actionButtonLoading = false;
-        FileManager.fileImportPending = false;
+        setState(() {
+          _actionButtonLoading = false;
+          FileManager.fileImportPending = false;
+          _stateView = StateManagerPage();
+        });
         return;
       }
 
