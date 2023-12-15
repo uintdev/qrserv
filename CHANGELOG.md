@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.0
+
+-   Added support for direct internal storage access (press on the SD card icon to toggle) -- ideal for large files
+    -   Direct access mode does not support multi-file selection
+    -   For this to function under Android 13 or later, a new permission 'MANAGE_EXTERNAL_STORAGE' was added
+    -   This grants access to '/storage/emulated/0'
+-   Fixed an issue where there would be multiple instances of the file system watcher
+-   File system watcher is now focused on the specific selected file rather than the directory it is under
+
 ## 2.1.7
 
 -   Long IPv6 addresses now visually limited to 2 lines (font size lowers when close to hard limit -- begins truncating when the limit is reached)
