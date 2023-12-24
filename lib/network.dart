@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'server.dart';
 import 'filemanager.dart';
+import 'statemanager.dart';
 
 class Network {
   // Default port number
@@ -62,7 +63,10 @@ class Network {
     }
 
     // Shutdown server if marked
-    if (!Server().fileExists(FileManager().readInfo()['path'])) {
+    // if (!StateManager().fileUntampered) {
+    if ((StateManager.fileTampered == PageType.filemodified) ||
+        !Server().fileExists(FileManager().readInfo()['path'])) {
+      // TODO: add check for state type
       await Server().shutdownServer(context);
     }
 

@@ -250,6 +250,7 @@ class FileManager {
       FileManager.fileImported = true;
       FileManager.allowWatcher = true;
       FileManager.lockWatcher = false;
+      StateManager.fileTampered = PageType.fileremoved;
       pageTypeCurrent = PageType.imported;
 
       // Initiate server

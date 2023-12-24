@@ -18,6 +18,7 @@ enum PageType {
   noconnection,
   snapshoterror,
   fileremoved,
+  filemodified,
   permissiondenied,
   insufficientstorage,
   portinuse,
@@ -34,15 +35,17 @@ class StateManagerPage extends StatefulWidget {
 }
 
 class StateManager extends State<StateManagerPage> {
-  bool fileExists = false;
+  bool fileUntampered = false;
+  static PageType fileTampered = PageType.fileremoved;
   bool interfaceUpdate = false;
   static StreamSubscription<WatchEvent>? importWatchdog;
   DirectoryWatcher? watcher;
 
-  bool setFileStatus(bool state) {
+  bool setFileStatus(bool state, [PageType stateType = PageType.fileremoved]) {
     if (mounted) {
       setState(() {
-        fileExists = state;
+        fileUntampered = state;
+        fileTampered = stateType;
       });
     }
     return state;
@@ -161,6 +164,17 @@ class StateManager extends State<StateManagerPage> {
             'icon': Icons.block,
             'label': AppLocalizations.of(context)!.page_info_fileremoved_label,
             'msg': AppLocalizations.of(context)!.page_info_fileremoved_msg,
+          };
+        }
+        break;
+
+      // Selected file was removed
+      case PageType.filemodified:
+        {
+          _msgInfo = {
+            'icon': Icons.edit,
+            'label': 'File modified',
+            'msg': 'File was modified',
           };
         }
         break;
@@ -320,10 +334,15 @@ class StateManager extends State<StateManagerPage> {
           String _hostName =
               'http://$_hostFormatted:${snapshot.data!['port'].toString()}/$_filePath';
 
-          fileExists = Server().fileExists(_fileInfo['path']);
+          if (Server().fileExists(_fileInfo['path']) &&
+              !(fileTampered == PageType.filemodified)) {
+            fileUntampered = true;
+          } else {
+            fileUntampered = false;
+          }
 
-          if (!fileExists) {
-            pageTypeCurrent = PageType.fileremoved;
+          if (!fileUntampered) {
+            pageTypeCurrent = fileTampered;
             return msgPage(context);
           }
 
@@ -334,12 +353,18 @@ class StateManager extends State<StateManagerPage> {
               watcherUnsubscriber();
               FileWatcher watcher = FileWatcher(_fileInfo['path']);
               importWatchdog = watcher.events.listen((event) {
-                // Check if selected file was removed
-                if (event.type.toString() == 'remove' &&
-                    event.path == _fileInfo['path'] &&
+                // TODO: When clearing cache, 'modify' is fired off
+                // first. After, it's 'remove'. Would be good to catch this...
+                print(event.type.toString());
+                print(event.path);
+                if (event.path == _fileInfo['path'] &&
                     FileManager.allowWatcher) {
-                  if (!Server().fileExists(_fileInfo['path'])) {
-                    setFileStatus(false);
+                  if (event.type.toString() == 'remove') {
+                    if (!Server().fileExists(_fileInfo['path'])) {
+                      setFileStatus(false);
+                    }
+                  } else if (event.type.toString() == 'modify') {
+                    setFileStatus(false, PageType.filemodified);
                   }
                 }
               });
