@@ -475,12 +475,19 @@ class StateManager extends State<StateManagerPage> {
       elevation: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
-        child: QrImageView(
-          data: _hostName,
-          version: QrVersions.auto,
-          size: (MediaQuery.of(context).size.height * .23),
-          backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-          padding: EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
+        child: Tooltip(
+          message: _hostName,
+          triggerMode: TooltipTriggerMode.longPress,
+          showDuration: Duration(days: 1),
+          padding: const EdgeInsets.all(10),
+          child: QrImageView(
+            data: _hostName,
+            version: QrVersions.auto,
+            size: (MediaQuery.of(context).size.height * .23),
+            backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+            padding:
+                EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
+          ),
         ),
       ),
     );
