@@ -450,6 +450,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         children: [
           fabShutdown(context),
           fabImport(context),
+          fabStub('blank'),
         ],
       ),
     );
@@ -461,7 +462,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       transitionBuilder: (Widget child, Animation<double> animation) =>
           ScaleTransition(child: child, scale: animation),
       child: !Server.serverRunning
-          ? SizedBox()
+          ? fabStub('shutdown_hidden')
           : FloatingActionButton(
               heroTag: 'shutdown',
               elevation: 3,
@@ -511,6 +512,22 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 semanticLabel:
                     AppLocalizations.of(context)!.fab_selectfile_label,
               ),
+      ),
+    );
+  }
+
+  Opacity fabStub(String heroTagName) {
+    return Opacity(
+      opacity: 0,
+      child: FloatingActionButton(
+        heroTag: heroTagName,
+        elevation: 3,
+        onPressed: () {},
+        child: Icon(
+          Icons.check_box_outline_blank,
+          color: Theme.of(context).colorScheme.secondary,
+          size: 20.0,
+        ),
       ),
     );
   }
