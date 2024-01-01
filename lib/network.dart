@@ -63,10 +63,8 @@ class Network {
     }
 
     // Shutdown server if marked
-    // if (!StateManager().fileUntampered) {
     if ((StateManager.fileTampered == PageType.filemodified) ||
         !Server().fileExists(FileManager().readInfo()['path'])) {
-      // TODO: add check for state type
       await Server().shutdownServer(context);
     }
 

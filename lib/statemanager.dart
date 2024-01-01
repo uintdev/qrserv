@@ -355,6 +355,8 @@ class StateManager extends State<StateManagerPage> {
               importWatchdog = watcher.events.listen((event) {
                 // TODO: When clearing cache, 'modify' is fired off
                 // first. After, it's 'remove'. Would be good to catch this...
+                // also, apparently the risk of the shutdown button
+                // not disappearing when it should (despite the 'pending shutdown')
                 print(event.type.toString());
                 print(event.path);
                 if (event.path == _fileInfo['path'] &&
