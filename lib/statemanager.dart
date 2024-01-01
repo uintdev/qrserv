@@ -159,14 +159,24 @@ class StateManager extends State<StateManagerPage> {
 
       // Selected file was removed
       case PageType.fileremoved:
-      case PageType.filemodified:
         {
           _msgInfo = {
             'icon': Icons.block,
             'label': AppLocalizations.of(context)!
-                .page_info_fileremovedmodified_label,
+                .page_info_fileremoved_label,
             'msg':
                 AppLocalizations.of(context)!.page_info_fileremovedmodified_msg,
+          };
+        }
+        break;
+
+      case PageType.filemodified:
+        {
+          _msgInfo = {
+            'icon': Icons.edit,
+            'label': AppLocalizations.of(context)!
+                .page_info_filemodified_label
+            'msg': AppLocalizations.of(context)!.page_info_filemodified_msg,
           };
         }
         break;
@@ -345,10 +355,6 @@ class StateManager extends State<StateManagerPage> {
               watcherUnsubscriber();
               FileWatcher watcher = FileWatcher(_fileInfo['path']);
               importWatchdog = watcher.events.listen((event) {
-                // TODO: Apparently the risk of the shutdown button
-                // not disappearing when it should (despite the 'pending shutdown')
-                print(event.type.toString());
-                print(event.path);
                 if (event.path == _fileInfo['path'] &&
                     FileManager.allowWatcher) {
                   if (event.type.toString() == 'remove') {
@@ -356,7 +362,12 @@ class StateManager extends State<StateManagerPage> {
                       setFileStatus(false);
                     }
                   } else if (event.type.toString() == 'modify') {
-                    setFileStatus(false, PageType.filemodified);
+                    if (Server().fileExists(_fileInfo['path'])) {
+                      setFileStatus(false, PageType.filemodified);
+                    } else {
+                      // Cache was wiped
+                      setFileStatus(false);
+                    }
                   }
                 }
               });
