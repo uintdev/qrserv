@@ -159,22 +159,14 @@ class StateManager extends State<StateManagerPage> {
 
       // Selected file was removed
       case PageType.fileremoved:
-        {
-          _msgInfo = {
-            'icon': Icons.block,
-            'label': AppLocalizations.of(context)!.page_info_fileremoved_label,
-            'msg': AppLocalizations.of(context)!.page_info_fileremoved_msg,
-          };
-        }
-        break;
-
-      // Selected file was removed
       case PageType.filemodified:
         {
           _msgInfo = {
-            'icon': Icons.edit,
-            'label': 'File modified',
-            'msg': 'File was modified',
+            'icon': Icons.block,
+            'label': AppLocalizations.of(context)!
+                .page_info_fileremovedmodified_label,
+            'msg':
+                AppLocalizations.of(context)!.page_info_fileremovedmodified_msg,
           };
         }
         break;
@@ -353,9 +345,7 @@ class StateManager extends State<StateManagerPage> {
               watcherUnsubscriber();
               FileWatcher watcher = FileWatcher(_fileInfo['path']);
               importWatchdog = watcher.events.listen((event) {
-                // TODO: When clearing cache, 'modify' is fired off
-                // first. After, it's 'remove'. Would be good to catch this...
-                // also, apparently the risk of the shutdown button
+                // TODO: Apparently the risk of the shutdown button
                 // not disappearing when it should (despite the 'pending shutdown')
                 print(event.type.toString());
                 print(event.path);
