@@ -162,20 +162,18 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.block,
-            'label': AppLocalizations.of(context)!
-                .page_info_fileremoved_label,
-            'msg':
-                AppLocalizations.of(context)!.page_info_fileremovedmodified_msg,
+            'label': AppLocalizations.of(context)!.page_info_fileremoved_label,
+            'msg': AppLocalizations.of(context)!.page_info_fileremoved_msg,
           };
         }
         break;
 
+      // Selected file was modified
       case PageType.filemodified:
         {
           _msgInfo = {
             'icon': Icons.edit,
-            'label': AppLocalizations.of(context)!
-                .page_info_filemodified_label
+            'label': AppLocalizations.of(context)!.page_info_filemodified_label,
             'msg': AppLocalizations.of(context)!.page_info_filemodified_msg,
           };
         }
