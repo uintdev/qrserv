@@ -356,12 +356,12 @@ class StateManager extends State<StateManagerPage> {
                 if (!(event.path == _fileInfo['path'] &&
                     FileManager.allowWatcher)) return;
 
-                String eventType = event.type.toString();
                 bool watchedFileExists = Server().fileExists(_fileInfo['path']);
 
                 if (!watchedFileExists) {
                   setFileStatus(false);
-                } else if (eventType == 'modify' && watchedFileExists) {
+                } else if (event.type == ChangeType.MODIFY &&
+                    watchedFileExists) {
                   setFileStatus(false, PageType.filemodified);
                 }
               });
