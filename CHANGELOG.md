@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.3.0
+
+-   Added file tamper check (uses existing file removal detection method)
+    -   This is an additional security measure, now that direct access to shared internal storage is possible
+-   Press and holding QR code shows full URL in a tooltip
+-   Moved file import button to the middle (for improved ergonomics on mobile)
+-   File name tooltip now shows the full file path if file selection was done while in Direct Access Mode
+
 ## 2.2.0
 
 -   Added support for direct internal storage access (press on the SD card icon to toggle) -- ideal for large files
