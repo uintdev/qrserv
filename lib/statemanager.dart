@@ -390,7 +390,11 @@ class StateManager extends State<StateManagerPage> {
 
                 fileResult = archivedFile.join('\n');
               } else {
-                fileResult = _fileInfo['name'];
+                if (FileManager().directModeDetect(_fileInfo['path'])) {
+                  fileResult = _fileInfo['path'];
+                } else {
+                  fileResult = _fileInfo['name'];
+                }
               }
             } else {
               fileResult = _fileInfo['path'];
