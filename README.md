@@ -51,6 +51,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
     -   Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
     -   The file manager for this mode only supports single file selection
     -   The mode can be toggled by pressing on the SD card icon
+-   File selection removal and modification detection
 -   Import via sharesheet (Android only)
 -   Show and hide filename in download URL path
     -   Long press the share button to toggle
