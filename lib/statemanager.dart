@@ -353,20 +353,16 @@ class StateManager extends State<StateManagerPage> {
               watcherUnsubscriber();
               FileWatcher watcher = FileWatcher(_fileInfo['path']);
               importWatchdog = watcher.events.listen((event) {
-                if (event.path == _fileInfo['path'] &&
-                    FileManager.allowWatcher) {
-                  if (event.type.toString() == 'remove') {
-                    if (!Server().fileExists(_fileInfo['path'])) {
-                      setFileStatus(false);
-                    }
-                  } else if (event.type.toString() == 'modify') {
-                    if (Server().fileExists(_fileInfo['path'])) {
-                      setFileStatus(false, PageType.filemodified);
-                    } else {
-                      // Cache was wiped
-                      setFileStatus(false);
-                    }
-                  }
+                if (!(event.path == _fileInfo['path'] &&
+                    FileManager.allowWatcher)) return;
+
+                String eventType = event.type.toString();
+                bool watchedFileExists = Server().fileExists(_fileInfo['path']);
+
+                if (!watchedFileExists) {
+                  setFileStatus(false);
+                } else if (eventType == 'modify' && watchedFileExists) {
+                  setFileStatus(false, PageType.filemodified);
                 }
               });
             }
