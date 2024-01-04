@@ -361,7 +361,8 @@ class StateManager extends State<StateManagerPage> {
                 if (!watchedFileExists) {
                   setFileStatus(false);
                 } else if (event.type == ChangeType.MODIFY &&
-                    watchedFileExists) {
+                    watchedFileExists &&
+                    FileManager().directModeDetect(_fileInfo['path'])) {
                   setFileStatus(false, PageType.filemodified);
                 }
               });
