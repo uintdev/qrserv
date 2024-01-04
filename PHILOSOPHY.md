@@ -14,9 +14,9 @@ QRServ was built using the Flutter UI framework.
 
 The file picker dependencies for the share sheet and the document UI would not allow gathering of the original path and instead would copy the selected file into cache. As a result, this temporarily uses up more storage and adds the extra processing of making a copy of the selection. How fast this would be depends on the SoC and NAND flash storage bandwidth. As you could imagine, this can especially be a struggle on lower end devices.
 
-The issue technically could be resolved when it comes to in-app file selection (less certain about the share sheet), but it would mean getting far more involved with Kotlin, which further complicates the project in its current stage. Ideally, the app would be built purely using Kotlin so that such things can work far more seamlessly together and function in a very specific way -- to higher satisfactory.
-
 It is worth noting that the limitations are not limited to this application in particular. Similar applications built using Flutter experience such limitations as well.
+
+Despite all that, you can use Direct Access Mode to avoid all that mess (only one file can be selected at a time). This will be the SD card icon on top of the app. Please note that when using the share sheet to pass the file selection over, it uses the app cache method from the get-go and so DAM simply can't be used in that case.
 
 ## Why does the HTTP server not offer a secure connection?
 
