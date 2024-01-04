@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.1
+
+-   Limited file tamper check to shared internal storage due to modification misreporting with application cache
+    -   Bug fixed: selection with Direct Access Mode off and putting the application in the background can result in the file system watcher to misreport the file as modified
+
 ## 2.3.0
 
 -   Added file tamper check (uses existing file removal detection method)
