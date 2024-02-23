@@ -69,6 +69,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
     -   Spanish (Español)
     -   Russian (Русский)
     -   Turkish (Türkçe)
+    -   Persian (فارسی)
 
 ## Releases
 
@@ -123,3 +124,4 @@ Thanks to the following users for helping out with language translation:
 | [solelychloe](https://arciniega.one)           | Russian     |
 | [metezd](https://github.com/metezd)            | Turkish     |
 | [princessmortix](https://princessmortix.link/) | Portuguese  |
+| [alr86](https://github.com/alr86)              | Persian     |
