@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as UI;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -477,18 +478,21 @@ class StateManager extends State<StateManagerPage> {
       elevation: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
-        child: Tooltip(
-          message: _hostName,
-          triggerMode: TooltipTriggerMode.longPress,
-          showDuration: Duration(days: 1),
-          padding: const EdgeInsets.all(10),
-          child: QrImageView(
-            data: _hostName,
-            version: QrVersions.auto,
-            size: (MediaQuery.of(context).size.height * .23),
-            backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-            padding:
-                EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
+        child: Directionality(
+          textDirection: UI.TextDirection.ltr,
+          child: Tooltip(
+            message: _hostName,
+            triggerMode: TooltipTriggerMode.longPress,
+            showDuration: Duration(days: 1),
+            padding: const EdgeInsets.all(10),
+            child: QrImageView(
+              data: _hostName,
+              version: QrVersions.auto,
+              size: (MediaQuery.of(context).size.height * .23),
+              backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+              padding:
+                  EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
+            ),
           ),
         ),
       ),
@@ -545,45 +549,48 @@ class StateManager extends State<StateManagerPage> {
         borderRadius: BorderRadius.circular(10),
       ),
       elevation: 2,
-      child: ButtonTheme(
-        alignedDropdown: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: DropdownButton<String>(
-          icon: Row(
-            children: const [
-              Icon(Icons.arrow_drop_down),
-              SizedBox(width: 10),
-            ],
+      child: Directionality(
+        textDirection: UI.TextDirection.ltr,
+        child: ButtonTheme(
+          alignedDropdown: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
-          borderRadius: BorderRadius.circular(10),
-          dropdownColor: Theme.of(context).canvasColor,
-          value: selectedIP,
-          isExpanded: true,
-          elevation: 4,
-          underline: const SizedBox(),
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedIP = newValue;
-            });
-          },
-          style: Theme.of(context).textTheme.bodyMedium,
-          items: snapshot.data!['interfaces']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Center(
-                child: AutoSizeText(
-                  value,
-                  style: const TextStyle(fontSize: 13),
-                  minFontSize: 12,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+          child: DropdownButton<String>(
+            icon: Row(
+              children: const [
+                Icon(Icons.arrow_drop_down),
+                SizedBox(width: 10),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(10),
+            dropdownColor: Theme.of(context).canvasColor,
+            value: selectedIP,
+            isExpanded: true,
+            elevation: 4,
+            underline: const SizedBox(),
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedIP = newValue;
+              });
+            },
+            style: Theme.of(context).textTheme.bodyMedium,
+            items: snapshot.data!['interfaces']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Center(
+                  child: AutoSizeText(
+                    value,
+                    style: const TextStyle(fontSize: 13),
+                    minFontSize: 12,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -617,17 +624,20 @@ Table importedFileInfo(
           ),
           Container(
             padding: const EdgeInsets.only(left: 10),
-            child: Tooltip(
-              message: fileDataTip(),
-              showDuration: const Duration(seconds: 5),
-              padding: const EdgeInsets.all(10),
-              child: Center(
-                child: AutoSizeText(
-                  _fileInfo['name'],
-                  style: const TextStyle(fontSize: 13),
-                  minFontSize: 13,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+            child: Directionality(
+              textDirection: UI.TextDirection.ltr,
+              child: Tooltip(
+                message: fileDataTip(),
+                showDuration: const Duration(seconds: 5),
+                padding: const EdgeInsets.all(10),
+                child: Center(
+                  child: AutoSizeText(
+                    _fileInfo['name'],
+                    style: const TextStyle(fontSize: 13),
+                    minFontSize: 13,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
               ),
             ),
@@ -648,9 +658,12 @@ Table importedFileInfo(
           Container(
             padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
-              child: Text(
-                _sizeHuman,
-                style: const TextStyle(fontSize: 13),
+              child: Directionality(
+                textDirection: UI.TextDirection.ltr,
+                child: Text(
+                  _sizeHuman,
+                  style: const TextStyle(fontSize: 13),
+                ),
               ),
             ),
           ),
@@ -670,9 +683,12 @@ Table importedFileInfo(
           Container(
             padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
-              child: Text(
-                snapshot.data!['port'].toString(),
-                style: const TextStyle(fontSize: 13),
+              child: Directionality(
+                textDirection: UI.TextDirection.ltr,
+                child: Text(
+                  snapshot.data!['port'].toString(),
+                  style: const TextStyle(fontSize: 13),
+                ),
               ),
             ),
           ),
