@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.2
+
+-   Added Persian translation
+-   Added enforcement of LTR text direction where RTL visually breaks text
+
 ## 2.3.1
 
 -   Limited file tamper check to shared internal storage due to modification misreporting with application cache

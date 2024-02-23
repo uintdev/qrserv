@@ -3,7 +3,7 @@ description: Transfer files with ease over a network.
 
 publish_to: 'none'
 
-version: 2.3.1+41
+version: 2.3.2+42
 
 environment:
     sdk: '>=3.4.0-167.0.dev <4.0.0'
