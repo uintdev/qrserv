@@ -71,6 +71,8 @@ class QRSTheme {
       colorScheme: themeData.colorScheme.copyWith(
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
         secondary: const Color.fromRGBO(191, 180, 229, 1),
+        // TODO: Using surface (as background is deprecated) results in
+        // the dialog box looking far darker -- look into how to appropriately migrate
         background: const Color.fromRGBO(28, 32, 42, 1),
       ),
     );
