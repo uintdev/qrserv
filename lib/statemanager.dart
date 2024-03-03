@@ -478,9 +478,8 @@ class StateManager extends State<StateManagerPage> {
       elevation: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
-        child: Directionality(
-          textDirection: UI.TextDirection.ltr,
-          child: Tooltip(
+        child: ForceLTR(
+          Tooltip(
             message: _hostName,
             triggerMode: TooltipTriggerMode.longPress,
             showDuration: Duration(days: 1),
@@ -549,9 +548,8 @@ class StateManager extends State<StateManagerPage> {
         borderRadius: BorderRadius.circular(10),
       ),
       elevation: 2,
-      child: Directionality(
-        textDirection: UI.TextDirection.ltr,
-        child: ButtonTheme(
+      child: ForceLTR(
+        ButtonTheme(
           alignedDropdown: true,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -624,9 +622,8 @@ Table importedFileInfo(
           ),
           Container(
             padding: const EdgeInsets.only(left: 10),
-            child: Directionality(
-              textDirection: UI.TextDirection.ltr,
-              child: Tooltip(
+            child: ForceLTR(
+              Tooltip(
                 message: fileDataTip(),
                 showDuration: const Duration(seconds: 5),
                 padding: const EdgeInsets.all(10),
@@ -658,9 +655,8 @@ Table importedFileInfo(
           Container(
             padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
-              child: Directionality(
-                textDirection: UI.TextDirection.ltr,
-                child: Text(
+              child: ForceLTR(
+                Text(
                   _sizeHuman,
                   style: const TextStyle(fontSize: 13),
                 ),
@@ -683,9 +679,8 @@ Table importedFileInfo(
           Container(
             padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
-              child: Directionality(
-                textDirection: UI.TextDirection.ltr,
-                child: Text(
+              child: ForceLTR(
+                Text(
                   snapshot.data!['port'].toString(),
                   style: const TextStyle(fontSize: 13),
                 ),
@@ -695,5 +690,12 @@ Table importedFileInfo(
         ],
       ),
     ],
+  );
+}
+
+Widget ForceLTR(Widget child) {
+  return Directionality(
+    textDirection: UI.TextDirection.ltr,
+    child: child,
   );
 }
