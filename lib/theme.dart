@@ -12,6 +12,7 @@ class QRSTheme {
       primaryColor: const Color.fromRGBO(0, 0, 0, 1),
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
+      dialogBackgroundColor: const Color.fromRGBO(237, 232, 243, 1),
       textTheme: TextTheme(
         titleLarge: TextStyle(
           color: const Color.fromRGBO(0, 0, 0, 1),
@@ -35,7 +36,6 @@ class QRSTheme {
       colorScheme: themeData.colorScheme.copyWith(
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
         secondary: const Color.fromRGBO(191, 180, 229, 1),
-        background: Color.fromRGBO(209, 219, 224, 1),
       ),
     );
     return newThemeData;
@@ -48,6 +48,7 @@ class QRSTheme {
       primaryColor: const Color.fromRGBO(255, 255, 255, 1),
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
+      dialogBackgroundColor: const Color.fromRGBO(37, 35, 41, 1),
       textTheme: TextTheme(
         titleLarge: TextStyle(
           color: const Color.fromRGBO(255, 255, 255, 1),
@@ -71,9 +72,6 @@ class QRSTheme {
       colorScheme: themeData.colorScheme.copyWith(
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
         secondary: const Color.fromRGBO(191, 180, 229, 1),
-        // TODO: Using surface (as background is deprecated) results in
-        // the dialog box looking far darker -- look into how to appropriately migrate
-        background: const Color.fromRGBO(28, 32, 42, 1),
       ),
     );
     return newThemeData;
