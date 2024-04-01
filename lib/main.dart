@@ -398,15 +398,15 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                         });
                       },
                       icon: !FileManager.directAccessMode
-                          ? Icon(Icons.sd_card_outlined)
-                          : Icon(Icons.sd_card),
+                          ? const Icon(Icons.sd_card_outlined)
+                          : const Icon(Icons.sd_card),
                     ),
               SizedBox(width: 10),
               IconButton(
                 onPressed: () {
                   infoDialogInvoker(context);
                 },
-                icon: Icon(Icons.info_outline),
+                icon: const Icon(Icons.info_outline),
               ),
               SizedBox(width: 15)
             ],
