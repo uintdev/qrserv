@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Невозможно выключить сервер во время обработки выбора файла",
     "info_pending_servershutdown": "Ожидание отключения сервера...",
     "info_pending_appinfo": "Загрузка...",
+    "server_info_download_started": "загрузка началась: ",
+    "server_info_download_finished": "загрузка завершена: ",
     "server_info_tokenmismatch": "Несоответствие токена сервера",
     "server_info_shutdownfailed": "Не удалось выключить сервер.\nКод HTTP: ",
     "server_info_gone": "Сервер недоступен: ",

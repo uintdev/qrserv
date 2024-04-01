@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "نمیتوان حین پردازش پرونده ها سرور را خاموش کرد",
     "info_pending_servershutdown": "خاموش کردن سرور...",
     "info_pending_appinfo": "بارگذاری...",
+    "server_info_download_started": "دانلود شروع شد: ",
+    "server_info_download_finished": "دانلود به پایان رسید: ",
     "server_info_tokenmismatch": "عدم تطابق نشان سرور",
     "server_info_shutdownfailed": "خاموش کردن سرور ناموفق شد.کد \nHTTP: ",
     "server_info_gone": "سرور از بین رفته است: ",

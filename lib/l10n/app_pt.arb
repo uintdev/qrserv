@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Não é possível desligar o servidor durante o processamento da seleção de arquivos",
     "info_pending_servershutdown": "Desligamento do servidor pendente...",
     "info_pending_appinfo": "Carregando...",
+    "server_info_download_started": "Descarregar iniciado: ",
+    "server_info_download_finished": "Descarregar terminado: ",
     "server_info_tokenmismatch": "Incompatibilidade da token do servidor",
     "server_info_shutdownfailed": "Falha ao desligar servidor.\nCódigo HTTP: ",
     "server_info_gone": "Servidor desaparecido: ",

@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Impossible d'arrêter le serveur pendant le traitement de la sélection de fichiers",
     "info_pending_servershutdown": "Arrêt du serveur en cours...",
     "info_pending_appinfo": "Chargement en cours...",
+    "server_info_download_started": "Téléchargement commencé: ",
+    "server_info_download_finished": "Téléchargement terminé: ",
     "server_info_tokenmismatch": "Le jeton du serveur est invalide",
     "server_info_shutdownfailed": "Échec de l'arrêt du serveur.\ncode HTTP: ",
     "server_info_gone": "Le serveur est parti: ",

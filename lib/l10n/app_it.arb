@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Impossibile spegnere il server durante l'elaborazione della selezione dei file",
     "info_pending_servershutdown": "Spegnimento del server in corso...",
     "info_pending_appinfo": "Caricamento...",
+    "server_info_download_started": "Download avviato: ",
+    "server_info_download_finished": "Download finito: ",
     "server_info_tokenmismatch": "Il token del server non corrisponde",
     "server_info_shutdownfailed": "Non è stato possibile spegnere il server.\nCodice HTTP: ",
     "server_info_gone": "Il server è sparito: ",

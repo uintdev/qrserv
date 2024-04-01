@@ -64,6 +64,12 @@ class Server {
         final fileInfo = FileManager().readInfo();
         File targetFile = File(fileInfo['path']);
 
+        // Get requestor's IP address
+        String remoteIP = 'unknown';
+        if (request.connectionInfo?.remoteAddress != null) {
+          remoteIP = request.connectionInfo!.remoteAddress.address;
+        }
+
         if (token != '') {
           if (token == _serverToken) {
             // If provided generated token matches then shutdown server
@@ -74,6 +80,8 @@ class Server {
           }
         } else if (await targetFile.exists()) {
           // File exists, prepare response headers
+          showToast(AppLocalizations.of(context)!.server_info_download_started +
+              remoteIP);
           response.statusCode = HttpStatus.ok;
           response.headers
               .add(HttpHeaders.contentTypeHeader, 'application/octet-stream');
@@ -87,6 +95,9 @@ class Server {
           // Serve file
           try {
             await response.addStream(targetFile.openRead());
+            showToast(
+                AppLocalizations.of(context)!.server_info_download_finished +
+                    remoteIP);
           } catch (error) {
             showToast(AppLocalizations.of(context)!.server_info_gone +
                 error.toString());

@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Server kann während der Verarbeitung der Dateiauswahl nicht heruntergefahren werden",
     "info_pending_servershutdown": "Server heruntergefahren ausstehend...",
     "info_pending_appinfo": "Laden...",
+    "server_info_download_started": "Download gestartet: ",
+    "server_info_download_finished": "Download beendet: ",
     "server_info_tokenmismatch": "Server-Token-Fehlanpassung",
     "server_info_shutdownfailed": "Server könnte nicht heruntergefahren werden.\nHTTP code: ",
     "server_info_gone": "Server ist weg: ",

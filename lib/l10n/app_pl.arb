@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Nie można wyłączyć serwera podczas przetwarzania wyboru pliku",
     "info_pending_servershutdown": "Zamknięcie serwera jest teraz w toku...",
     "info_pending_appinfo": "Ładowanie...",
+    "server_info_download_started": "Pobieranie rozpoczęte: ",
+    "server_info_download_finished": "Pobieranie zakończone: ",
     "server_info_tokenmismatch": "Niezgodność z tokenu serwera",
     "server_info_shutdownfailed": "Nie udało się pomyślnie zamknąć serwera.\nHTTP kod: ",
     "server_info_gone": "Serwer zaginął: ",

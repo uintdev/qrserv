@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Dosya seçimi işlenirken sunucu kapanamaz",
     "info_pending_servershutdown": "Sunucu kapatılması bekleniyor...",
     "info_pending_appinfo": "Yükleniyor...",
+    "server_info_download_started": "İndirme başladı: ",
+    "server_info_download_finished": "İndirme bitmiş: ",
     "server_info_tokenmismatch": "Sunucu token uyuşmazlığı",
     "server_info_shutdownfailed": "Sunucu kapatılamadı.\nHTTP kodu: ",
     "server_info_gone": "Sunucu yok: ",

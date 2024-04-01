@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Nem lehet leállítani a kiszolgálót a fájl választás feldolgozása közben",
     "info_pending_servershutdown": "Szerver leállítás folyamatban...",
     "info_pending_appinfo": "Betöltés...",
+    "server_info_download_started": "Letöltés megkezdve: ",
+    "server_info_download_finished": "Letöltés kész: ",
     "server_info_tokenmismatch": "Nem egyező szerver token",
     "server_info_shutdownfailed": "Sikertelen szerver leállás.\nHTTP kód: ",
     "server_info_gone": "A szerver eltűnt: ",

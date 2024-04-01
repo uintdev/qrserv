@@ -47,6 +47,8 @@
     "info_pending_fileprocessing_shutdown": "Cannot shutdown server while processing file selection",
     "info_pending_servershutdown": "Server shutdown pending...",
     "info_pending_appinfo": "Loading...",
+    "server_info_download_started": "Download started: ",
+    "server_info_download_finished": "Download finished: ",
     "server_info_tokenmismatch": "Server token mismatch",
     "server_info_shutdownfailed": "Failed to shutdown server.\nHTTP code: ",
     "server_info_gone": "Server is gone: ",
