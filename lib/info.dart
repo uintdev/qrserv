@@ -101,7 +101,7 @@ class Info {
               'uintdev/qrserv',
               AppLocalizations.of(context)!.info_opensource_title,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             listButton(
               context,
               Icons.local_cafe,
@@ -132,7 +132,7 @@ class Info {
         );
       },
       child: Padding(
-        padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+        padding: EdgeInsets.fromLTRB(5, 12, 5, 12),
         child: Row(
           children: [
             Icon(icon),
