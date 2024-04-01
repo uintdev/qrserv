@@ -30,7 +30,7 @@ class Server {
   static String _serverToken = '';
 
   // Create unique token
-  String tokenGenerator({String characters = '', int length = 32}) {
+  String tokenGenerator([String characters = '', int length = 32]) {
     String _characters = '';
     if (characters == '') {
       _characters =

@@ -101,10 +101,29 @@ class FileManager {
       if (resultFilePicker != null) {
         // File picker handler
         for (int i = 0; i < resultFilePicker.files.length; i++) {
+          if (resultFilePicker.files[i].path == null) continue;
+
+          File fileToMove = File(resultFilePicker.files[i].path ?? '');
+          String fileToMoveName = resultFilePicker.files[i].name;
+          String fileToMoveNewPath =
+              await filePickerPath() + '/' + fileToMoveName;
+
+          // Check if selection has multiple files of the same name
+          for (int j = 0; j < result['files'].length; j++) {
+            if (result['files'][j]['name'] == fileToMoveName) {
+              fileToMoveName = Server().tokenGenerator('0123456789abcdef', 6) +
+                  '_' +
+                  fileToMoveName;
+              fileToMoveNewPath = await filePickerPath() + '/' + fileToMoveName;
+            }
+          }
+
+          await fileToMove.rename(fileToMoveNewPath);
+
           result['files'].addAll({
             i: {
-              'name': resultFilePicker.files[i].name,
-              'path': resultFilePicker.files[i].path,
+              'name': fileToMoveName,
+              'path': fileToMoveNewPath,
               'size': resultFilePicker.files[i].size,
             }
           });
@@ -189,8 +208,7 @@ class FileManager {
       if (multipleFiles) {
         // Prepare archive name
         String archiveName =
-            Server().tokenGenerator(characters: 'ABCDEF1234567890', length: 8) +
-                '.zip';
+            Server().tokenGenerator('1234567890ABCDEF', 8) + '.zip';
         String fullPickerPath = await filePickerPath();
         String fullArchivePath = fullPickerPath + '/' + archiveName;
 
