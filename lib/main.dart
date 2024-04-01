@@ -339,7 +339,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     await Server().shutdownServer(context).whenComplete(() async {
       if (!Server.serverRunning) {
         setState(() {
-          FileManager.fileImported = false;
           _stateView = StateManagerPage();
         });
       } else {
