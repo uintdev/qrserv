@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.4.0
+
+-   Improved file handling in a case where a user can select files of the same name from different folders
+-   Added toast messages for when a download begins and ends, along with the IP address of the requestor
+-   Tweaked appearance of info dialog
+
 ## 2.3.2
 
 -   Added Persian translation

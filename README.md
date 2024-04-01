@@ -55,6 +55,7 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 -   Import via sharesheet (Android only)
 -   Show and hide filename in download URL path
     -   Long press the share button to toggle
+-   Notify when a client requested the hosted file and when that download finishes (includes IP address of requestor)
 -   Various IP addresses from different network interfaces can be chosen
 -   HTTP server uses an unused ("random") port
 -   Supports Android, Windows and Linux platforms
