@@ -25,10 +25,7 @@ dependencies:
     auto_size_text: ^3.0.0
     oktoast: ^3.4.0
     share_plus: ^9.0.0
-    receive_sharing_intent:
-        git:
-            url: https://github.com/uintdev/receive_sharing_intent.git
-            ref: 573400b66d61824b85396bd84a5f06b6f1e757d9
+    receive_sharing_intent: 1.8.0
 
     file_picker: ^8.0.5
     flutter_archive: ^6.0.3

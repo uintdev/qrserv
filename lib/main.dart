@@ -142,7 +142,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
     if (!StateManager().isDesktop) {
       // Intent share receiver (when in memory)
-      _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
+      _intentDataStreamSubscription = ReceiveSharingIntent.instance
+          .getMediaStream()
           .listen((List<SharedMediaFile> value) async {
         importShare(value);
       }, onError: (err) {
@@ -151,7 +152,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       });
 
       // Intent share receiver (when closed)
-      ReceiveSharingIntent.getInitialMedia().then(
+      ReceiveSharingIntent.instance.getInitialMedia().then(
           (List<SharedMediaFile> value) async {
         importShare(value);
       }, onError: (err) {
