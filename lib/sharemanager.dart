@@ -13,7 +13,7 @@ class ShareManager {
   }
 
   // Clipboard
-  static Future<void> _copyURL(String url, BuildContext context) async {
+  static Future<void> copyURL(String url, BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: url));
     showToast(AppLocalizations.of(context)!.page_imported_share_clipboard);
     return;
@@ -24,7 +24,7 @@ class ShareManager {
     if (!StateManager().isDesktop) {
       await _shareSheet(url);
     } else {
-      await _copyURL(url, context);
+      await copyURL(url, context);
     }
     return;
   }
