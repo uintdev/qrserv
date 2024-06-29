@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0
+
+-   Full URL can now be copied to the clipboard directly by press and holding on the QR code -- no longer need to go through the share sheet (if it even offers the 'copy to clipboard' option in the first place, which may vary by OEM)
+-   Tooltip with a full URL that would previously show when press and holding the QR code will now appear when tapping on the QR code instead
+-   Bug fixes from dependencies that address reliability and recent build issues
+
 ## 2.4.0
 
 -   Improved file handling in a case where a user can select files of the same name from different folders
