@@ -42,6 +42,7 @@ dependencies:
     http: ^1.2.1
     uuid: ^4.4.0
     ffi: ^2.1.2
+    win32: ^5.5.1
 
     filesystem_picker: ^4.1.0
     permission_handler: ^11.3.1
