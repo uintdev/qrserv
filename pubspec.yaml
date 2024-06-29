@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 2.4.0+43
 
 environment:
-    sdk: '>=3.4.0-167.0.dev <4.0.0'
+    sdk: '>= 3.5.0-315.0.dev <4.0.0'
 
 dependencies:
     flutter:
@@ -15,23 +15,23 @@ dependencies:
         sdk: flutter
     intl: ^0.19.0
 
-    path_provider: ^2.1.2
+    path_provider: ^2.1.3
     filesize: ^2.0.1
     qr_flutter: ^4.1.0
     watcher: ^1.1.0
-    package_info_plus: ^6.0.0
-    url_launcher: ^6.2.5
+    package_info_plus: ^8.0.0
+    url_launcher: ^6.3.0
     flutter_statusbarcolor_ns: ^0.5.0
     auto_size_text: ^3.0.0
     oktoast: ^3.4.0
-    share_plus: ^8.0.2
+    share_plus: ^9.0.0
     receive_sharing_intent:
         git:
             url: https://github.com/uintdev/receive_sharing_intent.git
             ref: 573400b66d61824b85396bd84a5f06b6f1e757d9
 
-    file_picker: ^8.0.0
-    flutter_archive: ^6.0.0
+    file_picker: ^8.0.5
+    flutter_archive: ^6.0.3
 
     window_size:
         git:
@@ -40,12 +40,12 @@ dependencies:
             ref: a738913c8ce2c9f47515382d40827e794a334274
 
     http: ^1.2.1
-    uuid: ^4.3.3
+    uuid: ^4.4.0
     ffi: ^2.1.2
 
     filesystem_picker: ^4.1.0
     permission_handler: ^11.3.1
-    device_info_plus: ^10.0.1
+    device_info_plus: ^10.1.0
 
     path: ^1.9.0
 
