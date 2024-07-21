@@ -25,7 +25,7 @@ dependencies:
     auto_size_text: ^3.0.0
     oktoast: ^3.4.0
     share_plus: ^9.0.0
-    receive_sharing_intent: 1.8.0
+    receive_sharing_intent: ^1.8.0
 
     file_picker: ^8.0.5
     flutter_archive: ^6.0.3
