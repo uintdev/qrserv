@@ -27,7 +27,7 @@ dependencies:
     share_plus: ^9.0.0
     receive_sharing_intent: ^1.8.0
 
-    file_picker: ^8.0.5
+    file_picker: ^8.0.6
     flutter_archive: ^6.0.3
 
     window_size:
@@ -36,8 +36,8 @@ dependencies:
             path: plugins/window_size
             ref: a738913c8ce2c9f47515382d40827e794a334274
 
-    http: ^1.2.1
-    uuid: ^4.4.0
+    http: ^1.2.2
+    uuid: ^4.4.2
     ffi: ^2.1.2
     win32: ^5.5.1
 
