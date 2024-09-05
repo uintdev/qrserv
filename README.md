@@ -94,7 +94,7 @@ As you may be aware, there are two different Android builds of this application.
 
 #### GitHub
 
--   Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 13 or later
+-   Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 11 or later
 
 #### Changing build types
 
