@@ -50,6 +50,8 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
     -   Multi-file selection would result in a ZIP archive
         -   Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
 -   Direct Access Mode (Android only)
+    -   Only available on Android 10 or earlier on the Play Store version
+    -   To use this feature on Android 11 or later, use the GitHub version (link is in-app under the 'about' dialog) -- please note that the Play Store version needs to be uninstalled first as it would be signed using a different certificate
     -   Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
     -   The file manager for this mode only supports single file selection
     -   The mode can be toggled by pressing on the SD card icon
@@ -78,9 +80,29 @@ QRServ is a file sharing application that utilises its own HTTP server to serve 
 
 Android builds can be found in the [releases](../../releases) section of this repository.
 
-Last desktop builds (Windows, Linux) can be found in the [releases section under v1.1.1](../../releases/tag/v1.1.1).
-
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B and vice versa.
+
+### Play Store and GitHub version differences
+
+As you may be aware, there are two different Android builds of this application. This section will cover the differences.
+
+#### Play Store
+
+-   Direct Access Mode is **not** available for Android 11 or later due to the `MANAGE_EXTERNAL_STORAGE` runtime permission requirement (see issue #20)
+    -   In short, Google Play had became far more strict about the usage of such sensitive permission since June 2024
+    -   There hasn't been much luck in terms of using the MediaStore API.. at least from existing Flutter packages that _kind of_ act like a wrapper (typically, there's issues and limitations) -- it would likely be the case of writing that functionality from scratch using Kotlin
+
+#### GitHub
+
+-   Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 13 or later
+
+#### Changing build types
+
+By default, the source code builds to the GitHub version. The build type can be changed through the [filemanager.dart](lib/filemanager.dart) file in the `isPlayStoreFriendly` section (instructions can also be found there). Update the permissions under [AndroidManifest.xml](Android/app/src/main/AndroidManifest.xml) as appropriate.
+
+### Desktop
+
+Last desktop builds (Windows, Linux) can be found in the [releases section under v1.1.1](../../releases/tag/v1.1.1).
 
 ## Contributing
 
