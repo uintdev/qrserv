@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.0
+
+-   Direct Access Mode is now only available for Android 10 or earlier for Play Store builds due to policy issues -- GitHub builds not affected
+-   Fixed Direct Access Mode for Android 10
+-   Added 'releases' button to 'about' dialog
+
 ## 2.5.0
 
 -   Full URL can now be copied to the clipboard directly by press and holding on the QR code -- no longer need to go through the share sheet (if it even offers the 'copy to clipboard' option in the first place, which may vary by OEM)
