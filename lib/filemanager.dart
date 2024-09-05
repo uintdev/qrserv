@@ -26,8 +26,17 @@ class FileManager {
   static bool allowWatcher = false;
   static bool lockWatcher = false;
   static bool directAccessMode = false;
+  final int directAccessModeNoMESMaxAPI = 29;
   final String directAccessPath = '/storage/emulated/0';
   final bool allowMultipleFiles = (Platform.isAndroid);
+
+  /*
+  !!! This determines if DAM is allowed on Android 11 or later in the build !!!
+  If `true`, remove `MANAGE_EXTERNAL_STORAGE` from `AndroidManifest.xml`
+  If `false`, add `<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>` into `AndroidManifest.xml`
+  !!! By default when it comes to Git, this should be set to `false` and with the MES permission in place !!!
+  */
+  final bool isPlayStoreFriendly = false;
 
   Map<String, dynamic> readInfo() {
     return {

@@ -236,7 +236,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       if (!Platform.isAndroid) return;
 
       final androidInfo = await DeviceInfoPlugin().androidInfo;
-      if (androidInfo.version.sdkInt <= 32) {
+      if (androidInfo.version.sdkInt <=
+          FileManager().directAccessModeNoMESMaxAPI) {
         storagePerm = Permission.storage;
       } else {
         storagePerm = Permission.manageExternalStorage;
@@ -352,6 +353,25 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     await Info().infoDialog(context);
   }
 
+  Future<bool> damEligibility() async {
+    bool result = false;
+
+    if (Platform.isAndroid) {
+      if (FileManager().isPlayStoreFriendly) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        if (androidInfo.version.sdkInt <=
+            FileManager().directAccessModeNoMESMaxAPI) {
+          // Does not require MES permission on Android 10 or lower
+          result = true;
+        }
+      } else {
+        result = true;
+      }
+    }
+
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!StateManager().isDesktop) {
@@ -384,24 +404,31 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               child: Text(widget.title),
             ),
             actions: [
-              !Platform.isAndroid
-                  ? SizedBox(width: 0)
-                  : IconButton(
-                      onPressed: () {
-                        !FileManager.directAccessMode
-                            ? showToast(
-                                AppLocalizations.of(context)!.dam_state_enabled)
-                            : showToast(AppLocalizations.of(context)!
-                                .dam_state_disabled);
-                        setState(() {
-                          FileManager.directAccessMode =
-                              !FileManager.directAccessMode;
-                        });
-                      },
-                      icon: !FileManager.directAccessMode
-                          ? const Icon(Icons.sd_card_outlined)
-                          : const Icon(Icons.sd_card),
-                    ),
+              IconButton(
+                onPressed: () async {
+                  final bool damEligible = await damEligibility();
+                  if (!damEligible) {
+                    showToast(
+                      'Direct Access Mode for Android 11 or later is only ' +
+                          'available on the GitHub version of the app' +
+                          ' -- see the \'about\' dialog',
+                    );
+                    return;
+                  }
+                  !FileManager.directAccessMode
+                      ? showToast(
+                          AppLocalizations.of(context)!.dam_state_enabled)
+                      : showToast(
+                          AppLocalizations.of(context)!.dam_state_disabled);
+                  setState(() {
+                    FileManager.directAccessMode =
+                        !FileManager.directAccessMode;
+                  });
+                },
+                icon: !FileManager.directAccessMode
+                    ? const Icon(Icons.sd_card_outlined)
+                    : const Icon(Icons.sd_card),
+              ),
               SizedBox(width: 10),
               IconButton(
                 onPressed: () {
