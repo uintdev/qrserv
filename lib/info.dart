@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/foundation.dart';
+import 'filemanager.dart';
 
 class Info {
   // URL launch management
@@ -85,6 +86,10 @@ class Info {
                 packageInfo,
                 Text(' ('),
                 Text(kReleaseMode ? 'release' : 'debug'),
+                Text(', '),
+                Text(
+                  FileManager().isPlayStoreFriendly ? 'Play Store' : 'GitHub',
+                ),
                 Text(')'),
               ],
             ),
@@ -100,6 +105,14 @@ class Info {
               'github.com',
               'uintdev/qrserv',
               AppLocalizations.of(context)!.info_opensource_title,
+            ),
+            const SizedBox(height: 8),
+            listButton(
+              context,
+              Icons.archive_rounded,
+              'github.com',
+              'uintdev/qrserv/releases',
+              'Releases',
             ),
             const SizedBox(height: 8),
             listButton(
