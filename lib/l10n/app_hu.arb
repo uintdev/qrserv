@@ -1,5 +1,6 @@
 {
     "@@locale": "hu",
+    "@@x-template": "app_en.arb",
     "page_landing_label": "Fájl(ok) kiválasztása",
     "page_landing_msg": "Megosztható fájlok kiválasztása...",
     "page_info_noconnection_label": "Nincs hálózati kapcsolat",

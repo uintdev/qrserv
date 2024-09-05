@@ -1,5 +1,6 @@
 {
     "@@locale": "fa",
+    "@@x-template": "app_en.arb",
     "page_landing_label": "انتخاب پرونده(ها)",
     "page_landing_msg": "پرونده ها را برای ارسال انتخاب کنید",
     "page_info_noconnection_label": "بدون اتصال شبکه",

@@ -1,5 +1,6 @@
 {
     "@@locale": "ru",
+    "@@x-template": "app_en.arb",
     "page_landing_label": "Выберите файл(ы)",
     "page_landing_msg": "Выберите файлы для обмена...",
     "page_info_noconnection_label": "Нет подключения к сети",

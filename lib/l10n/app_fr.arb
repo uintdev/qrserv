@@ -1,5 +1,6 @@
 {
     "@@locale": "fr",
+    "@@x-template": "app_en.arb",
     "page_landing_label": "Sélectionner fichier·s",
     "page_landing_msg": "Sélectionnez des fichiers à partager...",
     "page_info_noconnection_label": "Aucune connexion réseau",

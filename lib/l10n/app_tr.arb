@@ -1,5 +1,6 @@
 {
     "@@locale": "tr",
+    "@@x-template": "app_en.arb",
     "page_landing_label": "Dosya seç",
     "page_landing_msg": "Paylaşılacak dosyaları seçin...",
     "page_info_noconnection_label": "Ağ bağlantısı yok",

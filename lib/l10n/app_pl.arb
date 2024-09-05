@@ -1,5 +1,6 @@
 {
     "@@locale": "pl",
+    "@@x-template": "app_en.arb",
     "page_landing_label": "Wybierz plik(i)",
     "page_landing_msg": "Wybierz plik(i) do wysłania......",
     "page_info_noconnection_label": "Brak połączenia z siecią",
