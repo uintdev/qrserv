@@ -9,4 +9,7 @@ Android app permissions:
 
 -   android.permission.INTERNET -- Collection of available network interfaces and port binding for the HTTP server
 -   android.permission.READ_EXTERNAL_STORAGE -- Read-only access to emulated, physical SD card(s) and USB mass storage
+
+GitHub version (additional permissions):
+
 -   android.permission.MANAGE_EXTERNAL_STORAGE -- Direct access to select files on internal storage rather than what gets cached first
