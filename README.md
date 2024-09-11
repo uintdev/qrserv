@@ -98,7 +98,7 @@ As you may be aware, there are two different Android builds of this application.
 
 #### Changing build types
 
-By default, the source code builds to the GitHub version. The build type can be changed through the [filemanager.dart](lib/filemanager.dart) file in the `isPlayStoreFriendly` section (instructions can also be found there). Update the permissions under [AndroidManifest.xml](Android/app/src/main/AndroidManifest.xml) as appropriate.
+By default, the source code builds to the GitHub version. The build type can be changed through the [filemanager.dart](lib/filemanager.dart) file in the `isPlayStoreFriendly` section (instructions can also be found there). Update the permissions under [AndroidManifest.xml](android/app/src/main/AndroidManifest.xml) as appropriate.
 
 ### Desktop
 
