@@ -172,10 +172,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_statusbarcolor_ns
-      sha256: "28ad644daac2d692b6d0d576458b7967f1aaeaf212eddfcb40ec8b5e68621abc"
+      sha256: a971b00344dff1bff95c95e1c5d4cd38923a27d0d6fac684ebaf220b1d1abbdc
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
