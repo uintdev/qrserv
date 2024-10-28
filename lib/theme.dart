@@ -12,7 +12,9 @@ class QRSTheme {
       primaryColor: const Color.fromRGBO(0, 0, 0, 1),
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
-      dialogBackgroundColor: const Color.fromRGBO(237, 232, 243, 1),
+      dialogTheme: DialogThemeData(
+        backgroundColor: const Color.fromRGBO(237, 232, 243, 1),
+      ),
       textTheme: TextTheme(
         titleLarge: TextStyle(
           color: const Color.fromRGBO(0, 0, 0, 1),
@@ -48,7 +50,9 @@ class QRSTheme {
       primaryColor: const Color.fromRGBO(255, 255, 255, 1),
       indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
-      dialogBackgroundColor: const Color.fromRGBO(37, 35, 41, 1),
+      dialogTheme: DialogThemeData(
+        backgroundColor: const Color.fromRGBO(37, 35, 41, 1),
+      ),
       textTheme: TextTheme(
         titleLarge: TextStyle(
           color: const Color.fromRGBO(255, 255, 255, 1),
