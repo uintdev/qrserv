@@ -26,9 +26,10 @@ class Network {
     for (NetworkInterface interface in await NetworkInterface.list()) {
       for (InternetAddress addr in interface.addresses) {
         // Filter out 192.168.*.0-1
-        bool filterList = !(addr.rawAddress[0] == 192 &&
-            addr.rawAddress[1] == 168 &&
-            addr.rawAddress[3] < 2);
+        bool filterList =
+            !(addr.rawAddress[0] == 192 &&
+                addr.rawAddress[1] == 168 &&
+                addr.rawAddress[3] < 2);
         if (filterList) {
           // Organise IPs into their own version lists
           if (addr.type.name == 'IPv4') {
@@ -56,8 +57,10 @@ class Network {
       await Server().http(context).onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
-        showToast(AppLocalizations.of(context)!.info_exception_portinuse +
-            error.toString());
+        showToast(
+          AppLocalizations.of(context)!.info_exception_portinuse +
+              error.toString(),
+        );
         Server.serverException = true;
       });
     }
@@ -70,7 +73,7 @@ class Network {
 
     Map<String, dynamic> networkData = {
       'interfaces': interfaceList,
-      'port': port
+      'port': port,
     };
 
     return networkData;
@@ -82,9 +85,7 @@ class Network {
 
     bool _versionType;
 
-    RegExp regExp = RegExp(
-      r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$",
-    );
+    RegExp regExp = RegExp(r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$");
 
     _versionType = regExp.hasMatch(ip);
 

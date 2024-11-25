@@ -27,10 +27,7 @@ void main() async {
     setWindowMaxSize(Size.infinite);
   }
 
-  runApp(MaterialApp(
-    home: QRServ(),
-    debugShowCheckedModeBanner: false,
-  ));
+  runApp(MaterialApp(home: QRServ(), debugShowCheckedModeBanner: false));
 }
 
 class QRServ extends StatelessWidget {
@@ -119,7 +116,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             'name': Path.basename(file.path),
             'path': file.path,
             'size': fileSize,
-          }
+          },
         });
         index++;
       }
@@ -132,9 +129,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           });
         });
       } catch (error) {
-        showToast(AppLocalizations.of(context)!
-                .info_exception_fileselection_fallback +
-            error.toString());
+        showToast(
+          AppLocalizations.of(context)!.info_exception_fileselection_fallback +
+              error.toString(),
+        );
       } finally {
         FileManager.fileImportPending = false;
       }
@@ -144,21 +142,28 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       // Intent share receiver (when in memory)
       _intentDataStreamSubscription = ReceiveSharingIntent.instance
           .getMediaStream()
-          .listen((List<SharedMediaFile> value) async {
-        importShare(value);
-      }, onError: (err) {
-        showToast(
-            AppLocalizations.of(context)!.info_exception_intentstream + err);
-      });
+          .listen(
+            (List<SharedMediaFile> value) async {
+              importShare(value);
+            },
+            onError: (err) {
+              showToast(
+                AppLocalizations.of(context)!.info_exception_intentstream + err,
+              );
+            },
+          );
 
       // Intent share receiver (when closed)
       ReceiveSharingIntent.instance.getInitialMedia().then(
-          (List<SharedMediaFile> value) async {
-        importShare(value);
-      }, onError: (err) {
-        showToast(
-            AppLocalizations.of(context)!.info_exception_intentstream + err);
-      });
+        (List<SharedMediaFile> value) async {
+          importShare(value);
+        },
+        onError: (err) {
+          showToast(
+            AppLocalizations.of(context)!.info_exception_intentstream + err,
+          );
+        },
+      );
     }
   }
 
@@ -174,10 +179,12 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       if (_useWhiteStatusBarForeground)
         FlutterStatusbarcolor.setStatusBarWhiteForeground(
-            _useWhiteStatusBarForeground);
+          _useWhiteStatusBarForeground,
+        );
       if (_useWhiteNavigationBarForeground)
         FlutterStatusbarcolor.setNavigationBarWhiteForeground(
-            _useWhiteNavigationBarForeground);
+          _useWhiteNavigationBarForeground,
+        );
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -197,8 +204,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         _useWhiteNavigationBarForeground = false;
       }
     } on PlatformException catch (e) {
-      showToast(AppLocalizations.of(context)!.info_exception_statusbar +
-          e.toString());
+      showToast(
+        AppLocalizations.of(context)!.info_exception_statusbar + e.toString(),
+      );
     }
   }
 
@@ -206,8 +214,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     try {
       await FlutterStatusbarcolor.setNavigationBarColor(color);
     } on PlatformException catch (e) {
-      showToast(AppLocalizations.of(context)!.info_exception_navigationbar +
-          e.toString());
+      showToast(
+        AppLocalizations.of(context)!.info_exception_navigationbar +
+            e.toString(),
+      );
     }
   }
 
@@ -243,11 +253,14 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         storagePerm = Permission.manageExternalStorage;
       }
 
-      await storagePerm.onDeniedCallback(() {
-        FileManager.fileImportPending = false;
-      }).onGrantedCallback(() {
-        FileManager.fileImportPending = false;
-      }).request();
+      await storagePerm
+          .onDeniedCallback(() {
+            FileManager.fileImportPending = false;
+          })
+          .onGrantedCallback(() {
+            FileManager.fileImportPending = false;
+          })
+          .request();
 
       final Directory rootPath = Directory(FileManager().directAccessPath);
 
@@ -270,15 +283,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
       fileSelection = {'files': {}};
       final int fileSize = 0;
-      fileSelection['files'].addAll(
-        {
-          0: {
-            'name': Path.basename(path),
-            'path': path,
-            'size': fileSize,
-          }
-        },
-      );
+      fileSelection['files'].addAll({
+        0: {'name': Path.basename(path), 'path': path, 'size': fileSize},
+      });
     }
 
     // Prompt file import
@@ -317,9 +324,12 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // Unknown exception -- inform user
         default:
           {
-            showToast(AppLocalizations.of(context)!
-                    .info_exception_fileselection_fallback +
-                _exceptionData);
+            showToast(
+              AppLocalizations.of(
+                    context,
+                  )!.info_exception_fileselection_fallback +
+                  _exceptionData,
+            );
           }
           break;
       }
@@ -328,8 +338,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       _actionButtonLoading = false;
     } catch (error) {
       showToast(
-          AppLocalizations.of(context)!.info_exception_fileselection_fallback +
-              error.toString());
+        AppLocalizations.of(context)!.info_exception_fileselection_fallback +
+            error.toString(),
+      );
     } finally {
       FileManager.fileImportPending = false;
     }
@@ -387,14 +398,16 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).canvasColor,
-              offset: const Offset(0, 3),
-              spreadRadius: 25,
-              blurRadius: 15,
-            )
-          ]),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).canvasColor,
+                offset: const Offset(0, 3),
+                spreadRadius: 25,
+                blurRadius: 15,
+              ),
+            ],
+          ),
           child: AppBar(
             elevation: 0,
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
@@ -417,17 +430,20 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                   }
                   !FileManager.directAccessMode
                       ? showToast(
-                          AppLocalizations.of(context)!.dam_state_enabled)
+                        AppLocalizations.of(context)!.dam_state_enabled,
+                      )
                       : showToast(
-                          AppLocalizations.of(context)!.dam_state_disabled);
+                        AppLocalizations.of(context)!.dam_state_disabled,
+                      );
                   setState(() {
                     FileManager.directAccessMode =
                         !FileManager.directAccessMode;
                   });
                 },
-                icon: !FileManager.directAccessMode
-                    ? const Icon(Icons.sd_card_outlined)
-                    : const Icon(Icons.sd_card),
+                icon:
+                    !FileManager.directAccessMode
+                        ? const Icon(Icons.sd_card_outlined)
+                        : const Icon(Icons.sd_card),
               ),
               SizedBox(width: 10),
               IconButton(
@@ -436,7 +452,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                 },
                 icon: const Icon(Icons.info_outline),
               ),
-              SizedBox(width: 15)
+              SizedBox(width: 15),
             ],
           ),
         ),
@@ -454,9 +470,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _stateView,
-                ],
+                children: <Widget>[_stateView],
               ),
             ),
             // FAB layout
@@ -486,34 +500,41 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   AnimatedSwitcher fabShutdown(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 250),
-      transitionBuilder: (Widget child, Animation<double> animation) =>
-          ScaleTransition(child: child, scale: animation),
-      child: !Server.serverRunning
-          ? fabPlaceholder('shutdown_hidden')
-          : FloatingActionButton(
-              heroTag: 'shutdown',
-              elevation: 3,
-              backgroundColor: Colors.red.shade700,
-              foregroundColor: Colors.red.shade100,
-              onPressed: () {
-                if (_actionButtonLoading) {
-                  showToast(AppLocalizations.of(context)!
-                      .info_pending_fileprocessing_shutdown);
-                } else if (Server.serverRunning && !Server.serverPoweringDown) {
-                  shutdownFAB();
-                } else {
-                  showToast(AppLocalizations.of(context)!
-                      .info_pending_servershutdown);
-                }
-              },
-              child: Icon(
-                Icons.power_settings_new,
-                color: Colors.red.shade100,
-                size: 22.5,
-                semanticLabel:
-                    AppLocalizations.of(context)!.fab_shutdownserver_label,
+      transitionBuilder:
+          (Widget child, Animation<double> animation) =>
+              ScaleTransition(child: child, scale: animation),
+      child:
+          !Server.serverRunning
+              ? fabPlaceholder('shutdown_hidden')
+              : FloatingActionButton(
+                heroTag: 'shutdown',
+                elevation: 3,
+                backgroundColor: Colors.red.shade700,
+                foregroundColor: Colors.red.shade100,
+                onPressed: () {
+                  if (_actionButtonLoading) {
+                    showToast(
+                      AppLocalizations.of(
+                        context,
+                      )!.info_pending_fileprocessing_shutdown,
+                    );
+                  } else if (Server.serverRunning &&
+                      !Server.serverPoweringDown) {
+                    shutdownFAB();
+                  } else {
+                    showToast(
+                      AppLocalizations.of(context)!.info_pending_servershutdown,
+                    );
+                  }
+                },
+                child: Icon(
+                  Icons.power_settings_new,
+                  color: Colors.red.shade100,
+                  size: 22.5,
+                  semanticLabel:
+                      AppLocalizations.of(context)!.fab_shutdownserver_label,
+                ),
               ),
-            ),
     );
   }
 
@@ -528,17 +549,19 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       },
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
-        transitionBuilder: (Widget child, Animation<double> animation) =>
-            ScaleTransition(child: child, scale: animation),
-        child: _actionButtonLoading
-            ? StateManager().loadingIndicator(context)
-            : Icon(
-                Icons.insert_drive_file,
-                color: Theme.of(context).colorScheme.secondary,
-                size: 20.0,
-                semanticLabel:
-                    AppLocalizations.of(context)!.fab_selectfile_label,
-              ),
+        transitionBuilder:
+            (Widget child, Animation<double> animation) =>
+                ScaleTransition(child: child, scale: animation),
+        child:
+            _actionButtonLoading
+                ? StateManager().loadingIndicator(context)
+                : Icon(
+                  Icons.insert_drive_file,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 20.0,
+                  semanticLabel:
+                      AppLocalizations.of(context)!.fab_selectfile_label,
+                ),
       ),
     );
   }
@@ -550,10 +573,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         heroTag: heroTagName,
         elevation: 3,
         onPressed: () {},
-        child: Icon(
-          Icons.check_box_outline_blank,
-          size: 20.0,
-        ),
+        child: Icon(Icons.check_box_outline_blank, size: 20.0),
       ),
     );
   }

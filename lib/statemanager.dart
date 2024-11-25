@@ -23,7 +23,7 @@ enum PageType {
   permissiondenied,
   insufficientstorage,
   portinuse,
-  fallback
+  fallback,
 }
 
 PageType pageTypeCurrent = PageType.landing;
@@ -93,8 +93,9 @@ class StateManager extends State<StateManagerPage> {
           child: Container(
             padding: const EdgeInsets.all(20),
             child: CircularProgressIndicator(
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ),
@@ -197,8 +198,10 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.disc_full,
-            'label': AppLocalizations.of(context)!
-                .page_info_insufficientstorage_label,
+            'label':
+                AppLocalizations.of(
+                  context,
+                )!.page_info_insufficientstorage_label,
             'msg':
                 AppLocalizations.of(context)!.page_info_insufficientstorage_msg,
           };
@@ -221,7 +224,8 @@ class StateManager extends State<StateManagerPage> {
           _msgInfo = {
             'icon': Icons.error,
             'label': AppLocalizations.of(context)!.page_info_fallback_label,
-            'msg': AppLocalizations.of(context)!.page_info_fallback_msg +
+            'msg':
+                AppLocalizations.of(context)!.page_info_fallback_msg +
                 pageState.toString(),
           };
         }
@@ -285,8 +289,10 @@ class StateManager extends State<StateManagerPage> {
           Map<String, dynamic> _fileInfo = FileManager().readInfo();
 
           // Human readable file size
-          String _sizeHuman =
-              FileManager().fileSizeHuman(_fileInfo['length'], context);
+          String _sizeHuman = FileManager().fileSizeHuman(
+            _fileInfo['length'],
+            context,
+          );
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data!['interfaces'].contains(selectedIP.toString())) {
@@ -355,7 +361,8 @@ class StateManager extends State<StateManagerPage> {
               FileWatcher watcher = FileWatcher(_fileInfo['path']);
               importWatchdog = watcher.events.listen((event) {
                 if (!(event.path == _fileInfo['path'] &&
-                    FileManager.allowWatcher)) return;
+                    FileManager.allowWatcher))
+                  return;
 
                 bool watchedFileExists = Server().fileExists(_fileInfo['path']);
 
@@ -384,10 +391,12 @@ class StateManager extends State<StateManagerPage> {
                 archivedFile.add(_fileInfo['name']);
 
                 archivedList.forEach((element) {
-                  archivedFile.add(element['file'] +
-                      ' (' +
-                      FileManager().fileSizeHuman(element['size'], context) +
-                      ')');
+                  archivedFile.add(
+                    element['file'] +
+                        ' (' +
+                        FileManager().fileSizeHuman(element['size'], context) +
+                        ')',
+                  );
                 });
 
                 fileResult = archivedFile.join('\n');
@@ -406,7 +415,13 @@ class StateManager extends State<StateManagerPage> {
 
           // Import layout
           return importedFileView(
-              _hostName, context, snapshot, fileDataTip, _fileInfo, _sizeHuman);
+            _hostName,
+            context,
+            snapshot,
+            fileDataTip,
+            _fileInfo,
+            _sizeHuman,
+          );
         } else {
           return loadingPage();
         }
@@ -415,20 +430,19 @@ class StateManager extends State<StateManagerPage> {
   }
 
   Column importedFileView(
-      String _hostName,
-      BuildContext context,
-      AsyncSnapshot<Map<String, dynamic>> snapshot,
-      String fileDataTip(),
-      Map<String, dynamic> _fileInfo,
-      String _sizeHuman) {
+    String _hostName,
+    BuildContext context,
+    AsyncSnapshot<Map<String, dynamic>> snapshot,
+    String fileDataTip(),
+    Map<String, dynamic> _fileInfo,
+    String _sizeHuman,
+  ) {
     return Column(
       children: <Widget>[
         importedFileQR(_hostName, context),
         const SizedBox(height: 30),
         ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 330,
-          ),
+          constraints: const BoxConstraints(maxWidth: 330),
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
@@ -443,24 +457,23 @@ class StateManager extends State<StateManagerPage> {
                     children: [
                       SizedBox(
                         width: 196,
-                        child: importedFileInterfaces(
-                          context,
-                          snapshot,
-                        ),
+                        child: importedFileInterfaces(context, snapshot),
                       ),
                       const SizedBox(width: 10),
                       SizedBox(
                         width: 56,
-                        child: importedFileShare(
-                          _hostName,
-                          context,
-                        ),
+                        child: importedFileShare(_hostName, context),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   importedFileInfo(
-                      context, fileDataTip, _fileInfo, _sizeHuman, snapshot),
+                    context,
+                    fileDataTip,
+                    _fileInfo,
+                    _sizeHuman,
+                    snapshot,
+                  ),
                 ],
               ),
             ),
@@ -472,9 +485,7 @@ class StateManager extends State<StateManagerPage> {
 
   Card importedFileQR(String _hostName, BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       elevation: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
@@ -493,8 +504,9 @@ class StateManager extends State<StateManagerPage> {
                 version: QrVersions.auto,
                 size: (MediaQuery.of(context).size.height * .23),
                 backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-                padding:
-                    EdgeInsets.all((MediaQuery.of(context).size.height * .029)),
+                padding: EdgeInsets.all(
+                  (MediaQuery.of(context).size.height * .029),
+                ),
               ),
             ),
           ),
@@ -506,9 +518,7 @@ class StateManager extends State<StateManagerPage> {
   Card importedFileShare(String _hostName, BuildContext context) {
     return Card(
       color: Theme.of(context).canvasColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 2,
       child: SizedBox(
         height: 48,
@@ -523,10 +533,16 @@ class StateManager extends State<StateManagerPage> {
           },
           onLongPress: () {
             !fileInPath
-                ? showToast(AppLocalizations.of(context)!
-                    .page_imported_fileinpath_enabled)
-                : showToast(AppLocalizations.of(context)!
-                    .page_imported_fileinpath_disabled);
+                ? showToast(
+                  AppLocalizations.of(
+                    context,
+                  )!.page_imported_fileinpath_enabled,
+                )
+                : showToast(
+                  AppLocalizations.of(
+                    context,
+                  )!.page_imported_fileinpath_disabled,
+                );
             setState(() {
               fileInPath = !fileInPath;
             });
@@ -535,10 +551,14 @@ class StateManager extends State<StateManagerPage> {
             !isDesktop ? Icons.share : Icons.copy,
             size: 17,
             color: Theme.of(context).primaryColor,
-            semanticLabel: !isDesktop
-                ? AppLocalizations.of(context)!.page_imported_share_sheet_label
-                : AppLocalizations.of(context)!
-                    .page_imported_share_clipboard_label,
+            semanticLabel:
+                !isDesktop
+                    ? AppLocalizations.of(
+                      context,
+                    )!.page_imported_share_sheet_label
+                    : AppLocalizations.of(
+                      context,
+                    )!.page_imported_share_clipboard_label,
           ),
         ),
       ),
@@ -546,12 +566,12 @@ class StateManager extends State<StateManagerPage> {
   }
 
   Card importedFileInterfaces(
-      BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+    BuildContext context,
+    AsyncSnapshot<Map<String, dynamic>> snapshot,
+  ) {
     return Card(
       color: Theme.of(context).canvasColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 2,
       child: ForceLTR(
         ButtonTheme(
@@ -578,21 +598,23 @@ class StateManager extends State<StateManagerPage> {
               });
             },
             style: Theme.of(context).textTheme.bodyMedium,
-            items: snapshot.data!['interfaces']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Center(
-                  child: AutoSizeText(
-                    value,
-                    style: const TextStyle(fontSize: 13),
-                    minFontSize: 12,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              );
-            }).toList(),
+            items:
+                snapshot.data!['interfaces'].map<DropdownMenuItem<String>>((
+                  String value,
+                ) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Center(
+                      child: AutoSizeText(
+                        value,
+                        style: const TextStyle(fontSize: 13),
+                        minFontSize: 12,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
         ),
       ),
@@ -601,18 +623,16 @@ class StateManager extends State<StateManagerPage> {
 }
 
 Table importedFileInfo(
-    BuildContext context,
-    String fileDataTip(),
-    Map<String, dynamic> _fileInfo,
-    String _sizeHuman,
-    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+  BuildContext context,
+  String fileDataTip(),
+  Map<String, dynamic> _fileInfo,
+  String _sizeHuman,
+  AsyncSnapshot<Map<String, dynamic>> snapshot,
+) {
   const double tableGap = 2;
   return Table(
     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-    columnWidths: {
-      0: const FlexColumnWidth(2.3),
-      1: const FlexColumnWidth(4),
-    },
+    columnWidths: {0: const FlexColumnWidth(2.3), 1: const FlexColumnWidth(4)},
     children: [
       TableRow(
         children: [
@@ -661,10 +681,7 @@ Table importedFileInfo(
             padding: const EdgeInsets.only(left: 10, top: tableGap),
             child: Center(
               child: ForceLTR(
-                Text(
-                  _sizeHuman,
-                  style: const TextStyle(fontSize: 13),
-                ),
+                Text(_sizeHuman, style: const TextStyle(fontSize: 13)),
               ),
             ),
           ),
@@ -699,8 +716,5 @@ Table importedFileInfo(
 }
 
 Widget ForceLTR(Widget child) {
-  return Directionality(
-    textDirection: UI.TextDirection.ltr,
-    child: child,
-  );
+  return Directionality(textDirection: UI.TextDirection.ltr, child: child);
 }

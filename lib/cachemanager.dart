@@ -9,8 +9,11 @@ class CacheManager {
   static bool cacheDeleteDir = false;
   static bool cacheDeleteSpecific = false;
 
-  Future<void> deleteCache(BuildContext context,
-      [List<String> file = const [], bool exclude = false]) async {
+  Future<void> deleteCache(
+    BuildContext context, [
+    List<String> file = const [],
+    bool exclude = false,
+  ]) async {
     // Disallow desktop platforms
     if (StateManager().isDesktop) return;
 
@@ -47,8 +50,10 @@ class CacheManager {
         try {
           await pickerPath.delete();
         } catch (e) {
-          showToast(AppLocalizations.of(context)!.info_exception_fileremoval +
-              e.toString());
+          showToast(
+            AppLocalizations.of(context)!.info_exception_fileremoval +
+                e.toString(),
+          );
         }
       }
       cacheDeleteSpecific = false;

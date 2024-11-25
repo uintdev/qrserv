@@ -80,27 +80,37 @@ class Server {
           }
         } else if (await targetFile.exists()) {
           // File exists, prepare response headers
-          showToast(AppLocalizations.of(context)!.server_info_download_started +
-              remoteIP);
+          showToast(
+            AppLocalizations.of(context)!.server_info_download_started +
+                remoteIP,
+          );
           response.statusCode = HttpStatus.ok;
-          response.headers
-              .add(HttpHeaders.contentTypeHeader, 'application/octet-stream');
-          response.headers.add('Content-Disposition',
-              'filename="${Uri.encodeComponent(fileInfo['name'])}"');
+          response.headers.add(
+            HttpHeaders.contentTypeHeader,
+            'application/octet-stream',
+          );
+          response.headers.add(
+            'Content-Disposition',
+            'filename="${Uri.encodeComponent(fileInfo['name'])}"',
+          );
           // Get content length
           RandomAccessFile openedFile = targetFile.openSync();
-          response.headers
-              .add(HttpHeaders.contentLengthHeader, openedFile.lengthSync());
+          response.headers.add(
+            HttpHeaders.contentLengthHeader,
+            openedFile.lengthSync(),
+          );
           openedFile.closeSync();
           // Serve file
           try {
             await response.addStream(targetFile.openRead());
             showToast(
-                AppLocalizations.of(context)!.server_info_download_finished +
-                    remoteIP);
+              AppLocalizations.of(context)!.server_info_download_finished +
+                  remoteIP,
+            );
           } catch (error) {
-            showToast(AppLocalizations.of(context)!.server_info_gone +
-                error.toString());
+            showToast(
+              AppLocalizations.of(context)!.server_info_gone + error.toString(),
+            );
             serverRunning = false;
           }
         } else {
@@ -134,31 +144,39 @@ class Server {
     // Begin request
     HttpClient client = new HttpClient();
     await client
-        .getUrl(Uri.parse(
-            'http://localhost:${Network.port.toString()}/?token=$_serverToken'))
+        .getUrl(
+          Uri.parse(
+            'http://localhost:${Network.port.toString()}/?token=$_serverToken',
+          ),
+        )
         .then((HttpClientRequest request) {
-      return request.close();
-    }).then((HttpClientResponse response) {
-      if (response.statusCode == 202) {
-        // Server had shutdown successfully
-      } else if (response.statusCode == 401) {
-        // Provided token did not match
-        showToast(AppLocalizations.of(context)!.server_info_tokenmismatch);
-      } else {
-        // Unhandled HTTP code (misc)
-        showToast(AppLocalizations.of(context)!.server_info_shutdownfailed +
-            response.statusCode.toString());
-      }
-      serverPoweringDown = false;
-    }).onError((error, _) async {
-      // Server not found, so probably already gone
-      showToast(
-          AppLocalizations.of(context)!.server_info_gone + error.toString());
-      serverRunning = false;
-      serverPoweringDown = false;
-      FileManager.fileImported = false;
-      FileManager.allowWatcher = false;
-      await CacheManager().deleteCache(context);
-    });
+          return request.close();
+        })
+        .then((HttpClientResponse response) {
+          if (response.statusCode == 202) {
+            // Server had shutdown successfully
+          } else if (response.statusCode == 401) {
+            // Provided token did not match
+            showToast(AppLocalizations.of(context)!.server_info_tokenmismatch);
+          } else {
+            // Unhandled HTTP code (misc)
+            showToast(
+              AppLocalizations.of(context)!.server_info_shutdownfailed +
+                  response.statusCode.toString(),
+            );
+          }
+          serverPoweringDown = false;
+        })
+        .onError((error, _) async {
+          // Server not found, so probably already gone
+          showToast(
+            AppLocalizations.of(context)!.server_info_gone + error.toString(),
+          );
+          serverRunning = false;
+          serverPoweringDown = false;
+          FileManager.fileImported = false;
+          FileManager.allowWatcher = false;
+          await CacheManager().deleteCache(context);
+        });
   }
 }

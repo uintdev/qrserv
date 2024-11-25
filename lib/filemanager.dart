@@ -44,14 +44,15 @@ class FileManager {
       'path': currentFullPath,
       'pathpart': currentPath,
       'length': currentLength,
-      'archived': archivedFiles
+      'archived': archivedFiles,
     };
   }
 
   Future<String> filePickerPath() async {
-    String pickerDir = FileManager.directAccessMode
-        ? directAccessPath
-        : (await getTemporaryDirectory()).path + '/file_picker';
+    String pickerDir =
+        FileManager.directAccessMode
+            ? directAccessPath
+            : (await getTemporaryDirectory()).path + '/file_picker';
     return pickerDir;
   }
 
@@ -68,23 +69,37 @@ class FileManager {
   String fileSizeHuman(int length, BuildContext context) {
     String _sizeHuman = filesize(length, 2);
     _sizeHuman = _sizeHuman.replaceAll(
-        'TB', AppLocalizations.of(context)!.page_imported_sizesymbol_tb);
+      'TB',
+      AppLocalizations.of(context)!.page_imported_sizesymbol_tb,
+    );
     _sizeHuman = _sizeHuman.replaceAll(
-        'GB', AppLocalizations.of(context)!.page_imported_sizesymbol_gb);
+      'GB',
+      AppLocalizations.of(context)!.page_imported_sizesymbol_gb,
+    );
     _sizeHuman = _sizeHuman.replaceAll(
-        'MB', AppLocalizations.of(context)!.page_imported_sizesymbol_mb);
+      'MB',
+      AppLocalizations.of(context)!.page_imported_sizesymbol_mb,
+    );
     _sizeHuman = _sizeHuman.replaceAll(
-        'KB', AppLocalizations.of(context)!.page_imported_sizesymbol_kb);
+      'KB',
+      AppLocalizations.of(context)!.page_imported_sizesymbol_kb,
+    );
     _sizeHuman = _sizeHuman.replaceAll(
-        ' B', ' ' + AppLocalizations.of(context)!.page_imported_sizesymbol_b);
+      ' B',
+      ' ' + AppLocalizations.of(context)!.page_imported_sizesymbol_b,
+    );
     _sizeHuman = _sizeHuman.replaceAll(
-        '.', AppLocalizations.of(context)!.page_imported_decimalseparator);
+      '.',
+      AppLocalizations.of(context)!.page_imported_decimalseparator,
+    );
 
     return _sizeHuman;
   }
 
-  Future selectFile(BuildContext context,
-      [Map<String, dynamic> fileSelection = const {}]) async {
+  Future selectFile(
+    BuildContext context, [
+    Map<String, dynamic> fileSelection = const {},
+  ]) async {
     FileManager.fileImportPending = true;
     Map<String, dynamic> result = {'files': {}};
 
@@ -104,8 +119,9 @@ class FileManager {
 
     if (!directAccessMode && fileSelection.length == 0) {
       // Default file picker
-      FilePickerResult? resultFilePicker = await FilePicker.platform
-          .pickFiles(allowMultiple: allowMultipleFiles);
+      FilePickerResult? resultFilePicker = await FilePicker.platform.pickFiles(
+        allowMultiple: allowMultipleFiles,
+      );
 
       if (resultFilePicker != null) {
         // File picker handler
@@ -120,7 +136,8 @@ class FileManager {
           // Check if selection has multiple files of the same name
           for (int j = 0; j < result['files'].length; j++) {
             if (result['files'][j]['name'] == fileToMoveName) {
-              fileToMoveName = Server().tokenGenerator('0123456789abcdef', 6) +
+              fileToMoveName =
+                  Server().tokenGenerator('0123456789abcdef', 6) +
                   '_' +
                   fileToMoveName;
               fileToMoveNewPath = await filePickerPath() + '/' + fileToMoveName;
@@ -134,7 +151,7 @@ class FileManager {
               'name': fileToMoveName,
               'path': fileToMoveNewPath,
               'size': resultFilePicker.files[i].size,
-            }
+            },
           });
         }
       }
@@ -157,8 +174,9 @@ class FileManager {
       // Move files selected via share sheet into usual directory for archiving
       for (int i = 0; i < fileSelection['files'].length; i++) {
         File fileRename = File(fileSelection['files'][i]['path']);
-        File fileRenamed = await fileRename
-            .rename(pickerDir + '/' + fileSelection['files'][i]['name']);
+        File fileRenamed = await fileRename.rename(
+          pickerDir + '/' + fileSelection['files'][i]['name'],
+        );
         fileSelection['files'][i]['path'] = fileRenamed.path;
       }
       result = fileSelection;
@@ -195,7 +213,7 @@ class FileManager {
       for (int i = 0; i < result['files'].length; i++) {
         archivedFiles.add({
           'file': result['files'][i]['name'],
-          'size': result['files'][i]['size']
+          'size': result['files'][i]['size'],
         });
         cacheExceptionList.add(result['files'][i]['path'] ?? '');
       }
@@ -224,31 +242,40 @@ class FileManager {
         List<File> files = [];
 
         for (int i = 0; i < result['files'].length; i++) {
-          await File(result['files'][i]['path'] ??
-                  fullPickerPath + '/' + result['files'][i]['name'])
-              .exists()
-              .then((_) async {
-            files.add(File(result['files'][i]['path'] ??
-                fullPickerPath + '/' + result['files'][i]['name']));
+          await File(
+            result['files'][i]['path'] ??
+                fullPickerPath + '/' + result['files'][i]['name'],
+          ).exists().then((_) async {
+            files.add(
+              File(
+                result['files'][i]['path'] ??
+                    fullPickerPath + '/' + result['files'][i]['name'],
+              ),
+            );
           });
         }
         final zipFile = File(fullArchivePath);
         try {
           await ZipFile.createFromFiles(
-                  sourceDir: sourceDir, files: files, zipFile: zipFile)
-              .then((_) async => {
-                    for (int i = 0; i < result['files'].length; i++)
-                      {
-                        await File(result['files'][i]['path'] ??
-                                fullPickerPath +
-                                    '/' +
-                                    result['files'][i]['name'])
-                            .delete()
-                      }
-                  });
+            sourceDir: sourceDir,
+            files: files,
+            zipFile: zipFile,
+          ).then(
+            (_) async => {
+              for (int i = 0; i < result['files'].length; i++)
+                {
+                  await File(
+                    result['files'][i]['path'] ??
+                        fullPickerPath + '/' + result['files'][i]['name'],
+                  ).delete(),
+                },
+            },
+          );
         } catch (e) {
-          showToast(AppLocalizations.of(context)!.page_imported_archive_failed +
-              e.toString());
+          showToast(
+            AppLocalizations.of(context)!.page_imported_archive_failed +
+                e.toString(),
+          );
           return;
         }
 

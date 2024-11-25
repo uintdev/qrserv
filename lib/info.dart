@@ -10,13 +10,12 @@ class Info {
   // URL launch management
   void _launchURL(Uri url, BuildContext context) async {
     if (await canLaunchUrl(url)) {
-      await launchUrl(
-        url,
-        mode: LaunchMode.externalApplication,
-      );
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
-      showToast(AppLocalizations.of(context)!.info_exception_linkopenfailed +
-          url.toString());
+      showToast(
+        AppLocalizations.of(context)!.info_exception_linkopenfailed +
+            url.toString(),
+      );
     }
   }
 
@@ -50,19 +49,23 @@ class Info {
 
     showDialog(
       context: context,
-      builder: (contextDialog) => Dialog(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-          child: Container(
-            child: infoDialogContents(context, packageInfo, contextDialog),
+      builder:
+          (contextDialog) => Dialog(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+              child: Container(
+                child: infoDialogContents(context, packageInfo, contextDialog),
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
   Column infoDialogContents(
-      BuildContext context, Widget packageInfo, BuildContext contextDialog) {
+    BuildContext context,
+    Widget packageInfo,
+    BuildContext contextDialog,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -71,9 +74,7 @@ class Info {
           child: Container(
             child: Text(
               AppLocalizations.of(context)!.info_title,
-              style: const TextStyle(
-                fontSize: 25.0,
-              ),
+              style: const TextStyle(fontSize: 25.0),
             ),
           ),
         ),
@@ -135,14 +136,16 @@ class Info {
     );
   }
 
-  ElevatedButton listButton(BuildContext context, IconData icon, String host,
-      String path, String label) {
+  ElevatedButton listButton(
+    BuildContext context,
+    IconData icon,
+    String host,
+    String path,
+    String label,
+  ) {
     return ElevatedButton(
       onPressed: () {
-        _launchURL(
-          Uri(scheme: 'https', host: host, path: path),
-          context,
-        );
+        _launchURL(Uri(scheme: 'https', host: host, path: path), context);
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(5, 12, 5, 12),
@@ -150,13 +153,7 @@ class Info {
           children: [
             Icon(icon),
             const SizedBox(width: 15),
-            Row(
-              children: [
-                Text(
-                  label,
-                ),
-              ],
-            ),
+            Row(children: [Text(label)]),
           ],
         ),
       ),
