@@ -10,7 +10,6 @@ class QRSTheme {
     var newThemeData = themeData.copyWith(
       canvasColor: const Color.fromRGBO(237, 232, 243, 1),
       primaryColor: const Color.fromRGBO(0, 0, 0, 1),
-      indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
       dialogTheme: DialogThemeData(
         backgroundColor: const Color.fromRGBO(237, 232, 243, 1),
@@ -35,6 +34,9 @@ class QRSTheme {
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
         secondary: const Color.fromRGBO(191, 180, 229, 1),
       ),
+      tabBarTheme: TabBarThemeData(
+        indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
+      ),
     );
     return newThemeData;
   }
@@ -44,7 +46,6 @@ class QRSTheme {
     var newThemeData = themeData.copyWith(
       canvasColor: const Color.fromRGBO(37, 35, 41, 1),
       primaryColor: const Color.fromRGBO(255, 255, 255, 1),
-      indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
       dialogTheme: DialogThemeData(
         backgroundColor: const Color.fromRGBO(37, 35, 41, 1),
@@ -68,6 +69,9 @@ class QRSTheme {
       colorScheme: themeData.colorScheme.copyWith(
         secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
         secondary: const Color.fromRGBO(191, 180, 229, 1),
+      ),
+      tabBarTheme: TabBarThemeData(
+        indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
       ),
     );
     return newThemeData;
