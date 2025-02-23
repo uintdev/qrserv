@@ -26,7 +26,7 @@ class QRSTheme {
           fontSize: titleSmallSize,
         ),
       ),
-      cardTheme: CardTheme(color: Color.fromRGBO(227, 222, 233, 1)),
+      cardTheme: CardThemeData(color: Color.fromRGBO(227, 222, 233, 1)),
       tooltipTheme: TooltipThemeData(
         textStyle: TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
       ),
@@ -62,7 +62,7 @@ class QRSTheme {
           fontSize: titleSmallSize,
         ),
       ),
-      cardTheme: CardTheme(color: const Color.fromRGBO(46, 44, 54, 1)),
+      cardTheme: CardThemeData(color: const Color.fromRGBO(46, 44, 54, 1)),
       tooltipTheme: TooltipThemeData(
         textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
