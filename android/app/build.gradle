@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "dev.uint.qrserv"
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion "28.0.13004108"
 
     kotlinOptions {
@@ -49,7 +49,7 @@ android {
     defaultConfig {
         applicationId "dev.uint.qrserv"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
