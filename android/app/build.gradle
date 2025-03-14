@@ -31,6 +31,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "dev.uint.qrserv"
     compileSdkVersion 34
+    ndkVersion "28.0.13004108"
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17
