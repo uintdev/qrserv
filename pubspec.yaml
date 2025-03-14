@@ -21,7 +21,10 @@ dependencies:
     watcher: ^1.1.1
     package_info_plus: ^8.3.0
     url_launcher: ^6.3.1
-    flutter_statusbarcolor_ns: ^0.6.0
+    flutter_statusbarcolor_ns:
+        git:
+            url: https://github.com/uintdev/flutter_statusbarcolor.git
+            ref: d870cb252200b8273b61433fbc3047d01c544223
     auto_size_text: ^3.0.0
     oktoast: ^3.4.0
     share_plus: ^10.1.4

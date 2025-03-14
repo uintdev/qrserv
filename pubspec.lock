@@ -171,10 +171,11 @@ packages:
   flutter_statusbarcolor_ns:
     dependency: "direct main"
     description:
-      name: flutter_statusbarcolor_ns
-      sha256: a971b00344dff1bff95c95e1c5d4cd38923a27d0d6fac684ebaf220b1d1abbdc
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: d870cb252200b8273b61433fbc3047d01c544223
+      resolved-ref: d870cb252200b8273b61433fbc3047d01c544223
+      url: "https://github.com/uintdev/flutter_statusbarcolor.git"
+    source: git
     version: "0.6.0"
   flutter_test:
     dependency: "direct dev"
