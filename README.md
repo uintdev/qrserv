@@ -29,7 +29,6 @@
         <img src="docs/screenshots/2.png" alt="Screenshot of app after selecting a file" height="380">
         &nbsp;&nbsp;
         <img src="docs/screenshots/3.png" alt="Screenshot of app after opening IP address list" height="380">
-        &nbsp;&nbsp;
         <img src="docs/screenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="380">
         &nbsp;&nbsp;
         <img src="docs/screenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with original file names sizes of those included in the resulting file archive" height="380">
