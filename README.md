@@ -10,11 +10,14 @@
     <a href="../../releases/latest" title="Latest release"><img src="https://img.shields.io/github/v/release/uintdev/qrserv" alt="Version"></a>
     &nbsp;&nbsp;
     <a href="LICENSE" title="License"><img src="https://img.shields.io/github/license/uintdev/qrserv" alt="License"></a>
-    <br>
-    <br>
-    <a href="https://play.google.com/store/apps/details?id=dev.uint.qrserv"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80"></a>
+</p>
+<p align="center">
+    <a href="https://play.google.com/store/apps/details?id=dev.uint.qrserv"><img src="docs/badges/google_play.png" alt="Get it on Google Play" height="48dp"></a>
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://ko-fi.com/uintdev" title="ko-fi"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Donate" height="80" width="300"></a>
+    <a href="https://apt.izzysoft.de/fdroid/index/apk/dev.uint.qrserv"><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png" alt="Get it on IzzyOnDroid" height="48dp"></a>
+</p>
+<p align="center">
+    <a href="https://ko-fi.com/uintdev" title="ko-fi"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Donate" height="48dp" width="300"></a>
 </p>
 <br>
 <details>
