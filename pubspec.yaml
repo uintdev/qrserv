@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 2.6.0+46
 
 environment:
-    sdk: '>= 3.7.0-183.0.dev <4.0.0'
+    sdk: '>= 3.8.0-265.0.dev <4.0.0'
 
 dependencies:
     flutter:
@@ -33,7 +33,7 @@ dependencies:
             url: https://github.com/KasemJaffer/receive_sharing_intent.git
             ref: 2cea396843cd3ab1b5ec4334be4233864637874e
 
-    file_picker: ^9.1.0
+    file_picker: ^10.1.2
     flutter_archive: ^6.0.3
 
     window_size:
@@ -48,7 +48,7 @@ dependencies:
     win32: ^5.12.0
 
     filesystem_picker: ^4.1.0
-    permission_handler: ^11.4.0
+    permission_handler: ^12.0.0
     device_info_plus: ^11.3.3
     path: ^1.9.1
 
