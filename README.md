@@ -144,7 +144,7 @@ Thanks to the following users for helping out with language translation:
 | [utf-4096](https://github.com/utf-4096)      | French      |
 | [SimoneG97](https://github.com/SimoneG97)    | Italian     |
 | [guidov2006](https://github.com/guidov2006)  | Spanish     |
-| [solelychloe](https://arciniega.one)         | Russian     |
+| [SapphicMoe](https://github.com/SapphicMoe)  | Russian     |
 | [metezd](https://github.com/metezd)          | Turkish     |
 | princessmortix                               | Portuguese  |
 | [alr86](https://github.com/alr86)            | Persian     |
