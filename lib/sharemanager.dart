@@ -8,7 +8,7 @@ import 'statemanager.dart';
 class ShareManager {
   // Share sheet
   static Future<void> _shareSheet(String url) async {
-    await Share.share(url);
+    await SharePlus.instance.share(ShareParams(uri: Uri.parse(url)));
     return;
   }
 
