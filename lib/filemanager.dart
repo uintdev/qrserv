@@ -49,10 +49,9 @@ class FileManager {
   }
 
   Future<String> filePickerPath() async {
-    String pickerDir =
-        FileManager.directAccessMode
-            ? directAccessPath
-            : (await getTemporaryDirectory()).path + '/file_picker';
+    String pickerDir = FileManager.directAccessMode
+        ? directAccessPath
+        : (await getTemporaryDirectory()).path + '/file_picker';
     return pickerDir;
   }
 
