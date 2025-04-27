@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.6.1
+
+-   Increased compile and target SDK to 36 (Android 16)
+-   Various minor technical migrations
+
 ## 2.6.0
 
 -   Direct Access Mode is now only available for Android 10 or earlier for Play Store builds due to policy issues -- GitHub builds not affected
