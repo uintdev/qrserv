@@ -148,4 +148,4 @@ Thanks to the following users for helping out with language translation:
 | [metezd](https://github.com/metezd)          | Turkish     |
 | princessmortix                               | Portuguese  |
 | [alr86](https://github.com/alr86)            | Persian     |
-| [vhhhl](https://github.com/vhhhl)            | Persian     |
+| [vhhhl](https://github.com/vhhhl)            | German      |
