@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.2
+
+-   Improved German translation
+
 ## 2.6.1
 
 -   Increased compile and target SDK to 36 (Android 16)
