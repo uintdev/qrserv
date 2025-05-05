@@ -149,3 +149,4 @@ Thanks to the following users for helping out with language translation:
 | princessmortix                               | Portuguese  |
 | [alr86](https://github.com/alr86)            | Persian     |
 | [vhhhl](https://github.com/vhhhl)            | German      |
+| [elid34](https://github.com/elid34)          | Hebrew      |
