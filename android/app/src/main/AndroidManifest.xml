@@ -12,7 +12,8 @@
         android:label="QRServ"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:localeConfig="@xml/locales_config">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
