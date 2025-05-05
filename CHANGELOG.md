@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.0
+
+-   Added Hebrew translation
+-   Added per-app language support
+
 ## 2.6.2
 
 -   Improved German translation
