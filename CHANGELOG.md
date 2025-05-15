@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.2
+
+-   Reproducible build attempt 2
+
 ## 2.7.1
 
 -   Now built on Steam OS
