@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "xstring": "cpp"
+    },
+    "dart.analysisExcludedFolders": ["flutter/"]
+}
