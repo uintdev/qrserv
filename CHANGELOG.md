@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.1
+
+-   Now built on Steam OS
+-   Reproducible build attempt
+
 ## 2.7.0
 
 -   Added Hebrew translation
