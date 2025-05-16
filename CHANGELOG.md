@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.4
+
+-   Builds are now reproducible -- baked on the Steam Deck
+-   Framework is now on the stable branch
+-   Basic Fastlane structures and files had been added
+-   Enabled predictive back gesture support
+-   Improved appearence of the info dialog box
+
 ## 2.7.3
 
 -   Reproducible build attempt 3 (third time's the charm?)
