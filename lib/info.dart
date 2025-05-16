@@ -70,7 +70,7 @@ class Info {
       mainAxisSize: MainAxisSize.min,
       children: [
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           child: Container(
             child: Text(
               AppLocalizations.of(context)!.info_title,
@@ -80,9 +80,10 @@ class Info {
         ),
         const SizedBox(height: 4),
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           child: Container(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 packageInfo,
                 Text(' ('),
@@ -96,7 +97,7 @@ class Info {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
