@@ -1,1 +1,34 @@
-<p><i>QRServ</i> takes any selected file on your device and makes it available through its own HTTP server at an unused port number. The selected file can then be downloaded via web browser on another device or software that allows file downloads over HTTP from QR codes.</p><p><br><b>Features:</b></p><ul><li>QR Code</li><li>Share option</li><li>Show and hide filename in download URL path (Long press the share button to toggle)</li><li>Various IP addresses from different network interfaces can be chosen</li><li>HTTP server uses an unused ("random") port</li><li>Supports various languages: English, French, German, Spanish, Portuguese, Hungarian, Polish</li></ul><p><b>Important:</b></p><p>Please note that you should have sufficient internal storage to make a copy of the same file as it is stored into QRServ's app storage rather than being directly accessed (as to combat MITD attacks and work with later Android API restrictions).</p><p>To clear the selected file out from the app&#39;s own storage, either shutdown the server or relaunch the app after forcefully stopping it. Selecting another file will remove the previous one but that is after the new file gets stored so ensure you have enough internal storage for that as well.</p><p><br><b>Permission usage:</b></p><ul><li><code>android.permission.INTERNET</code> -- Collection of available network interfaces and port binding for the HTTP server</li><li><code>android.permission.READ_EXTERNAL_STORAGE</code> -- Read-only access to emulated, physical SD card(s) and USB mass storage</li></ul><p>QRServ is open source and available for desktop.</p>
+QRServ takes any selected files on your device and makes them available through its own HTTP server at an unused port number. The selected files can then be downloaded via web browser on another device and/or software that allows file downloads over HTTP from QR codes.
+Devices involved would need to be on the same network (i.e. access point, tethering [no mobile data required], VPN [with a supported configuration]).
+
+Features:
+- QR Code
+- Tap on the QR code to show full URL in a tooltip
+- Press and hold on the QR code to copy full URL to clipboard
+- Import via sharesheet
+- Multi-file selection support
+- In-app and via sharesheet
+- Selection is put into a ZIP archive
+- Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
+- Direct Access Mode
+- Only available on Android 10 or earlier on the Play Store version
+- To use this feature on Android 11 or later, use the GitHub version (link is in-app under the 'about' dialog and later on in the description) -- please note that the Play Store version needs to be uninstalled first as it would be signed using a different certificate
+- Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
+- The file manager for this mode only supports single file selection
+- The mode can be toggled by pressing on the SD card icon
+- File selection removal and modification detection (latter only available with DAM)
+- Share option
+- Show and hide filename in download URL path
+- Long press the share button to toggle
+- Notify when a client requested the hosted file and when that download finishes (includes IP address of requestor)
+- Various IP addresses from different network interfaces can be chosen
+- HTTP server uses an unused ("random") port
+- Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
+
+Permission usage:
+- android.permission.INTERNET -- Collection of available network interfaces and port binding for the HTTP server
+- android.permission.READ_EXTERNAL_STORAGE -- Read-only access to emulated, physical SD card(s) and USB mass storage
+- android.permission.MANAGE_EXTERNAL_STORAGE -- Direct access to select files on internal storage rather than what gets cached first (only available outside Google Play)
+
+QRServ is open source.
+https://github.com/uintdev/qrserv
