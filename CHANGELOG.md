@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.3
+
+-   Reproducible build attempt 3 (third time's the charm?)
+
 ## 2.7.2
 
 -   Reproducible build attempt 2
