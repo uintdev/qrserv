@@ -1,0 +1,9 @@
+-   Remove signature block blobs
+
+Previous version (2.7.4):
+
+-   Builds are now reproducible -- baked on the Steam Deck
+-   Framework is now on the stable branch
+-   Basic Fastlane structures and files had been added
+-   Enabled predictive back gesture support
+-   Improved appearance of the info dialog box

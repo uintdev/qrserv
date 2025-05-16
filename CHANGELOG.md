@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.5
+
+-   Remove signature block blobs
+
 ## 2.7.4
 
 -   Builds are now reproducible -- baked on the Steam Deck
