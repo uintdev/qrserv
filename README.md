@@ -24,12 +24,12 @@
     <summary>Screenshots</summary>
     <br>
     <p align="center">
-        <img src="docs/screenshots/1.png" alt="Screenshot of app on the main screen" height="380">
-        <img src="docs/screenshots/2.png" alt="Screenshot of app after selecting a file" height="380">
-        <img src="docs/screenshots/3.png" alt="Screenshot of app after opening IP address list" height="380">
-        <img src="docs/screenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="380">
-        <img src="docs/screenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with original file names sizes of those included in the resulting file archive" height="380">
-        <img src="docs/screenshots/6.png" alt="Screenshot of app showing that a 10 Gigabit file was selected -- this shows the ability to work with large files" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Screenshot of app on the main screen" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Screenshot of app after selecting a file" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Screenshot of app after opening IP address list" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with original file names sizes of those included in the resulting file archive" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Screenshot of app showing that a 10 Gigabit file was selected -- this shows the ability to work with large files" height="380">
     </p>
 </details>
 <br>
