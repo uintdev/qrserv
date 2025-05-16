@@ -2,6 +2,7 @@ QRServ takes any selected files on your device and makes them available through 
 Devices involved would need to be on the same network (i.e. access point, tethering [no mobile data required], VPN [with a supported configuration]).
 
 Features:
+
 - QR Code
 - Tap on the QR code to show full URL in a tooltip
 - Press and hold on the QR code to copy full URL to clipboard
@@ -26,6 +27,7 @@ Features:
 - Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
 
 Permission usage:
+
 - android.permission.INTERNET -- Collection of available network interfaces and port binding for the HTTP server
 - android.permission.READ_EXTERNAL_STORAGE -- Read-only access to emulated, physical SD card(s) and USB mass storage
 - android.permission.MANAGE_EXTERNAL_STORAGE -- Direct access to select files on internal storage rather than what gets cached first (only available outside Google Play)
