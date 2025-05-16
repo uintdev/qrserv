@@ -6,7 +6,7 @@
 -   Framework is now on the stable branch
 -   Basic Fastlane structures and files had been added
 -   Enabled predictive back gesture support
--   Improved appearence of the info dialog box
+-   Improved appearance of the info dialog box
 
 ## 2.7.3
 
