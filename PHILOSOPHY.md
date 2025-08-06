@@ -17,17 +17,21 @@ The file picker dependencies for the share sheet and the document UI would not a
 It is worth noting that the limitations are not limited to this application in particular. Similar applications built using Flutter experience such limitations as well.
 
 Despite all that, you can use Direct Access Mode to avoid all that mess (only one file can be selected at a time). This will be the SD card icon on top of the app. Please note that when using the share sheet to pass the file selection over, it uses the app cache method from the get-go and so DAM simply can't be used in that case.
+<br>
+Due to Google Play restrictions, Direct Access Mode is only available for GitHub releases.
 
 ## Why does the HTTP server not offer a secure connection?
 
 There was a bit of a debate regarding this concept that several other similar applications had adopted. Some better than others (i.e. generated certificate & keys vs. hardcoded).
 <br>
-I happen to have experience in software and web security, and have pushed for better security. With that said, it would feel rather negligent to include the aforementioned functionality.
+I happen to have experience in software and web security, and have pushed for better security. With that said, it would be somewhat negligent to include the aforementioned functionality.
 
 Right out the gate, we would be talking about self-signed certificates. These inherently will not be trusted by clients that impose certificate validation checks. These clients would usually be browsers.
 
+QRServ does not offer a mode to specifically download files from another instance of QRServ. Other applications tend to do this considering that the client will be their own application rather than any other application they have no control over.
+
 The main concern is essentially encouraging users to skip certificate warnings. In general, there are going to be man-in-the-middle risks before that self-signed certificate is temporarily trusted -- hence the certificate warning in the first place.
 <br>
-I do not want to encourage such bad practices, nor do I wish to participate in security theatre. It is not convenient or concise to the end user, nor is it an appropriate selling point bearing the aforementioned in mind. The bad outweighs the good. The solution has to be relatively solid.
+I do not want to encourage such bad practices, nor do I wish to participate in security theatre. It is not convenient or concise to the end user. It most certainly would therefore not be a good selling point. The bad outweighs the good. The solution has to be relatively solid.
 
-If concerned for privacy and data integrity, I would encourage trying using a trusted VPN that allows for reachability of other VPN clients, a network that can be trusted, or mobile tethering (mobile data not required -- just needs a 'local' network, as standard).
+If concerned for privacy and data integrity, it is encouraged to trying using a trusted VPN that allows for reachability of other VPN clients, a network that can be trusted, or mobile tethering (mobile data not required -- it would offer a LAN of which is what you would need).

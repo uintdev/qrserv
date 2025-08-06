@@ -105,7 +105,7 @@ Last desktop builds (Windows, Linux) can be found in the [releases section under
 
 ## Contributing
 
-Before creating a new issue or putting together a pull request (particularly regarding feature requests or potential improvements), please refer to the [design philosophy](PHILOSOPHY.md). It also serves as a Q&A.
+If you are considering to contribute to QRServ or report issues, more information can be [found here](CONTRIBUTING.md).
 
 ## Building
 
@@ -124,13 +124,13 @@ Windows builds normally require `Visual C++ Redistributable for Visual Studio 20
 
 You could [package builds as a MSIX](https://pub.dev/packages/msix) but that is only practical if you plan to get or already have a code signing certificate.
 
-## Licencing
+## Licenses
 
 Google Play and the Google Play logo are trademarks of Google LLC.
 
-Poppins (the font) is licenced under [OFL-1.1](fonts/OFL.txt).
+Poppins (the font) is licensed under [OFL-1.1](fonts/OFL.txt).
 
-QRServ is licenced under the [MIT license](LICENSE).
+QRServ is licensed under the [MIT license](LICENSE).
 
 ## Translations and translators
 
