@@ -14,14 +14,14 @@ dependencies:
         sdk: flutter
     flutter_localizations:
         sdk: flutter
-    intl: ^0.19.0
+    intl: ^0.20.1
 
     path_provider: ^2.1.5
     filesize: ^2.0.1
     qr_flutter: ^4.1.0
-    watcher: ^1.1.1
+    watcher: ^1.1.2
     package_info_plus: ^8.3.0
-    url_launcher: ^6.3.1
+    url_launcher: ^6.3.2
     flutter_statusbarcolor_ns:
         git:
             url: https://github.com/uintdev/flutter_statusbarcolor.git
@@ -34,7 +34,7 @@ dependencies:
             url: https://github.com/KasemJaffer/receive_sharing_intent.git
             ref: 2cea396843cd3ab1b5ec4334be4233864637874e
 
-    file_picker: ^10.1.9
+    file_picker: ^10.2.1
     flutter_archive: ^6.0.3
 
     window_size:
@@ -46,11 +46,11 @@ dependencies:
     http: ^1.4.0
     uuid: ^4.5.1
     ffi: ^2.1.4
-    win32: ^5.13.0
+    win32: ^5.14.0
 
     filesystem_picker: ^4.1.0
-    permission_handler: ^12.0.0
-    device_info_plus: ^11.4.0
+    permission_handler: ^12.0.1
+    device_info_plus: ^11.5.0
     path: ^1.9.1
 
 dev_dependencies:
