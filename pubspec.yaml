@@ -14,7 +14,7 @@ dependencies:
         sdk: flutter
     flutter_localizations:
         sdk: flutter
-    intl: ^0.20.1
+    intl: ^0.20.2
 
     path_provider: ^2.1.5
     filesize: ^2.0.1
