@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "TB",
     "fab_shutdownserver_label": "Zamknąć serwer",
     "fab_selectfile_label": "Wybierz plik(i)",
-    "info_exception_statusbar": "Nie udało się zmienić koloru paska powiadomień: ",
-    "info_exception_navigationbar": "Nie udało się zmienić kolor paska nawigacji: ",
     "info_exception_fileselection_fallback": "Nie udało się wybrać pliku: ",
     "info_exception_intentstream": "getIntentDataStream błąd: ",
     "info_exception_shutdownfailed": "Nie udało się zamknąć serwera",

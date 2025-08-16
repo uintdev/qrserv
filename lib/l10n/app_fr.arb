@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "To",
     "fab_shutdownserver_label": "Arrêter le serveur",
     "fab_selectfile_label": "Sélectionner fichier·s",
-    "info_exception_statusbar": "Échec de la modification de la couleur de la barre d'état: ",
-    "info_exception_navigationbar": "Échec de la modification de la couleur de la barre de navigation: ",
     "info_exception_fileselection_fallback": "Échec de la sélection des fichiers: ",
     "info_exception_intentstream": "erreur getIntentDataStream: ",
     "info_exception_shutdownfailed": "L'arrêt du serveur a échoué.",

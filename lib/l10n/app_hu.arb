@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "TB",
     "fab_shutdownserver_label": "Szerver leállítása",
     "fab_selectfile_label": "Fájl(ok) kiválasztása",
-    "info_exception_statusbar": "Nem sikerült az értesítési sáv színének a megváltoztatása: ",
-    "info_exception_navigationbar": "Nem sikerült a navigációs sáv színének a megváltoztatása: ",
     "info_exception_fileselection_fallback": "Nem sikerült kiválasztani a fájl(t/okat): ",
     "info_exception_intentstream": "getIntentDataStream hiba: ",
     "info_exception_shutdownfailed": "Sikertelen szerver leállítás",

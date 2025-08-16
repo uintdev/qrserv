@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "ТБ",
     "fab_shutdownserver_label": "Выключить сервер",
     "fab_selectfile_label": "Выберите файл(ы)",
-    "info_exception_statusbar": "Не удалось изменить цвет строки состояния: ",
-    "info_exception_navigationbar": "Не удалось изменить цвет панели навигации: ",
     "info_exception_fileselection_fallback": "Не удалось выбрать файл(ы): ",
     "info_exception_intentstream": "Ошибка getIntentDataStream: ",
     "info_exception_shutdownfailed": "Не удалось выключить сервер",

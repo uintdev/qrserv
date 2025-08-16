@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "ט\"ב",
     "fab_shutdownserver_label": "כבה שרת",
     "fab_selectfile_label": "בחר קובץ(ים)",
-    "info_exception_statusbar": "נכשל בשינוי צבע שורת מצב: ",
-    "info_exception_navigationbar": "נכשל לשנות צבע שורת ניווט: ",
     "info_exception_fileselection_fallback": "נכשל לבחור קובץ(ים): ",
     "info_exception_intentstream": "שגיאת getIntentDataStream: ",
     "info_exception_shutdownfailed": "כיבוי השרת נכשל",

@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "TB",
     "fab_shutdownserver_label": "Spegni server",
     "fab_selectfile_label": "Seleziona i(l) file",
-    "info_exception_statusbar": "Non è stato possibile cambiare il colore della status bar: ",
-    "info_exception_navigationbar": "Non è stato possibile cambiare il colore della navigation bar: ",
     "info_exception_fileselection_fallback": "Errore durante la selezione de(i/l) file: ",
     "info_exception_intentstream": "Errore getIntentDataStream: ",
     "info_exception_shutdownfailed": "Non è stato possibile spegnere il server",

@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "TB",
     "fab_shutdownserver_label": "Sunucuyu kapat",
     "fab_selectfile_label": "Dosya seçin",
-    "info_exception_statusbar": "Durum çubuğu rengi değiştirilemedi: ",
-    "info_exception_navigationbar": "Gezinti çubuğu rengi değiştirilemedi: ",
     "info_exception_fileselection_fallback": "Dosya(lar) seçilemedi: ",
     "info_exception_intentstream": "getIntentDataStream hatası: ",
     "info_exception_shutdownfailed": "Sunucu kapatılamadı",

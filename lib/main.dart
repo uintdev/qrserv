@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:window_size/window_size.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:path/path.dart' as Path;
@@ -41,6 +40,15 @@ class QRServ extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Theme.of(context).canvasColor,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Theme.of(context).canvasColor,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    );
 
     return OKToast(
       // Toast properties
@@ -83,10 +91,6 @@ class PageState extends StatefulWidget {
 }
 
 class _Page extends State<PageState> with WidgetsBindingObserver {
-  // Bar themes
-  bool _useWhiteStatusBarForeground = false;
-  bool _useWhiteNavigationBarForeground = false;
-
   late StreamSubscription _intentDataStreamSubscription;
 
   @override
@@ -175,53 +179,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _intentDataStreamSubscription.cancel();
     super.dispose();
-  }
-
-  @override
-  didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      if (_useWhiteStatusBarForeground)
-        FlutterStatusbarcolor.setStatusBarWhiteForeground(
-          _useWhiteStatusBarForeground,
-        );
-      if (_useWhiteNavigationBarForeground)
-        FlutterStatusbarcolor.setNavigationBarWhiteForeground(
-          _useWhiteNavigationBarForeground,
-        );
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
-  void changeStatusColor(Color color) async {
-    try {
-      await FlutterStatusbarcolor.setStatusBarColor(color);
-      if (useWhiteForeground(color)) {
-        FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
-        FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
-        _useWhiteStatusBarForeground = true;
-        _useWhiteNavigationBarForeground = true;
-      } else {
-        FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
-        FlutterStatusbarcolor.setNavigationBarWhiteForeground(false);
-        _useWhiteStatusBarForeground = false;
-        _useWhiteNavigationBarForeground = false;
-      }
-    } on PlatformException catch (e) {
-      showToast(
-        AppLocalizations.of(context)!.info_exception_statusbar + e.toString(),
-      );
-    }
-  }
-
-  void changeNavigationColor(Color color) async {
-    try {
-      await FlutterStatusbarcolor.setNavigationBarColor(color);
-    } on PlatformException catch (e) {
-      showToast(
-        AppLocalizations.of(context)!.info_exception_navigationbar +
-            e.toString(),
-      );
-    }
   }
 
   Widget _stateView = StateManagerPage();
@@ -388,12 +345,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    if (!StateManager().isDesktop) {
-      // Apply system UI colours
-      changeStatusColor(Theme.of(context).canvasColor);
-      changeNavigationColor(Theme.of(context).canvasColor);
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
       extendBody: true,

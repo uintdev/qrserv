@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "TB",
     "fab_shutdownserver_label": "خاموش کردن سرور",
     "fab_selectfile_label": "انتخاب پرونده(ها)",
-    "info_exception_statusbar": "تغییر رنگ نوار وضعیت ناموفق شد: ",
-    "info_exception_navigationbar": "تغییر رنگ نوار ناوبری ناموفق بود: ",
     "info_exception_fileselection_fallback": "انتخاب پرونده(ها) ناموفق شد: ",
     "info_exception_intentstream": "getIntentDataStream خطا: ",
     "info_exception_shutdownfailed": "خاموش کردن سرور ناموفق شد",

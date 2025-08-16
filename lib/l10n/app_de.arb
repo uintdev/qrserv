@@ -36,8 +36,6 @@
     "page_imported_sizesymbol_tb": "TB",
     "fab_shutdownserver_label": "Server herunterfahren",
     "fab_selectfile_label": "Datei(en) auswählen",
-    "info_exception_statusbar": "Fehler beim Ändern der Farbe der Statusleiste: ",
-    "info_exception_navigationbar": "Fehler beim Ändern der Navigationsleisten-Farbe: ",
     "info_exception_fileselection_fallback": "Fehler beim Auswählen der Datei(en): ",
     "info_exception_intentstream": "getIntentDataStream error: ",
     "info_exception_shutdownfailed": "Server könnte nicht heruntergefahren werden",
