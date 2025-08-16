@@ -34,6 +34,9 @@ class QRServ extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Portrait only
+    // TODO: This does not take affect when targetting Android 16 or later
+    // TODO: https://github.com/flutter/flutter/pull/171089
+    // TODO: https://developer.android.com/about/versions/16/behavior-changes-16#ignore-orientation
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
