@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.7.6
+
+-   Updated dependencies
+-   Updated framework
+
+Note: the next release will increase the minimum Android version to 7 (SDK version 24) due to it being an enforced minimum SDK version starting from Flutter 3.35.0. This version will still be available on GitHub, should you need to use it on a version of Android from 2014 or 2015.
+
 ## 2.7.5
 
 -   Remove signature block blobs
