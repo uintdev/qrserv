@@ -381,20 +381,19 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                   }
                   !FileManager.directAccessMode
                       ? showToast(
-                        AppLocalizations.of(context)!.dam_state_enabled,
-                      )
+                          AppLocalizations.of(context)!.dam_state_enabled,
+                        )
                       : showToast(
-                        AppLocalizations.of(context)!.dam_state_disabled,
-                      );
+                          AppLocalizations.of(context)!.dam_state_disabled,
+                        );
                   setState(() {
                     FileManager.directAccessMode =
                         !FileManager.directAccessMode;
                   });
                 },
-                icon:
-                    !FileManager.directAccessMode
-                        ? const Icon(Icons.sd_card_outlined)
-                        : const Icon(Icons.sd_card),
+                icon: !FileManager.directAccessMode
+                    ? const Icon(Icons.sd_card_outlined)
+                    : const Icon(Icons.sd_card),
               ),
               SizedBox(width: 10),
               IconButton(
@@ -451,41 +450,39 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   AnimatedSwitcher fabShutdown(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 250),
-      transitionBuilder:
-          (Widget child, Animation<double> animation) =>
-              ScaleTransition(child: child, scale: animation),
-      child:
-          !Server.serverRunning
-              ? fabPlaceholder('shutdown_hidden')
-              : FloatingActionButton(
-                heroTag: 'shutdown',
-                elevation: 3,
-                backgroundColor: Colors.red.shade700,
-                foregroundColor: Colors.red.shade100,
-                onPressed: () {
-                  if (_actionButtonLoading) {
-                    showToast(
-                      AppLocalizations.of(
-                        context,
-                      )!.info_pending_fileprocessing_shutdown,
-                    );
-                  } else if (Server.serverRunning &&
-                      !Server.serverPoweringDown) {
-                    shutdownFAB();
-                  } else {
-                    showToast(
-                      AppLocalizations.of(context)!.info_pending_servershutdown,
-                    );
-                  }
-                },
-                child: Icon(
-                  Icons.power_settings_new,
-                  color: Colors.red.shade100,
-                  size: 22.5,
-                  semanticLabel:
-                      AppLocalizations.of(context)!.fab_shutdownserver_label,
-                ),
+      transitionBuilder: (Widget child, Animation<double> animation) =>
+          ScaleTransition(child: child, scale: animation),
+      child: !Server.serverRunning
+          ? fabPlaceholder('shutdown_hidden')
+          : FloatingActionButton(
+              heroTag: 'shutdown',
+              elevation: 3,
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.red.shade100,
+              onPressed: () {
+                if (_actionButtonLoading) {
+                  showToast(
+                    AppLocalizations.of(
+                      context,
+                    )!.info_pending_fileprocessing_shutdown,
+                  );
+                } else if (Server.serverRunning && !Server.serverPoweringDown) {
+                  shutdownFAB();
+                } else {
+                  showToast(
+                    AppLocalizations.of(context)!.info_pending_servershutdown,
+                  );
+                }
+              },
+              child: Icon(
+                Icons.power_settings_new,
+                color: Colors.red.shade100,
+                size: 22.5,
+                semanticLabel: AppLocalizations.of(
+                  context,
+                )!.fab_shutdownserver_label,
               ),
+            ),
     );
   }
 
@@ -500,19 +497,18 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       },
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
-        transitionBuilder:
-            (Widget child, Animation<double> animation) =>
-                ScaleTransition(child: child, scale: animation),
-        child:
-            _actionButtonLoading
-                ? StateManager().loadingIndicator(context)
-                : Icon(
-                  Icons.insert_drive_file,
-                  color: Theme.of(context).colorScheme.secondary,
-                  size: 20.0,
-                  semanticLabel:
-                      AppLocalizations.of(context)!.fab_selectfile_label,
-                ),
+        transitionBuilder: (Widget child, Animation<double> animation) =>
+            ScaleTransition(child: child, scale: animation),
+        child: _actionButtonLoading
+            ? StateManager().loadingIndicator(context)
+            : Icon(
+                Icons.insert_drive_file,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 20.0,
+                semanticLabel: AppLocalizations.of(
+                  context,
+                )!.fab_selectfile_label,
+              ),
       ),
     );
   }
