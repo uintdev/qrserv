@@ -108,22 +108,25 @@ class Info {
               'github.com',
               'uintdev/qrserv',
               AppLocalizations.of(context)!.info_opensource_title,
+              ListPositionType.Front,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             listButton(
               context,
               Icons.archive_rounded,
               'github.com',
               'uintdev/qrserv/releases',
               'Releases',
+              ListPositionType.Between,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             listButton(
               context,
               Icons.local_cafe,
               'ko-fi.com',
               'uintdev',
               AppLocalizations.of(context)!.info_donate_title,
+              ListPositionType.End,
             ),
             const SizedBox(height: 10),
             TextButton(
@@ -138,27 +141,77 @@ class Info {
     );
   }
 
-  ElevatedButton listButton(
+  SizedBox listButton(
     BuildContext context,
     IconData icon,
     String host,
     String path,
     String label,
+    ListPositionType positionType,
   ) {
-    return ElevatedButton(
-      onPressed: () {
-        _launchURL(Uri(scheme: 'https', host: host, path: path), context);
-      },
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(6, 16, 6, 16),
-        child: Row(
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          _launchURL(Uri(scheme: 'https', host: host, path: path), context);
+        },
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.fromLTRB(6, 16, 6, 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: listRadiusPosition(positionType),
+          ),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Icon(icon),
-            const SizedBox(width: 15),
-            Row(children: [Text(label)]),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                child: Icon(icon),
+              ),
+            ),
+            Center(child: Text(label)),
           ],
         ),
       ),
     );
   }
+}
+
+enum ListPositionType { Front, Between, End }
+
+BorderRadius listRadiusPosition(ListPositionType listPosition) {
+  final BorderRadius result;
+
+  switch (listPosition) {
+    case ListPositionType.Front:
+      result = BorderRadius.only(
+        topLeft: Radius.circular(16),
+        topRight: Radius.circular(16),
+        bottomLeft: Radius.circular(6),
+        bottomRight: Radius.circular(6),
+      );
+      break;
+
+    case ListPositionType.Between:
+      result = BorderRadius.only(
+        topLeft: Radius.circular(6),
+        topRight: Radius.circular(6),
+        bottomLeft: Radius.circular(6),
+        bottomRight: Radius.circular(6),
+      );
+      break;
+
+    case ListPositionType.End:
+      result = BorderRadius.only(
+        topLeft: Radius.circular(6),
+        topRight: Radius.circular(6),
+        bottomLeft: Radius.circular(16),
+        bottomRight: Radius.circular(16),
+      );
+      break;
+  }
+
+  return result;
 }
