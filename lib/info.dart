@@ -79,7 +79,7 @@ class Info {
             ),
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 5),
         Align(
           alignment: Alignment.center,
           child: Container(
