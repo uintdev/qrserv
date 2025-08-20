@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Sunucu token uyuşmazlığı",
     "server_info_shutdownfailed": "Sunucu kapatılamadı.\nHTTP kodu: ",
     "server_info_gone": "Sunucu yok: ",
-    "info_title": "Hakkında...",
+    "info_title": "Hakkında",
     "info_packageinfofail": "Hata",
     "info_opensource_title": "Açık kaynak",
     "info_donate_title": "Bağış",

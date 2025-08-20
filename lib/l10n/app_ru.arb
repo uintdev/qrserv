@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Несоответствие токена сервера",
     "server_info_shutdownfailed": "Не удалось выключить сервер.\nКод HTTP: ",
     "server_info_gone": "Сервер недоступен: ",
-    "info_title": "О программе...",
+    "info_title": "О программе",
     "info_packageinfofail": "Ошибка",
     "info_opensource_title": "Открытый исходный код",
     "info_donate_title": "Поддержать",

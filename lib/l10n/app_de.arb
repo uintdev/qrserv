@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Server-Token-Fehlanpassung",
     "server_info_shutdownfailed": "Server könnte nicht heruntergefahren werden.\nHTTP code: ",
     "server_info_gone": "Server ist weg: ",
-    "info_title": "Über...",
+    "info_title": "Über",
     "info_packageinfofail": "Fehler",
     "info_opensource_title": "Open source",
     "info_donate_title": "Spenden",

@@ -50,7 +50,7 @@
     "server_info_tokenmismatch": "Server token mismatch",
     "server_info_shutdownfailed": "Failed to shutdown server.\nHTTP code: ",
     "server_info_gone": "Server is gone: ",
-    "info_title": "About...",
+    "info_title": "About",
     "info_packageinfofail": "Error",
     "info_opensource_title": "Open source",
     "info_donate_title": "Donate",

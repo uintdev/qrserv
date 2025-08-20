@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Le jeton du serveur est invalide",
     "server_info_shutdownfailed": "Échec de l'arrêt du serveur.\ncode HTTP: ",
     "server_info_gone": "Le serveur est parti: ",
-    "info_title": "À propos...",
+    "info_title": "À propos",
     "info_packageinfofail": "Erreur",
     "info_opensource_title": "Open source",
     "info_donate_title": "Faire un don",

@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Nem egyező szerver token",
     "server_info_shutdownfailed": "Sikertelen szerver leállás.\nHTTP kód: ",
     "server_info_gone": "A szerver eltűnt: ",
-    "info_title": "Névjegy...",
+    "info_title": "Névjegy",
     "info_packageinfofail": "Hiba",
     "info_opensource_title": "Nyílt forráskód",
     "info_donate_title": "Támogatás",

@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "אי התאמה בטוקן של השרת",
     "server_info_shutdownfailed": "כיבוי השרת נכשל.\nקוד HTTP: ",
     "server_info_gone": "השרת נעלם: ",
-    "info_title": "אודות...",
+    "info_title": "אודות",
     "info_packageinfofail": "שגיאה",
     "info_opensource_title": "קוד פתוח",
     "info_donate_title": "תרום",

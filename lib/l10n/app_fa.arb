@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "عدم تطابق نشان سرور",
     "server_info_shutdownfailed": "خاموش کردن سرور ناموفق شد.کد \nHTTP: ",
     "server_info_gone": "سرور از بین رفته است: ",
-    "info_title": "درباره...",
+    "info_title": "درباره",
     "info_packageinfofail": "خطا",
     "info_opensource_title": "متن باز",
     "info_donate_title": "حمایت",

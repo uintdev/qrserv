@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Il token del server non corrisponde",
     "server_info_shutdownfailed": "Non è stato possibile spegnere il server.\nCodice HTTP: ",
     "server_info_gone": "Il server è sparito: ",
-    "info_title": "Informazioni...",
+    "info_title": "Informazioni",
     "info_packageinfofail": "Errore",
     "info_opensource_title": "Open source",
     "info_donate_title": "Dona",

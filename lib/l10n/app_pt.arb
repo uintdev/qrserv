@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Incompatibilidade da token do servidor",
     "server_info_shutdownfailed": "Falha ao desligar servidor.\nCódigo HTTP: ",
     "server_info_gone": "Servidor desaparecido: ",
-    "info_title": "Sobre...",
+    "info_title": "Sobre",
     "info_packageinfofail": "Erro",
     "info_opensource_title": "Código aberto",
     "info_donate_title": "Doar",

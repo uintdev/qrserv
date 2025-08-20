@@ -51,7 +51,7 @@
     "server_info_tokenmismatch": "Niezgodność z tokenu serwera",
     "server_info_shutdownfailed": "Nie udało się pomyślnie zamknąć serwera.\nHTTP kod: ",
     "server_info_gone": "Serwer zaginął: ",
-    "info_title": "Na temat...",
+    "info_title": "Na temat",
     "info_packageinfofail": "Błąd",
     "info_opensource_title": "Open source",
     "info_donate_title": "Podaruj kawę",
