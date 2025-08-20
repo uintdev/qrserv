@@ -449,7 +449,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   AnimatedSwitcher fabShutdown(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 150),
       transitionBuilder: (Widget child, Animation<double> animation) =>
           ScaleTransition(child: child, scale: animation),
       child: !Server.serverRunning
@@ -496,7 +496,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         importFile();
       },
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 150),
         transitionBuilder: (Widget child, Animation<double> animation) =>
             ScaleTransition(child: child, scale: animation),
         child: _actionButtonLoading
