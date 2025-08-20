@@ -109,7 +109,7 @@ class Info {
               'uintdev/qrserv',
               AppLocalizations.of(context)!.info_opensource_title,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             listButton(
               context,
               Icons.archive_rounded,
@@ -117,7 +117,7 @@ class Info {
               'uintdev/qrserv/releases',
               'Releases',
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             listButton(
               context,
               Icons.local_cafe,
@@ -150,7 +150,7 @@ class Info {
         _launchURL(Uri(scheme: 'https', host: host, path: path), context);
       },
       child: Padding(
-        padding: EdgeInsets.fromLTRB(5, 12, 5, 12),
+        padding: EdgeInsets.fromLTRB(6, 16, 6, 16),
         child: Row(
           children: [
             Icon(icon),
