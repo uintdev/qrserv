@@ -27,13 +27,15 @@ class Info {
         String packageInfo = '';
         String appName = '';
         String version = '';
+        String buildNumber = '';
 
         if (snapshot.hasError) {
           packageInfo = AppLocalizations.of(context)!.info_packageinfofail;
         } else if (snapshot.hasData) {
           appName = snapshot.data?.appName ?? '(null)';
           version = snapshot.data?.version ?? '(null)';
-          packageInfo = '$appName v$version';
+          buildNumber = snapshot.data?.buildNumber ?? '(null)';
+          packageInfo = '$appName v$version (build $buildNumber)';
         } else {
           packageInfo = AppLocalizations.of(context)!.info_pending_appinfo;
         }
@@ -49,15 +51,14 @@ class Info {
 
     showDialog(
       context: context,
-      builder:
-          (contextDialog) => Dialog(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-              child: Container(
-                child: infoDialogContents(context, packageInfo, contextDialog),
-              ),
-            ),
+      builder: (contextDialog) => Dialog(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+          child: Container(
+            child: infoDialogContents(context, packageInfo, contextDialog),
           ),
+        ),
+      ),
     );
   }
 
@@ -82,17 +83,17 @@ class Info {
         Align(
           alignment: Alignment.center,
           child: Container(
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 packageInfo,
-                Text(' ('),
-                Text(kReleaseMode ? 'release' : 'debug'),
-                Text(', '),
                 Text(
-                  FileManager().isPlayStoreFriendly ? 'Play Store' : 'GitHub',
+                  (kReleaseMode ? 'Release' : 'Debug') +
+                      ', ' +
+                      (FileManager().isPlayStoreFriendly
+                          ? 'Play Store'
+                          : 'GitHub'),
                 ),
-                Text(')'),
               ],
             ),
           ),
