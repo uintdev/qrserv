@@ -4,7 +4,6 @@ import 'dart:ui' as UI;
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:oktoast/oktoast.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'cachemanager.dart';
@@ -152,8 +151,9 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label':
-                AppLocalizations.of(context)!.page_info_snapshoterror_label,
+            'label': AppLocalizations.of(
+              context,
+            )!.page_info_snapshoterror_label,
             'msg': AppLocalizations.of(context)!.page_info_snapshoterror_msg,
           };
         }
@@ -186,8 +186,9 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.error,
-            'label':
-                AppLocalizations.of(context)!.page_info_permissiondenied_label,
+            'label': AppLocalizations.of(
+              context,
+            )!.page_info_permissiondenied_label,
             'msg': AppLocalizations.of(context)!.page_info_permissiondenied_msg,
           };
         }
@@ -198,12 +199,12 @@ class StateManager extends State<StateManagerPage> {
         {
           _msgInfo = {
             'icon': Icons.disc_full,
-            'label':
-                AppLocalizations.of(
-                  context,
-                )!.page_info_insufficientstorage_label,
-            'msg':
-                AppLocalizations.of(context)!.page_info_insufficientstorage_msg,
+            'label': AppLocalizations.of(
+              context,
+            )!.page_info_insufficientstorage_label,
+            'msg': AppLocalizations.of(
+              context,
+            )!.page_info_insufficientstorage_msg,
           };
         }
         break;
@@ -253,11 +254,10 @@ class StateManager extends State<StateManagerPage> {
                     semanticLabel: _msgInfo['label'],
                   ),
                   const SizedBox(height: 20),
-                  AutoSizeText(
+                  Text(
                     _msgInfo['msg'],
                     style: const TextStyle(fontSize: 13),
                     textAlign: TextAlign.center,
-                    minFontSize: 11,
                   ),
                 ],
               ),
@@ -452,6 +452,13 @@ class StateManager extends State<StateManagerPage> {
               padding: const EdgeInsets.all(30),
               child: Column(
                 children: [
+                  importedFileInfoName(
+                    context,
+                    fileDataTip,
+                    _fileInfo,
+                    _sizeHuman,
+                  ),
+                  const SizedBox(height: 5),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -459,14 +466,14 @@ class StateManager extends State<StateManagerPage> {
                         width: 196,
                         child: importedFileInterfaces(context, snapshot),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 5),
                       SizedBox(
-                        width: 56,
+                        width: 60,
                         child: importedFileShare(_hostName, context),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   importedFileInfo(
                     context,
                     fileDataTip,
@@ -534,15 +541,15 @@ class StateManager extends State<StateManagerPage> {
           onLongPress: () {
             !fileInPath
                 ? showToast(
-                  AppLocalizations.of(
-                    context,
-                  )!.page_imported_fileinpath_enabled,
-                )
+                    AppLocalizations.of(
+                      context,
+                    )!.page_imported_fileinpath_enabled,
+                  )
                 : showToast(
-                  AppLocalizations.of(
-                    context,
-                  )!.page_imported_fileinpath_disabled,
-                );
+                    AppLocalizations.of(
+                      context,
+                    )!.page_imported_fileinpath_disabled,
+                  );
             setState(() {
               fileInPath = !fileInPath;
             });
@@ -551,14 +558,11 @@ class StateManager extends State<StateManagerPage> {
             !isDesktop ? Icons.share : Icons.copy,
             size: 17,
             color: Theme.of(context).primaryColor,
-            semanticLabel:
-                !isDesktop
-                    ? AppLocalizations.of(
-                      context,
-                    )!.page_imported_share_sheet_label
-                    : AppLocalizations.of(
-                      context,
-                    )!.page_imported_share_clipboard_label,
+            semanticLabel: !isDesktop
+                ? AppLocalizations.of(context)!.page_imported_share_sheet_label
+                : AppLocalizations.of(
+                    context,
+                  )!.page_imported_share_clipboard_label,
           ),
         ),
       ),
@@ -598,23 +602,22 @@ class StateManager extends State<StateManagerPage> {
               });
             },
             style: Theme.of(context).textTheme.bodyMedium,
-            items:
-                snapshot.data!['interfaces'].map<DropdownMenuItem<String>>((
-                  String value,
-                ) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Center(
-                      child: AutoSizeText(
-                        value,
-                        style: const TextStyle(fontSize: 13),
-                        minFontSize: 12,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
-                  );
-                }).toList(),
+            items: snapshot.data!['interfaces'].map<DropdownMenuItem<String>>((
+              String value,
+            ) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Center(
+                  child: Text(
+                    value,
+                    style: const TextStyle(fontSize: 12),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ),
       ),
@@ -622,97 +625,200 @@ class StateManager extends State<StateManagerPage> {
   }
 }
 
-Table importedFileInfo(
+Widget importedFileInfoName(
+  BuildContext context,
+  String fileDataTip(),
+  Map<String, dynamic> _fileInfo,
+  String _sizeHuman,
+) {
+  return ForceLTR(
+    Tooltip(
+      message: fileDataTip(),
+      showDuration: const Duration(seconds: 5),
+      padding: const EdgeInsets.all(10),
+      child: Card(
+        color: Theme.of(context).canvasColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+          child: Row(
+            children: [
+              Icon(importedFileInfoIcon(_fileInfo['name']), size: 16),
+              SizedBox(width: 20),
+              Flexible(
+                fit: FlexFit.tight,
+                child: Text(
+                  _fileInfo['name'],
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Column importedFileInfo(
   BuildContext context,
   String fileDataTip(),
   Map<String, dynamic> _fileInfo,
   String _sizeHuman,
   AsyncSnapshot<Map<String, dynamic>> snapshot,
 ) {
-  const double tableGap = 2;
-  return Table(
-    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-    columnWidths: {0: const FlexColumnWidth(2.3), 1: const FlexColumnWidth(4)},
+  const double tableGap = 4;
+  return Column(
     children: [
-      TableRow(
+      Table(
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        columnWidths: {
+          0: const FlexColumnWidth(2.3),
+          1: const FlexColumnWidth(3),
+        },
         children: [
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: Center(
-              child: Text(
-                AppLocalizations.of(context)!.page_imported_file,
-                style: const TextStyle(fontSize: 13),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 10),
-            child: ForceLTR(
-              Tooltip(
-                message: fileDataTip(),
-                showDuration: const Duration(seconds: 5),
-                padding: const EdgeInsets.all(10),
+          TableRow(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 10),
                 child: Center(
-                  child: AutoSizeText(
-                    _fileInfo['name'],
-                    style: const TextStyle(fontSize: 13),
-                    minFontSize: 13,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  child: Text(
+                    AppLocalizations.of(context)!.page_imported_size,
+                    style: const TextStyle(fontSize: 12),
+                    textAlign: TextAlign.left,
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-      TableRow(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(right: 10, top: tableGap),
-            child: Center(
-              child: Text(
-                AppLocalizations.of(context)!.page_imported_size,
-                style: const TextStyle(fontSize: 13),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 10, top: tableGap),
-            child: Center(
-              child: ForceLTR(
-                Text(_sizeHuman, style: const TextStyle(fontSize: 13)),
-              ),
-            ),
-          ),
-        ],
-      ),
-      TableRow(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(right: 10, top: tableGap),
-            child: Center(
-              child: Text(
-                AppLocalizations.of(context)!.page_imported_port,
-                style: const TextStyle(fontSize: 13),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 10, top: tableGap),
-            child: Center(
-              child: ForceLTR(
-                Text(
-                  snapshot.data!['port'].toString(),
-                  style: const TextStyle(fontSize: 13),
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: Center(
+                  child: ForceLTR(
+                    Text(
+                      _sizeHuman,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
+          ),
+          TableRow(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 10, top: tableGap),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.page_imported_port,
+                    style: const TextStyle(fontSize: 12),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 10, top: tableGap),
+                child: Center(
+                  child: ForceLTR(
+                    Text(
+                      snapshot.data!['port'].toString(),
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     ],
   );
+}
+
+IconData importedFileInfoIcon(String fileName) {
+  IconData result = Icons.insert_drive_file;
+
+  final int dotIndex = fileName.lastIndexOf('.');
+
+  if (dotIndex == -1) return result;
+
+  final String fileExtension = (fileName.substring(dotIndex + 1)).toLowerCase();
+
+  final List<String> fileExtensionsArchive = [
+    '7z',
+    'xz',
+    'bz2',
+    'gz',
+    'tar',
+    'zip',
+    'rar',
+  ];
+  final List<String> fileExtensionsImage = [
+    'png',
+    'jpg',
+    'jpeg',
+    'webp',
+    'avif',
+    'bmp',
+    'gif',
+    'heic',
+    'heif',
+    'svg',
+    'tif',
+    'tiff',
+  ];
+  final List<String> fileExtensionsVideo = [
+    '3gp',
+    'avi',
+    'mkv',
+    'mov',
+    'mp4',
+    'mpeg',
+    'mpg',
+    'webm',
+    'wmv',
+  ];
+  final List<String> fileExtensionsAudio = [
+    'aac',
+    'aiff',
+    'flac',
+    'm3a',
+    'mp4',
+    'mid',
+    'midi',
+    'mka',
+    'mp3',
+    'ogg',
+    'wav',
+    'weba',
+    'wma',
+  ];
+
+  if (fileExtensionsArchive.contains(fileExtension)) {
+    result = Icons.folder_zip;
+  }
+
+  if (fileExtensionsImage.contains(fileExtension)) {
+    result = Icons.image;
+  }
+
+  if (fileExtensionsVideo.contains(fileExtension)) {
+    result = Icons.video_file;
+  }
+
+  if (fileExtensionsAudio.contains(fileExtension)) {
+    result = Icons.audio_file;
+  }
+
+  if (fileExtension == 'apk') {
+    result = Icons.android;
+  }
+
+  return result;
 }
 
 Widget ForceLTR(Widget child) {

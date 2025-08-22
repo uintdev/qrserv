@@ -25,7 +25,6 @@
     "page_imported_share_clipboard": "Скопировано",
     "page_imported_fileinpath_enabled": "Включено: имя файла в пути",
     "page_imported_fileinpath_disabled": "Отключено: имя файла в пути",
-    "page_imported_file": "Файл",
     "page_imported_size": "Размер",
     "page_imported_port": "Порт",
     "page_imported_decimalseparator": ".",
