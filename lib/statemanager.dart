@@ -756,6 +756,7 @@ IconData importedFileInfoIcon(String fileName) {
     'tar',
     'zip',
     'rar',
+    'cab',
   ];
   final List<String> fileExtensionsImage = [
     'png',
