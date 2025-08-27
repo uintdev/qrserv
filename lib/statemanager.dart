@@ -641,11 +641,11 @@ Widget importedFileInfoName(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 2,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+          padding: const EdgeInsets.fromLTRB(20, 18, 22, 18),
           child: Row(
             children: [
               Icon(importedFileInfoIcon(_fileInfo['name']), size: 16),
-              SizedBox(width: 20),
+              SizedBox(width: 15),
               Flexible(
                 fit: FlexFit.tight,
                 child: Text(
