@@ -18,6 +18,16 @@ When adding a new language:
 -   Add a language file to [lib/l10n/](lib/l10n/) with the file name format of `app_{language_code}.arb` (ISO 639-1 -- two character language code) and based on [app_en.arb](lib/l10n/app_en.arb) -- ensure that `@@locale` within the file also has the respective language code
 -   Add a new entry to the bottom of the list in [locales_config.xml](android/app/src/main/res/xml/locales_config.xml) within the `locale-config` tags -- this is used for the per-app language feature
 
+Addition and modifications of translations during development:
+
+-   These are done with best effort and judgement
+    -   It is done to have something hopefully understandable instead of having it fall back to the default language or have a localization string as a placeholder
+        -   The two things being avoided might still be fine to do, but in the case of this project specifically, I felt that this might be the most suitable approach.
+    -   This is very prone to errors still (some much larger than others), and so contributions that can offer corrections are helpful in that regard.
+-   The limit of such effort goes towards the application's language files.
+-   This **does not** extend into what is under [fastlane/metadata/android](fastlane/metadata/android/). In most cases, metadata not under [en-US](fastlane/metadata/android/en-US/) are not officially maintained and so information such as description and screenshots can fall behind. Pull requests to add or update metadata are still welcome though.
+    -   **Note:** the [fastlane](fastlane/) directory is currently solely used for IzzyOnDroid app listing metadata. Any changes made are expected to be reflected under that F-Droid repository once a new app release is created, gets picked up on and is processed successfully.
+
 ## Changelog
 
 When creating or updating a changelog for a new release:
