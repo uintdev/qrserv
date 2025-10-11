@@ -473,7 +473,7 @@ class StateManager extends State<StateManagerPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   importedFileInfo(
                     context,
                     fileDataTip,
