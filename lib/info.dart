@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/foundation.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'theme.dart';
 import 'filemanager.dart';
 
 class Info {
@@ -133,7 +134,13 @@ class Info {
               onPressed: () {
                 Navigator.pop(contextDialog);
               },
-              child: Text(AppLocalizations.of(context)!.info_close),
+              child: Text(
+                AppLocalizations.of(context)!.info_close,
+                style: TextStyle(
+                  fontFamily: QRSTheme.fontFamily,
+                  fontSize: 12.5,
+                ),
+              ),
             ),
           ],
         ),
@@ -171,7 +178,12 @@ class Info {
                 child: Icon(icon),
               ),
             ),
-            Center(child: Text(label)),
+            Center(
+              child: Text(
+                label,
+                style: TextStyle(fontFamily: QRSTheme.fontFamily, fontSize: 13),
+              ),
+            ),
           ],
         ),
       ),
