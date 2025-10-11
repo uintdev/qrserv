@@ -113,7 +113,7 @@ If you are considering to contribute to QRServ or report issues, more informatio
 
 If you wish to have debugging symbols for an app bundle release, ensure you have the Android NDK installed. You may need to specify the `ndk.dir` in the `local.properties` file.
 <br>
-However, if you do not plan to do a Play Store release, you may remove the `ndk` block from `android.defaultConfig` in the gradle build file.
+However, if you do not plan to do a Play Store release, you may remove the `ndk` block from `android.defaultConfig` in the [Gradle build file](android/build.gradle.kts).
 
 ### Windows
 
