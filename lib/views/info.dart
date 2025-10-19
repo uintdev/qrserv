@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'l10n/generated/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'theme.dart';
-import 'filemanager.dart';
+import '../theme.dart';
+import '../components/filemanager.dart';
 
 class Info {
   // URL launch management

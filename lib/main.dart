@@ -11,10 +11,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'theme.dart';
-import 'filemanager.dart';
-import 'statemanager.dart';
-import 'server.dart';
-import 'info.dart';
+import 'components/filemanager.dart';
+import 'components/server.dart';
+import 'views/statemanager.dart';
+import 'views/info.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

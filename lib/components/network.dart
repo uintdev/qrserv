@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'l10n/generated/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'server.dart';
 import 'filemanager.dart';
-import 'statemanager.dart';
+import '../views/statemanager.dart';
 
 class Network {
   // Default port number

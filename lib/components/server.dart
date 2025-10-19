@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'l10n/generated/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
-import 'cachemanager.dart';
+import 'cache.dart';
 import 'filemanager.dart';
 import 'network.dart';
 

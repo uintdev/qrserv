@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as UI;
 import 'package:flutter/material.dart';
-import 'l10n/generated/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:oktoast/oktoast.dart';
-import 'cachemanager.dart';
-import 'filemanager.dart';
-import 'server.dart';
-import 'network.dart';
-import 'sharemanager.dart';
+import '../components/cache.dart';
+import '../components/filemanager.dart';
+import '../components/server.dart';
+import '../components/network.dart';
+import '../components/share.dart';
 
 enum PageType {
   landing,
