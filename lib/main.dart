@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -357,6 +358,20 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               child: Text(widget.title),
             ),
             actions: [
+              kDebugMode
+                  ? IconButton(
+                      onPressed: () {
+                        showToast(
+                          'App is in debug mode -- ' +
+                              'performance is degraded and behavior ' +
+                              'may not reflect the release build.',
+                        );
+                        return;
+                      },
+                      icon: const Icon(Icons.bug_report_outlined),
+                    )
+                  : SizedBox(width: 0),
+              SizedBox(width: 10),
               IconButton(
                 onPressed: () async {
                   final bool damEligible = await damEligibility();
