@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:window_size/window_size.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:share_handler/share_handler.dart';
 import 'package:path/path.dart' as Path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
@@ -95,79 +95,68 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Import via share receiver
-    void importShare(List fileData) async {
-      if (fileData.isEmpty) return;
+    initShareListener();
+  }
 
-      // Prevent further execution if still loading
-      if (_actionButtonLoading) {
-        showToast(AppLocalizations.of(context)!.info_pending_fileprocessing);
-        return;
-      }
+  SharedMedia? media;
 
-      // Update button state
-      setState(() {
-        _actionButtonLoading = true;
-        FileManager.directAccessMode = false;
-      });
+  Future<void> initShareListener() async {
+    final handler = ShareHandler.instance;
+    media = await handler.getInitialSharedMedia();
 
-      Map<String, dynamic> fileSelection = {'files': {}};
-      int index = 0;
-      for (var file in fileData) {
-        int fileSize = File(file.path).lengthSync();
-        fileSelection['files'].addAll({
-          index: {
-            'name': Path.basename(file.path),
-            'path': file.path,
-            'size': fileSize,
-          },
-        });
-        index++;
-      }
+    handler.sharedMediaStream.listen((SharedMedia media) async {
+      if (!mounted) return;
+      importShare(media.attachments);
+    });
+  }
 
-      try {
-        await FileManager().selectFile(context, fileSelection).whenComplete(() {
-          setState(() {
-            _actionButtonLoading = false;
-            _stateView = StateManagerPage();
-          });
-        });
-      } catch (error) {
-        showToast(
-          AppLocalizations.of(context)!.info_exception_fileselection_fallback +
-              error.toString(),
-        );
-      } finally {
-        FileManager.fileImportPending = false;
-      }
+  // Import via share receiver
+  void importShare(List<SharedAttachment?>? fileData) async {
+    if (fileData == null) return;
+    if (fileData.isEmpty) return;
+
+    // Prevent further execution if still loading
+    if (_actionButtonLoading) {
+      showToast(AppLocalizations.of(context)!.info_pending_fileprocessing);
+      return;
     }
 
-    if (!StateManager().isDesktop) {
-      // Intent share receiver (when in memory)
-      _intentDataStreamSubscription = ReceiveSharingIntent.instance
-          .getMediaStream()
-          .listen(
-            (List<SharedMediaFile> value) async {
-              importShare(value);
-            },
-            onError: (err) {
-              showToast(
-                AppLocalizations.of(context)!.info_exception_intentstream + err,
-              );
-            },
-          );
+    // Update button state
+    setState(() {
+      _actionButtonLoading = true;
+      FileManager.directAccessMode = false;
+    });
 
-      // Intent share receiver (when closed)
-      ReceiveSharingIntent.instance.getInitialMedia().then(
-        (List<SharedMediaFile> value) async {
-          importShare(value);
+    Map<String, dynamic> fileSelection = {'files': {}};
+    int index = 0;
+    for (var file in fileData) {
+      if (file == null) continue;
+      // int fileSize = File(file.path).lengthSync();
+      int fileSize = await File(file.path).length();
+      fileSelection['files'].addAll({
+        index: {
+          'name': Path.basename(file.path),
+          'path': file.path,
+          'size': fileSize,
         },
-        onError: (err) {
-          showToast(
-            AppLocalizations.of(context)!.info_exception_intentstream + err,
-          );
-        },
+      });
+      index++;
+    }
+
+    try {
+      await FileManager().selectFile(context, fileSelection).whenComplete(() {
+        setState(() {
+          _actionButtonLoading = false;
+          _stateView = StateManagerPage();
+        });
+      });
+    } catch (error) {
+      showToast(
+        AppLocalizations.of(context)!.info_exception_fileselection_fallback +
+            error.toString(),
       );
+    } finally {
+      FileManager.fileImportPending = false;
     }
   }
 
