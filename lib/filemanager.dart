@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'package:filesize/filesize.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 import 'package:path/path.dart';
 import 'package:oktoast/oktoast.dart';
-import 'l10n/generated/app_localizations.dart';
 import 'cachemanager.dart';
 import 'server.dart';
 import 'network.dart';
@@ -49,10 +49,9 @@ class FileManager {
   }
 
   Future<String> filePickerPath() async {
-    String pickerDir =
-        FileManager.directAccessMode
-            ? directAccessPath
-            : (await getTemporaryDirectory()).path + '/file_picker';
+    String pickerDir = FileManager.directAccessMode
+        ? directAccessPath
+        : (await getTemporaryDirectory()).path + '/file_picker';
     return pickerDir;
   }
 

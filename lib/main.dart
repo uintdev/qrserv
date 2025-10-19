@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'l10n/generated/app_localizations.dart';
 import 'package:window_size/window_size.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:share_handler/share_handler.dart';
@@ -9,7 +10,6 @@ import 'package:path/path.dart' as Path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'l10n/generated/app_localizations.dart';
 import 'theme.dart';
 import 'filemanager.dart';
 import 'statemanager.dart';
