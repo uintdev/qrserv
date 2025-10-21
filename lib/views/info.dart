@@ -45,7 +45,7 @@ class Info {
           packageInfo,
           style: const TextStyle(
             fontSize: 13,
-            fontVariations: [FontVariation('wght', 300)],
+            fontVariations: [FontVariation('wght', 400)],
           ),
         );
       },
@@ -152,7 +152,7 @@ class Info {
                 style: TextStyle(
                   fontFamily: QRSTheme.fontFamily,
                   fontSize: 12.5,
-                  fontVariations: const [FontVariation('wght', 400)],
+                  fontVariations: const [FontVariation('wght', 500)],
                 ),
               ),
             ),
@@ -198,7 +198,7 @@ class Info {
                 style: TextStyle(
                   fontFamily: QRSTheme.fontFamily,
                   fontSize: 13,
-                  fontVariations: const [FontVariation('wght', 300)],
+                  fontVariations: const [FontVariation('wght', 500)],
                 ),
               ),
             ),
