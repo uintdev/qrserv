@@ -9,19 +9,20 @@ class QRSTheme {
     var themeData = template;
     var newThemeData = themeData.copyWith(
       canvasColor: const Color.fromRGBO(237, 232, 243, 1),
-      primaryColor: const Color.fromRGBO(0, 0, 0, 1),
+      primaryColor: const Color.fromRGBO(30, 30, 45, 1),
       splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
       dialogTheme: DialogThemeData(
         backgroundColor: const Color.fromRGBO(237, 232, 243, 1),
       ),
+      iconTheme: IconThemeData(color: const Color.fromRGBO(30, 30, 45, 1)),
       textTheme: TextTheme(
         titleLarge: TextStyle(
-          color: const Color.fromRGBO(0, 0, 0, 1),
+          color: const Color.fromRGBO(30, 30, 45, 1),
           fontFamily: fontFamily,
           fontSize: titleLargeSize,
         ),
         bodyMedium: TextStyle(
-          color: const Color.fromRGBO(0, 0, 0, 1),
+          color: const Color.fromRGBO(30, 30, 45, 1),
           fontFamily: fontFamily,
           fontSize: titleSmallSize,
         ),
@@ -50,6 +51,7 @@ class QRSTheme {
       dialogTheme: DialogThemeData(
         backgroundColor: const Color.fromRGBO(37, 35, 41, 1),
       ),
+      iconTheme: IconThemeData(color: const Color.fromRGBO(255, 255, 255, 1)),
       textTheme: TextTheme(
         titleLarge: TextStyle(
           color: const Color.fromRGBO(255, 255, 255, 1),
