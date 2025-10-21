@@ -55,6 +55,6 @@ flutter:
     uses-material-design: true
     generate: true
     fonts:
-        - family: Poppins
+        - family: Nunito
           fonts:
-              - asset: fonts/Poppins-Regular.ttf
+              - asset: fonts/Nunito-Variable.ttf

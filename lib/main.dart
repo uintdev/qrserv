@@ -355,7 +355,12 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             backgroundColor: Theme.of(context).canvasColor,
             title: Padding(
               padding: const EdgeInsets.only(left: 5),
-              child: Text(widget.title),
+              child: Text(
+                widget.title,
+                style: const TextStyle(
+                  fontVariations: [FontVariation('wght', 700)],
+                ),
+              ),
             ),
             actions: [
               kDebugMode

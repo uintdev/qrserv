@@ -41,7 +41,13 @@ class Info {
           packageInfo = AppLocalizations.of(context)!.info_pending_appinfo;
         }
 
-        return Text(packageInfo);
+        return Text(
+          packageInfo,
+          style: const TextStyle(
+            fontSize: 13,
+            fontVariations: [FontVariation('wght', 300)],
+          ),
+        );
       },
     );
   }
@@ -76,7 +82,10 @@ class Info {
           child: Container(
             child: Text(
               AppLocalizations.of(context)!.info_title,
-              style: const TextStyle(fontSize: 25.0),
+              style: const TextStyle(
+                fontSize: 25,
+                fontVariations: [FontVariation('wght', 500)],
+              ),
             ),
           ),
         ),
@@ -94,6 +103,10 @@ class Info {
                       (FileManager().isPlayStoreFriendly
                           ? 'Play Store'
                           : 'GitHub'),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontVariations: [FontVariation('wght', 300)],
+                  ),
                 ),
               ],
             ),
@@ -139,6 +152,7 @@ class Info {
                 style: TextStyle(
                   fontFamily: QRSTheme.fontFamily,
                   fontSize: 12.5,
+                  fontVariations: const [FontVariation('wght', 400)],
                 ),
               ),
             ),
@@ -181,7 +195,11 @@ class Info {
             Center(
               child: Text(
                 label,
-                style: TextStyle(fontFamily: QRSTheme.fontFamily, fontSize: 13),
+                style: TextStyle(
+                  fontFamily: QRSTheme.fontFamily,
+                  fontSize: 13,
+                  fontVariations: const [FontVariation('wght', 300)],
+                ),
               ),
             ),
           ],

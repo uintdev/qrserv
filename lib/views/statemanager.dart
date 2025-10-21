@@ -256,7 +256,10 @@ class StateManager extends State<StateManagerPage> {
                   const SizedBox(height: 20),
                   Text(
                     _msgInfo['msg'],
-                    style: const TextStyle(fontSize: 13),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontVariations: [FontVariation('wght', 400)],
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -610,7 +613,10 @@ class StateManager extends State<StateManagerPage> {
                 child: Center(
                   child: Text(
                     value,
-                    style: const TextStyle(fontSize: 12),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontVariations: [FontVariation('wght', 300)],
+                    ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     textAlign: TextAlign.center,
@@ -650,7 +656,10 @@ Widget importedFileInfoName(
                 fit: FlexFit.tight,
                 child: Text(
                   _fileInfo['name'],
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontVariations: [FontVariation('wght', 300)],
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   textAlign: TextAlign.center,
@@ -688,7 +697,10 @@ Column importedFileInfo(
                 child: Center(
                   child: Text(
                     AppLocalizations.of(context)!.page_imported_size,
-                    style: const TextStyle(fontSize: 12),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontVariations: [FontVariation('wght', 600)],
+                    ),
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -699,7 +711,10 @@ Column importedFileInfo(
                   child: ForceLTR(
                     Text(
                       _sizeHuman,
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontVariations: [FontVariation('wght', 300)],
+                      ),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -714,7 +729,10 @@ Column importedFileInfo(
                 child: Center(
                   child: Text(
                     AppLocalizations.of(context)!.page_imported_port,
-                    style: const TextStyle(fontSize: 12),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontVariations: [FontVariation('wght', 600)],
+                    ),
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -725,7 +743,10 @@ Column importedFileInfo(
                   child: ForceLTR(
                     Text(
                       snapshot.data!['port'].toString(),
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontVariations: [FontVariation('wght', 300)],
+                      ),
                       textAlign: TextAlign.right,
                     ),
                   ),
