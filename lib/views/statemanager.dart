@@ -6,6 +6,7 @@ import '../l10n/generated/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:oktoast/oktoast.dart';
+import '../theme.dart';
 import '../components/cache.dart';
 import '../components/filemanager.dart';
 import '../components/server.dart';
@@ -509,6 +510,12 @@ class StateManager extends State<StateManagerPage> {
               triggerMode: TooltipTriggerMode.tap,
               showDuration: Duration(days: 1),
               padding: const EdgeInsets.all(10),
+              textStyle: TextStyle(
+                fontFamily: QRSTheme.fontFamily,
+                color: Theme.of(context).canvasColor,
+                fontSize: 13,
+                fontVariations: [FontVariation('wght', 500)],
+              ),
               child: QrImageView(
                 data: _hostName,
                 version: QrVersions.auto,
@@ -642,6 +649,12 @@ Widget importedFileInfoName(
       message: fileDataTip(),
       showDuration: const Duration(seconds: 5),
       padding: const EdgeInsets.all(10),
+      textStyle: TextStyle(
+        fontFamily: QRSTheme.fontFamily,
+        color: Theme.of(context).canvasColor,
+        fontSize: 13,
+        fontVariations: [FontVariation('wght', 500)],
+      ),
       child: Card(
         color: Theme.of(context).canvasColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
