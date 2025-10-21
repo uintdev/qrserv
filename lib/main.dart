@@ -54,6 +54,12 @@ class QRServ extends StatelessWidget {
       textPadding: const EdgeInsets.fromLTRB(25, 16, 25, 16),
       backgroundColor: const Color.fromRGBO(60, 60, 60, 1.0),
       duration: const Duration(milliseconds: 3500),
+      textStyle: TextStyle(
+        fontFamily: QRSTheme.fontFamily,
+        color: const Color.fromRGBO(255, 255, 255, 1),
+        fontSize: 13,
+        fontVariations: [FontVariation('wght', 300)],
+      ),
       radius: 30,
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
