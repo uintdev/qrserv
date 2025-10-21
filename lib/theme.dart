@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class QRSTheme {
-  static String fontFamily = 'Poppins';
+  static String fontFamily = 'Nunito';
   static double titleLargeSize = 16;
   static double titleSmallSize = 13.5;
 

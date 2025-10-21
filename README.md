@@ -128,7 +128,7 @@ You could [package builds as a MSIX](https://pub.dev/packages/msix) but that is 
 
 Google Play and the Google Play logo are trademarks of Google LLC.
 
-Poppins (the font) is licensed under [OFL-1.1](fonts/OFL.txt).
+Nunito (the font) is licensed under [OFL-1.1](fonts/OFL.txt).
 
 QRServ is licensed under the [MIT license](LICENSE).
 
