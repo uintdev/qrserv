@@ -472,8 +472,10 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           : FloatingActionButton(
               heroTag: 'shutdown',
               elevation: 3,
-              backgroundColor: Colors.red.shade700,
-              foregroundColor: Colors.red.shade100,
+              backgroundColor: const Color.fromRGBO(211, 47, 47, 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
               onPressed: () {
                 if (_actionButtonLoading) {
                   showToast(
@@ -491,7 +493,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               },
               child: Icon(
                 Icons.power_settings_new,
-                color: Colors.red.shade100,
+                color: const Color.fromRGBO(255, 255, 255, 0.8),
                 size: 22.5,
                 semanticLabel: AppLocalizations.of(
                   context,
@@ -507,6 +509,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       elevation: 3,
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       foregroundColor: Theme.of(context).colorScheme.secondary,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       onPressed: () {
         importFile();
       },
@@ -518,7 +521,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             ? StateManager().loadingIndicator(context)
             : Icon(
                 Icons.insert_drive_file,
-                color: Theme.of(context).colorScheme.secondary,
+                color: const Color.fromRGBO(255, 255, 255, 0.8),
                 size: 20.0,
                 semanticLabel: AppLocalizations.of(
                   context,
