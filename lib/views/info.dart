@@ -184,7 +184,6 @@ class Info {
           _launchURL(Uri(scheme: 'https', host: host, path: path), context);
         },
         style: ElevatedButton.styleFrom(
-          //foregroundColor: Theme.of(context).primaryColor,
           foregroundColor: themeColor,
           padding: EdgeInsets.fromLTRB(6, 16, 6, 16),
           shape: RoundedRectangleBorder(
