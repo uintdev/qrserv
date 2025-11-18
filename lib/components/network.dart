@@ -31,7 +31,7 @@ class Network {
                 addr.rawAddress[1] == 168 &&
                 addr.rawAddress[3] < 2);
         if (filterList) {
-          // Organise IPs into their own version lists
+          // Organize IPs into their own version lists
           if (addr.type.name == 'IPv4') {
             _ipv4List.add(addr.address);
           } else if (addr.type.name == 'IPv6') {
@@ -40,7 +40,7 @@ class Network {
         }
       }
     }
-    // Create and organise interface list
+    // Create and organize interface list
     _ipv4List = _ipv4List..sort();
     _ipv6List = _ipv6List..sort();
     Network.interfaceList = List.from(_ipv4List.reversed)..addAll(_ipv6List);
@@ -80,7 +80,7 @@ class Network {
   }
 
   // Determine IP version
-  bool checkIPV4(String? ip) {
+  bool checkIPv4(String? ip) {
     if (ip == null) return true;
 
     bool _versionType;

@@ -14,9 +14,7 @@ class Server {
     if (file == '') return _filePresent;
 
     File _filePath = File(file);
-    if (_filePath.existsSync()) {
-      _filePresent = true;
-    }
+    _filePresent = _filePath.existsSync();
 
     return _filePresent;
   }

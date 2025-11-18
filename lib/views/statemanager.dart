@@ -325,7 +325,7 @@ class StateManager extends State<StateManagerPage> {
           String _filePath;
 
           // Formatting for IPv6
-          if (!Network().checkIPV4(selectedIP)) {
+          if (!Network().checkIPv4(selectedIP)) {
             _hostFormatted = '[$selectedIP]';
           } else {
             _hostFormatted = selectedIP;
@@ -341,12 +341,9 @@ class StateManager extends State<StateManagerPage> {
           String _hostName =
               'http://$_hostFormatted:${snapshot.data!['port'].toString()}/$_filePath';
 
-          if (Server().fileExists(_fileInfo['path']) &&
-              !(fileTampered == .filemodified)) {
-            fileUntampered = true;
-          } else {
-            fileUntampered = false;
-          }
+          fileUntampered =
+              (Server().fileExists(_fileInfo['path']) &&
+              !(fileTampered == .filemodified));
 
           if (!fileUntampered) {
             pageTypeCurrent = fileTampered;
@@ -368,7 +365,7 @@ class StateManager extends State<StateManagerPage> {
 
                 if (!watchedFileExists) {
                   setFileStatus(false);
-                } else if (event.type == ChangeType.MODIFY &&
+                } else if (event.type == .MODIFY &&
                     watchedFileExists &&
                     FileManager().directModeDetect(_fileInfo['path'])) {
                   setFileStatus(false, .filemodified);
