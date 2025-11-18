@@ -8,35 +8,35 @@ class QRSTheme {
   static ThemeData light(ThemeData template) {
     var themeData = template;
     var newThemeData = themeData.copyWith(
-      canvasColor: const Color.fromRGBO(237, 232, 243, 1),
-      primaryColor: const Color.fromRGBO(30, 30, 45, 1),
-      splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
+      canvasColor: const .fromRGBO(237, 232, 243, 1),
+      primaryColor: const .fromRGBO(30, 30, 45, 1),
+      splashColor: const .fromRGBO(99, 81, 159, 0.3),
       dialogTheme: DialogThemeData(
-        backgroundColor: const Color.fromRGBO(237, 232, 243, 1),
+        backgroundColor: const .fromRGBO(237, 232, 243, 1),
       ),
-      iconTheme: IconThemeData(color: const Color.fromRGBO(30, 30, 45, 1)),
+      iconTheme: IconThemeData(color: const .fromRGBO(30, 30, 45, 1)),
       textTheme: TextTheme(
         titleLarge: TextStyle(
-          color: const Color.fromRGBO(30, 30, 45, 1),
+          color: const .fromRGBO(30, 30, 45, 1),
           fontFamily: fontFamily,
           fontSize: titleLargeSize,
         ),
         bodyMedium: TextStyle(
-          color: const Color.fromRGBO(30, 30, 45, 1),
+          color: const .fromRGBO(30, 30, 45, 1),
           fontFamily: fontFamily,
           fontSize: titleSmallSize,
         ),
       ),
-      cardTheme: CardThemeData(color: const Color.fromRGBO(227, 222, 233, 1)),
+      cardTheme: CardThemeData(color: const .fromRGBO(227, 222, 233, 1)),
       tooltipTheme: TooltipThemeData(
-        textStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 1)),
+        textStyle: TextStyle(color: const .fromRGBO(255, 255, 255, 1)),
       ),
       colorScheme: themeData.colorScheme.copyWith(
-        secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
-        secondary: const Color.fromRGBO(191, 180, 229, 1),
+        secondaryContainer: const .fromRGBO(91, 93, 213, 1),
+        secondary: const .fromRGBO(191, 180, 229, 1),
       ),
       tabBarTheme: TabBarThemeData(
-        indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
+        indicatorColor: const .fromRGBO(91, 93, 213, 1),
       ),
     );
     return newThemeData;
@@ -45,35 +45,35 @@ class QRSTheme {
   static ThemeData dark(ThemeData template) {
     var themeData = template;
     var newThemeData = themeData.copyWith(
-      canvasColor: const Color.fromRGBO(37, 35, 41, 1),
-      primaryColor: const Color.fromRGBO(255, 255, 255, 1),
-      splashColor: const Color.fromRGBO(99, 81, 159, 0.3),
+      canvasColor: const .fromRGBO(37, 35, 41, 1),
+      primaryColor: const .fromRGBO(255, 255, 255, 1),
+      splashColor: const .fromRGBO(99, 81, 159, 0.3),
       dialogTheme: DialogThemeData(
-        backgroundColor: const Color.fromRGBO(37, 35, 41, 1),
+        backgroundColor: const .fromRGBO(37, 35, 41, 1),
       ),
-      iconTheme: IconThemeData(color: const Color.fromRGBO(255, 255, 255, 1)),
+      iconTheme: IconThemeData(color: const .fromRGBO(255, 255, 255, 1)),
       textTheme: TextTheme(
         titleLarge: TextStyle(
-          color: const Color.fromRGBO(255, 255, 255, 1),
+          color: const .fromRGBO(255, 255, 255, 1),
           fontFamily: fontFamily,
           fontSize: titleLargeSize,
         ),
         bodyMedium: TextStyle(
-          color: const Color.fromRGBO(255, 255, 255, 1),
+          color: const .fromRGBO(255, 255, 255, 1),
           fontFamily: fontFamily,
           fontSize: titleSmallSize,
         ),
       ),
-      cardTheme: CardThemeData(color: const Color.fromRGBO(46, 44, 54, 1)),
+      cardTheme: CardThemeData(color: const .fromRGBO(46, 44, 54, 1)),
       tooltipTheme: TooltipThemeData(
-        textStyle: TextStyle(color: const Color.fromRGBO(0, 0, 0, 1)),
+        textStyle: TextStyle(color: const .fromRGBO(0, 0, 0, 1)),
       ),
       colorScheme: themeData.colorScheme.copyWith(
-        secondaryContainer: const Color.fromRGBO(91, 93, 213, 1),
-        secondary: const Color.fromRGBO(191, 180, 229, 1),
+        secondaryContainer: const .fromRGBO(91, 93, 213, 1),
+        secondary: const .fromRGBO(191, 180, 229, 1),
       ),
       tabBarTheme: TabBarThemeData(
-        indicatorColor: const Color.fromRGBO(91, 93, 213, 1),
+        indicatorColor: const .fromRGBO(91, 93, 213, 1),
       ),
     );
     return newThemeData;

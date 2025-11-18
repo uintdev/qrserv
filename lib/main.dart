@@ -24,7 +24,7 @@ void main() async {
   if (StateManager().isDesktop) {
     setWindowTitle('QRServ');
     setWindowMinSize(const Size(650, 1200));
-    setWindowMaxSize(Size.infinite);
+    setWindowMaxSize(.infinite);
   }
 
   runApp(MaterialApp(home: QRServ(), debugShowCheckedModeBanner: false));
@@ -34,29 +34,26 @@ class QRServ extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Portrait only (ignored on Android 16 or later if smallest width is >= 600dp)
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    SystemChrome.setPreferredOrientations([.portraitUp, .portraitDown]);
 
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Theme.of(context).canvasColor,
-        statusBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: .light,
         systemNavigationBarColor: Theme.of(context).canvasColor,
-        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: .light,
       ),
     );
 
     return OKToast(
       // Toast properties
       position: ToastPosition.bottom,
-      textPadding: const EdgeInsets.fromLTRB(25, 16, 25, 16),
-      backgroundColor: const Color.fromRGBO(60, 60, 60, 1.0),
+      textPadding: const .fromLTRB(25, 16, 25, 16),
+      backgroundColor: const .fromRGBO(60, 60, 60, 1.0),
       duration: const Duration(milliseconds: 3500),
       textStyle: TextStyle(
         fontFamily: QRSTheme.fontFamily,
-        color: const Color.fromRGBO(255, 255, 255, 1),
+        color: const .fromRGBO(255, 255, 255, 1),
         fontSize: 13,
         fontVariations: [FontVariation('wght', 300)],
       ),
@@ -256,7 +253,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // System denied storage access
         case 'read_external_storage_denied':
           {
-            pageTypeCurrent = PageType.permissiondenied;
+            pageTypeCurrent = .permissiondenied;
             setState(() {
               _stateView = StateManager().msgPage(context);
             });
@@ -266,7 +263,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         // Insufficient storage
         case 'unknown_path':
           {
-            pageTypeCurrent = PageType.insufficientstorage;
+            pageTypeCurrent = .insufficientstorage;
             await Server().shutdownServer(context);
             setState(() {
               _stateView = StateManager().msgPage(context);
@@ -301,7 +298,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
   // Handle server shutdown via FAB
   void shutdownFAB() async {
-    pageTypeCurrent = PageType.landing;
+    pageTypeCurrent = .landing;
     await Server().shutdownServer(context).whenComplete(() async {
       if (!Server.serverRunning) {
         setState(() {
@@ -343,7 +340,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+        preferredSize: const .fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: [
@@ -360,7 +357,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
             backgroundColor: Theme.of(context).canvasColor,
             title: Padding(
-              padding: const EdgeInsets.only(left: 5),
+              padding: const .only(left: 5),
               child: Text(
                 widget.title,
                 style: const TextStyle(
@@ -430,11 +427,11 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           return true;
         },
         child: Stack(
-          alignment: Alignment.topCenter,
+          alignment: .topCenter,
           children: <Widget>[
             Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: <Widget>[_stateView],
               ),
             ),
@@ -452,7 +449,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       left: 35,
       right: 35,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: .spaceBetween,
         children: [
           fabShutdown(context),
           fabImport(context),
@@ -472,10 +469,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           : FloatingActionButton(
               heroTag: 'shutdown',
               elevation: 3,
-              backgroundColor: const Color.fromRGBO(211, 47, 47, 1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
+              backgroundColor: const .fromRGBO(211, 47, 47, 1),
+              shape: RoundedRectangleBorder(borderRadius: .circular(30)),
               onPressed: () {
                 if (_actionButtonLoading) {
                   showToast(
@@ -493,7 +488,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               },
               child: Icon(
                 Icons.power_settings_new,
-                color: const Color.fromRGBO(255, 255, 255, 0.8),
+                color: const .fromRGBO(255, 255, 255, 0.8),
                 size: 22.5,
                 semanticLabel: AppLocalizations.of(
                   context,
@@ -509,7 +504,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       elevation: 3,
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       foregroundColor: Theme.of(context).colorScheme.secondary,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(30)),
       onPressed: () {
         importFile();
       },
@@ -521,7 +516,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             ? StateManager().loadingIndicator(context)
             : Icon(
                 Icons.insert_drive_file,
-                color: const Color.fromRGBO(255, 255, 255, 0.8),
+                color: const .fromRGBO(255, 255, 255, 0.8),
                 size: 20.0,
                 semanticLabel: AppLocalizations.of(
                   context,

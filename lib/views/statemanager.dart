@@ -26,7 +26,7 @@ enum PageType {
   fallback,
 }
 
-PageType pageTypeCurrent = PageType.landing;
+PageType pageTypeCurrent = .landing;
 
 class RebuildNotification extends Notification {}
 
@@ -37,12 +37,12 @@ class StateManagerPage extends StatefulWidget {
 
 class StateManager extends State<StateManagerPage> {
   bool fileUntampered = false;
-  static PageType fileTampered = PageType.fileremoved;
+  static PageType fileTampered = .fileremoved;
   bool interfaceUpdate = false;
   static StreamSubscription<WatchEvent>? importWatchdog;
   DirectoryWatcher? watcher;
 
-  bool setFileStatus(bool state, [PageType stateType = PageType.fileremoved]) {
+  bool setFileStatus(bool state, [PageType stateType = .fileremoved]) {
     if (mounted) {
       setState(() {
         fileUntampered = state;
@@ -73,7 +73,7 @@ class StateManager extends State<StateManagerPage> {
 
     if (FileManager.fileImportPending) {
       _outputState = loadingPage();
-    } else if (pageTypeCurrent == PageType.imported) {
+    } else if (pageTypeCurrent == .imported) {
       _outputState = importedPage(context);
     } else {
       _outputState = msgPage(context);
@@ -86,12 +86,10 @@ class StateManager extends State<StateManagerPage> {
     return Column(
       children: <Widget>[
         Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: .circular(40)),
           elevation: 1,
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const .all(20),
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 Theme.of(context).primaryColor,
@@ -126,7 +124,7 @@ class StateManager extends State<StateManagerPage> {
 
     switch (pageState) {
       // Landing
-      case PageType.landing:
+      case .landing:
         {
           _msgInfo = {
             'icon': Icons.insert_drive_file,
@@ -137,7 +135,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // No network
-      case PageType.noconnection:
+      case .noconnection:
         {
           _msgInfo = {
             'icon': Icons.signal_wifi_off,
@@ -148,7 +146,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Snapshot error while gathering interface list
-      case PageType.snapshoterror:
+      case .snapshoterror:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -161,7 +159,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Selected file was removed
-      case PageType.fileremoved:
+      case .fileremoved:
         {
           _msgInfo = {
             'icon': Icons.block,
@@ -172,7 +170,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Selected file was modified
-      case PageType.filemodified:
+      case .filemodified:
         {
           _msgInfo = {
             'icon': Icons.edit,
@@ -183,7 +181,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Storage permission declined
-      case PageType.permissiondenied:
+      case .permissiondenied:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -196,7 +194,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Insufficient storage
-      case PageType.insufficientstorage:
+      case .insufficientstorage:
         {
           _msgInfo = {
             'icon': Icons.disc_full,
@@ -211,7 +209,7 @@ class StateManager extends State<StateManagerPage> {
         break;
 
       // Port reuse
-      case PageType.portinuse:
+      case .portinuse:
         {
           _msgInfo = {
             'icon': Icons.error,
@@ -241,12 +239,10 @@ class StateManager extends State<StateManagerPage> {
         Container(
           constraints: const BoxConstraints(maxWidth: 300),
           child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: .circular(25)),
             elevation: 1,
             child: Container(
-              padding: const EdgeInsets.all(40),
+              padding: const .all(40),
               child: Column(
                 children: <Widget>[
                   Icon(
@@ -261,7 +257,7 @@ class StateManager extends State<StateManagerPage> {
                       fontSize: 14,
                       fontVariations: [FontVariation('wght', 400)],
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: .center,
                   ),
                 ],
               ),
@@ -282,7 +278,7 @@ class StateManager extends State<StateManagerPage> {
       future: Network().fetchInterfaces(context),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
-          pageTypeCurrent = PageType.snapshoterror;
+          pageTypeCurrent = .snapshoterror;
           return msgPage(context);
         } else if (snapshot.hasData && interfaceUpdate ||
             snapshot.connectionState == ConnectionState.done &&
@@ -309,7 +305,7 @@ class StateManager extends State<StateManagerPage> {
 
             // If no interfaces available, return network error page
             if (defaultIP == '') {
-              pageTypeCurrent = PageType.noconnection;
+              pageTypeCurrent = .noconnection;
               Server().shutdownServer(context);
               return msgPage(context);
             }
@@ -321,7 +317,7 @@ class StateManager extends State<StateManagerPage> {
           // Check if server exception occurred
           if (Server.serverException) {
             Server.serverException = false;
-            pageTypeCurrent = PageType.portinuse;
+            pageTypeCurrent = .portinuse;
             return msgPage(context);
           }
 
@@ -346,7 +342,7 @@ class StateManager extends State<StateManagerPage> {
               'http://$_hostFormatted:${snapshot.data!['port'].toString()}/$_filePath';
 
           if (Server().fileExists(_fileInfo['path']) &&
-              !(fileTampered == PageType.filemodified)) {
+              !(fileTampered == .filemodified)) {
             fileUntampered = true;
           } else {
             fileUntampered = false;
@@ -375,7 +371,7 @@ class StateManager extends State<StateManagerPage> {
                 } else if (event.type == ChangeType.MODIFY &&
                     watchedFileExists &&
                     FileManager().directModeDetect(_fileInfo['path'])) {
-                  setFileStatus(false, PageType.filemodified);
+                  setFileStatus(false, .filemodified);
                 }
               });
             }
@@ -448,12 +444,10 @@ class StateManager extends State<StateManagerPage> {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 330),
           child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: .circular(25)),
             elevation: 1,
             child: Container(
-              padding: const EdgeInsets.all(30),
+              padding: const .all(30),
               child: Column(
                 children: [
                   importedFileInfoName(
@@ -464,7 +458,7 @@ class StateManager extends State<StateManagerPage> {
                   ),
                   const SizedBox(height: 5),
                   Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: [
                       SizedBox(
                         width: 196,
@@ -496,10 +490,10 @@ class StateManager extends State<StateManagerPage> {
 
   Card importedFileQR(String _hostName, BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(25)),
       elevation: 1,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: .circular(25),
         child: GestureDetector(
           onLongPress: () {
             ShareManager.copyURL(_hostName, context);
@@ -507,9 +501,9 @@ class StateManager extends State<StateManagerPage> {
           child: ForceLTR(
             Tooltip(
               message: _hostName,
-              triggerMode: TooltipTriggerMode.tap,
+              triggerMode: .tap,
               showDuration: Duration(days: 1),
-              padding: const EdgeInsets.all(10),
+              padding: const .all(10),
               textStyle: TextStyle(
                 fontFamily: QRSTheme.fontFamily,
                 color: Theme.of(context).canvasColor,
@@ -518,12 +512,9 @@ class StateManager extends State<StateManagerPage> {
               ),
               child: QrImageView(
                 data: _hostName,
-                version: QrVersions.auto,
                 size: (MediaQuery.of(context).size.height * .23),
-                backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-                padding: EdgeInsets.all(
-                  (MediaQuery.of(context).size.height * .029),
-                ),
+                backgroundColor: const .fromRGBO(255, 255, 255, 1),
+                padding: .all((MediaQuery.of(context).size.height * .029)),
               ),
             ),
           ),
@@ -535,15 +526,13 @@ class StateManager extends State<StateManagerPage> {
   Card importedFileShare(String _hostName, BuildContext context) {
     return Card(
       color: Theme.of(context).canvasColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(10)),
       elevation: 2,
       child: SizedBox(
         height: 48,
         child: TextButton(
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: .circular(10)),
           ),
           onPressed: () {
             ShareManager().share(_hostName, context);
@@ -585,14 +574,12 @@ class StateManager extends State<StateManagerPage> {
   ) {
     return Card(
       color: Theme.of(context).canvasColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(10)),
       elevation: 2,
       child: ForceLTR(
         ButtonTheme(
           alignedDropdown: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: .circular(10)),
           child: DropdownButton<String>(
             icon: Row(
               children: const [
@@ -600,7 +587,7 @@ class StateManager extends State<StateManagerPage> {
                 SizedBox(width: 10),
               ],
             ),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: .circular(10),
             dropdownColor: Theme.of(context).canvasColor,
             value: selectedIP,
             isExpanded: true,
@@ -624,9 +611,9 @@ class StateManager extends State<StateManagerPage> {
                       fontSize: 12,
                       fontVariations: [FontVariation('wght', 300)],
                     ),
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                     maxLines: 2,
-                    textAlign: TextAlign.center,
+                    textAlign: .center,
                   ),
                 ),
               );
@@ -648,7 +635,7 @@ Widget importedFileInfoName(
     Tooltip(
       message: fileDataTip(),
       showDuration: const Duration(seconds: 5),
-      padding: const EdgeInsets.all(10),
+      padding: const .all(10),
       textStyle: TextStyle(
         fontFamily: QRSTheme.fontFamily,
         color: Theme.of(context).canvasColor,
@@ -657,10 +644,10 @@ Widget importedFileInfoName(
       ),
       child: Card(
         color: Theme.of(context).canvasColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: .circular(10)),
         elevation: 2,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 22, 18),
+          padding: const .fromLTRB(20, 18, 22, 18),
           child: Row(
             children: [
               Icon(importedFileInfoIcon(_fileInfo['name']), size: 16),
@@ -673,9 +660,9 @@ Widget importedFileInfoName(
                     fontSize: 13,
                     fontVariations: [FontVariation('wght', 300)],
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                   maxLines: 1,
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                 ),
               ),
             ],
@@ -697,7 +684,7 @@ Column importedFileInfo(
   return Column(
     children: [
       Table(
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        defaultVerticalAlignment: .middle,
         columnWidths: {
           0: const FlexColumnWidth(2.3),
           1: const FlexColumnWidth(3),
@@ -706,7 +693,7 @@ Column importedFileInfo(
           TableRow(
             children: [
               Container(
-                padding: const EdgeInsets.only(right: 10),
+                padding: const .only(right: 10),
                 child: Center(
                   child: Text(
                     AppLocalizations.of(context)!.page_imported_size,
@@ -714,12 +701,12 @@ Column importedFileInfo(
                       fontSize: 13,
                       fontVariations: [FontVariation('wght', 600)],
                     ),
-                    textAlign: TextAlign.left,
+                    textAlign: .left,
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const .only(left: 10),
                 child: Center(
                   child: ForceLTR(
                     Text(
@@ -728,7 +715,7 @@ Column importedFileInfo(
                         fontSize: 13,
                         fontVariations: [FontVariation('wght', 300)],
                       ),
-                      textAlign: TextAlign.right,
+                      textAlign: .right,
                     ),
                   ),
                 ),
@@ -738,7 +725,7 @@ Column importedFileInfo(
           TableRow(
             children: [
               Container(
-                padding: const EdgeInsets.only(right: 10, top: tableGap),
+                padding: const .only(right: 10, top: tableGap),
                 child: Center(
                   child: Text(
                     AppLocalizations.of(context)!.page_imported_port,
@@ -746,12 +733,12 @@ Column importedFileInfo(
                       fontSize: 13,
                       fontVariations: [FontVariation('wght', 600)],
                     ),
-                    textAlign: TextAlign.left,
+                    textAlign: .left,
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(left: 10, top: tableGap),
+                padding: const .only(left: 10, top: tableGap),
                 child: Center(
                   child: ForceLTR(
                     Text(
@@ -760,7 +747,7 @@ Column importedFileInfo(
                         fontSize: 13,
                         fontVariations: [FontVariation('wght', 300)],
                       ),
-                      textAlign: TextAlign.right,
+                      textAlign: .right,
                     ),
                   ),
                 ),

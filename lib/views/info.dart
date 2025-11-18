@@ -11,7 +11,7 @@ class Info {
   // URL launch management
   void _launchURL(Uri url, BuildContext context) async {
     if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+      await launchUrl(url, mode: .externalApplication);
     } else {
       showToast(
         AppLocalizations.of(context)!.info_exception_linkopenfailed +
@@ -60,7 +60,7 @@ class Info {
       context: context,
       builder: (contextDialog) => Dialog(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+          padding: .fromLTRB(30, 20, 30, 10),
           child: Container(
             child: infoDialogContents(context, packageInfo, contextDialog),
           ),
@@ -75,10 +75,10 @@ class Info {
     BuildContext contextDialog,
   ) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         Align(
-          alignment: Alignment.center,
+          alignment: .center,
           child: Container(
             child: Text(
               AppLocalizations.of(context)!.info_title,
@@ -91,10 +91,10 @@ class Info {
         ),
         const SizedBox(height: 5),
         Align(
-          alignment: Alignment.center,
+          alignment: .center,
           child: Container(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: .center,
               children: [
                 packageInfo,
                 Text(
@@ -114,7 +114,7 @@ class Info {
         ),
         const SizedBox(height: 20),
         Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: .end,
           children: [
             listButton(
               context,
@@ -178,25 +178,25 @@ class Info {
     Color themeColor,
   ) {
     return SizedBox(
-      width: double.infinity,
+      width: .infinity,
       child: ElevatedButton(
         onPressed: () {
           _launchURL(Uri(scheme: 'https', host: host, path: path), context);
         },
         style: ElevatedButton.styleFrom(
           foregroundColor: themeColor,
-          padding: EdgeInsets.fromLTRB(6, 16, 6, 16),
+          padding: .fromLTRB(6, 16, 6, 16),
           shape: RoundedRectangleBorder(
             borderRadius: listRadiusPosition(positionType),
           ),
         ),
         child: Stack(
-          alignment: Alignment.center,
+          alignment: .center,
           children: [
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: .centerLeft,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                padding: .fromLTRB(24, 0, 0, 0),
                 child: Icon(icon),
               ),
             ),
@@ -223,30 +223,30 @@ BorderRadius listRadiusPosition(ListPositionType listPosition) {
   final BorderRadius result;
 
   switch (listPosition) {
-    case ListPositionType.Front:
-      result = BorderRadius.only(
-        topLeft: Radius.circular(16),
-        topRight: Radius.circular(16),
-        bottomLeft: Radius.circular(6),
-        bottomRight: Radius.circular(6),
+    case .Front:
+      result = .only(
+        topLeft: .circular(16),
+        topRight: .circular(16),
+        bottomLeft: .circular(6),
+        bottomRight: .circular(6),
       );
       break;
 
-    case ListPositionType.Between:
-      result = BorderRadius.only(
-        topLeft: Radius.circular(6),
-        topRight: Radius.circular(6),
-        bottomLeft: Radius.circular(6),
-        bottomRight: Radius.circular(6),
+    case .Between:
+      result = .only(
+        topLeft: .circular(6),
+        topRight: .circular(6),
+        bottomLeft: .circular(6),
+        bottomRight: .circular(6),
       );
       break;
 
-    case ListPositionType.End:
-      result = BorderRadius.only(
-        topLeft: Radius.circular(6),
-        topRight: Radius.circular(6),
-        bottomLeft: Radius.circular(16),
-        bottomRight: Radius.circular(16),
+    case .End:
+      result = .only(
+        topLeft: .circular(6),
+        topRight: .circular(6),
+        bottomLeft: .circular(16),
+        bottomRight: .circular(16),
       );
       break;
   }

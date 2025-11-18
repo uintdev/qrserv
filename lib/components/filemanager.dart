@@ -163,7 +163,7 @@ class FileManager {
         fileSelection['files'][0]['size'] = selectedFile.lengthSync();
       } else {
         // File was selected but no longer exists
-        pageTypeCurrent = PageType.fileremoved;
+        pageTypeCurrent = .fileremoved;
         await Server().shutdownServer(context);
         return;
       }
@@ -188,7 +188,7 @@ class FileManager {
 
     await Network().internalIP();
     if (Network.interfaceList.isEmpty) {
-      pageTypeCurrent = PageType.noconnection;
+      pageTypeCurrent = .noconnection;
       await Server().shutdownServer(context);
       return;
     }
@@ -303,8 +303,8 @@ class FileManager {
       FileManager.fileImported = true;
       FileManager.allowWatcher = true;
       FileManager.lockWatcher = false;
-      StateManager.fileTampered = PageType.fileremoved;
-      pageTypeCurrent = PageType.imported;
+      StateManager.fileTampered = .fileremoved;
+      pageTypeCurrent = .imported;
 
       // Initiate server
       await Network().fetchInterfaces(context);
