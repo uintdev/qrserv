@@ -123,7 +123,6 @@ class Info {
               'uintdev/qrserv/releases',
               'Releases',
               ListPositionType.Front,
-              const Color.fromARGB(255, 132, 128, 235),
             ),
             const SizedBox(height: 5),
             listButton(
@@ -133,7 +132,6 @@ class Info {
               'uintdev/qrserv',
               AppLocalizations.of(context)!.info_opensource_title,
               ListPositionType.Between,
-              const Color.fromARGB(255, 86, 211, 128),
             ),
             const SizedBox(height: 5),
             listButton(
@@ -143,7 +141,6 @@ class Info {
               'uintdev',
               AppLocalizations.of(context)!.info_donate_title,
               ListPositionType.End,
-              const Color.fromARGB(255, 228, 165, 93),
             ),
             const SizedBox(height: 10),
             TextButton(
@@ -175,7 +172,6 @@ class Info {
     String path,
     String label,
     ListPositionType positionType,
-    Color themeColor,
   ) {
     return SizedBox(
       width: .infinity,
@@ -184,7 +180,7 @@ class Info {
           _launchURL(Uri(scheme: 'https', host: host, path: path), context);
         },
         style: ElevatedButton.styleFrom(
-          foregroundColor: themeColor,
+          foregroundColor: Theme.of(context).primaryColor,
           padding: .fromLTRB(6, 16, 6, 16),
           shape: RoundedRectangleBorder(
             borderRadius: listRadiusPosition(positionType),
