@@ -1,6 +1,6 @@
 package dev.uint.qrserv
 
-import io.flutter.embedding.android.FlutterFragmentActivity
+import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
 
@@ -9,7 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
-class MainActivity: FlutterFragmentActivity() {
+class MainActivity: FlutterActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (this.getResources().getBoolean(R.bool.tablet_mode)) {
