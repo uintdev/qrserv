@@ -16,6 +16,7 @@ import 'components/filemanager.dart';
 import 'components/server.dart';
 import 'views/statemanager.dart';
 import 'views/info.dart';
+import 'views/settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,6 +83,8 @@ class QRServ extends StatelessWidget {
   }
 }
 
+enum MenuOption { dialogInfo, pageSettings }
+
 class PageState extends StatefulWidget {
   PageState({Key? key, required this.title}) : super(key: key);
 
@@ -135,7 +138,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     int index = 0;
     for (var file in fileData) {
       if (file == null) continue;
-      // int fileSize = File(file.path).lengthSync();
       int fileSize = await File(file.path).length();
       fileSelection['files'].addAll({
         index: {
@@ -221,7 +223,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         requestPermission: () async => await storagePerm.request().isGranted,
       );
 
-      // User cancelled
+      // User canceled
       if (path == null) {
         setState(() {
           _actionButtonLoading = false;
@@ -408,12 +410,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                     : const Icon(Icons.sd_card),
               ),
               SizedBox(width: 10),
-              IconButton(
-                onPressed: () {
-                  infoDialogInvoker(context);
-                },
-                icon: const Icon(Icons.info_outline),
-              ),
+              menuButton(context),
               SizedBox(width: 15),
             ],
           ),
@@ -535,6 +532,49 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         onPressed: () {},
         child: Icon(Icons.check_box_outline_blank, size: 20.0),
       ),
+    );
+  }
+
+  PopupMenuButton<MenuOption> menuButton(BuildContext context) {
+    return PopupMenuButton<MenuOption>(
+      tooltip: "",
+      onSelected: (MenuOption item) {
+        switch (item) {
+          case .dialogInfo:
+            infoDialogInvoker(context);
+            break;
+
+          case .pageSettings:
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            );
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<MenuOption>>[
+        // TODO: Use localized strings
+        const PopupMenuItem<MenuOption>(
+          value: MenuOption.dialogInfo,
+          child: Row(
+            children: [
+              const Icon(Icons.info_outline),
+              SizedBox(width: 10),
+              Text('Info'),
+            ],
+          ),
+        ),
+        const PopupMenuItem<MenuOption>(
+          value: MenuOption.pageSettings,
+          child: Row(
+            children: [
+              const Icon(Icons.settings),
+              SizedBox(width: 10),
+              Text('Settings'),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
