@@ -1,7 +1,7 @@
 //import 'dart:async';
 //import 'dart:io';
 import 'package:flutter/material.dart';
-//import '../l10n/generated/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 //import 'package:oktoast/oktoast.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -34,9 +34,8 @@ Scaffold SettingsContent(BuildContext context) {
           backgroundColor: Theme.of(context).canvasColor,
           surfaceTintColor: Colors.transparent,
           flexibleSpace: FlexibleSpaceBar(
-            // TODO: Use localized strings
             title: Text(
-              "Settings",
+              AppLocalizations.of(context)!.settings_title,
               style: const TextStyle(
                 fontVariations: [FontVariation('wght', 500)],
               ),

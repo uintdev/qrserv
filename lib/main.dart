@@ -563,14 +563,13 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             ],
           ),
         ),
-        // TODO: Use localized strings
-        const PopupMenuItem<MenuOption>(
+        PopupMenuItem<MenuOption>(
           value: MenuOption.pageSettings,
           child: Row(
             children: [
               const Icon(Icons.settings),
               SizedBox(width: 10),
-              Text('Settings'),
+              Text(AppLocalizations.of(context)!.settings_title),
             ],
           ),
         ),
