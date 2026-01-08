@@ -31,7 +31,7 @@ class Info {
         String buildNumber = '';
 
         if (snapshot.hasError) {
-          packageInfo = AppLocalizations.of(context)!.info_packageinfofail;
+          packageInfo = AppLocalizations.of(context)!.about_packageinfofail;
         } else if (snapshot.hasData) {
           appName = snapshot.data?.appName ?? '(null)';
           version = snapshot.data?.version ?? '(null)';
@@ -81,7 +81,7 @@ class Info {
           alignment: .center,
           child: Container(
             child: Text(
-              AppLocalizations.of(context)!.info_title,
+              AppLocalizations.of(context)!.about_title,
               style: const TextStyle(
                 fontSize: 25,
                 fontVariations: [FontVariation('wght', 500)],
@@ -130,7 +130,7 @@ class Info {
               Icons.code,
               'github.com',
               'uintdev/qrserv',
-              AppLocalizations.of(context)!.info_opensource_title,
+              AppLocalizations.of(context)!.about_opensource_title,
               ListPositionType.Between,
             ),
             const SizedBox(height: 5),
@@ -139,7 +139,7 @@ class Info {
               Icons.local_cafe,
               'ko-fi.com',
               'uintdev',
-              AppLocalizations.of(context)!.info_donate_title,
+              AppLocalizations.of(context)!.about_donate_title,
               ListPositionType.End,
             ),
             const SizedBox(height: 10),
@@ -151,7 +151,7 @@ class Info {
                 foregroundColor: Theme.of(context).primaryColor,
               ),
               child: Text(
-                AppLocalizations.of(context)!.info_close,
+                AppLocalizations.of(context)!.about_close,
                 style: TextStyle(
                   fontFamily: QRSTheme.fontFamily,
                   fontSize: 12.5,
