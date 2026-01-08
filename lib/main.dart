@@ -553,17 +553,17 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<MenuOption>>[
-        // TODO: Use localized strings
-        const PopupMenuItem<MenuOption>(
+        PopupMenuItem<MenuOption>(
           value: MenuOption.dialogInfo,
           child: Row(
             children: [
               const Icon(Icons.info_outline),
               SizedBox(width: 10),
-              Text('Info'),
+              Text(AppLocalizations.of(context)!.about_title),
             ],
           ),
         ),
+        // TODO: Use localized strings
         const PopupMenuItem<MenuOption>(
           value: MenuOption.pageSettings,
           child: Row(
