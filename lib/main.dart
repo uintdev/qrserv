@@ -313,7 +313,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   }
 
   void infoDialogInvoker(BuildContext context) async {
-    await Info().infoDialog(context);
+    await About().infoDialog(context);
   }
 
   Future<bool> damEligibility() async {

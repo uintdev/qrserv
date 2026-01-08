@@ -7,7 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../theme.dart';
 import '../components/filemanager.dart';
 
-class Info {
+class About {
   // URL launch management
   void _launchURL(Uri url, BuildContext context) async {
     if (await canLaunchUrl(url)) {
