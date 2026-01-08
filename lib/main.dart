@@ -15,7 +15,7 @@ import 'theme.dart';
 import 'components/filemanager.dart';
 import 'components/server.dart';
 import 'views/statemanager.dart';
-import 'views/info.dart';
+import 'views/about.dart';
 import 'views/settings.dart';
 
 void main() async {
