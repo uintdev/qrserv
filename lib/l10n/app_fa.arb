@@ -57,5 +57,6 @@
     "about_close": "بستن",
     "dam_state_enabled": "فعال: حالت دسترسی مستقیم",
     "dam_state_disabled": "غیرفعال: حالت دسترسی مستقیم",
-    "dam_path_not_found": "خطا: مسیر برای حالت دسترسی مستقیم پیدا نشد"
+    "dam_path_not_found": "خطا: مسیر برای حالت دسترسی مستقیم پیدا نشد",
+    "settings_title": "تنظیمات"
 }

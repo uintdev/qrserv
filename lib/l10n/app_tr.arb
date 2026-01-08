@@ -57,5 +57,6 @@
     "about_close": "Kapat",
     "dam_state_enabled": "Etkin: doğrudan erişim modu",
     "dam_state_disabled": "Devre dışı: doğrudan erişim modu",
-    "dam_path_not_found": "Hata: doğrudan erişim modu için yol bulunamadı"
+    "dam_path_not_found": "Hata: doğrudan erişim modu için yol bulunamadı",
+    "settings_title": "Ayarlar"
 }

@@ -57,5 +57,6 @@
     "about_close": "Zamknij",
     "dam_state_enabled": "Włączone: tryb dostępu bezpośredniego",
     "dam_state_disabled": "Wyłączone: tryb dostępu bezpośredniego",
-    "dam_path_not_found": "Błąd: nie znaleziono ścieżki dla trybu dostępu bezpośredniego"
+    "dam_path_not_found": "Błąd: nie znaleziono ścieżki dla trybu dostępu bezpośredniego",
+    "settings_title": "Ustawienia"
 }

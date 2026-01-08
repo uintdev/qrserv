@@ -57,5 +57,6 @@
     "about_close": "Bezár",
     "dam_state_enabled": "Engedélyezve: közvetlen hozzáférési mód",
     "dam_state_disabled": "Letiltva: közvetlen hozzáférési mód",
-    "dam_path_not_found": "Hiba: a közvetlen elérési mód elérési útvonala nem található"
+    "dam_path_not_found": "Hiba: a közvetlen elérési mód elérési útvonala nem található",
+    "settings_title": "Beállítások"
 }

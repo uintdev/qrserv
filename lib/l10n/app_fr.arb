@@ -57,5 +57,6 @@
     "about_close": "Fermer",
     "dam_state_enabled": "Activé: mode d'accès direct",
     "dam_state_disabled": "Désactivé: mode d'accès direct",
-    "dam_path_not_found": "Erreur: chemin d'accès au mode d'accès direct non trouvé"
+    "dam_path_not_found": "Erreur: chemin d'accès au mode d'accès direct non trouvé",
+    "settings_title": "Paramètres"
 }

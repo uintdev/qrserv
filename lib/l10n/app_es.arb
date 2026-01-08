@@ -57,5 +57,6 @@
     "about_close": "Cerrar",
     "dam_state_enabled": "Habilitado: modo de acceso directo",
     "dam_state_disabled": "Deshabilitado: modo de acceso directo",
-    "dam_path_not_found": "Error: no se ha encontrado la ruta para el modo de acceso directo"
+    "dam_path_not_found": "Error: no se ha encontrado la ruta para el modo de acceso directo",
+    "settings_title": "Configuración"
 }

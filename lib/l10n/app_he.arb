@@ -57,5 +57,6 @@
     "about_close": "סגור",
     "dam_state_enabled": "מופעל: מצב גישה ישירה",
     "dam_state_disabled": "מושבת: מצב גישה ישירה",
-    "dam_path_not_found": "שגיאה: לא נמצא נתיב למצב גישה ישירה"
+    "dam_path_not_found": "שגיאה: לא נמצא נתיב למצב גישה ישירה",
+    "settings_title": "הגדרות"
 }
