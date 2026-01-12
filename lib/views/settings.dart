@@ -61,22 +61,23 @@ Column SettingsBody(BuildContext context) {
         child: Text(
           'Server',
           style: const TextStyle(
-            fontVariations: [FontVariation('wght', 500)],
+            fontVariations: [FontVariation('wght', 700)],
             fontSize: 14,
           ),
           textAlign: .left,
         ),
       ),
       SizedBox(height: 10),
-      // TODO: to be implemented
+      // TODO: Use localized strings
       ListTileEntry(
         context,
         Text('Port number'),
-        Text('Port number to use for the HTTP server'),
+        Text('Use a specific or random port number'),
         () {
           print('Option had been pressed.');
         },
       ),
+      // TODO: to be implemented
     ],
   );
 }
@@ -89,7 +90,7 @@ Padding ListTileEntry(
 ) {
   return Padding(
     padding: .fromLTRB(20, 0, 20, 0),
-    // TODO: Use localized strings
+
     child: Material(
       child: ListTile(
         tileColor: Theme.of(context).cardTheme.color,
@@ -102,9 +103,13 @@ Padding ListTileEntry(
           // ),
         ),
         title: title,
-        subtitle: subtitle,
+        subtitle: Opacity(opacity: 0.6, child: subtitle),
+        titleTextStyle: const TextStyle(
+          fontSize: 16.0,
+          fontVariations: [FontVariation('wght', 600)],
+        ),
         subtitleTextStyle: const TextStyle(
-          fontVariations: [FontVariation('wght', 300)],
+          fontVariations: [FontVariation('wght', 400)],
         ),
         onTap: onTap,
       ),
