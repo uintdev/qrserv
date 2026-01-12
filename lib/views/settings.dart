@@ -56,18 +56,58 @@ Column SettingsBody(BuildContext context) {
     children: [
       SizedBox(height: 15),
       Padding(
-        padding: .fromLTRB(20, 0, 20, 0),
+        padding: .fromLTRB(30, 0, 30, 0),
         // TODO: Use localized strings
         child: Text(
-          'Server -- WIP',
+          'Server',
           style: const TextStyle(
             fontVariations: [FontVariation('wght', 500)],
-            fontSize: 16,
+            fontSize: 14,
           ),
           textAlign: .left,
         ),
       ),
+      SizedBox(height: 10),
       // TODO: to be implemented
+      ListTileEntry(
+        context,
+        Text('Port number'),
+        Text('Port number to use for the HTTP server'),
+        () {
+          print('Option had been pressed.');
+        },
+      ),
     ],
+  );
+}
+
+Padding ListTileEntry(
+  BuildContext context,
+  Widget? title,
+  Widget? subtitle,
+  Function()? onTap,
+) {
+  return Padding(
+    padding: .fromLTRB(20, 0, 20, 0),
+    // TODO: Use localized strings
+    child: Material(
+      child: ListTile(
+        tileColor: Theme.of(context).cardTheme.color,
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+          // borderRadius: BorderRadius.only(
+          //   topLeft: Radius.circular(25),
+          //   topRight: Radius.circular(25),
+          // ),
+        ),
+        title: title,
+        subtitle: subtitle,
+        subtitleTextStyle: const TextStyle(
+          fontVariations: [FontVariation('wght', 300)],
+        ),
+        onTap: onTap,
+      ),
+    ),
   );
 }
