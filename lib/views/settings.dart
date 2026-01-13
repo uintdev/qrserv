@@ -71,14 +71,8 @@ Column SettingsBody(BuildContext context) {
       // TODO: Use localized strings
       ListTileEntry(
         context,
-        Text(
-          AppLocalizations.of(context)!.settings_server_port_number_list_title,
-        ),
-        Text(
-          AppLocalizations.of(
-            context,
-          )!.settings_server_port_number_list_subtitle,
-        ),
+        Text(AppLocalizations.of(context)!.settings_server_port_list_title),
+        Text(AppLocalizations.of(context)!.settings_server_port_list_subtitle),
         () {
           print('Option had been pressed.');
         },

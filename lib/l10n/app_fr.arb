@@ -60,6 +60,6 @@
     "dam_path_not_found": "Erreur: chemin d'accès au mode d'accès direct non trouvé",
     "settings_title": "Paramètres",
     "settings_subheading_server": "Serveur",
-    "settings_server_port_number_list_title": "Numéro de port",
-    "settings_server_port_number_list_subtitle": "Utiliser un numéro de port spécifique ou aléatoire"
+    "settings_server_port_list_title": "Numéro de port",
+    "settings_server_port_list_subtitle": "Utiliser un numéro de port spécifique ou aléatoire"
 }

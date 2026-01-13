@@ -60,6 +60,6 @@
     "dam_path_not_found": "Error: no se ha encontrado la ruta para el modo de acceso directo",
     "settings_title": "Configuración",
     "settings_subheading_server": "Servidor",
-    "settings_server_port_number_list_title": "Número de puerto",
-    "settings_server_port_number_list_subtitle": "Utilice un número de puerto específico o aleatorio"
+    "settings_server_port_list_title": "Número de puerto",
+    "settings_server_port_list_subtitle": "Utilice un número de puerto específico o aleatorio"
 }

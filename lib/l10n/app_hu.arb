@@ -60,6 +60,6 @@
     "dam_path_not_found": "Hiba: a közvetlen elérési mód elérési útvonala nem található",
     "settings_title": "Beállítások",
     "settings_subheading_server": "Szerver",
-    "settings_server_port_number_list_title": "Portszám",
-    "settings_server_port_number_list_subtitle": "Használjon egy meghatározott vagy véletlenszerű portszámot"
+    "settings_server_port_list_title": "Portszám",
+    "settings_server_port_list_subtitle": "Használjon egy meghatározott vagy véletlenszerű portszámot"
 }

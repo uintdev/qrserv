@@ -60,6 +60,6 @@
     "dam_path_not_found": "שגיאה: לא נמצא נתיב למצב גישה ישירה",
     "settings_title": "הגדרות",
     "settings_subheading_server": "שרת",
-    "settings_server_port_number_list_title": "מספר פורט",
-    "settings_server_port_number_list_subtitle": "השתמש במספר פורט ספציפי או אקראי"
+    "settings_server_port_list_title": "מספר פורט",
+    "settings_server_port_list_subtitle": "השתמש במספר פורט ספציפי או אקראי"
 }

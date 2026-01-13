@@ -59,6 +59,6 @@
     "dam_path_not_found": "Error: path for direct access mode not found",
     "settings_title": "Settings",
     "settings_subheading_server": "Server",
-    "settings_server_port_number_list_title": "Port number",
-    "settings_server_port_number_list_subtitle": "Use a specific or random port number"
+    "settings_server_port_list_title": "Port number",
+    "settings_server_port_list_subtitle": "Use a specific or random port number"
 }
