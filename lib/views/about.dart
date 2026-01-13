@@ -56,7 +56,7 @@ class About {
   Future aboutDialog(BuildContext context) async {
     Widget packageInfo = await packageInfoRequest(context);
 
-    showDialog(
+    await showDialog(
       context: context,
       builder: (contextDialog) => Dialog(
         child: Padding(
