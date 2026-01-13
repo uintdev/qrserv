@@ -58,5 +58,8 @@
     "dam_state_enabled": "Włączone: tryb dostępu bezpośredniego",
     "dam_state_disabled": "Wyłączone: tryb dostępu bezpośredniego",
     "dam_path_not_found": "Błąd: nie znaleziono ścieżki dla trybu dostępu bezpośredniego",
-    "settings_title": "Ustawienia"
+    "settings_title": "Ustawienia",
+    "settings_subheading_server": "Serwer",
+    "settings_server_port_number_list_title": "Numer portu",
+    "settings_server_port_number_list_subtitle": "Użyj określonego lub losowego numeru portu"
 }

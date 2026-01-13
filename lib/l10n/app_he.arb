@@ -58,5 +58,8 @@
     "dam_state_enabled": "מופעל: מצב גישה ישירה",
     "dam_state_disabled": "מושבת: מצב גישה ישירה",
     "dam_path_not_found": "שגיאה: לא נמצא נתיב למצב גישה ישירה",
-    "settings_title": "הגדרות"
+    "settings_title": "הגדרות",
+    "settings_subheading_server": "שרת",
+    "settings_server_port_number_list_title": "מספר פורט",
+    "settings_server_port_number_list_subtitle": "השתמש במספר פורט ספציפי או אקראי"
 }

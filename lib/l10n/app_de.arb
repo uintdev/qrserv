@@ -58,5 +58,8 @@
     "dam_state_enabled": "Direktzugriffsmodus aktiviert",
     "dam_state_disabled": "Direktzugriffsmodus deaktiviert",
     "dam_path_not_found": "Fehler: Pfad für Direktzugriffsmodus nicht gefunden",
-    "settings_title": "Einstellungen"
+    "settings_title": "Einstellungen",
+    "settings_subheading_server": "Server",
+    "settings_server_port_number_list_title": "Portnummer",
+    "settings_server_port_number_list_subtitle": "Verwenden Sie eine bestimmte oder eine zufällige Portnummer"
 }

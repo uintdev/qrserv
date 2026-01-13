@@ -58,5 +58,8 @@
     "dam_state_enabled": "Включено: Режим прямого доступа",
     "dam_state_disabled": "Отключено: Режим прямого доступа",
     "dam_path_not_found": "Ошибка: Путь для режима прямого доступа не найден",
-    "settings_title": "Настройки"
+    "settings_title": "Настройки",
+    "settings_subheading_server": "Сервер",
+    "settings_server_port_number_list_title": "номер порта",
+    "settings_server_port_number_list_subtitle": "Используйте определенный или случайный номер порта"
 }

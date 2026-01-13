@@ -59,7 +59,7 @@ Column SettingsBody(BuildContext context) {
         padding: .fromLTRB(30, 0, 30, 0),
         // TODO: Use localized strings
         child: Text(
-          'Server',
+          AppLocalizations.of(context)!.settings_subheading_server,
           style: const TextStyle(
             fontVariations: [FontVariation('wght', 700)],
             fontSize: 14,
@@ -71,8 +71,14 @@ Column SettingsBody(BuildContext context) {
       // TODO: Use localized strings
       ListTileEntry(
         context,
-        Text('Port number'),
-        Text('Use a specific or random port number'),
+        Text(
+          AppLocalizations.of(context)!.settings_server_port_number_list_title,
+        ),
+        Text(
+          AppLocalizations.of(
+            context,
+          )!.settings_server_port_number_list_subtitle,
+        ),
         () {
           print('Option had been pressed.');
         },

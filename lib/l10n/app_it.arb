@@ -58,5 +58,8 @@
     "dam_state_enabled": "Abilitato: modalità di accesso diretto",
     "dam_state_disabled": "Disabilitato: modalità di accesso diretto",
     "dam_path_not_found": "Errore: il percorso per la modalità di accesso diretto non è stato trovato",
-    "settings_title": "Impostazioni"
+    "settings_title": "Impostazioni",
+    "settings_subheading_server": "Server",
+    "settings_server_port_number_list_title": "Numero di porta",
+    "settings_server_port_number_list_subtitle": "Utilizzare un numero di porta specifico o casuale"
 }

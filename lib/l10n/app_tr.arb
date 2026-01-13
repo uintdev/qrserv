@@ -58,5 +58,8 @@
     "dam_state_enabled": "Etkin: doğrudan erişim modu",
     "dam_state_disabled": "Devre dışı: doğrudan erişim modu",
     "dam_path_not_found": "Hata: doğrudan erişim modu için yol bulunamadı",
-    "settings_title": "Ayarlar"
+    "settings_title": "Ayarlar",
+    "settings_subheading_server": "Sunucu",
+    "settings_server_port_number_list_title": "Port numarası",
+    "settings_server_port_number_list_subtitle": "Belirli veya rastgele bir port numarası kullanın"
 }

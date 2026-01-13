@@ -58,5 +58,8 @@
     "dam_state_enabled": "فعال: حالت دسترسی مستقیم",
     "dam_state_disabled": "غیرفعال: حالت دسترسی مستقیم",
     "dam_path_not_found": "خطا: مسیر برای حالت دسترسی مستقیم پیدا نشد",
-    "settings_title": "تنظیمات"
+    "settings_title": "تنظیمات",
+    "settings_subheading_server": "سرور",
+    "settings_server_port_number_list_title": "شماره پورت",
+    "settings_server_port_number_list_subtitle": "از یک شماره پورت مشخص یا تصادفی استفاده کنید"
 }
