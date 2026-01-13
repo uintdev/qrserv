@@ -62,7 +62,7 @@ class About {
         child: Padding(
           padding: .fromLTRB(30, 20, 30, 10),
           child: Container(
-            child: aboutDialogContents(context, packageInfo, contextDialog),
+            child: aboutDialogContents(context, contextDialog, packageInfo),
           ),
         ),
       ),
@@ -71,8 +71,8 @@ class About {
 
   Column aboutDialogContents(
     BuildContext context,
-    Widget packageInfo,
     BuildContext contextDialog,
+    Widget packageInfo,
   ) {
     return Column(
       mainAxisSize: .min,
