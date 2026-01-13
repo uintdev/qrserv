@@ -53,7 +53,7 @@ class About {
   }
 
   // Panel interface
-  Future infoDialog(BuildContext context) async {
+  Future aboutDialog(BuildContext context) async {
     Widget packageInfo = await packageInfoRequest(context);
 
     showDialog(
@@ -62,14 +62,14 @@ class About {
         child: Padding(
           padding: .fromLTRB(30, 20, 30, 10),
           child: Container(
-            child: infoDialogContents(context, packageInfo, contextDialog),
+            child: aboutDialogContents(context, packageInfo, contextDialog),
           ),
         ),
       ),
     );
   }
 
-  Column infoDialogContents(
+  Column aboutDialogContents(
     BuildContext context,
     Widget packageInfo,
     BuildContext contextDialog,
