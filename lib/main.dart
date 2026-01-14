@@ -14,6 +14,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'theme.dart';
 import 'components/filemanager.dart';
 import 'components/server.dart';
+import 'components/preferences.dart';
 import 'views/statemanager.dart';
 import 'views/about.dart';
 import 'views/settings.dart';
@@ -45,6 +46,8 @@ class QRServ extends StatelessWidget {
         systemNavigationBarIconBrightness: .light,
       ),
     );
+
+    Preferences().load();
 
     return OKToast(
       // Toast properties
