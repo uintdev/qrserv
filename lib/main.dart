@@ -502,7 +502,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       foregroundColor: Theme.of(context).colorScheme.secondary,
       shape: RoundedRectangleBorder(borderRadius: .circular(30)),
-      onPressed: () {
+      onPressed: () async {
         importFile();
       },
       child: AnimatedSwitcher(
