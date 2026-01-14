@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import '../../components/server.dart';
 
 class Port {
   final TextEditingController _fieldController = TextEditingController();
@@ -12,16 +13,26 @@ class Port {
     await showDialog(
       context: context,
       useRootNavigator: false,
-      builder: (contextDialog) => Dialog(
-        child: Padding(
-          padding: .fromLTRB(30, 20, 30, 10),
-          child: Container(child: portDialogContents(context, contextDialog)),
-        ),
+      builder: (contextDialog) => StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+              child: Container(
+                child: portDialogContents(context, contextDialog, setState),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Column portDialogContents(BuildContext context, BuildContext contextDialog) {
+  Column portDialogContents(
+    BuildContext context,
+    BuildContext contextDialog,
+    StateSetter setState,
+  ) {
     return Column(
       mainAxisSize: .min,
       children: [
@@ -47,20 +58,28 @@ class Port {
             fontVariations: [FontVariation('wght', 500)],
           ),
         ),
-        SizedBox(height: 5),
-        Text(
-          'Changes apply on server restart.',
-          style: const TextStyle(
-            fontSize: 13,
-            fontVariations: [FontVariation('wght', 500)],
-          ),
-        ),
+        Server.serverRunning
+            ? Column(
+                children: [
+                  SizedBox(height: 5),
+                  // TODO: use localization here
+                  Text(
+                    'Changes apply on server restart.',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontVariations: [FontVariation('wght', 500)],
+                    ),
+                  ),
+                ],
+              )
+            : SizedBox(),
         SizedBox(height: 15),
         TextField(
           controller: _fieldController,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           autofocus: true,
+          onChanged: (value) => setState(() {}),
           cursorColor: Theme.of(context).primaryColor,
           decoration: InputDecoration(
             labelText: AppLocalizations.of(
@@ -79,42 +98,59 @@ class Port {
           child: Text('Set Port'),
           style: ElevatedButton.styleFrom(
             foregroundColor: Theme.of(context).primaryColor,
+            animationDuration: Duration.zero,
           ),
-          onPressed: () {
-            final String text = _fieldController.text;
-
-            if (text.isEmpty) {
-              // TODO: use localization here
-              // TODO: add storage logic
-              showToast('Saved changes');
-              Navigator.pop(contextDialog);
-              return;
-            }
-
-            final int? value = text.isEmpty ? null : int.tryParse(text);
-
-            if (value == null) {
-              // TODO: use localization here
-              showToast('No valid integer entered');
-              return;
-            }
-
-            if (!(value >= portMin && value <= portMax)) {
-              // TODO: use localization here
-              showToast('Port number out of range');
-              return;
-            }
-
-            // TODO: add at-the-time port use check
-
-            // TODO: add storage logic
-
-            showToast('Saved changes');
-            Navigator.pop(contextDialog);
-          },
+          onPressed: portValidation()
+              ? portSubmission(context, contextDialog)
+              : null,
         ),
       ],
     );
+  }
+
+  bool portValidation() {
+    final String text = _fieldController.text;
+
+    if (text.isEmpty) return true;
+
+    final int? value = text.isEmpty ? null : int.tryParse(text);
+
+    if (value == null) return false;
+
+    if (!(value >= portMin && value <= portMax)) return false;
+
+    return true;
+  }
+
+  VoidCallback? portSubmission(
+    BuildContext context,
+    BuildContext contextDialog,
+  ) {
+    return () {
+      final String text = _fieldController.text;
+
+      if (text.isEmpty) {
+        // TODO: use localization here
+        // TODO: add storage logic
+        showToast('Saved changes');
+        Navigator.pop(contextDialog);
+        return;
+      }
+
+      final int? value = text.isEmpty ? null : int.tryParse(text);
+
+      if (value == null) return;
+
+      if (!(value >= portMin && value <= portMax)) return;
+
+      // TODO: add at-the-time port use check
+
+      // TODO: add storage logic
+
+      showToast('Saved changes');
+      Navigator.pop(contextDialog);
+      return;
+    };
   }
 }
 
