@@ -58,6 +58,7 @@ class About {
 
     await showDialog(
       context: context,
+      useRootNavigator: false,
       builder: (contextDialog) => Dialog(
         child: Padding(
           padding: .fromLTRB(30, 20, 30, 10),
