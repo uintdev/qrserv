@@ -53,20 +53,11 @@ Column SettingsBody(BuildContext context) {
   return Column(
     crossAxisAlignment: .start,
     children: [
-      SizedBox(height: 15),
-      Padding(
-        padding: .fromLTRB(30, 0, 30, 0),
-        // TODO: Use localized strings
-        child: Text(
-          AppLocalizations.of(context)!.settings_subheading_server,
-          style: const TextStyle(
-            fontVariations: [FontVariation('wght', 700)],
-            fontSize: 14,
-          ),
-          textAlign: .left,
-        ),
+      ListSubheader(
+        context,
+        AppLocalizations.of(context)!.settings_subheading_server,
+        true,
       ),
-      SizedBox(height: 10),
       ListTileEntry(
         context,
         Text(AppLocalizations.of(context)!.settings_server_port_list_title),
@@ -75,13 +66,41 @@ Column SettingsBody(BuildContext context) {
           await Port().portDialog(context);
         },
       ),
-      SizedBox(height: 5),
       // TODO: Use localized strings
+      ListSubheader(context, 'General'),
       ListTileEntry(context, Text('Reset to defaults'), null, () async {
         // TODO: reset storage logic
         showToast('Settings had been reset to defaults');
       }),
       // TODO: to be implemented
+    ],
+  );
+}
+
+Column ListSubheader(
+  BuildContext context,
+  String subheading, [
+  bool initial = false,
+]) {
+  double initialPadding = 20;
+  if (initial) {
+    initialPadding = 0;
+  }
+  return Column(
+    children: [
+      SizedBox(height: initialPadding),
+      Padding(
+        padding: .fromLTRB(30, 0, 30, 0),
+        child: Text(
+          subheading,
+          style: const TextStyle(
+            fontVariations: [FontVariation('wght', 700)],
+            fontSize: 14,
+          ),
+          textAlign: .left,
+        ),
+      ),
+      SizedBox(height: 10),
     ],
   );
 }
