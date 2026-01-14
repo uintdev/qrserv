@@ -18,33 +18,50 @@ class Settings extends State<SettingsPage> {
 Scaffold SettingsContent(BuildContext context) {
   return Scaffold(
     backgroundColor: Theme.of(context).canvasColor,
-    body: CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          iconTheme: IconThemeData(
-            color: Theme.of(context).textTheme.titleLarge?.color,
-          ),
-          expandedHeight: 195.0,
-          floating: false,
-          pinned: true,
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-          backgroundColor: Theme.of(context).canvasColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text(
-              AppLocalizations.of(context)!.settings_title,
-              style: const TextStyle(
-                fontVariations: [FontVariation('wght', 500)],
+    body: NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverAppBar(
+              iconTheme: IconThemeData(
+                color: Theme.of(context).textTheme.titleLarge?.color,
+              ),
+              expandedHeight: 195.0,
+              floating: false,
+              pinned: true,
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              backgroundColor: Theme.of(context).canvasColor,
+              surfaceTintColor: Colors.transparent,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  AppLocalizations.of(context)!.settings_title,
+                  style: const TextStyle(
+                    fontVariations: [FontVariation('wght', 500)],
+                  ),
+                ),
+                expandedTitleScale: 2.3,
+                background: Container(color: Theme.of(context).canvasColor),
               ),
             ),
-            expandedTitleScale: 2.3,
-            background: Container(color: Theme.of(context).canvasColor),
           ),
-        ),
-        SliverFillRemaining(child: SettingsBody(context)),
-      ],
+        ];
+      },
+      body: Builder(
+        builder: (BuildContext context) {
+          return CustomScrollView(
+            slivers: [
+              SliverOverlapInjector(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  context,
+                ),
+              ),
+              SliverToBoxAdapter(child: SettingsBody(context)),
+            ],
+          );
+        },
+      ),
     ),
   );
 }
