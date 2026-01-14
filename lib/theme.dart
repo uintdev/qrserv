@@ -38,6 +38,11 @@ class QRSTheme {
       tabBarTheme: TabBarThemeData(
         indicatorColor: const .fromRGBO(91, 93, 213, 1),
       ),
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: const .fromRGBO(30, 30, 45, 0.4),
+        selectionHandleColor: const .fromRGBO(30, 30, 45, 1),
+        cursorColor: const .fromRGBO(30, 30, 45, 1),
+      ),
     );
     return newThemeData;
   }
@@ -74,6 +79,11 @@ class QRSTheme {
       ),
       tabBarTheme: TabBarThemeData(
         indicatorColor: const .fromRGBO(91, 93, 213, 1),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: const .fromRGBO(255, 255, 255, 0.4),
+        selectionHandleColor: const .fromRGBO(255, 255, 255, 1),
+        cursorColor: const .fromRGBO(255, 255, 255, 1),
       ),
     );
     return newThemeData;
