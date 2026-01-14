@@ -1,8 +1,7 @@
-//import 'dart:async';
-//import 'dart:io';
 import 'package:flutter/material.dart';
 import '../l10n/generated/app_localizations.dart';
-//import 'package:oktoast/oktoast.dart';
+import 'package:oktoast/oktoast.dart';
+import 'settings/port.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -68,15 +67,20 @@ Column SettingsBody(BuildContext context) {
         ),
       ),
       SizedBox(height: 10),
-      // TODO: Use localized strings
       ListTileEntry(
         context,
         Text(AppLocalizations.of(context)!.settings_server_port_list_title),
         Text(AppLocalizations.of(context)!.settings_server_port_list_subtitle),
-        () {
-          print('Option had been pressed.');
+        () async {
+          await Port().portDialog(context);
         },
       ),
+      SizedBox(height: 5),
+      // TODO: Use localized strings
+      ListTileEntry(context, Text('Reset to defaults'), null, () async {
+        // TODO: reset storage logic
+        showToast('Settings had been reset to defaults');
+      }),
       // TODO: to be implemented
     ],
   );
@@ -90,11 +94,13 @@ Padding ListTileEntry(
 ) {
   return Padding(
     padding: .fromLTRB(20, 0, 20, 0),
-
     child: Material(
       child: ListTile(
         tileColor: Theme.of(context).cardTheme.color,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 3.0,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
           // borderRadius: BorderRadius.only(
@@ -103,7 +109,9 @@ Padding ListTileEntry(
           // ),
         ),
         title: title,
-        subtitle: Opacity(opacity: 0.6, child: subtitle),
+        subtitle: (subtitle != null)
+            ? Opacity(opacity: 0.6, child: subtitle)
+            : subtitle,
         titleTextStyle: const TextStyle(
           fontSize: 16.0,
           fontVariations: [FontVariation('wght', 600)],
