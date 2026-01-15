@@ -185,7 +185,17 @@ Padding ListTileEntry(
           fontVariations: [FontVariation('wght', 400)],
         ),
         trailing: (switchValue != null)
-            ? Switch(value: switchValue, onChanged: null)
+            ? Switch(
+                value: switchValue,
+                onChanged: null,
+                inactiveTrackColor: Theme.of(context).canvasColor,
+                thumbColor: WidgetStateProperty.all(
+                  switchValue ? Theme.of(context).cardTheme.color : null,
+                ),
+                activeTrackColor: Theme.of(
+                  context,
+                ).colorScheme.secondaryContainer,
+              )
             : null,
         onTap: onTap,
       ),
