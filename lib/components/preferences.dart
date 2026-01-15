@@ -40,7 +40,7 @@ class Preferences {
   }
 
   Future<void> clear() async {
-    _preferenceData = {};
+    _preferenceData.clear();
     await _dataWrite();
   }
 
@@ -58,6 +58,6 @@ class Preferences {
     return preferenceDir;
   }
 
-  // Constants
+  // Property list
   static const PREF_SERVER_PORT = 'server_port';
 }

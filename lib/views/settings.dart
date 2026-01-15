@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qrserv/components/preferences.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'settings/port.dart';
@@ -86,10 +87,11 @@ Column SettingsBody(BuildContext context) {
       // TODO: Use localized strings
       ListSubheader(context, 'General'),
       ListTileEntry(context, Text('Reset to defaults'), null, () async {
-        // TODO: reset storage logic
+        await Preferences().clear();
+        // TODO: Use localized strings
         showToast('Settings had been reset to defaults');
       }),
-      // TODO: to be implemented
+      // TODO: other options to be determined
     ],
   );
 }
