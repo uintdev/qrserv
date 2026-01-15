@@ -6,6 +6,7 @@ import 'package:oktoast/oktoast.dart';
 import 'cache.dart';
 import 'filemanager.dart';
 import 'network.dart';
+import 'preferences.dart';
 
 class Server {
   // Check if specified file path exists
@@ -48,7 +49,15 @@ class Server {
 
   // Web server
   Future http(BuildContext context) async {
-    await HttpServer.bind(InternetAddress.anyIPv6, 0).then((server) {
+    int serverPort = 0;
+    final dynamic serverPortConfig = await Preferences().read(
+      Preferences.PREF_SERVER_PORT,
+    );
+    if (serverPortConfig != null) {
+      serverPort = serverPortConfig;
+    }
+
+    await HttpServer.bind(InternetAddress.anyIPv6, serverPort).then((server) {
       // Update server status
       serverRunning = true;
       // Update port

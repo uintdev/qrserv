@@ -2,14 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:freeport/freeport.dart';
 import '../../components/server.dart';
+import '../../components/network.dart';
+import '../../components/preferences.dart';
 
 class Port {
   final TextEditingController _fieldController = TextEditingController();
   final int portMin = 1024;
   final int portMax = 65535;
+  static String currentPortNumber = '';
 
   Future portDialog(BuildContext context) async {
+    final int? fetchPortNumber = await Preferences().read(
+      Preferences.PREF_SERVER_PORT,
+    );
+
+    if (fetchPortNumber != null) {
+      currentPortNumber = fetchPortNumber.toString();
+    }
+
+    _fieldController.text = currentPortNumber;
+
     await showDialog(
       context: context,
       useRootNavigator: false,
@@ -81,6 +95,7 @@ class Port {
           autofocus: true,
           onChanged: (value) => setState(() {}),
           cursorColor: Theme.of(context).primaryColor,
+
           decoration: InputDecoration(
             labelText: AppLocalizations.of(
               context,
@@ -126,12 +141,12 @@ class Port {
     BuildContext context,
     BuildContext contextDialog,
   ) {
-    return () {
+    return () async {
       final String text = _fieldController.text;
 
       if (text.isEmpty) {
+        await Preferences().write(Preferences.PREF_SERVER_PORT, null);
         // TODO: use localization here
-        // TODO: add storage logic
         showToast('Saved changes');
         Navigator.pop(contextDialog);
         return;
@@ -143,10 +158,17 @@ class Port {
 
       if (!(value >= portMin && value <= portMax)) return;
 
-      // TODO: add at-the-time port use check
+      final bool serverRunningMatchingPort =
+          (Server.serverRunning && Network.port == value);
+      final bool portAvaliable = await isAvailablePort(value);
+      if (!portAvaliable && !serverRunningMatchingPort) {
+        // TODO: use localization here
+        showToast('Port %s is in use'.format([value]));
+        return;
+      }
 
-      // TODO: add storage logic
-
+      await Preferences().write(Preferences.PREF_SERVER_PORT, value);
+      // TODO: use localization here
       showToast('Saved changes');
       Navigator.pop(contextDialog);
       return;
