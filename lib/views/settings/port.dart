@@ -91,11 +91,13 @@ class Port {
         TextField(
           controller: _fieldController,
           keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            NoLeadingZerosTextInputFormatter(),
+          ],
           autofocus: true,
           onChanged: (value) => setState(() {}),
           cursorColor: Theme.of(context).primaryColor,
-
           decoration: InputDecoration(
             labelText: AppLocalizations.of(
               context,
@@ -181,5 +183,31 @@ extension StringFormat on String {
       result = result.replaceFirst('%s', value.toString());
     }
     return result;
+  }
+}
+
+class NoLeadingZerosTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newText = newValue.text;
+
+    final userTypedWhenThereWasZero =
+        newText.startsWith("0") && newText.length > 1;
+
+    if (!userTypedWhenThereWasZero) return newValue;
+
+    final regExp = RegExp(r'^0+(?=.)');
+    final textWithoutLeadingZeros = newText.replaceAll(regExp, "");
+
+    return TextEditingValue(
+      text: textWithoutLeadingZeros,
+      selection: newValue.selection.copyWith(
+        baseOffset: newText.length - 1,
+        extentOffset: newText.length - 1,
+      ),
+    );
   }
 }
