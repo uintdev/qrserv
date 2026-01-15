@@ -11,9 +11,10 @@ class Port {
   final TextEditingController _fieldController = TextEditingController();
   final int portMin = 1024;
   final int portMax = 65535;
-  static String currentPortNumber = '';
 
   Future portDialog(BuildContext context) async {
+    String currentPortNumber = '';
+
     final int? fetchPortNumber = await Preferences().read(
       Preferences.PREF_SERVER_PORT,
     );
