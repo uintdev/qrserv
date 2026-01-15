@@ -47,8 +47,8 @@ class Preferences {
   Future<void> _dataWrite() async {
     final directory = await _preferencesPath();
     final file = File('${directory}/${_preferenceFileName}');
-    file.createSync(recursive: true);
-    file.writeAsStringSync(json.encode(_preferenceData), flush: true);
+    await file.create(recursive: true);
+    await file.writeAsString(json.encode(_preferenceData), flush: true);
   }
 
   Future<String> _preferencesPath() async {
