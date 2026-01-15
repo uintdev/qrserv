@@ -28,7 +28,7 @@ class Port {
       context: context,
       useRootNavigator: false,
       builder: (contextDialog) => StatefulBuilder(
-        builder: (context, setState) {
+        builder: (BuildContext context, StateSetter setState) {
           return Dialog(
             child: Padding(
               padding: EdgeInsets.fromLTRB(30, 20, 30, 10),

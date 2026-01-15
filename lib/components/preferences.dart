@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import '../components/filemanager.dart';
 
 class Preferences {
   static Map<String, dynamic> _preferenceData = {};
@@ -41,6 +42,7 @@ class Preferences {
 
   Future<void> clear() async {
     _preferenceData.clear();
+    FileManager.directAccessMode = false;
     await _dataWrite();
   }
 
@@ -60,4 +62,5 @@ class Preferences {
 
   // Property list
   static const PREF_SERVER_PORT = 'server_port';
+  static const PREF_CLIENT_DAM = 'client_dam';
 }

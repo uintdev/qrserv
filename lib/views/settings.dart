@@ -3,6 +3,8 @@ import 'package:qrserv/components/preferences.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'settings/port.dart';
+import 'settings/dam.dart';
+import '../components/filemanager.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -49,8 +51,8 @@ Scaffold SettingsContent(BuildContext context) {
           ),
         ];
       },
-      body: Builder(
-        builder: (BuildContext context) {
+      body: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
           return CustomScrollView(
             slivers: [
               SliverOverlapInjector(
@@ -58,7 +60,7 @@ Scaffold SettingsContent(BuildContext context) {
                   context,
                 ),
               ),
-              SliverToBoxAdapter(child: SettingsBody(context)),
+              SliverToBoxAdapter(child: SettingsBody(context, setState)),
             ],
           );
         },
@@ -67,7 +69,7 @@ Scaffold SettingsContent(BuildContext context) {
   );
 }
 
-Column SettingsBody(BuildContext context) {
+Column SettingsBody(BuildContext context, StateSetter setState) {
   return Column(
     crossAxisAlignment: .start,
     children: [
@@ -85,12 +87,36 @@ Column SettingsBody(BuildContext context) {
         },
       ),
       // TODO: Use localized strings
+      ListSubheader(context, 'Client'),
+      ListTileEntry(
+        context,
+        Text('Direct Access Mode'),
+        Text('Ideal for large files'),
+        () async {
+          final bool damEligibility = await DAM().eligibility();
+          if (!damEligibility) {
+            // TODO: Use localized strings
+            showToast(
+              'Direct Access Mode for Android 11 or later is only ' +
+                  'available on the GitHub version of the app' +
+                  ' -- see the \'about\' dialog',
+            );
+            return;
+          }
+          DAM().toggle(context, setState);
+        },
+        FileManager.directAccessMode,
+      ),
+      // TODO: Use localized strings
       ListSubheader(context, 'General'),
       ListTileEntry(context, Text('Reset to defaults'), null, () async {
-        await Preferences().clear();
+        setState(() async {
+          await Preferences().clear();
+        });
         // TODO: Use localized strings
         showToast('Settings had been reset to defaults');
       }),
+
       // TODO: other options to be determined
     ],
   );
@@ -128,8 +154,9 @@ Padding ListTileEntry(
   BuildContext context,
   Widget? title,
   Widget? subtitle,
-  Function()? onTap,
-) {
+  Function()? onTap, [
+  bool? switchValue = null,
+]) {
   return Padding(
     padding: .fromLTRB(20, 0, 20, 0),
     child: Material(
@@ -157,6 +184,9 @@ Padding ListTileEntry(
         subtitleTextStyle: const TextStyle(
           fontVariations: [FontVariation('wght', 400)],
         ),
+        trailing: (switchValue != null)
+            ? Switch(value: switchValue, onChanged: null)
+            : null,
         onTap: onTap,
       ),
     ),

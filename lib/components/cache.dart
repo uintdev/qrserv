@@ -13,6 +13,7 @@ class CacheManager {
     BuildContext context, [
     List<String> file = const [],
     bool exclude = false,
+    bool ignoreDAM = false,
   ]) async {
     // Disallow desktop platforms
     if (StateManager().isDesktop) return;
@@ -24,7 +25,7 @@ class CacheManager {
       if (file.length == 0) FileManager.archivedLast = '';
 
       // Recursive file removal
-      String pickerDir = await FileManager().filePickerPath();
+      String pickerDir = await FileManager().filePickerPath(ignoreDAM);
       Directory pickerPath = Directory(pickerDir);
 
       if (await pickerPath.exists()) {

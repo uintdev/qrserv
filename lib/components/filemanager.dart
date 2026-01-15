@@ -48,8 +48,8 @@ class FileManager {
     };
   }
 
-  Future<String> filePickerPath() async {
-    String pickerDir = FileManager.directAccessMode
+  Future<String> filePickerPath(bool ignoreDAM) async {
+    String pickerDir = (!ignoreDAM && FileManager.directAccessMode)
         ? directAccessPath
         : (await getTemporaryDirectory()).path + '/file_picker';
     return pickerDir;
@@ -98,11 +98,12 @@ class FileManager {
   Future selectFile(
     BuildContext context, [
     Map<String, dynamic> fileSelection = const {},
+    bool ignoreDAM = false,
   ]) async {
     FileManager.fileImportPending = true;
     Map<String, dynamic> result = {'files': {}};
 
-    String pickerDir = await FileManager().filePickerPath();
+    String pickerDir = await FileManager().filePickerPath(ignoreDAM);
     Directory sourceDir = Directory(pickerDir);
 
     // Ensure file picker directory exists first
@@ -130,7 +131,7 @@ class FileManager {
           File fileToMove = File(resultFilePicker.files[i].path ?? '');
           String fileToMoveName = resultFilePicker.files[i].name;
           String fileToMoveNewPath =
-              await filePickerPath() + '/' + fileToMoveName;
+              await filePickerPath(ignoreDAM) + '/' + fileToMoveName;
 
           // Check if selection has multiple files of the same name
           for (int j = 0; j < result['files'].length; j++) {
@@ -139,7 +140,8 @@ class FileManager {
                   Server().tokenGenerator('0123456789abcdef', 6) +
                   '_' +
                   fileToMoveName;
-              fileToMoveNewPath = await filePickerPath() + '/' + fileToMoveName;
+              fileToMoveNewPath =
+                  await filePickerPath(ignoreDAM) + '/' + fileToMoveName;
             }
           }
 
@@ -224,7 +226,12 @@ class FileManager {
       if (archivedLast.isEmpty) cacheExceptionList.add(archivedLast);
 
       // Cache handling
-      await CacheManager().deleteCache(context, cacheExceptionList, true);
+      await CacheManager().deleteCache(
+        context,
+        cacheExceptionList,
+        true,
+        ignoreDAM,
+      );
 
       String _currentFile = '';
       String _currentFullPath = '';
@@ -235,7 +242,7 @@ class FileManager {
         // Prepare archive name
         String archiveName =
             Server().tokenGenerator('1234567890ABCDEF', 8) + '.zip';
-        String fullPickerPath = await filePickerPath();
+        String fullPickerPath = await filePickerPath(ignoreDAM);
         String fullArchivePath = fullPickerPath + '/' + archiveName;
 
         List<File> files = [];

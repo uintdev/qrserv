@@ -29,6 +29,14 @@ void main() async {
     setWindowMaxSize(.infinite);
   }
 
+  // Load preferences
+  await Preferences().load();
+  // Load DAM preference
+  final bool? damPref = await Preferences().read(Preferences.PREF_CLIENT_DAM);
+  if (damPref != null) {
+    FileManager.directAccessMode = damPref;
+  }
+
   runApp(MaterialApp(home: QRServ(), debugShowCheckedModeBanner: false));
 }
 
@@ -46,8 +54,6 @@ class QRServ extends StatelessWidget {
         systemNavigationBarIconBrightness: .light,
       ),
     );
-
-    Preferences().load();
 
     return OKToast(
       // Toast properties
@@ -101,7 +107,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   late StreamSubscription _intentDataStreamSubscription;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
@@ -134,7 +140,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     // Update button state
     setState(() {
       _actionButtonLoading = true;
-      FileManager.directAccessMode = false;
     });
 
     Map<String, dynamic> fileSelection = {'files': {}};
@@ -153,12 +158,14 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     }
 
     try {
-      await FileManager().selectFile(context, fileSelection).whenComplete(() {
-        setState(() {
-          _actionButtonLoading = false;
-          _stateView = StateManagerPage();
-        });
-      });
+      await FileManager().selectFile(context, fileSelection, true).whenComplete(
+        () {
+          setState(() {
+            _actionButtonLoading = false;
+            _stateView = StateManagerPage();
+          });
+        },
+      );
     } catch (error) {
       showToast(
         AppLocalizations.of(context)!.info_exception_fileselection_fallback +
@@ -319,25 +326,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     await About().aboutDialog(context);
   }
 
-  Future<bool> damEligibility() async {
-    bool result = false;
-
-    if (Platform.isAndroid) {
-      if (FileManager().isPlayStoreFriendly) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        if (androidInfo.version.sdkInt <=
-            FileManager().directAccessModeNoMESMaxAPI) {
-          // Does not require MES permission on Android 10 or lower
-          result = true;
-        }
-      } else {
-        result = true;
-      }
-    }
-
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -384,34 +372,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
                       icon: const Icon(Icons.bug_report_outlined),
                     )
                   : SizedBox(width: 0),
-              SizedBox(width: 10),
-              IconButton(
-                onPressed: () async {
-                  final bool damEligible = await damEligibility();
-                  if (!damEligible) {
-                    showToast(
-                      'Direct Access Mode for Android 11 or later is only ' +
-                          'available on the GitHub version of the app' +
-                          ' -- see the \'about\' dialog',
-                    );
-                    return;
-                  }
-                  !FileManager.directAccessMode
-                      ? showToast(
-                          AppLocalizations.of(context)!.dam_state_enabled,
-                        )
-                      : showToast(
-                          AppLocalizations.of(context)!.dam_state_disabled,
-                        );
-                  setState(() {
-                    FileManager.directAccessMode =
-                        !FileManager.directAccessMode;
-                  });
-                },
-                icon: !FileManager.directAccessMode
-                    ? const Icon(Icons.sd_card_outlined)
-                    : const Icon(Icons.sd_card),
-              ),
               SizedBox(width: 10),
               menuButton(context),
               SizedBox(width: 15),
