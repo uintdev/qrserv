@@ -164,7 +164,7 @@ class Port {
       final bool portAvaliable = await isAvailablePort(value);
       if (!portAvaliable && !serverRunningMatchingPort) {
         // TODO: use localization here
-        showToast('Port %s is in use'.format([value]));
+        showToast('Port is in use');
         return;
       }
 
