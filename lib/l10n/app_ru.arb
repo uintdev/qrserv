@@ -55,8 +55,6 @@
     "about_opensource_title": "Открытый исходный код",
     "about_donate_title": "Поддержать",
     "about_close": "Закрыть",
-    "dam_state_enabled": "Включено: Режим прямого доступа",
-    "dam_state_disabled": "Отключено: Режим прямого доступа",
     "dam_path_not_found": "Ошибка: Путь для режима прямого доступа не найден",
     "settings_title": "Настройки",
     "settings_subheading_server": "Сервер",
