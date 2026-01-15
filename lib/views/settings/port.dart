@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:freeport/freeport.dart';
 import '../../components/server.dart';
 import '../../components/network.dart';
 import '../../components/preferences.dart';
@@ -159,10 +158,8 @@ class Port {
 
       if (!(value >= portMin && value <= portMax)) return;
 
-      final bool serverRunningMatchingPort =
-          (Server.serverRunning && Network.port == value);
-      final bool portAvaliable = await isAvailablePort(value);
-      if (!portAvaliable && !serverRunningMatchingPort) {
+      final bool portUsed = await Network().checkPortUsed(value);
+      if (portUsed) {
         // TODO: use localization here
         showToast('Port is in use');
         return;

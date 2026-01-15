@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:freeport/freeport.dart';
 import 'server.dart';
 import 'filemanager.dart';
 import '../views/statemanager.dart';
@@ -90,5 +91,23 @@ class Network {
     _versionType = regExp.hasMatch(ip);
 
     return _versionType;
+  }
+
+  Future<bool> checkPortUsed(int portNumber) async {
+    final bool serverRunningMatchingPort =
+        (Server.serverRunning && port == portNumber);
+
+    final bool portUnusedIPv4 = await isAvailablePort(
+      portNumber,
+      hostname: '0.0.0.0',
+    );
+    final bool portUnusedIPv6 = await isAvailablePort(
+      portNumber,
+      hostname: '::',
+    );
+
+    final bool portUsed = !(portUnusedIPv4 && portUnusedIPv6);
+
+    return (portUsed && !serverRunningMatchingPort);
   }
 }
