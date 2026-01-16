@@ -52,6 +52,7 @@
     "server_info_gone": "Sunucu yok: ",
     "about_title": "Hakkında",
     "about_packageinfofail": "Hata",
+    "about_releases_title": "Sürümler",
     "about_opensource_title": "Açık kaynak",
     "about_donate_title": "Bağış",
     "about_close": "Kapat",

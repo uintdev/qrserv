@@ -52,6 +52,7 @@
     "server_info_gone": "El servidor se ha ido: ",
     "about_title": "Acerca de",
     "about_packageinfofail": "Error",
+    "about_releases_title": "Lanzamientos",
     "about_opensource_title": "Código fuente abierto",
     "about_donate_title": "Donar",
     "about_close": "Cerrar",

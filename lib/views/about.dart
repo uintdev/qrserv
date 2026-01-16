@@ -122,7 +122,7 @@ class About {
               Icons.archive_rounded,
               'github.com',
               'uintdev/qrserv/releases',
-              'Releases',
+              AppLocalizations.of(context)!.about_releases_title,
               ListPositionType.Front,
             ),
             const SizedBox(height: 5),

@@ -52,6 +52,7 @@
     "server_info_gone": "سرور از بین رفته است: ",
     "about_title": "درباره",
     "about_packageinfofail": "خطا",
+    "about_releases_title": "انتشارها",
     "about_opensource_title": "متن باز",
     "about_donate_title": "حمایت",
     "about_close": "بستن",

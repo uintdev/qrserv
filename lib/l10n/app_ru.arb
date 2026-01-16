@@ -52,6 +52,7 @@
     "server_info_gone": "Сервер недоступен: ",
     "about_title": "О программе",
     "about_packageinfofail": "Ошибка",
+    "about_releases_title": "Релизы",
     "about_opensource_title": "Открытый исходный код",
     "about_donate_title": "Поддержать",
     "about_close": "Закрыть",

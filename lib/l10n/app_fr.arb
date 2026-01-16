@@ -52,6 +52,7 @@
     "server_info_gone": "Le serveur est parti: ",
     "about_title": "À propos",
     "about_packageinfofail": "Erreur",
+    "about_releases_title": "Versions",
     "about_opensource_title": "Open source",
     "about_donate_title": "Faire un don",
     "about_close": "Fermer",

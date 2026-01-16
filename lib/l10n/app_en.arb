@@ -51,6 +51,7 @@
     "server_info_gone": "Server is gone: ",
     "about_title": "About",
     "about_packageinfofail": "Error",
+    "about_releases_title": "Releases",
     "about_opensource_title": "Open source",
     "about_donate_title": "Donate",
     "about_close": "Close",

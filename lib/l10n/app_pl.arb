@@ -52,6 +52,7 @@
     "server_info_gone": "Serwer zaginął: ",
     "about_title": "Na temat",
     "about_packageinfofail": "Błąd",
+    "about_releases_title": "Wydania",
     "about_opensource_title": "Open source",
     "about_donate_title": "Podaruj kawę",
     "about_close": "Zamknij",

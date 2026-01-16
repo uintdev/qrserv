@@ -52,6 +52,7 @@
     "server_info_gone": "A szerver eltűnt: ",
     "about_title": "Névjegy",
     "about_packageinfofail": "Hiba",
+    "about_releases_title": "Kiadások",
     "about_opensource_title": "Nyílt forráskód",
     "about_donate_title": "Támogatás",
     "about_close": "Bezár",
