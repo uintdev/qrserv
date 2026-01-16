@@ -59,7 +59,7 @@ class QRServ extends StatelessWidget {
       // Toast properties
       position: ToastPosition.bottom,
       textPadding: const .fromLTRB(25, 16, 25, 16),
-      backgroundColor: const .fromRGBO(60, 60, 60, 1.0),
+      backgroundColor: const .fromRGBO(60, 60, 60, 1),
       duration: const Duration(milliseconds: 3500),
       textStyle: TextStyle(
         fontFamily: QRSTheme.fontFamily,
