@@ -27,7 +27,7 @@ class QRSTheme {
           fontSize: titleSmallSize,
         ),
       ),
-      cardTheme: CardThemeData(color: const .fromRGBO(227, 222, 233, 1)),
+      cardTheme: CardThemeData(color: const .fromRGBO(249, 244, 255, 1)),
       tooltipTheme: TooltipThemeData(
         textStyle: TextStyle(color: const .fromRGBO(255, 255, 255, 1)),
       ),
