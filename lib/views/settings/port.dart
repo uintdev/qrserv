@@ -98,6 +98,7 @@ class Port {
           autofocus: true,
           onChanged: (value) => setState(() {}),
           cursorColor: Theme.of(context).primaryColor,
+          style: TextStyle(color: Theme.of(context).primaryColor),
           decoration: InputDecoration(
             labelText: AppLocalizations.of(
               context,
