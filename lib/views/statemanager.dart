@@ -489,30 +489,28 @@ class StateManager extends State<StateManagerPage> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: .circular(25)),
       elevation: 1,
-      child: ClipRRect(
-        borderRadius: .circular(25),
-        child: GestureDetector(
-          onLongPress: () {
-            ShareManager.copyURL(_hostName, context);
-          },
-          child: ForceLTR(
-            Tooltip(
-              message: _hostName,
-              triggerMode: .tap,
-              showDuration: Duration(days: 1),
-              padding: const .all(10),
-              textStyle: TextStyle(
-                fontFamily: QRSTheme.fontFamily,
-                color: Theme.of(context).canvasColor,
-                fontSize: 13,
-                fontVariations: [FontVariation('wght', 500)],
-              ),
-              child: QrImageView(
-                data: _hostName,
-                size: (MediaQuery.of(context).size.height * .23),
-                backgroundColor: const .fromRGBO(255, 255, 255, 1),
-                padding: .all((MediaQuery.of(context).size.height * .029)),
-              ),
+      clipBehavior: .antiAlias,
+      child: GestureDetector(
+        onLongPress: () {
+          ShareManager.copyURL(_hostName, context);
+        },
+        child: ForceLTR(
+          Tooltip(
+            message: _hostName,
+            triggerMode: .tap,
+            showDuration: Duration(days: 1),
+            padding: const .all(10),
+            textStyle: TextStyle(
+              fontFamily: QRSTheme.fontFamily,
+              color: Theme.of(context).canvasColor,
+              fontSize: 13,
+              fontVariations: [FontVariation('wght', 500)],
+            ),
+            child: QrImageView(
+              data: _hostName,
+              size: (MediaQuery.of(context).size.height * .23),
+              backgroundColor: const .fromRGBO(255, 255, 255, 1),
+              padding: .all((MediaQuery.of(context).size.height * .029)),
             ),
           ),
         ),
