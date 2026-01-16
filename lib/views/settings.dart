@@ -160,18 +160,20 @@ Padding ListTileEntry(
   return Padding(
     padding: .fromLTRB(20, 0, 20, 0),
     child: Material(
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25),
+        // borderRadius: BorderRadius.only(
+        //   topLeft: Radius.circular(25),
+        //   topRight: Radius.circular(25),
+        // ),
+      ),
+      clipBehavior: .antiAlias,
       child: ListTile(
         tileColor: Theme.of(context).cardTheme.color,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16.0,
           vertical: 3.0,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-          // borderRadius: BorderRadius.only(
-          //   topLeft: Radius.circular(25),
-          //   topRight: Radius.circular(25),
-          // ),
         ),
         title: title,
         subtitle: (subtitle != null)
