@@ -170,6 +170,7 @@ Padding ListTileEntry(
       ),
       clipBehavior: .antiAlias,
       child: ListTile(
+        textColor: Theme.of(context).primaryColor,
         tileColor: Theme.of(context).cardTheme.color,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16.0,
