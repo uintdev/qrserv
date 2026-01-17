@@ -80,8 +80,8 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
       ),
       ListTileEntry(
         context,
-        Text(AppLocalizations.of(context)!.settings_server_port_list_title),
-        Text(AppLocalizations.of(context)!.settings_server_port_list_subtitle),
+        AppLocalizations.of(context)!.settings_server_port_list_title,
+        AppLocalizations.of(context)!.settings_server_port_list_subtitle,
         () async {
           await Port().portDialog(context);
         },
@@ -90,8 +90,8 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
       ListSubheader(context, 'Client'),
       ListTileEntry(
         context,
-        Text('Direct Access Mode'),
-        Text('Ideal for large files'),
+        'Direct Access Mode',
+        'Ideal for large files',
         () async {
           final bool damEligibility = await DAM().eligibility();
           if (!damEligibility) {
@@ -109,7 +109,7 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
       ),
       // TODO: Use localized strings
       ListSubheader(context, 'General'),
-      ListTileEntry(context, Text('Reset to defaults'), null, () async {
+      ListTileEntry(context, 'Reset to defaults', null, () async {
         setState(() async {
           await Preferences().clear();
         });
@@ -152,8 +152,8 @@ Column ListSubheader(
 
 Padding ListTileEntry(
   BuildContext context,
-  Widget? title,
-  Widget? subtitle,
+  String title,
+  String? subtitle,
   Function()? onTap, [
   bool? switchValue = null,
 ]) {
@@ -176,10 +176,10 @@ Padding ListTileEntry(
           horizontal: 16.0,
           vertical: 3.0,
         ),
-        title: title,
+        title: Text(title),
         subtitle: (subtitle != null)
-            ? Opacity(opacity: 0.6, child: subtitle)
-            : subtitle,
+            ? Opacity(opacity: 0.6, child: Text(subtitle))
+            : null,
         titleTextStyle: const TextStyle(
           fontSize: 16.0,
           fontVariations: [FontVariation('wght', 600)],
