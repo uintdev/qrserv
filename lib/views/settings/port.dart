@@ -63,10 +63,10 @@ class Port {
           ),
         ),
         const SizedBox(height: 5),
-        // TODO: use localization here
         Text(
-          'Port number range must be %s - %s. Leave empty for a random port.'
-              .format([portMin, portMax]),
+          AppLocalizations.of(
+            context,
+          )!.settings_server_port_dialog_description.format([portMin, portMax]),
           style: const TextStyle(
             fontSize: 13,
             fontVariations: [FontVariation('wght', 500)],
@@ -76,9 +76,10 @@ class Port {
             ? Column(
                 children: [
                   SizedBox(height: 5),
-                  // TODO: use localization here
                   Text(
-                    'Changes apply on server restart.',
+                    AppLocalizations.of(
+                      context,
+                    )!.settings_server_port_dialog_serveractive,
                     style: const TextStyle(
                       fontSize: 13,
                       fontVariations: [FontVariation('wght', 500)],
@@ -112,8 +113,9 @@ class Port {
         ),
         SizedBox(height: 15),
         ElevatedButton(
-          // TODO: use localization here
-          child: Text('Set Port'),
+          child: Text(
+            AppLocalizations.of(context)!.settings_server_port_dialog_submit,
+          ),
           style: ElevatedButton.styleFrom(
             foregroundColor: Theme.of(context).primaryColor,
             animationDuration: Duration.zero,
@@ -149,8 +151,9 @@ class Port {
 
       if (text.isEmpty) {
         await Preferences().write(Preferences.PREF_SERVER_PORT, null);
-        // TODO: use localization here
-        showToast('Saved changes');
+        showToast(
+          AppLocalizations.of(context)!.settings_server_port_dialog_saved,
+        );
         Navigator.pop(contextDialog);
         return;
       }
@@ -163,14 +166,16 @@ class Port {
 
       final bool portUsed = await Network().checkPortUsed(value);
       if (portUsed) {
-        // TODO: use localization here
-        showToast('Port is in use');
+        showToast(
+          AppLocalizations.of(context)!.settings_server_port_dialog_portinuse,
+        );
         return;
       }
 
       await Preferences().write(Preferences.PREF_SERVER_PORT, value);
-      // TODO: use localization here
-      showToast('Saved changes');
+      showToast(
+        AppLocalizations.of(context)!.settings_server_port_dialog_saved,
+      );
       Navigator.pop(contextDialog);
       return;
     };

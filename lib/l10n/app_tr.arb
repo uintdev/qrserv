@@ -60,5 +60,10 @@
     "settings_title": "Ayarlar",
     "settings_subheading_server": "Sunucu",
     "settings_server_port_list_title": "Port numarası",
-    "settings_server_port_list_subtitle": "Belirli veya rastgele bir port numarası kullanın"
+    "settings_server_port_list_subtitle": "Belirli veya rastgele bir port numarası kullanın",
+    "settings_server_port_dialog_description": "Port numarası aralığı %s ile %s arasında olmalıdır. Rastgele bir port için boş bırakın.",
+    "settings_server_port_dialog_serveractive": "Değişiklikler sunucu yeniden başlatıldığında geçerli olacaktır.",
+    "settings_server_port_dialog_submit": "Portu Ayarla",
+    "settings_server_port_dialog_portinuse": "Port zaten kullanılıyor",
+    "settings_server_port_dialog_saved": "Değişiklikler kaydedildi"
 }

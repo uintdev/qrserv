@@ -60,5 +60,10 @@
     "settings_title": "Paramètres",
     "settings_subheading_server": "Serveur",
     "settings_server_port_list_title": "Numéro de port",
-    "settings_server_port_list_subtitle": "Utiliser un numéro de port spécifique ou aléatoire"
+    "settings_server_port_list_subtitle": "Utiliser un numéro de port spécifique ou aléatoire",
+    "settings_server_port_dialog_description": "Plage de numéros de port doit être comprise entre %s et %s. Laissez vide pour utiliser un port aléatoire.",
+    "settings_server_port_dialog_serveractive": "Modifications prendront effet au redémarrage du serveur.",
+    "settings_server_port_dialog_submit": "Définir Port",
+    "settings_server_port_dialog_portinuse": "Port est déjà utilisé",
+    "settings_server_port_dialog_saved": "Modifications enregistrées"
 }

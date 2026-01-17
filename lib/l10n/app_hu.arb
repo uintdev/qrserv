@@ -60,5 +60,10 @@
     "settings_title": "Beállítások",
     "settings_subheading_server": "Szerver",
     "settings_server_port_list_title": "Portszám",
-    "settings_server_port_list_subtitle": "Használjon egy meghatározott vagy véletlenszerű portszámot"
+    "settings_server_port_list_subtitle": "Használjon egy meghatározott vagy véletlenszerű portszámot",
+    "settings_server_port_dialog_description": "Portszám tartományának %s és %s között kell lennie. Hagyja üresen egy véletlenszerű porthoz.",
+    "settings_server_port_dialog_serveractive": "Változtatások a szerver újraindítása után lépnek érvénybe.",
+    "settings_server_port_dialog_submit": "Port Beállítása",
+    "settings_server_port_dialog_portinuse": "Port már használatban van",
+    "settings_server_port_dialog_saved": "Módosítások mentve"
 }

@@ -60,5 +60,10 @@
     "settings_title": "Impostazioni",
     "settings_subheading_server": "Server",
     "settings_server_port_list_title": "Numero di porta",
-    "settings_server_port_list_subtitle": "Utilizzare un numero di porta specifico o casuale"
+    "settings_server_port_list_subtitle": "Utilizzare un numero di porta specifico o casuale",
+    "settings_server_port_dialog_description": "Intervallo per il numero di porta deve essere compreso tra %s e %s. Lasciare vuoto per una porta casuale.",
+    "settings_server_port_dialog_serveractive": "Modifiche diventeranno effettive al riavvio del server.",
+    "settings_server_port_dialog_submit": "Imposta Porta",
+    "settings_server_port_dialog_portinuse": "Porta è già in uso",
+    "settings_server_port_dialog_saved": "Modifiche salvate"
 }

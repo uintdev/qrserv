@@ -60,5 +60,10 @@
     "settings_title": "تنظیمات",
     "settings_subheading_server": "سرور",
     "settings_server_port_list_title": "شماره پورت",
-    "settings_server_port_list_subtitle": "از یک شماره پورت مشخص یا تصادفی استفاده کنید"
+    "settings_server_port_list_subtitle": "از یک شماره پورت مشخص یا تصادفی استفاده کنید",
+    "settings_server_port_dialog_description": "محدوده شماره پort باید بین %s و %s باشد. برای انتخاب پورت تصادفی، این قسمت را خالی بگذارید.",
+    "settings_server_port_dialog_serveractive": "تغییرات پس از راه‌اندازی مجدد سرور اعمال خواهند شد.",
+    "settings_server_port_dialog_submit": "تنظیم پورت",
+    "settings_server_port_dialog_portinuse": "پورت در حال استفاده است",
+    "settings_server_port_dialog_saved": "تغییرات ذخیره شد"
 }
