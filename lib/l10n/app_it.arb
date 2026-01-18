@@ -56,7 +56,7 @@
     "about_opensource_title": "Open source",
     "about_donate_title": "Dona",
     "about_close": "Chiudere",
-    "dam_path_not_found": "Errore: il percorso per la modalità di accesso diretto non è stato trovato",
+    "dam_path_not_found": "Errore: il percorso per la Modalità di Accesso Diretto non è stato trovato",
     "settings_title": "Impostazioni",
     "settings_subheading_server": "Server",
     "settings_server_port_list_title": "Numero di porta",
@@ -65,5 +65,12 @@
     "settings_server_port_dialog_serveractive": "Modifiche diventeranno effettive al riavvio del server.",
     "settings_server_port_dialog_submit": "Imposta Porta",
     "settings_server_port_dialog_portinuse": "Porta è già in uso",
-    "settings_server_port_dialog_saved": "Modifiche salvate"
+    "settings_server_port_dialog_saved": "Modifiche salvate",
+    "settings_subheading_client": "Client",
+    "settings_client_dam_list_title": "Modalità di Accesso Diretto",
+    "settings_client_dam_list_subtitle": "Ideale per file di grandi dimensioni",
+    "settings_client_dam_ineligiblebuild": "Modalità di Accesso Diretto per Android 11 e versioni successive è disponibile solo nella versione dell'app presente su GitHub -- vedi la finestra 'informazioni'.",
+    "settings_subheading_general": "Generale",
+    "settings_general_defaults_list_title": "Ripristina impostazioni predefinite",
+    "settings_general_defaults_success": "Impostazioni predefinite ripristinate"
 }

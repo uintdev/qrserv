@@ -86,20 +86,19 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
           await Port().portDialog(context);
         },
       ),
-      // TODO: Use localized strings
-      ListSubheader(context, 'Client'),
+      ListSubheader(
+        context,
+        AppLocalizations.of(context)!.settings_subheading_client,
+      ),
       ListTileEntry(
         context,
-        'Direct Access Mode',
-        'Ideal for large files',
+        AppLocalizations.of(context)!.settings_client_dam_list_title,
+        AppLocalizations.of(context)!.settings_client_dam_list_subtitle,
         () async {
           final bool damEligibility = await DAM().eligibility();
           if (!damEligibility) {
-            // TODO: Use localized strings
             showToast(
-              'Direct Access Mode for Android 11 or later is only ' +
-                  'available on the GitHub version of the app' +
-                  ' -- see the \'about\' dialog',
+              AppLocalizations.of(context)!.settings_client_dam_ineligiblebuild,
             );
             return;
           }
@@ -107,17 +106,23 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
         },
         FileManager.directAccessMode,
       ),
-      // TODO: Use localized strings
-      ListSubheader(context, 'General'),
-      ListTileEntry(context, 'Reset to defaults', null, () async {
-        setState(() async {
-          await Preferences().clear();
-        });
-        // TODO: Use localized strings
-        showToast('Settings had been reset to defaults');
-      }),
-
-      // TODO: other options to be determined
+      ListSubheader(
+        context,
+        AppLocalizations.of(context)!.settings_subheading_general,
+      ),
+      ListTileEntry(
+        context,
+        AppLocalizations.of(context)!.settings_general_defaults_list_title,
+        null,
+        () async {
+          setState(() async {
+            await Preferences().clear();
+          });
+          showToast(
+            AppLocalizations.of(context)!.settings_general_defaults_success,
+          );
+        },
+      ),
     ],
   );
 }

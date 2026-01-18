@@ -56,7 +56,7 @@
     "about_opensource_title": "Nyílt forráskód",
     "about_donate_title": "Támogatás",
     "about_close": "Bezár",
-    "dam_path_not_found": "Hiba: a közvetlen elérési mód elérési útvonala nem található",
+    "dam_path_not_found": "Hiba: a Közvetlen Hozzáférési Módhoz tartozó útvonal nem található",
     "settings_title": "Beállítások",
     "settings_subheading_server": "Szerver",
     "settings_server_port_list_title": "Portszám",
@@ -65,5 +65,12 @@
     "settings_server_port_dialog_serveractive": "Változtatások a szerver újraindítása után lépnek érvénybe.",
     "settings_server_port_dialog_submit": "Port Beállítása",
     "settings_server_port_dialog_portinuse": "Port már használatban van",
-    "settings_server_port_dialog_saved": "Módosítások mentve"
+    "settings_server_port_dialog_saved": "Módosítások mentve",
+    "settings_subheading_client": "Kliens",
+    "settings_client_dam_list_title": "Közvetlen Hozzáférési Mód",
+    "settings_client_dam_list_subtitle": "Nagy méretű fájlokhoz ideális",
+    "settings_client_dam_ineligiblebuild": "Az Android 11-es vagy újabb verziókhoz készült Közvetlen Hozzáférési Mód csak az alkalmazás GitHub-verziójában érhető el – lásd a „névjegy” ablakot.",
+    "settings_subheading_general": "Általános",
+    "settings_general_defaults_list_title": "Alapértelmezett beállítások visszaállítása",
+    "settings_general_defaults_success": "Alapértelmezett beállítások visszaállítva"
 }

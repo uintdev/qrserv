@@ -56,7 +56,7 @@
     "about_opensource_title": "Código aberto",
     "about_donate_title": "Doar",
     "about_close": "Fechar",
-    "dam_path_not_found": "Erro: caminho para o modo de acesso direto não encontrado",
+    "dam_path_not_found": "Erro: caminho para o Modo de Acesso Direto não encontrado",
     "settings_title": "Configurações",
     "settings_subheading_server": "Servidor",
     "settings_server_port_list_title": "Número da porta",
@@ -65,5 +65,12 @@
     "settings_server_port_dialog_serveractive": "Alterações entrarão em vigor quando o servidor for reiniciado.",
     "settings_server_port_dialog_submit": "Definir Porta",
     "settings_server_port_dialog_portinuse": "Porta já está em uso",
-    "settings_server_port_dialog_saved": "Alterações salvas"
+    "settings_server_port_dialog_saved": "Alterações salvas",
+    "settings_subheading_client": "Cliente",
+    "settings_client_dam_list_title": "Modo de Acesso Direto",
+    "settings_client_dam_list_subtitle": "Ideal para arquivos grandes",
+    "settings_client_dam_ineligiblebuild": "Modo de Acesso Direto para Android 11 ou posterior só está disponível na versão do GitHub do aplicativo — consulte a caixa de diálogo 'sobre'.",
+    "settings_subheading_general": "Geral",
+    "settings_general_defaults_list_title": "Restaurar configurações padrão",
+    "settings_general_defaults_success": "Configurações padrão restauradas"
 }

@@ -56,7 +56,7 @@
     "about_opensource_title": "Açık kaynak",
     "about_donate_title": "Bağış",
     "about_close": "Kapat",
-    "dam_path_not_found": "Hata: doğrudan erişim modu için yol bulunamadı",
+    "dam_path_not_found": "Hata: Doğrudan Erişim Modu için yol bulunamadı",
     "settings_title": "Ayarlar",
     "settings_subheading_server": "Sunucu",
     "settings_server_port_list_title": "Port numarası",
@@ -65,5 +65,12 @@
     "settings_server_port_dialog_serveractive": "Değişiklikler sunucu yeniden başlatıldığında geçerli olacaktır.",
     "settings_server_port_dialog_submit": "Portu Ayarla",
     "settings_server_port_dialog_portinuse": "Port zaten kullanılıyor",
-    "settings_server_port_dialog_saved": "Değişiklikler kaydedildi"
+    "settings_server_port_dialog_saved": "Değişiklikler kaydedildi",
+    "settings_subheading_client": "İstemci",
+    "settings_client_dam_list_title": "Doğrudan Erişim Modu",
+    "settings_client_dam_list_subtitle": "Büyük dosyalar için idealdir",
+    "settings_client_dam_ineligiblebuild": "Android 11 veya üstü için Doğrudan Erişim Modu yalnızca uygulamanın GitHub sürümünde mevcuttur -- 'hakkında' penceresine bakın.",
+    "settings_subheading_general": "Genel",
+    "settings_general_defaults_list_title": "Varsayılan ayarları geri yükle",
+    "settings_general_defaults_success": "Varsayılan ayarlar geri yüklendi"
 }
