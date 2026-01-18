@@ -56,3 +56,4 @@ app.*.map.json
 # Generated content
 /lib/l10n/generated
 /android/app/.cxx
+/android/build
