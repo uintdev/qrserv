@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' as UI;
 import 'package:flutter/material.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:path/path.dart' as path;
 import '../theme.dart';
 import '../components/cache.dart';
 import '../components/filemanager.dart';
@@ -649,15 +649,35 @@ Widget importedFileInfoName(
               SizedBox(width: 15),
               Flexible(
                 fit: FlexFit.tight,
-                child: Text(
-                  _fileInfo['name'],
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontVariations: [FontVariation('wght', 300)],
-                  ),
-                  overflow: .ellipsis,
-                  maxLines: 1,
-                  textAlign: .center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        truncateShowFileExtension(_fileInfo['name'])
+                            ? _fileInfo['name'].split(
+                                path.extension(_fileInfo['name']),
+                              )[0]
+                            : _fileInfo['name'],
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontVariations: [FontVariation('wght', 300)],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: .center,
+                      ),
+                    ),
+                    Text(
+                      truncateShowFileExtension(_fileInfo['name'])
+                          ? path.extension(_fileInfo['name'])
+                          : '',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontVariations: [FontVariation('wght', 300)],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -839,5 +859,9 @@ IconData importedFileInfoIcon(String fileName) {
 }
 
 Widget ForceLTR(Widget child) {
-  return Directionality(textDirection: UI.TextDirection.ltr, child: child);
+  return Directionality(textDirection: TextDirection.ltr, child: child);
+}
+
+bool truncateShowFileExtension(String fileName) {
+  return RegExp(r'^.+\.[A-z]{1,16}$').hasMatch(fileName);
 }
