@@ -61,7 +61,7 @@
     "settings_subheading_server": "Serwer",
     "settings_server_port_list_title": "Numer portu",
     "settings_server_port_list_subtitle": "Użyj określonego lub losowego numeru portu",
-    "settings_server_port_dialog_description": "Zakres numerów portów musi zawierać się w przedziale od %s do %s. Pozostaw puste pole, aby użyć losowego portu.",
+    "settings_server_port_dialog_description": "Numerów portów musi zawierać się w przedziale od %s do %s. Pozostaw puste pole, aby użyć losowego portu.",
     "settings_server_port_dialog_serveractive": "Zmiany wejdą w życie po ponownym uruchomieniu serwera.",
     "settings_server_port_dialog_submit": "Ustaw Port",
     "settings_server_port_dialog_portinuse": "Port jest już w użyciu",

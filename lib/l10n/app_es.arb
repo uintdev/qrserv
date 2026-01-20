@@ -61,7 +61,7 @@
     "settings_subheading_server": "Servidor",
     "settings_server_port_list_title": "Número de puerto",
     "settings_server_port_list_subtitle": "Utilice un número de puerto específico o aleatorio",
-    "settings_server_port_dialog_description": "Rango del número de puerto debe estar entre %s y %s. Déjelo en blanco para un puerto aleatorio.",
+    "settings_server_port_dialog_description": "Número de puerto debe estar entre %s y %s. Déjelo en blanco para un puerto aleatorio.",
     "settings_server_port_dialog_serveractive": "Cambios se aplicarán cuando se reinicie el servidor.",
     "settings_server_port_dialog_submit": "Establecer Puerto",
     "settings_server_port_dialog_portinuse": "Puerto ya está en uso",

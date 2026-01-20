@@ -61,7 +61,7 @@
     "settings_subheading_server": "Servidor",
     "settings_server_port_list_title": "Número da porta",
     "settings_server_port_list_subtitle": "Use um número de porta específico ou aleatório",
-    "settings_server_port_dialog_description": "Intervalo do número da porta deve ser entre %s e %s. Deixe em branco para uma porta aleatória.",
+    "settings_server_port_dialog_description": "Número da porta deve ser entre %s e %s. Deixe em branco para uma porta aleatória.",
     "settings_server_port_dialog_serveractive": "Alterações entrarão em vigor quando o servidor for reiniciado.",
     "settings_server_port_dialog_submit": "Definir Porta",
     "settings_server_port_dialog_portinuse": "Porta já está em uso",

@@ -61,7 +61,7 @@
     "settings_subheading_server": "Server",
     "settings_server_port_list_title": "Portnummer",
     "settings_server_port_list_subtitle": "Verwenden Sie eine bestimmte oder eine zufällige Portnummer",
-    "settings_server_port_dialog_description": "Portnummernbereich muss zwischen %s und %s liegen. Lassen Sie das Feld für einen zufälligen Port leer.",
+    "settings_server_port_dialog_description": "Portnummer muss zwischen %s und %s liegen. Lassen Sie für einen zufälligen Port leer.",
     "settings_server_port_dialog_serveractive": "Änderungen werden bei einem Neustart des Servers wirksam.",
     "settings_server_port_dialog_submit": "Port Einstellen",
     "settings_server_port_dialog_portinuse": "Port wird bereits verwendet",

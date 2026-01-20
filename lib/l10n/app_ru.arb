@@ -61,7 +61,7 @@
     "settings_subheading_server": "Сервер",
     "settings_server_port_list_title": "номер порта",
     "settings_server_port_list_subtitle": "Используйте определенный или случайный номер порта",
-    "settings_server_port_dialog_description": "Номер порта должен быть в диапазоне от %s до %s. Оставьте поле пустым для выбора случайного порта.",
+    "settings_server_port_dialog_description": "Номер порта должен быть в диапазоне от %s до %s. Оставьте поле пустым, чтобы порт был выбран автоматически.",
     "settings_server_port_dialog_serveractive": "Изменения вступят в силу после перезапуска сервера.",
     "settings_server_port_dialog_submit": "Задать порт",
     "settings_server_port_dialog_portinuse": "Порт уже используется",

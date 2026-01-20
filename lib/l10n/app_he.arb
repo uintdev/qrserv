@@ -61,7 +61,7 @@
     "settings_subheading_server": "שרת",
     "settings_server_port_list_title": "מספר פורט",
     "settings_server_port_list_subtitle": "השתמש במספר פורט ספציפי או אקראי",
-    "settings_server_port_dialog_description": "טווח מספרי הפורט חייב להיות בין %s ל-%s. יש להשאיר ריק לבחירת פורט אקראי.",
+    "settings_server_port_dialog_description": "מספר הפורט חייב להיות בין %s ל-%s. יש להשאיר ריק לבחירת פורט אקראי.",
     "settings_server_port_dialog_serveractive": "השינויים ייכנסו לתוקף לאחר הפעלה מחדש של השרת.",
     "settings_server_port_dialog_submit": "הגדר פורט",
     "settings_server_port_dialog_portinuse": "הפורט כבר נמצא בשימוש",

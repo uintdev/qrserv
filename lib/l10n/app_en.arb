@@ -60,7 +60,7 @@
     "settings_subheading_server": "Server",
     "settings_server_port_list_title": "Port number",
     "settings_server_port_list_subtitle": "Use a specific or random port number",
-    "settings_server_port_dialog_description": "Port number range must be between %s and %s. Leave blank for a random port.",
+    "settings_server_port_dialog_description": "Port number must be between %s and %s. Leave blank for a random port.",
     "settings_server_port_dialog_serveractive": "Changes will take effect when the server is restarted.",
     "settings_server_port_dialog_submit": "Set Port",
     "settings_server_port_dialog_portinuse": "Port is already in use",
