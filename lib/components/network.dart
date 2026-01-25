@@ -28,7 +28,8 @@ class Network {
       for (InternetAddress addr in interface.addresses) {
         // Filter out 192.168.*.0-1
         bool filterList =
-            !(addr.rawAddress[0] == 192 &&
+            !(addr.type.name == 'IPv4' &&
+                addr.rawAddress[0] == 192 &&
                 addr.rawAddress[1] == 168 &&
                 addr.rawAddress[3] < 2);
         if (filterList) {
@@ -52,9 +53,12 @@ class Network {
     // Prepare interface list and fetch unused port for server
     await internalIP();
 
+    bool fileExists = await Server().fileExists(
+      FileManager().readInfo()['path'],
+    );
+
     // Server init
-    if (!Server.serverRunning &&
-        Server().fileExists(FileManager().readInfo()['path'])) {
+    if (!Server.serverRunning && fileExists) {
       await Server().http(context).onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
@@ -67,8 +71,7 @@ class Network {
     }
 
     // Shutdown server if marked
-    if ((StateManager.fileTampered == .filemodified) ||
-        !Server().fileExists(FileManager().readInfo()['path'])) {
+    if ((StateManager.fileTampered == .filemodified) || !fileExists) {
       await Server().shutdownServer(context);
     }
 
@@ -83,14 +86,7 @@ class Network {
   // Determine IP version
   bool checkIPv4(String? ip) {
     if (ip == null) return true;
-
-    bool _versionType;
-
-    RegExp regExp = RegExp(r"^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$");
-
-    _versionType = regExp.hasMatch(ip);
-
-    return _versionType;
+    return (InternetAddress.tryParse(ip)?.type == InternetAddressType.IPv4);
   }
 
   Future<bool> checkPortUsed(int portNumber) async {

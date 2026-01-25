@@ -101,12 +101,12 @@ class Server {
             'filename="${Uri.encodeComponent(fileInfo['name'])}"',
           );
           // Get content length
-          RandomAccessFile openedFile = targetFile.openSync();
+          RandomAccessFile openedFile = await targetFile.open();
           response.headers.add(
             HttpHeaders.contentLengthHeader,
-            openedFile.lengthSync(),
+            await openedFile.length(),
           );
-          openedFile.closeSync();
+          await openedFile.close();
           // Serve file
           try {
             await response.addStream(targetFile.openRead());
@@ -149,12 +149,10 @@ class Server {
     serverPoweringDown = true;
 
     // Begin request
-    HttpClient client = new HttpClient();
+    HttpClient client = HttpClient();
     await client
         .getUrl(
-          Uri.parse(
-            'http://localhost:${Network.port.toString()}/?token=$_serverToken',
-          ),
+          Uri.parse('http://localhost:${Network.port}/?token=$_serverToken'),
         )
         .then((HttpClientRequest request) {
           return request.close();
