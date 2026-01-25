@@ -120,7 +120,7 @@ class Port {
             foregroundColor: Theme.of(context).primaryColor,
             animationDuration: Duration.zero,
           ),
-          onPressed: portValidation()
+          onPressed: portSubmissionValidation()
               ? portSubmission(context, contextDialog)
               : null,
         ),
@@ -128,7 +128,7 @@ class Port {
     );
   }
 
-  bool portValidation() {
+  bool portSubmissionValidation() {
     final String text = _fieldController.text;
 
     if (text.isEmpty) return true;
