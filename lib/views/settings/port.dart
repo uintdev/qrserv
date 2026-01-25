@@ -154,7 +154,7 @@ class Port {
         showToast(
           AppLocalizations.of(context)!.settings_server_port_dialog_saved,
         );
-        Navigator.pop(contextDialog);
+        Navigator.of(contextDialog).pop();
         return;
       }
 
@@ -176,7 +176,7 @@ class Port {
       showToast(
         AppLocalizations.of(context)!.settings_server_port_dialog_saved,
       );
-      Navigator.pop(contextDialog);
+      Navigator.of(contextDialog).pop();
       return;
     };
   }
