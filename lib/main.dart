@@ -508,10 +508,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
             break;
 
           case .pageSettings:
-            Navigator.push(
+            Navigator.of(
               context,
-              MaterialPageRoute(builder: (context) => SettingsPage()),
-            );
+            ).push(MaterialPageRoute(builder: (context) => SettingsPage()));
             break;
         }
       },

@@ -146,7 +146,7 @@ class About {
             const SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                Navigator.pop(contextDialog);
+                Navigator.of(contextDialog).pop();
               },
               style: TextButton.styleFrom(
                 foregroundColor: Theme.of(context).primaryColor,
