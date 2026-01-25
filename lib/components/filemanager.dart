@@ -161,8 +161,8 @@ class FileManager {
       // Direct access mode
       final File selectedFile = File(fileSelection['files'][0]['path']);
 
-      if (selectedFile.existsSync()) {
-        fileSelection['files'][0]['size'] = selectedFile.lengthSync();
+      if (await selectedFile.exists()) {
+        fileSelection['files'][0]['size'] = await selectedFile.length();
       } else {
         // File was selected but no longer exists
         pageTypeCurrent = .fileremoved;
