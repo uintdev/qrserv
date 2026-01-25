@@ -54,7 +54,7 @@ class Preferences {
   }
 
   Future<String> _preferencesPath() async {
-    Directory pathDataRoot = await getTemporaryDirectory();
+    Directory pathDataRoot = await getApplicationSupportDirectory();
     pathDataRoot = pathDataRoot.parent;
     String preferenceDir = pathDataRoot.path + '/shared_prefs';
     return preferenceDir;
