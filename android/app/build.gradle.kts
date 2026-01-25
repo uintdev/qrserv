@@ -60,6 +60,8 @@ android {
 
     buildTypes {
         named("release") {
+            ndk.abiFilters.clear()
+            ndk.abiFilters.addAll(listOf("arm64-v8a"))
             isMinifyEnabled = true
             isShrinkResources = true
             if (keystorePropertiesFile.exists()) {
