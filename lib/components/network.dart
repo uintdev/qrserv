@@ -24,7 +24,9 @@ class Network {
     _ipv6List = [];
 
     // Collect currently used interfaces
-    for (NetworkInterface interface in await NetworkInterface.list()) {
+    for (NetworkInterface interface in await NetworkInterface.list(
+      includeLoopback: true,
+    )) {
       for (InternetAddress addr in interface.addresses) {
         // Filter out 192.168.*.0-1
         bool filterList =
