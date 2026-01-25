@@ -66,6 +66,17 @@ class StateManager extends State<StateManagerPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    importWatchdog?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget _outputState;
 
