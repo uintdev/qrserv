@@ -27,7 +27,7 @@ dependencies:
     share_plus: ^12.0.1
     share_handler: ^0.0.25
 
-    file_picker: ^10.3.8
+    file_picker: ^10.3.9
     flutter_archive: ^6.0.4
 
     window_size:
