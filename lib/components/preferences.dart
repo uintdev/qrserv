@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
-import '../components/filemanager.dart';
 
 class Preferences {
   static Map<String, dynamic> _preferenceData = {};
@@ -40,9 +39,10 @@ class Preferences {
     }
   }
 
-  Future<void> clear() async {
+  Future<void> clear([void Function()? propertyDefaults]) async {
+    propertyDefaults = propertyDefaults ?? () {};
     _preferenceData.clear();
-    FileManager.directAccessMode = false;
+    propertyDefaults();
     await _dataWrite();
   }
 

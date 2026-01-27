@@ -116,7 +116,9 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
         null,
         () async {
           setState(() async {
-            await Preferences().clear();
+            await Preferences().clear(() {
+              FileManager.directAccessMode = false;
+            });
           });
           showToast(
             AppLocalizations.of(context)!.settings_general_defaults_success,
