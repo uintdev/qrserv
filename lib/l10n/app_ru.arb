@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "Режим прямого доступа",
     "settings_client_dam_list_subtitle": "Идеально подходит для больших файлов",
     "settings_client_dam_ineligiblebuild": "Режим прямого доступа для Android 11 и более поздних версий доступен только в GitHub-версии приложения -- подробности в разделе «О программе».",
+    "settings_client_fiu_list_title": "Имя файла в URL",
+    "settings_client_fiu_list_subtitle": "Включать имя файла в URL-адрес",
     "settings_subheading_general": "Общие",
     "settings_general_defaults_list_title": "Восстановить настройки по умолчанию",
     "settings_general_defaults_success": "Настройки по умолчанию восстановлены"

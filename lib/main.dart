@@ -18,7 +18,7 @@ import 'components/preferences.dart';
 import 'views/statemanager.dart';
 import 'views/about.dart';
 import 'views/settings.dart';
-import 'views/settings/fip.dart';
+import 'views/settings/fiu.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,9 +38,9 @@ void main() async {
     FileManager.directAccessMode = damPref;
   }
   // Load FIP preference
-  final bool? fipPref = await Preferences().read(Preferences.PREF_CLIENT_FIP);
+  final bool? fipPref = await Preferences().read(Preferences.PREF_CLIENT_FIU);
   if (fipPref != null) {
-    FIP.state = fipPref;
+    FIU.state = fipPref;
   }
 
   runApp(MaterialApp(home: QRServ(), debugShowCheckedModeBanner: false));

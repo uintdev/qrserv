@@ -67,6 +67,8 @@
     "settings_client_dam_list_title": "Direct Access Mode",
     "settings_client_dam_list_subtitle": "Ideal for large files",
     "settings_client_dam_ineligiblebuild": "Direct Access Mode for Android 11 or later is only available in the GitHub version of the app -- see the 'about' dialog.",
+    "settings_client_fiu_list_title": "Filename in URL",
+    "settings_client_fiu_list_subtitle": "Include filename in URL",
     "settings_subheading_general": "General",
     "settings_general_defaults_list_title": "Restore default settings",
     "settings_general_defaults_success": "Default settings restored"

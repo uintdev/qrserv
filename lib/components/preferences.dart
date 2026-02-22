@@ -63,5 +63,5 @@ class Preferences {
   // Property list
   static const PREF_SERVER_PORT = 'server_port';
   static const PREF_CLIENT_DAM = 'client_dam';
-  static const PREF_CLIENT_FIP = 'client_fip';
+  static const PREF_CLIENT_FIU = 'client_fiu';
 }

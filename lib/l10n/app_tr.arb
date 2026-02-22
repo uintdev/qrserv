@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "Doğrudan Erişim Modu",
     "settings_client_dam_list_subtitle": "Büyük dosyalar için idealdir",
     "settings_client_dam_ineligiblebuild": "Android 11 veya üstü için Doğrudan Erişim Modu yalnızca uygulamanın GitHub sürümünde mevcuttur -- 'hakkında' penceresine bakın.",
+    "settings_client_fiu_list_title": "URL'deki Dosya Adı",
+    "settings_client_fiu_list_subtitle": "Dosya adını URL'ye dahil et",
     "settings_subheading_general": "Genel",
     "settings_general_defaults_list_title": "Varsayılan ayarları geri yükle",
     "settings_general_defaults_success": "Varsayılan ayarlar geri yüklendi"

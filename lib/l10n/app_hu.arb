@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "Közvetlen Hozzáférési Mód",
     "settings_client_dam_list_subtitle": "Nagy méretű fájlokhoz ideális",
     "settings_client_dam_ineligiblebuild": "Az Android 11-es vagy újabb verziókhoz készült Közvetlen Hozzáférési Mód csak az alkalmazás GitHub-verziójában érhető el – lásd a „névjegy” ablakot.",
+    "settings_client_fiu_list_title": "Fájlnév az URL-ben",
+    "settings_client_fiu_list_subtitle": "Fájlnév szerepeltetése az URL-ben",
     "settings_subheading_general": "Általános",
     "settings_general_defaults_list_title": "Alapértelmezett beállítások visszaállítása",
     "settings_general_defaults_success": "Alapértelmezett beállítások visszaállítva"

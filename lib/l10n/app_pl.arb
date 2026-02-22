@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "Tryb Dostępu Bezpośredniego",
     "settings_client_dam_list_subtitle": "Idealne dla dużych plików",
     "settings_client_dam_ineligiblebuild": "Tryb Bezpośredniego Dostępu dla systemu Android 11 lub nowszego jest dostępny tylko w wersji aplikacji z GitHuba – zobacz okno „o programie”.",
+    "settings_client_fiu_list_title": "Nazwa pliku w adresie URL",
+    "settings_client_fiu_list_subtitle": "Uwzględnij nazwę pliku w adresie URL",
     "settings_subheading_general": "Ogólne",
     "settings_general_defaults_list_title": "Przywróć ustawienia domyślne",
     "settings_general_defaults_success": "Przywrócono ustawienia domyślne"

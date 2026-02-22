@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "Mode d'Accès Direct",
     "settings_client_dam_list_subtitle": "Idéal pour les fichiers volumineux",
     "settings_client_dam_ineligiblebuild": "Mode d'Accès Direct pour Android 11 ou version ultérieure est uniquement disponible dans la version GitHub de l'application -- voir la boîte de dialogue « à propos ».",
+    "settings_client_fiu_list_title": "Nom de fichier dans l'URL",
+    "settings_client_fiu_list_subtitle": "Inclure le nom de fichier dans l'URL",
     "settings_subheading_general": "Général",
     "settings_general_defaults_list_title": "Restaurer les paramètres par défaut",
     "settings_general_defaults_success": "Paramètres par défaut restaurés"

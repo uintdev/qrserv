@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "מצב גישה ישירה",
     "settings_client_dam_list_subtitle": "אידיאלי לקבצים גדולים",
     "settings_client_dam_ineligiblebuild": "מצב גישה ישירה עבור אנדרואיד 11 ומעלה זמין רק בגרסת ה-GitHub של האפליקציה -- עיין בתיבת הדו-שיח 'אודות'.",
+    "settings_client_fiu_list_title": "שם קובץ בכתובת URL",
+    "settings_client_fiu_list_subtitle": "כלול את שם הקובץ בכתובת ה-URL",
     "settings_subheading_general": "כללי",
     "settings_general_defaults_list_title": "שחזור הגדרות ברירת מחדל",
     "settings_general_defaults_success": "הגדרות ברירת המחדל שוחזרו"

@@ -68,6 +68,8 @@
     "settings_client_dam_list_title": "حالت دسترسی مستقیم",
     "settings_client_dam_list_subtitle": "ایده‌آل برای فایل‌های حجیم",
     "settings_client_dam_ineligiblebuild": "حالت دسترسی مستقیم برای اندروید ۱۱ و بالاتر فقط در نسخه گیت‌هاب برنامه موجود است -- به کادر «درباره» مراجعه کنید.",
+    "settings_client_fiu_list_title": "نام فایل در URL",
+    "settings_client_fiu_list_subtitle": "گنجاندن نام فایل در URL",
     "settings_subheading_general": "عمومی",
     "settings_general_defaults_list_title": "بازگردانی به تنظیمات پیش‌فرض",
     "settings_general_defaults_success": "تنظیمات پیش‌فرض بازیابی شد"

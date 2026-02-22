@@ -4,7 +4,7 @@ import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'settings/port.dart';
 import 'settings/dam.dart';
-import 'settings/fip.dart';
+import 'settings/fiu.dart';
 import '../components/filemanager.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -110,12 +110,12 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
       SizedBox(height: 10),
       ListTileEntry(
         context,
-        "Filename in path",
-        "Include filename in HTTP URL",
+        AppLocalizations.of(context)!.settings_client_fiu_list_title,
+        AppLocalizations.of(context)!.settings_client_fiu_list_subtitle,
         () async {
-          FIP().toggle(context, setState);
+          FIU().toggle(context, setState);
         },
-        FIP.state,
+        FIU.state,
       ),
       ListSubheader(
         context,
@@ -129,7 +129,7 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
           setState(() async {
             await Preferences().clear(() {
               FileManager.directAccessMode = false;
-              FIP.state = false;
+              FIU.state = false;
             });
           });
           showToast(

@@ -11,7 +11,7 @@ import '../components/filemanager.dart';
 import '../components/server.dart';
 import '../components/network.dart';
 import '../components/share.dart';
-import '../views/settings/fip.dart';
+import 'settings/fiu.dart';
 
 enum PageType {
   landing,
@@ -342,7 +342,7 @@ class StateManager extends State<StateManagerPage> {
           }
 
           // Check if to include file name in path
-          if (FIP.state) {
+          if (FIU.state) {
             _filePath = Uri.encodeComponent(_fileInfo['name']);
           } else {
             _filePath = '';
