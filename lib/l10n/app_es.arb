@@ -23,8 +23,6 @@
     "page_imported_share_sheet_label": "Compartir",
     "page_imported_share_clipboard_label": "Copiar",
     "page_imported_share_clipboard": "Copiado",
-    "page_imported_fileinpath_enabled": "Habilitado: nombre de archivo en ruta",
-    "page_imported_fileinpath_disabled": "Deshabilitado: nombre de archivo en ruta",
     "page_imported_size": "Tamaño",
     "page_imported_port": "Puerto",
     "page_imported_decimalseparator": ",",

@@ -23,8 +23,6 @@
     "page_imported_share_sheet_label": "שתף",
     "page_imported_share_clipboard_label": "העתק",
     "page_imported_share_clipboard": "הועתק",
-    "page_imported_fileinpath_enabled": "מופעל: שם קובץ בנתיב",
-    "page_imported_fileinpath_disabled": "מושבת: שם קובץ בנתיב",
     "page_imported_size": "גודל",
     "page_imported_port": "פורט",
     "page_imported_decimalseparator": ".",

@@ -4,6 +4,7 @@ import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'settings/port.dart';
 import 'settings/dam.dart';
+import 'settings/fip.dart';
 import '../components/filemanager.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -106,6 +107,16 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
         },
         FileManager.directAccessMode,
       ),
+      SizedBox(height: 10),
+      ListTileEntry(
+        context,
+        "Filename in path",
+        "Include filename in HTTP URL",
+        () async {
+          FIP().toggle(context, setState);
+        },
+        FIP.state,
+      ),
       ListSubheader(
         context,
         AppLocalizations.of(context)!.settings_subheading_general,
@@ -118,6 +129,7 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
           setState(() async {
             await Preferences().clear(() {
               FileManager.directAccessMode = false;
+              FIP.state = false;
             });
           });
           showToast(
@@ -168,13 +180,7 @@ Padding ListTileEntry(
     padding: .fromLTRB(20, 0, 20, 0),
     child: Material(
       elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-        // borderRadius: BorderRadius.only(
-        //   topLeft: Radius.circular(25),
-        //   topRight: Radius.circular(25),
-        // ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       clipBehavior: .antiAlias,
       child: ListTile(
         textColor: Theme.of(context).primaryColor,

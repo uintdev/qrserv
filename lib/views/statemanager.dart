@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:watcher/watcher.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:path/path.dart' as path;
 import '../theme.dart';
 import '../components/cache.dart';
@@ -12,6 +11,7 @@ import '../components/filemanager.dart';
 import '../components/server.dart';
 import '../components/network.dart';
 import '../components/share.dart';
+import '../views/settings/fip.dart';
 
 enum PageType {
   landing,
@@ -282,7 +282,6 @@ class StateManager extends State<StateManagerPage> {
   // Imported view
   String defaultIP = '';
   String? selectedIP = '';
-  bool fileInPath = false;
 
   Widget importedPage(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
@@ -343,7 +342,7 @@ class StateManager extends State<StateManagerPage> {
           }
 
           // Check if to include file name in path
-          if (fileInPath) {
+          if (FIP.state) {
             _filePath = Uri.encodeComponent(_fileInfo['name']);
           } else {
             _filePath = '';
@@ -542,22 +541,6 @@ class StateManager extends State<StateManagerPage> {
           ),
           onPressed: () {
             ShareManager().share(_hostName, context);
-          },
-          onLongPress: () {
-            !fileInPath
-                ? showToast(
-                    AppLocalizations.of(
-                      context,
-                    )!.page_imported_fileinpath_enabled,
-                  )
-                : showToast(
-                    AppLocalizations.of(
-                      context,
-                    )!.page_imported_fileinpath_disabled,
-                  );
-            setState(() {
-              fileInPath = !fileInPath;
-            });
           },
           child: Icon(
             !isDesktop ? Icons.share : Icons.copy,

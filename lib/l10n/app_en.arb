@@ -22,8 +22,6 @@
     "page_imported_share_sheet_label": "Share",
     "page_imported_share_clipboard_label": "Copy",
     "page_imported_share_clipboard": "Copied",
-    "page_imported_fileinpath_enabled": "Enabled: filename in path",
-    "page_imported_fileinpath_disabled": "Disabled: filename in path",
     "page_imported_size": "Size",
     "page_imported_port": "Port",
     "page_imported_decimalseparator": ".",
