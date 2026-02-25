@@ -1,0 +1,12 @@
+-   Updated framework
+-   Updated UI
+-   New settings section
+-   Port number is now user configurable
+-   Improved overall performance
+-   Minimum SDK version had been increased to 24 (Android 7), as per Flutter 3.35.0 requirements
+-   Now using included framework functionality for System UI overlay styling (resolves API deprecations)
+-   Fixed a couple cases of crashes (certain video files, file not found) when sharing file selection with app (#31)
+-   Added build number to info dialog
+-   Updated translations
+-   Android builds are now ARM64-only
+-   Loopback IP addresses now listed

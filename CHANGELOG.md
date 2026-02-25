@@ -1,288 +1,303 @@
 # Changelog
 
+## 3.0.0
+
+- Updated framework
+- Updated UI
+- New settings section
+- Port number is now user configurable
+- Improved overall performance
+- Minimum SDK version had been increased to 24 (Android 7), as per Flutter 3.35.0 requirements
+- Now using included framework functionality for System UI overlay styling (resolves API deprecations)
+- Fixed a couple cases of crashes (certain video files, file not found) when sharing file selection with app (#31)
+- Added build number to info dialog
+- Updated translations
+- Android builds are now ARM64-only
+- Loopback IP addresses now listed
+
 ## 2.7.6
 
--   Updated dependencies
--   Updated framework
+- Updated dependencies
+- Updated framework
 
 Note: the next release will increase the minimum Android version to 7 (SDK version 24) due to it being an enforced minimum SDK version starting from Flutter 3.35.0. This version will still be available on GitHub, should you need to use it on a version of Android from 2014 or 2015.
 
 ## 2.7.5
 
--   Remove signature block blobs
+- Remove signature block blobs
 
 ## 2.7.4
 
--   Builds are now reproducible -- baked on the Steam Deck
--   Framework is now on the stable branch
--   Basic Fastlane structures and files had been added
--   Enabled predictive back gesture support
--   Improved appearance of the info dialog box
+- Builds are now reproducible -- baked on the Steam Deck
+- Framework is now on the stable branch
+- Basic Fastlane structures and files had been added
+- Enabled predictive back gesture support
+- Improved appearance of the info dialog box
 
 ## 2.7.3
 
--   Reproducible build attempt 3 (third time's the charm?)
+- Reproducible build attempt 3 (third time's the charm?)
 
 ## 2.7.2
 
--   Reproducible build attempt 2
+- Reproducible build attempt 2
 
 ## 2.7.1
 
--   Now built on Steam OS
--   Reproducible build attempt
+- Now built on Steam OS
+- Reproducible build attempt
 
 ## 2.7.0
 
--   Added Hebrew translation
--   Added per-app language support
+- Added Hebrew translation
+- Added per-app language support
 
 ## 2.6.2
 
--   Improved German translation
+- Improved German translation
 
 ## 2.6.1
 
--   Increased compile and target SDK to 36 (Android 16)
--   Various minor technical migrations
+- Increased compile and target SDK to 36 (Android 16)
+- Various minor technical migrations
 
 ## 2.6.0
 
--   Direct Access Mode is now only available for Android 10 or earlier for Play Store builds due to policy issues -- GitHub builds not affected
--   Fixed Direct Access Mode for Android 10
--   Added 'releases' button to 'about' dialog
+- Direct Access Mode is now only available for Android 10 or earlier for Play Store builds due to policy issues -- GitHub builds not affected
+- Fixed Direct Access Mode for Android 10
+- Added 'releases' button to 'about' dialog
 
 ## 2.5.0
 
--   Full URL can now be copied to the clipboard directly by press and holding on the QR code -- no longer need to go through the share sheet (if it even offers the 'copy to clipboard' option in the first place, which may vary by OEM)
--   Tooltip with a full URL that would previously show when press and holding the QR code will now appear when tapping on the QR code instead
--   Bug fixes from dependencies that address reliability and recent build issues
+- Full URL can now be copied to the clipboard directly by press and holding on the QR code -- no longer need to go through the share sheet (if it even offers the 'copy to clipboard' option in the first place, which may vary by OEM)
+- Tooltip with a full URL that would previously show when press and holding the QR code will now appear when tapping on the QR code instead
+- Bug fixes from dependencies that address reliability and recent build issues
 
 ## 2.4.0
 
--   Improved file handling in a case where a user can select files of the same name from different folders
--   Added toast messages for when a download begins and ends, along with the IP address of the requestor
--   Tweaked appearance of info dialog
+- Improved file handling in a case where a user can select files of the same name from different folders
+- Added toast messages for when a download begins and ends, along with the IP address of the requestor
+- Tweaked appearance of info dialog
 
 ## 2.3.2
 
--   Added Persian translation
--   Added enforcement of LTR text direction where RTL visually breaks text
+- Added Persian translation
+- Added enforcement of LTR text direction where RTL visually breaks text
 
 ## 2.3.1
 
--   Limited file tamper check to shared internal storage due to modification misreporting with application cache
-    -   Bug fixed: selection with Direct Access Mode off and putting the application in the background can result in the file system watcher to misreport the file as modified
+- Limited file tamper check to shared internal storage due to modification misreporting with application cache
+    - Bug fixed: selection with Direct Access Mode off and putting the application in the background can result in the file system watcher to misreport the file as modified
 
 ## 2.3.0
 
--   Added file tamper check (uses existing file removal detection method)
-    -   This is an additional security measure, now that direct access to shared internal storage is possible
--   Press and holding QR code shows full URL in a tooltip
--   Moved file import button to the middle (for improved ergonomics on mobile)
--   File name tooltip now shows the full file path if file selection was done while in Direct Access Mode
+- Added file tamper check (uses existing file removal detection method)
+    - This is an additional security measure, now that direct access to shared internal storage is possible
+- Press and holding QR code shows full URL in a tooltip
+- Moved file import button to the middle (for improved ergonomics on mobile)
+- File name tooltip now shows the full file path if file selection was done while in Direct Access Mode
 
 ## 2.2.0
 
--   Added support for direct internal storage access (press on the SD card icon to toggle) -- ideal for large files
-    -   Direct access mode does not support multi-file selection
-    -   For this to function under Android 13 or later, a new permission 'MANAGE_EXTERNAL_STORAGE' was added
-    -   This grants access to '/storage/emulated/0'
--   Fixed an issue where there would be multiple instances of the file system watcher
--   File system watcher is now focused on the specific selected file rather than the directory it is under
+- Added support for direct internal storage access (press on the SD card icon to toggle) -- ideal for large files
+    - Direct access mode does not support multi-file selection
+    - For this to function under Android 13 or later, a new permission 'MANAGE_EXTERNAL_STORAGE' was added
+    - This grants access to '/storage/emulated/0'
+- Fixed an issue where there would be multiple instances of the file system watcher
+- File system watcher is now focused on the specific selected file rather than the directory it is under
 
 ## 2.1.7
 
--   Long IPv6 addresses now visually limited to 2 lines (font size lowers when close to hard limit -- begins truncating when the limit is reached)
--   Visually limited file name to one line (truncates if too long -- press and hold to display full file name in tooltip)
--   Spaced out the file information table further
--   Incremented compile and target SDK versions to 34 (Android 14)
--   Removed GMS (Google Mobile Services) dependency from Gradle build config
--   Use mavenCentral over jcenter
--   Increased Kotlin version
+- Long IPv6 addresses now visually limited to 2 lines (font size lowers when close to hard limit -- begins truncating when the limit is reached)
+- Visually limited file name to one line (truncates if too long -- press and hold to display full file name in tooltip)
+- Spaced out the file information table further
+- Incremented compile and target SDK versions to 34 (Android 14)
+- Removed GMS (Google Mobile Services) dependency from Gradle build config
+- Use mavenCentral over jcenter
+- Increased Kotlin version
 
 ## 2.1.6
 
--   Fixed share button theming
--   Reworked imported UI card structure (to keep widget sizes consistent)
+- Fixed share button theming
+- Reworked imported UI card structure (to keep widget sizes consistent)
 
 ## 2.1.5
 
--   Adjusted 'about' dialogue box UI
--   Fixes and workarounds relating to recent releases of Flutter
-    -   Increased Kotlin version -- there will be warnings from (abandoned) dependencies relying on the older version but nothing that would prevent building
-    -   Reconstructed share button due to recent ElevatedButton defects regarding child widget alignment
+- Adjusted 'about' dialogue box UI
+- Fixes and workarounds relating to recent releases of Flutter
+    - Increased Kotlin version -- there will be warnings from (abandoned) dependencies relying on the older version but nothing that would prevent building
+    - Reconstructed share button due to recent ElevatedButton defects regarding child widget alignment
 
 ## 2.1.4
 
 Android:
 
--   Removed in-app immediate update check (Google Play Store) -- oops, best to keep it purely FOSS
+- Removed in-app immediate update check (Google Play Store) -- oops, best to keep it purely FOSS
 
 ## 2.1.3
 
 All:
 
--   Improved Portuguese translation
+- Improved Portuguese translation
 
 ## 2.1.2
 
 Android:
 
--   Added in-app immediate update check (Google Play Store)
+- Added in-app immediate update check (Google Play Store)
 
 ## 2.1.1
 
 All:
 
--   Removed zone index from IPv6
+- Removed zone index from IPv6
 
 ## 2.1.0
 
 Android:
 
--   Potential bug fix on certain devices regarding system UI colour changing animation (status and navigation bar -- by not animating them)
--   Unrestricted rotation for tablets
-    -   Note: this does not mean the UI is optimised for large displays -- this is just for convenience
--   Added Turkish translation
+- Potential bug fix on certain devices regarding system UI colour changing animation (status and navigation bar -- by not animating them)
+- Unrestricted rotation for tablets
+    - Note: this does not mean the UI is optimised for large displays -- this is just for convenience
+- Added Turkish translation
 
 All:
 
--   Updated UI
-    -   New light theme
-    -   Updated dark theme
-    -   Changes depending on system theme
+- Updated UI
+    - New light theme
+    - Updated dark theme
+    - Changes depending on system theme
 
 ## 2.0.0
 
 Android:
 
--   Multi-file selection support
-    -   In-app and via sharesheet (i.e. selecting multiple images)
-    -   Will be made into a ZIP archive file
-    -   Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
--   Themed icon support
--   Target Android 13 (SDK 33)
--   Added Russian translation
--   Fixed a crash that may occur when attempting to import video files via sharesheet
+- Multi-file selection support
+    - In-app and via sharesheet (i.e. selecting multiple images)
+    - Will be made into a ZIP archive file
+    - Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
+- Themed icon support
+- Target Android 13 (SDK 33)
+- Added Russian translation
+- Fixed a crash that may occur when attempting to import video files via sharesheet
 
 All:
 
--   Updated UI
-    -   Improved appearance of dropdown
-    -   Replaced slide panel with dialogue box
--   Reduced file selection FAB animation duration by 50ms
--   Added network check during import process
--   Improved state management
--   General reliability improvements
+- Updated UI
+    - Improved appearance of dropdown
+    - Replaced slide panel with dialogue box
+- Reduced file selection FAB animation duration by 50ms
+- Added network check during import process
+- Improved state management
+- General reliability improvements
 
 ## 1.4.1
 
 All:
 
--   Added language fallback (now falls back to English rather than German)
+- Added language fallback (now falls back to English rather than German)
 
 ## 1.4.0
 
 All:
 
--   Added Italian translation
+- Added Italian translation
 
 ## 1.3.2
 
 All:
 
--   Reverted migration
+- Reverted migration
 
 ## 1.3.1
 
 All:
 
--   When a URL fails to open, it is now displayed in the presented error message
--   Migrated to official file picker package with merged custom-made patches
+- When a URL fails to open, it is now displayed in the presented error message
+- Migrated to official file picker package with merged custom-made patches
 
 ## 1.3.0
 
 All:
 
--   Added port number in the file information section
+- Added port number in the file information section
 
 ## 1.2.0
 
 Android:
 
--   Added the option to import a file via the sharesheet
--   Improved start up times
+- Added the option to import a file via the sharesheet
+- Improved start up times
 
 ## 1.1.7
 
 All:
 
--   Fixed an issue where the HTTP server can shutdown right before the download is done resulting in a download interruption (corrected the content length)
--   When the server gets shutdown by means that do not involve the shutdown button, the app state is now properly reset
+- Fixed an issue where the HTTP server can shutdown right before the download is done resulting in a download interruption (corrected the content length)
+- When the server gets shutdown by means that do not involve the shutdown button, the app state is now properly reset
 
 ## 1.1.6
 
 Android:
 
--   Fixed an issue where URLs cannot be launched on Android 11 and later
+- Fixed an issue where URLs cannot be launched on Android 11 and later
 
 ## 1.1.5
 
 All:
 
--   Removed debugging information from non-fallback file selection toasts
+- Removed debugging information from non-fallback file selection toasts
 
 ## 1.1.4
 
 All:
 
--   Added additional user-friendly messages for certain file selection cases
+- Added additional user-friendly messages for certain file selection cases
 
 ## 1.1.3
 
 Android:
 
--   Increased minimum API/SDK version requirement to 21 (Lollipop)
+- Increased minimum API/SDK version requirement to 21 (Lollipop)
 
 ## 1.1.2
 
 Android:
 
--   Reduced minimum API/SDK version requirement to 16 (Jelly Bean)
+- Reduced minimum API/SDK version requirement to 16 (Jelly Bean)
 
 ## 1.1.1
 
 Linux:
 
--   Fixed minimum window size bug
+- Fixed minimum window size bug
 
 All:
 
--   Increased spacing between card title and subtitle
+- Increased spacing between card title and subtitle
 
 ## 1.1.0
 
 All:
 
--   Added 'include filename in path' toggle
+- Added 'include filename in path' toggle
 
 ## 1.0.2
 
 All:
 
--   Improved UI performance
+- Improved UI performance
 
 ## 1.0.1
 
 Desktop:
 
--   Reduced minimum window height
+- Reduced minimum window height
 
 All:
 
--   Fixed a typo in a translation
+- Fixed a typo in a translation
 
 ## 1.0.0
 
--   Initial release.
+- Initial release.
