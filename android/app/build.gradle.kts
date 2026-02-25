@@ -18,6 +18,12 @@ android {
     compileSdk = 36
     ndkVersion = "29.0.14206865"
 
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     kotlinOptions {
         jvmTarget = "17"
     }
