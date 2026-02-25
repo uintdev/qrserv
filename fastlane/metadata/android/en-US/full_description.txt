@@ -4,26 +4,24 @@ Devices involved would need to be on the same network (i.e. access point, tether
 Features:
 
 - QR Code
-- Tap on the QR code to show full URL in a tooltip
-- Press and hold on the QR code to copy full URL to clipboard
-- Import via sharesheet
-- Multi-file selection support
-- In-app and via sharesheet
-- Selection is put into a ZIP archive
-- Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
-- Direct Access Mode
-- Only available on Android 10 or earlier on the Play Store version
-- To use this feature on Android 11 or later, use the GitHub version (link is in-app under the 'about' dialog and later on in the description) -- please note that the Play Store version needs to be uninstalled first as it would be signed using a different certificate
-- Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
-- The file manager for this mode only supports single file selection
-- The mode can be toggled by pressing on the SD card icon
-- File selection removal and modification detection (latter only available with DAM)
+-- Tap the QR code to show the URL in a tooltip
+-- Press and hold the QR code to copy URL to clipboard
 - Share option
-- Show and hide filename in download URL path
-- Long press the share button to toggle
-- Notify when a client requested the hosted file and when that download finishes (includes IP address of requestor)
+- Multi-file selection support
+-- Multi-file selection would result in a ZIP archive
+--- Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
+- Direct Access Mode
+-- Available only on Android 10 or earlier on the Play Store version
+-- To use this feature on Android 11 or later, use the GitHub version (link is in-app under the 'about' dialog) -- please note that the Play Store version must be uninstalled first as it is signed using a different certificate
+-- Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
+-- The file manager for this mode supports only single file selection
+-- The mode can be toggled via settings
+- File selection removal and modification detection (latter only available with DAM)
+- Import via sharesheet
+- Show or hide filename in download URL
+- Notify when a client requested the hosted file and when that download finishes (includes requestor's IP address)
 - Various IP addresses from different network interfaces can be chosen
-- HTTP server uses an unused ("random") port
+- HTTP server uses an unused random or user configurable port
 - Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
 
 Permission usage:
