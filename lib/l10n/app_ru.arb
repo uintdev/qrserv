@@ -21,7 +21,6 @@
     "page_info_fallback_msg": "Произошла ошибка. Код: ",
     "page_imported_archive_failed": "Не удалось создать файл архива: ",
     "page_imported_share_sheet_label": "Поделиться",
-    "page_imported_share_clipboard_label": "Копировать",
     "page_imported_share_clipboard": "Скопировано",
     "page_imported_size": "Размер",
     "page_imported_port": "Порт",

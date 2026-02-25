@@ -52,10 +52,6 @@ class StateManager extends State<StateManagerPage> {
     return state;
   }
 
-  // List of platforms considered to be desktop
-  final bool isDesktop =
-      (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
-
   // Cancel watcher subscription on server shutdown
   void watcherUnsubscriber() {
     if (!FileManager.allowWatcher) {
@@ -391,31 +387,27 @@ class StateManager extends State<StateManagerPage> {
           String fileDataTip() {
             String fileResult = '';
             List archivedFile = [];
-            if (!isDesktop) {
-              List archivedList = FileManager().readInfo()['archived'];
+            List archivedList = FileManager().readInfo()['archived'];
 
-              if (archivedList.length > 0) {
-                archivedFile.add(_fileInfo['name']);
+            if (archivedList.length > 0) {
+              archivedFile.add(_fileInfo['name']);
 
-                archivedList.forEach((element) {
-                  archivedFile.add(
-                    element['file'] +
-                        ' (' +
-                        FileManager().fileSizeHuman(element['size'], context) +
-                        ')',
-                  );
-                });
+              archivedList.forEach((element) {
+                archivedFile.add(
+                  element['file'] +
+                      ' (' +
+                      FileManager().fileSizeHuman(element['size'], context) +
+                      ')',
+                );
+              });
 
-                fileResult = archivedFile.join('\n');
-              } else {
-                if (FileManager().directModeDetect(_fileInfo['path'])) {
-                  fileResult = _fileInfo['path'];
-                } else {
-                  fileResult = _fileInfo['name'];
-                }
-              }
+              fileResult = archivedFile.join('\n');
             } else {
-              fileResult = _fileInfo['path'];
+              if (FileManager().directModeDetect(_fileInfo['path'])) {
+                fileResult = _fileInfo['path'];
+              } else {
+                fileResult = _fileInfo['name'];
+              }
             }
             return fileResult;
           }
@@ -543,14 +535,12 @@ class StateManager extends State<StateManagerPage> {
             ShareManager().share(_hostName, context);
           },
           child: Icon(
-            !isDesktop ? Icons.share : Icons.copy,
+            Icons.share,
             size: 17,
             color: Theme.of(context).primaryColor,
-            semanticLabel: !isDesktop
-                ? AppLocalizations.of(context)!.page_imported_share_sheet_label
-                : AppLocalizations.of(
-                    context,
-                  )!.page_imported_share_clipboard_label,
+            semanticLabel: AppLocalizations.of(
+              context,
+            )!.page_imported_share_sheet_label,
           ),
         ),
       ),

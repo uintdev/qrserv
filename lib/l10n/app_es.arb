@@ -21,7 +21,6 @@
     "page_info_fallback_msg": "Se ha producido un error.\nCódigo: ",
     "page_imported_archive_failed": "No se ha podido crear el archivo: ",
     "page_imported_share_sheet_label": "Compartir",
-    "page_imported_share_clipboard_label": "Copiar",
     "page_imported_share_clipboard": "Copiado",
     "page_imported_size": "Tamaño",
     "page_imported_port": "Puerto",

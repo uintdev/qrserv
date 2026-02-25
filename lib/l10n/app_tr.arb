@@ -21,7 +21,6 @@
     "page_info_fallback_msg": "Bir hata oluştu.\nKod: ",
     "page_imported_archive_failed": "Arşiv dosyası oluşturulamadı: ",
     "page_imported_share_sheet_label": "Paylaş",
-    "page_imported_share_clipboard_label": "Kopyala",
     "page_imported_share_clipboard": "Kopyalandı",
     "page_imported_size": "Boyut",
     "page_imported_port": "Port",

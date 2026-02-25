@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'l10n/generated/app_localizations.dart';
-import 'package:window_size/window_size.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:share_handler/share_handler.dart';
 import 'package:path/path.dart' as Path;
@@ -22,13 +21,6 @@ import 'views/settings/fiu.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Window information for desktop platforms
-  if (StateManager().isDesktop) {
-    setWindowTitle('QRServ');
-    setWindowMinSize(const Size(650, 1200));
-    setWindowMaxSize(.infinite);
-  }
 
   // Load preferences
   await Preferences().load();

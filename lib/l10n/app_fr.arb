@@ -21,7 +21,6 @@
     "page_info_fallback_msg": "Une erreur est survenue.\nCode: ",
     "page_imported_archive_failed": "Le fichier d'archive n'a pas pu être créé: ",
     "page_imported_share_sheet_label": "Partager",
-    "page_imported_share_clipboard_label": "Copier",
     "page_imported_share_clipboard": "Copie effectuée",
     "page_imported_size": "Taille",
     "page_imported_port": "Port",

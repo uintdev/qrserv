@@ -20,7 +20,6 @@
     "page_info_fallback_msg": "An error has occurred.\nCode: ",
     "page_imported_archive_failed": "Archive file could not be created: ",
     "page_imported_share_sheet_label": "Share",
-    "page_imported_share_clipboard_label": "Copy",
     "page_imported_share_clipboard": "Copied",
     "page_imported_size": "Size",
     "page_imported_port": "Port",

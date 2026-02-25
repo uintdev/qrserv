@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:share_plus/share_plus.dart';
-import '../views/statemanager.dart';
 
 class ShareManager {
   // Share sheet
@@ -21,11 +20,7 @@ class ShareManager {
 
   // Determine what share method to use
   Future<void> share(String url, BuildContext context) async {
-    if (!StateManager().isDesktop) {
-      await _shareSheet(url);
-    } else {
-      await copyURL(url, context);
-    }
+    await _shareSheet(url);
     return;
   }
 }

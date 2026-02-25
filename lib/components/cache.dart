@@ -15,9 +15,6 @@ class CacheManager {
     bool exclude = false,
     bool ignoreDAM = false,
   ]) async {
-    // Disallow desktop platforms
-    if (StateManager().isDesktop) return;
-
     if (file.length == 0 || file.length > 0 && exclude) {
       if (cacheDeleteDir) return;
       cacheDeleteDir = true;
