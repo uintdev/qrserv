@@ -23,14 +23,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load preferences
-  await Preferences().load();
+  await Preferences.load();
   // Load DAM preference
-  final bool? damPref = await Preferences().read(Preferences.PREF_CLIENT_DAM);
+  final bool? damPref = await Preferences.read(Preferences.PREF_CLIENT_DAM);
   if (damPref != null) {
     FileManager.directAccessMode = damPref;
   }
   // Load FIP preference
-  final bool? fipPref = await Preferences().read(Preferences.PREF_CLIENT_FIU);
+  final bool? fipPref = await Preferences.read(Preferences.PREF_CLIENT_FIU);
   if (fipPref != null) {
     FIU.state = fipPref;
   }
@@ -105,10 +105,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   late StreamSubscription _intentDataStreamSubscription;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
     initShareListener();
   }
 
@@ -156,7 +155,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     }
 
     try {
-      await FileManager().selectFile(context, fileSelection, true).whenComplete(
+      await FileManager.selectFile(context, fileSelection, true).whenComplete(
         () {
           setState(() {
             _actionButtonLoading = false;
@@ -203,11 +202,9 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     if (FileManager.directAccessMode) {
       final Permission storagePerm;
 
-      if (!Platform.isAndroid) return;
-
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       if (androidInfo.version.sdkInt <=
-          FileManager().directAccessModeNoMESMaxAPI) {
+          FileManager.directAccessModeNoMESMaxAPI) {
         storagePerm = Permission.storage;
       } else {
         storagePerm = Permission.manageExternalStorage;
@@ -222,7 +219,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
           })
           .request();
 
-      final Directory rootPath = Directory(FileManager().directAccessPath);
+      final Directory rootPath = Directory(FileManager.directAccessPath);
 
       String? path = await FilesystemPicker.open(
         context: context,
@@ -250,7 +247,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
     // Prompt file import
     try {
-      await FileManager().selectFile(context, fileSelection).whenComplete(() {
+      await FileManager.selectFile(context, fileSelection).whenComplete(() {
         setState(() {
           _actionButtonLoading = false;
           _stateView = StateManagerPage();
@@ -274,7 +271,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         case 'unknown_path':
           {
             pageTypeCurrent = .insufficientstorage;
-            await Server().shutdownServer(context);
+            await Server.shutdownServer(context);
             setState(() {
               _stateView = StateManager().msgPage(context);
             });
@@ -309,7 +306,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   // Handle server shutdown via FAB
   void shutdownFAB() async {
     pageTypeCurrent = .landing;
-    await Server().shutdownServer(context).whenComplete(() async {
+    await Server.shutdownServer(context).whenComplete(() async {
       if (!Server.serverRunning) {
         setState(() {
           _stateView = StateManagerPage();

@@ -14,7 +14,7 @@ class Port {
   Future portDialog(BuildContext context) async {
     String currentPortNumber = '';
 
-    final int? fetchPortNumber = await Preferences().read(
+    final int? fetchPortNumber = await Preferences.read(
       Preferences.PREF_SERVER_PORT,
     );
 
@@ -150,7 +150,7 @@ class Port {
       final String text = _fieldController.text;
 
       if (text.isEmpty) {
-        await Preferences().write(Preferences.PREF_SERVER_PORT, null);
+        await Preferences.write(Preferences.PREF_SERVER_PORT, null);
         showToast(
           AppLocalizations.of(context)!.settings_server_port_dialog_saved,
         );
@@ -164,7 +164,7 @@ class Port {
 
       if (!(value >= portMin && value <= portMax)) return;
 
-      final bool portUsed = await Network().checkPortUsed(value);
+      final bool portUsed = await Network.checkPortUsed(value);
       if (portUsed) {
         showToast(
           AppLocalizations.of(context)!.settings_server_port_dialog_portinuse,
@@ -172,7 +172,7 @@ class Port {
         return;
       }
 
-      await Preferences().write(Preferences.PREF_SERVER_PORT, value);
+      await Preferences.write(Preferences.PREF_SERVER_PORT, value);
       showToast(
         AppLocalizations.of(context)!.settings_server_port_dialog_saved,
       );

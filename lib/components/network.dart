@@ -8,18 +8,21 @@ import 'filemanager.dart';
 import '../views/statemanager.dart';
 
 class Network {
+  // Private constructor to prevent instantiation
+  Network._();
+
   // Default port number
   static int port = 0;
 
   // Initialise interface lists
   static List<String> interfaceList = [];
-  List<String> _ipv4List = [];
-  List<String> _ipv6List = [];
+  static List<String> _ipv4List = [];
+  static List<String> _ipv6List = [];
 
   // Interface list builder
-  Future internalIP() async {
+  static Future internalIP() async {
     // Reset lists
-    Network.interfaceList = [];
+    interfaceList = [];
     _ipv4List = [];
     _ipv6List = [];
 
@@ -45,23 +48,25 @@ class Network {
       }
     }
     // Create and organize interface list
-    _ipv4List = _ipv4List..sort();
-    _ipv6List = _ipv6List..sort();
-    Network.interfaceList = List.from(_ipv4List.reversed)..addAll(_ipv6List);
+    _ipv4List..sort();
+    _ipv6List..sort();
+    interfaceList
+      ..addAll(_ipv4List.reversed)
+      ..addAll(_ipv6List);
   }
 
   // Get full list of IPs and unused port
-  Future<Map<String, dynamic>> fetchInterfaces(BuildContext context) async {
+  static Future<Map<String, dynamic>> fetchInterfaces(
+    BuildContext context,
+  ) async {
     // Prepare interface list and fetch unused port for server
     await internalIP();
 
-    bool fileExists = await Server().fileExists(
-      FileManager().readInfo()['path'],
-    );
+    bool fileExists = await Server.fileExists(FileManager.readInfo()['path']);
 
     // Server init
     if (!Server.serverRunning && fileExists) {
-      await Server().http(context).onError((error, _) {
+      await Server.http(context).onError((error, _) {
         // Selected port should already be uniquely unused
         // by other services at the time, but just as a precaution...
         showToast(
@@ -74,7 +79,7 @@ class Network {
 
     // Shutdown server if marked
     if ((StateManager.fileTampered == .filemodified) || !fileExists) {
-      await Server().shutdownServer(context);
+      await Server.shutdownServer(context);
     }
 
     Map<String, dynamic> networkData = {
@@ -86,12 +91,12 @@ class Network {
   }
 
   // Determine IP version
-  bool checkIPv4(String? ip) {
+  static bool checkIPv4(String? ip) {
     if (ip == null) return true;
     return (InternetAddress.tryParse(ip)?.type == InternetAddressType.IPv4);
   }
 
-  Future<bool> checkPortUsed(int portNumber) async {
+  static Future<bool> checkPortUsed(int portNumber) async {
     final bool serverRunningMatchingPort =
         (Server.serverRunning && port == portNumber);
 

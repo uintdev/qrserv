@@ -6,10 +6,13 @@ import '../views/statemanager.dart';
 import 'filemanager.dart';
 
 class CacheManager {
+  // Private constructor to prevent instantiation
+  CacheManager._();
+
   static bool cacheDeleteDir = false;
   static bool cacheDeleteSpecific = false;
 
-  Future<void> deleteCache(
+  static Future<void> deleteCache(
     BuildContext context, [
     List<String> file = const [],
     bool exclude = false,
@@ -22,13 +25,13 @@ class CacheManager {
       if (file.length == 0) FileManager.archivedLast = '';
 
       // Recursive file removal
-      String pickerDir = await FileManager().filePickerPath(ignoreDAM);
+      String pickerDir = await FileManager.filePickerPath(ignoreDAM);
       Directory pickerPath = Directory(pickerDir);
 
       if (await pickerPath.exists()) {
         await pickerPath.list().forEach((e) async {
           if (!file.contains(e.path)) {
-            if (FileManager().directModeDetect(e.path)) return;
+            if (FileManager.directModeDetect(e.path)) return;
             await e.delete(recursive: true);
           }
         });
@@ -41,7 +44,7 @@ class CacheManager {
       List<String> pickerDir = file;
 
       for (int i = 0; i < pickerDir.length; i++) {
-        if (FileManager().directModeDetect(pickerDir[i])) continue;
+        if (FileManager.directModeDetect(pickerDir[i])) continue;
 
         File pickerPath = File(pickerDir[i]);
 

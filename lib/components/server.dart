@@ -9,15 +9,13 @@ import 'network.dart';
 import 'preferences.dart';
 
 class Server {
+  // Private constructor to prevent instantiation
+  Server._();
+
   // Check if specified file path exists
-  bool fileExists([String file = '']) {
-    bool _filePresent = false;
-    if (file == '') return _filePresent;
-
-    File _filePath = File(file);
-    _filePresent = _filePath.existsSync();
-
-    return _filePresent;
+  static bool fileExists(String? file) {
+    if (file == null || file.isEmpty) return false;
+    return File(file).existsSync();
   }
 
   // Server states
@@ -29,33 +27,31 @@ class Server {
   static String _serverToken = '';
 
   // Create unique token
-  String tokenGenerator([String characters = '', int length = 32]) {
-    String _characters = '';
-    if (characters == '') {
-      _characters =
-          '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    } else {
-      _characters = characters;
-    }
-    String _generateStore = '';
+  static String tokenGenerator([
+    String characters =
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    int length = 32,
+  ]) {
+    if (length <= 0) return '';
 
-    final _random = Random();
+    final random = Random();
+    final buffer = StringBuffer();
+
     for (int i = 0; i < length; i++) {
-      _generateStore += _characters[_random.nextInt(_characters.length - 1)];
+      buffer.write(characters[random.nextInt(characters.length)]);
     }
 
-    return _generateStore;
+    return buffer.toString();
   }
 
   // Web server
-  Future http(BuildContext context) async {
+  static Future http(BuildContext context) async {
     int serverPort = 0;
-    final dynamic serverPortConfig = await Preferences().read(
+    final dynamic serverPortConfig = await Preferences.read(
       Preferences.PREF_SERVER_PORT,
     );
-    if (serverPortConfig != null) {
-      serverPort = serverPortConfig;
-    }
+
+    serverPort = serverPortConfig is int ? serverPortConfig : serverPort;
 
     await HttpServer.bind(InternetAddress.anyIPv6, serverPort).then((server) {
       // Update server status
@@ -68,7 +64,7 @@ class Server {
       server.listen((HttpRequest request) async {
         final token = request.uri.queryParameters['token'] ?? '';
         final response = request.response;
-        final fileInfo = FileManager().readInfo();
+        final fileInfo = FileManager.readInfo();
         File targetFile = File(fileInfo['path']);
 
         // Get requestor's IP address
@@ -92,17 +88,17 @@ class Server {
                 remoteIP,
           );
           response.statusCode = HttpStatus.ok;
-          response.headers.add(
+          response.headers.set(
             HttpHeaders.contentTypeHeader,
             'application/octet-stream',
           );
-          response.headers.add(
+          response.headers.set(
             'Content-Disposition',
             'filename="${Uri.encodeComponent(fileInfo['name'])}"',
           );
           // Get content length
           RandomAccessFile openedFile = await targetFile.open();
-          response.headers.add(
+          response.headers.set(
             HttpHeaders.contentLengthHeader,
             await openedFile.length(),
           );
@@ -134,14 +130,14 @@ class Server {
           serverPoweringDown = false;
           FileManager.fileImported = false;
           FileManager.allowWatcher = false;
-          await CacheManager().deleteCache(context);
+          await CacheManager.deleteCache(context);
         }
       });
     });
   }
 
   // Shutdown server
-  Future shutdownServer(BuildContext context) async {
+  static Future shutdownServer(BuildContext context) async {
     // Do not proceed if server is not running
     if (!serverRunning) return;
 
@@ -181,7 +177,7 @@ class Server {
           serverPoweringDown = false;
           FileManager.fileImported = false;
           FileManager.allowWatcher = false;
-          await CacheManager().deleteCache(context);
+          await CacheManager.deleteCache(context);
         });
   }
 }

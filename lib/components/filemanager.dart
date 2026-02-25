@@ -13,6 +13,9 @@ import 'network.dart';
 import '../views/statemanager.dart';
 
 class FileManager {
+  // Private constructor to prevent instantiation
+  FileManager._();
+
   static String currentFile = '';
   static String currentFullPath = '';
   static String currentPath = '';
@@ -26,9 +29,8 @@ class FileManager {
   static bool allowWatcher = false;
   static bool lockWatcher = false;
   static bool directAccessMode = false;
-  final int directAccessModeNoMESMaxAPI = 29;
-  final String directAccessPath = '/storage/emulated/0';
-  final bool allowMultipleFiles = (Platform.isAndroid);
+  static final int directAccessModeNoMESMaxAPI = 29;
+  static final String directAccessPath = '/storage/emulated/0';
 
   /*
   !!! This determines if DAM is allowed on Android 11 or later in the build !!!
@@ -36,9 +38,9 @@ class FileManager {
   If `false`, add `<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>` into `AndroidManifest.xml`
   !!! By default when it comes to Git, this should be set to `false` and with the MES permission in place !!!
   */
-  final bool isPlayStoreFriendly = false;
+  static final bool isPlayStoreFriendly = false;
 
-  Map<String, dynamic> readInfo() {
+  static Map<String, dynamic> readInfo() {
     return {
       'name': currentFile,
       'path': currentFullPath,
@@ -48,14 +50,14 @@ class FileManager {
     };
   }
 
-  Future<String> filePickerPath(bool ignoreDAM) async {
+  static Future<String> filePickerPath(bool ignoreDAM) async {
     String pickerDir = (!ignoreDAM && FileManager.directAccessMode)
         ? directAccessPath
         : (await getTemporaryDirectory()).path + '/file_picker';
     return pickerDir;
   }
 
-  bool directModeDetect(String path) {
+  static bool directModeDetect(String path) {
     bool result = false;
 
     if (path.startsWith(directAccessPath)) {
@@ -65,7 +67,7 @@ class FileManager {
     return result;
   }
 
-  String fileSizeHuman(int length, BuildContext context) {
+  static String fileSizeHuman(int length, BuildContext context) {
     String _sizeHuman = filesize(length, 2);
     _sizeHuman = _sizeHuman.replaceAll(
       'TB',
@@ -95,7 +97,7 @@ class FileManager {
     return _sizeHuman;
   }
 
-  Future selectFile(
+  static Future selectFile(
     BuildContext context, [
     Map<String, dynamic> fileSelection = const {},
     bool ignoreDAM = false,
@@ -103,7 +105,7 @@ class FileManager {
     FileManager.fileImportPending = true;
     Map<String, dynamic> result = {'files': {}};
 
-    String pickerDir = await FileManager().filePickerPath(ignoreDAM);
+    String pickerDir = await FileManager.filePickerPath(ignoreDAM);
     Directory sourceDir = Directory(pickerDir);
 
     // Ensure file picker directory exists first
@@ -120,7 +122,7 @@ class FileManager {
     if (!directAccessMode && fileSelection.length == 0) {
       // Default file picker
       FilePickerResult? resultFilePicker = await FilePicker.platform.pickFiles(
-        allowMultiple: allowMultipleFiles,
+        allowMultiple: true,
       );
 
       if (resultFilePicker != null) {
@@ -137,7 +139,7 @@ class FileManager {
           for (int j = 0; j < result['files'].length; j++) {
             if (result['files'][j]['name'] == fileToMoveName) {
               fileToMoveName =
-                  Server().tokenGenerator('0123456789abcdef', 6) +
+                  Server.tokenGenerator('0123456789abcdef', 6) +
                   '_' +
                   fileToMoveName;
               fileToMoveNewPath =
@@ -166,7 +168,7 @@ class FileManager {
       } else {
         // File was selected but no longer exists
         pageTypeCurrent = .fileremoved;
-        await Server().shutdownServer(context);
+        await Server.shutdownServer(context);
         return;
       }
       result = fileSelection;
@@ -188,10 +190,10 @@ class FileManager {
       return;
     }
 
-    await Network().internalIP();
+    await Network.internalIP();
     if (Network.interfaceList.isEmpty) {
       pageTypeCurrent = .noconnection;
-      await Server().shutdownServer(context);
+      await Server.shutdownServer(context);
       return;
     }
 
@@ -226,7 +228,7 @@ class FileManager {
       if (archivedLast.isEmpty) cacheExceptionList.add(archivedLast);
 
       // Cache handling
-      await CacheManager().deleteCache(
+      await CacheManager.deleteCache(
         context,
         cacheExceptionList,
         true,
@@ -241,7 +243,7 @@ class FileManager {
       if (multipleFiles) {
         // Prepare archive name
         String archiveName =
-            Server().tokenGenerator('1234567890ABCDEF', 8) + '.zip';
+            Server.tokenGenerator('1234567890ABCDEF', 8) + '.zip';
         String fullPickerPath = await filePickerPath(ignoreDAM);
         String fullArchivePath = fullPickerPath + '/' + archiveName;
 
@@ -314,7 +316,7 @@ class FileManager {
       pageTypeCurrent = .imported;
 
       // Initiate server
-      await Network().fetchInterfaces(context);
+      await Network.fetchInterfaces(context);
     }
     FileManager.fileImportPending = false;
   }

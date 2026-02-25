@@ -96,14 +96,14 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
         AppLocalizations.of(context)!.settings_client_dam_list_title,
         AppLocalizations.of(context)!.settings_client_dam_list_subtitle,
         () async {
-          final bool damEligibility = await DAM().eligibility();
+          final bool damEligibility = await DAM.eligibility();
           if (!damEligibility) {
             showToast(
               AppLocalizations.of(context)!.settings_client_dam_ineligiblebuild,
             );
             return;
           }
-          DAM().toggle(context, setState);
+          DAM.toggle(context, setState);
         },
         FileManager.directAccessMode,
       ),
@@ -113,7 +113,7 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
         AppLocalizations.of(context)!.settings_client_fiu_list_title,
         AppLocalizations.of(context)!.settings_client_fiu_list_subtitle,
         () async {
-          FIU().toggle(context, setState);
+          FIU.toggle(context, setState);
         },
         FIU.state,
       ),
@@ -127,7 +127,7 @@ Column SettingsBody(BuildContext context, StateSetter setState) {
         null,
         () async {
           setState(() async {
-            await Preferences().clear(() {
+            await Preferences.clear(() {
               FileManager.directAccessMode = false;
               FIU.state = false;
             });

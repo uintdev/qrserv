@@ -239,7 +239,7 @@ class StateManager extends State<StateManagerPage> {
         break;
     }
 
-    CacheManager().deleteCache(context);
+    CacheManager.deleteCache(context);
 
     return Column(
       children: <Widget>[
@@ -281,7 +281,7 @@ class StateManager extends State<StateManagerPage> {
 
   Widget importedPage(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
-      future: Network().fetchInterfaces(context),
+      future: Network.fetchInterfaces(context),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
           pageTypeCurrent = .snapshoterror;
@@ -292,10 +292,10 @@ class StateManager extends State<StateManagerPage> {
           // Enable state bypass
           interfaceUpdate = true;
           // File information
-          Map<String, dynamic> _fileInfo = FileManager().readInfo();
+          Map<String, dynamic> _fileInfo = FileManager.readInfo();
 
           // Human readable file size
-          String _sizeHuman = FileManager().fileSizeHuman(
+          String _sizeHuman = FileManager.fileSizeHuman(
             _fileInfo['length'],
             context,
           );
@@ -310,9 +310,9 @@ class StateManager extends State<StateManagerPage> {
             }
 
             // If no interfaces available, return network error page
-            if (defaultIP == '') {
+            if (defaultIP.isEmpty) {
               pageTypeCurrent = .noconnection;
-              Server().shutdownServer(context);
+              Server.shutdownServer(context);
               return msgPage(context);
             }
 
@@ -331,7 +331,7 @@ class StateManager extends State<StateManagerPage> {
           String _filePath;
 
           // Formatting for IPv6
-          if (!Network().checkIPv4(selectedIP)) {
+          if (!Network.checkIPv4(selectedIP)) {
             _hostFormatted = '[$selectedIP]';
           } else {
             _hostFormatted = selectedIP;
@@ -348,7 +348,7 @@ class StateManager extends State<StateManagerPage> {
               'http://$_hostFormatted:${snapshot.data!['port'].toString()}/$_filePath';
 
           fileUntampered =
-              (Server().fileExists(_fileInfo['path']) &&
+              (Server.fileExists(_fileInfo['path']) &&
               !(fileTampered == .filemodified));
 
           if (!fileUntampered) {
@@ -367,13 +367,13 @@ class StateManager extends State<StateManagerPage> {
                     FileManager.allowWatcher))
                   return;
 
-                bool watchedFileExists = Server().fileExists(_fileInfo['path']);
+                bool watchedFileExists = Server.fileExists(_fileInfo['path']);
 
                 if (!watchedFileExists) {
                   setFileStatus(false);
                 } else if (event.type == .MODIFY &&
                     watchedFileExists &&
-                    FileManager().directModeDetect(_fileInfo['path'])) {
+                    FileManager.directModeDetect(_fileInfo['path'])) {
                   setFileStatus(false, .filemodified);
                 }
               });
@@ -387,7 +387,7 @@ class StateManager extends State<StateManagerPage> {
           String fileDataTip() {
             String fileResult = '';
             List archivedFile = [];
-            List archivedList = FileManager().readInfo()['archived'];
+            List archivedList = FileManager.readInfo()['archived'];
 
             if (archivedList.length > 0) {
               archivedFile.add(_fileInfo['name']);
@@ -396,14 +396,14 @@ class StateManager extends State<StateManagerPage> {
                 archivedFile.add(
                   element['file'] +
                       ' (' +
-                      FileManager().fileSizeHuman(element['size'], context) +
+                      FileManager.fileSizeHuman(element['size'], context) +
                       ')',
                 );
               });
 
               fileResult = archivedFile.join('\n');
             } else {
-              if (FileManager().directModeDetect(_fileInfo['path'])) {
+              if (FileManager.directModeDetect(_fileInfo['path'])) {
                 fileResult = _fileInfo['path'];
               } else {
                 fileResult = _fileInfo['name'];
@@ -532,7 +532,7 @@ class StateManager extends State<StateManagerPage> {
             shape: RoundedRectangleBorder(borderRadius: .circular(10)),
           ),
           onPressed: () {
-            ShareManager().share(_hostName, context);
+            ShareManager.shareSheet(_hostName);
           },
           child: Icon(
             Icons.share,

@@ -101,7 +101,7 @@ class About {
                 Text(
                   (kReleaseMode ? 'Release' : 'Debug') +
                       ', ' +
-                      (FileManager().isPlayStoreFriendly
+                      (FileManager.isPlayStoreFriendly
                           ? 'Play Store'
                           : 'GitHub'),
                   style: const TextStyle(
