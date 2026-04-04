@@ -426,7 +426,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               elevation: 3,
               backgroundColor: const .fromRGBO(211, 47, 47, 1),
               shape: RoundedRectangleBorder(borderRadius: .circular(30)),
-              clipBehavior: .antiAliasWithSaveLayer,
               onPressed: () {
                 if (_actionButtonLoading) {
                   showToast(
@@ -461,7 +460,6 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       foregroundColor: Theme.of(context).colorScheme.secondary,
       shape: RoundedRectangleBorder(borderRadius: .circular(30)),
-      clipBehavior: .antiAliasWithSaveLayer,
       onPressed: () async {
         importFile();
       },
