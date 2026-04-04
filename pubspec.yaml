@@ -19,23 +19,23 @@ dependencies:
     path_provider: ^2.1.5
     filesize: ^2.0.1
     qr_flutter: ^4.1.0
-    watcher: ^1.2.0
-    package_info_plus: ^9.0.0
+    watcher: ^1.2.1
+    package_info_plus: ^9.0.1
     url_launcher: ^6.3.2
     oktoast: ^3.4.0
-    share_plus: ^12.0.1
+    share_plus: ^12.0.2
     share_handler: ^0.0.25
 
-    file_picker: ^10.3.10
+    file_picker: 10.3.10
     flutter_archive: ^6.0.4
 
     http: ^1.5.0
-    uuid: ^4.5.1
-    ffi: ^2.1.4
+    uuid: ^4.5.3
+    ffi: ^2.2.0
 
     filesystem_picker: ^4.1.0
     permission_handler: ^12.0.1
-    device_info_plus: ^12.2.0
+    device_info_plus: ^12.4.0
     path: ^1.9.1
     freeport: ^1.0.1
 
