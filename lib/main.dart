@@ -53,6 +53,8 @@ class QRServ extends StatelessWidget {
       ),
     );
 
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
     return OKToast(
       // Toast properties
       position: ToastPosition.bottom,
