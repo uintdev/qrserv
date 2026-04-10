@@ -4,7 +4,7 @@
 
 - Resolved a potential path traversal vulnerability with the file picker
 - Edge-to-Edge now enforced on Android 12 to 14 (15 and later enforces it regardless)
-- Fixed Impeller (rendering runtime) bug where circles can be rendered as if they are aliased (jagged appearence)
+- Fixed Impeller (rendering runtime) bug where circles can be rendered as if they are aliased (jagged appearance)
 
 ## 3.0.0
 
