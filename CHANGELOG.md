@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.3
+
+- .note.gnu.build-id is now stripped from native libraries (reproducible build action)
+
 ## 3.0.2
 
 - Bumped NDK version back to 29
