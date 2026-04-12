@@ -1,0 +1,59 @@
+// Direct run: ./gradlew assembleRelease --no-daemon --init-script no-build-id.gradle
+// Verification of '.note.gnu.build-id' removal: readelf --wide --notes libdartjni.so
+
+def findObjcopy = {
+    def home = System.getenv("ANDROID_HOME") ?: ""
+    logger.lifecycle("[no-build-id] ANDROID_HOME environment variable value: ${home}")
+    if (!home) return null
+    def ndkRoot = new File("${home}/ndk")
+    if (!ndkRoot.isDirectory()) return null
+    def found = null
+    ndkRoot.eachDir { ndkVer ->
+        if (found) return
+        logger.lifecycle("[no-build-id] first path to check for llvm-objcopy: ${ndkVer}/toolchains/llvm/prebuilt")
+        def prebuilt = new File("${ndkVer}/toolchains/llvm/prebuilt")
+        if (!prebuilt.isDirectory()) return
+        prebuilt.eachDir { platform ->
+            if (found) return
+            logger.lifecycle("[no-build-id] second path to check for llvm-objcopy: ${platform}/bin/llvm-objcopy")
+            def c = new File("${platform}/bin/llvm-objcopy")
+            if (c.exists()) found = c.absolutePath
+        }
+    }
+    return found
+}
+
+final String OBJCOPY = findObjcopy()
+
+if (OBJCOPY) {
+    logger.lifecycle("[no-build-id] llvm-objcopy: ${OBJCOPY}")
+} else {
+    logger.warn("[no-build-id] llvm-objcopy not found – build-id strip skipped")
+}
+
+allprojects {
+    afterEvaluate { proj ->
+        if (!OBJCOPY) return
+        if (!proj.extensions.findByName("android")) return
+
+        proj.tasks.matching { t ->
+            t.name.startsWith("merge") && t.name.endsWith("NativeLibs")
+        }.configureEach { mergeTask ->
+            mergeTask.doLast {
+                mergeTask.outputs.files.each { out ->
+                    if (!(out instanceof File) || !out.isDirectory()) return
+                    out.eachFileRecurse { f ->
+                        if (!f.name.endsWith('.so')) return
+                        proj.exec {
+                            commandLine OBJCOPY,
+                                '--remove-section', '.note.gnu.build-id',
+                                f.absolutePath
+                        }
+                        println "[no-build-id] stripped: ${f.name}"
+                    }
+                }
+            }
+            println "[no-build-id] ${proj.name}: post-strip registered for ${mergeTask.name}"
+        }
+    }
+}
