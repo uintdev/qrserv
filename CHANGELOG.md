@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.2
+
+- Bumped NDK version back to 29
+
 ## 3.0.1
 
 - Resolved a potential path traversal vulnerability with the file picker

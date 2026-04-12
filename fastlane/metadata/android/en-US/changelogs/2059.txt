@@ -1,0 +1,1 @@
+- Bumped NDK version back to 29
