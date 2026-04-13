@@ -2,7 +2,7 @@
 
 ## 3.0.5
 
-- no-build-id script is now executed after gradle evaluation -- allowing any neccessary NDK downloads to happen first (reproducible build action)
+- no-build-id script is now executed after gradle evaluation -- allowing any necessary NDK downloads to happen first (reproducible build action)
 
 ## 3.0.4
 
