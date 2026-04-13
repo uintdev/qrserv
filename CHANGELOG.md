@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.5
+
+- no-build-id script is now executed after gradle evaluation -- allowing any neccessary NDK downloads to happen first (reproducible build action)
+
 ## 3.0.4
 
 - no-build-id script now prints more logs into flutter console rather than through 'gradlew' only (reproducible build debugging action)
