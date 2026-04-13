@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.4
+
+- no-build-id script now prints more logs into flutter console rather than through 'gradlew' only (reproducible build debugging action)
+
 ## 3.0.3
 
 - .note.gnu.build-id is now stripped from native libraries (reproducible build action)

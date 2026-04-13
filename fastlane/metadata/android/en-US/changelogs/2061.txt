@@ -1,0 +1,1 @@
+- no-build-id script now prints more logs into flutter console rather than through 'gradlew' only (reproducible build debugging action)
