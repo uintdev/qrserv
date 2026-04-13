@@ -30,6 +30,4 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.2.20" apply false
 }
 
-gradle.apply(from = "no-build-id.gradle")
-
 include(":app")
