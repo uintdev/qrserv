@@ -1,4 +1,6 @@
-// Direct run: ./gradlew assembleRelease --no-daemon --init-script no-build-id.gradle
+// MIT License - Copyright (c) 2026 Simple Badminton Contributors
+// (Kudos for this solution!)
+
 // Verification of '.note.gnu.build-id' removal: readelf --wide --notes libdartjni.so
 
 def findObjcopy = {
@@ -28,7 +30,7 @@ final String OBJCOPY = findObjcopy()
 if (OBJCOPY) {
     println "[no-build-id] llvm-objcopy: ${OBJCOPY}"
 } else {
-    println "[no-build-id] llvm-objcopy not found – build-id strip skipped"
+    println "[no-build-id] llvm-objcopy not found - build-id strip skipped"
 }
 
 allprojects {
