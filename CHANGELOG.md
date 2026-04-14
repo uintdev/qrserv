@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.6
+
+- Addressed an issue preventing reproducible builds -- '.note.gnu.build-id' is now removed from all native libraries automatically
+- NDK version bumped back to 29 -- there was a temporary bug limiting it to 28 in the previous release build
+- Improved file type icon logic
+
 ## 3.0.5
 
 - no-build-id script is now executed after gradle evaluation -- allowing any necessary NDK downloads to happen first (reproducible build action)
