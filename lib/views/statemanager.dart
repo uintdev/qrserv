@@ -821,21 +821,13 @@ IconData importedFileInfoIcon(String fileName) {
 
   if (fileExtensionsArchive.contains(fileExtension)) {
     result = Icons.folder_zip;
-  }
-
-  if (fileExtensionsImage.contains(fileExtension)) {
+  } else if (fileExtensionsImage.contains(fileExtension)) {
     result = Icons.image;
-  }
-
-  if (fileExtensionsVideo.contains(fileExtension)) {
+  } else if (fileExtensionsVideo.contains(fileExtension)) {
     result = Icons.video_file;
-  }
-
-  if (fileExtensionsAudio.contains(fileExtension)) {
+  } else if (fileExtensionsAudio.contains(fileExtension)) {
     result = Icons.audio_file;
-  }
-
-  if (fileExtension == 'apk') {
+  } else if (fileExtension == 'apk') {
     result = Icons.android;
   }
 
