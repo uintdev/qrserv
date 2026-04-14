@@ -34,8 +34,8 @@ class Server {
   ]) {
     if (length <= 0) return '';
 
-    final random = Random();
-    final buffer = StringBuffer();
+    final Random random = Random();
+    final StringBuffer buffer = StringBuffer();
 
     for (int i = 0; i < length; i++) {
       buffer.write(characters[random.nextInt(characters.length)]);
