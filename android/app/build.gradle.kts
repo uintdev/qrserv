@@ -9,7 +9,6 @@ if (keystorePropertiesFile.exists()) {
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -22,10 +21,6 @@ android {
         jniLibs {
             useLegacyPackaging = true
         }
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
     }
 
     compileOptions {
@@ -74,6 +69,12 @@ android {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
