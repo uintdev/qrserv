@@ -14,7 +14,7 @@ plugins {
 
 android {
     namespace = "dev.uint.qrserv"
-    compileSdk = 36
+    compileSdk = 37
     ndkVersion = "29.0.14206865"
 
     packagingOptions {
@@ -38,7 +38,7 @@ android {
     defaultConfig {
         applicationId = "dev.uint.qrserv"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         ndk {
