@@ -28,14 +28,21 @@ if (!objcopy) {
     return
 }
 final String oc = objcopy
+
+interface InjectedExecOps {
+    @Inject
+    ExecOperations getExecOps()
+}
+
 tasks.matching { it.name.startsWith("merge") && it.name.endsWith("NativeLibs") }
     .configureEach { t ->
         t.doLast {
+            def injected = project.objects.newInstance(InjectedExecOps)
             t.outputs.files.each { dir ->
                 if (!(dir instanceof File) || !dir.isDirectory()) return
                 dir.eachFileRecurse { f ->
                     if (!f.name.endsWith('.so')) return
-                    exec { commandLine oc, '--remove-section', '.note.gnu.build-id', f.absolutePath }
+                    injected.execOps.exec { commandLine oc, '--remove-section', '.note.gnu.build-id', f.absolutePath }
                     println "[no-build-id] stripped Build ID: ${f.name}"
                 }
             }
