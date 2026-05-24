@@ -121,9 +121,7 @@ class FileManager {
 
     if (!directAccessMode && fileSelection.length == 0) {
       // Default file picker
-      FilePickerResult? resultFilePicker = await FilePicker.pickFiles(
-        allowMultiple: true,
-      );
+      FilePickerResult? resultFilePicker = await FilePicker.pickFiles();
 
       if (resultFilePicker != null) {
         // File picker handler
