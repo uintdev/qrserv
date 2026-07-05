@@ -43,6 +43,8 @@ android {
         versionName = flutter.versionName
         ndk {
             debugSymbolLevel = "SYMBOL_TABLE"
+            abiFilters.clear()
+            abiFilters += "arm64-v8a"
         }
     }
 
