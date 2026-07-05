@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.0
+
+- Minimum supported SDK version to Flutter 3.44/Dart 3.12
+- App is now ARM64 only
+- General performance improvements
+- Preparations for Built-in Kotlin
+- Incremented target and compile SDK to 37 (Android 17)
+
 ## 3.0.6
 
 - Addressed an issue preventing reproducible builds -- '.note.gnu.build-id' is now removed from all native libraries automatically
