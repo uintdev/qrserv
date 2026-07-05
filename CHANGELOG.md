@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.0
+## 3.1.1
 
 - Minimum supported SDK version to Flutter 3.44/Dart 3.12
 - App is now ARM64 only
