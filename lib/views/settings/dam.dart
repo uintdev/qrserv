@@ -8,7 +8,7 @@ class DAM {
   DAM._();
 
   static Future<bool> eligibility() async {
-    if (!FileManager.isPlayStoreFriendly) return true;
+    if (!FileManager.isPlayStoreBuild) return true;
 
     // Does not require MES permission on Android 10 or lower
     final androidInfo = await DeviceInfoPlugin().androidInfo;

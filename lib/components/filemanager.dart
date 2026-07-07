@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import '../l10n/generated/app_localizations.dart';
@@ -33,12 +34,13 @@ class FileManager {
   static final String directAccessPath = '/storage/emulated/0';
 
   /*
-  !!! This determines if DAM is allowed on Android 11 or later in the build !!!
-  If `true`, remove `MANAGE_EXTERNAL_STORAGE` from `AndroidManifest.xml`
-  If `false`, add `<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>` into `AndroidManifest.xml`
-  !!! By default when it comes to Git, this should be set to `false` and with the MES permission in place !!!
+  This determines if DAM is allowed on Android 11 or later in the build.
+  Use '--dart-define=NO_DAM=true' in the build command to disable Direct Access Mode
   */
-  static final bool isPlayStoreFriendly = false;
+  static const bool isPlayStoreBuild = bool.fromEnvironment(
+    'NO_DAM',
+    defaultValue: false,
+  );
 
   static Map<String, dynamic> readInfo() {
     return {
