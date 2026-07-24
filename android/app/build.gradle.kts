@@ -133,7 +133,7 @@ afterEvaluate {
     apply(from = "../no-build-id.gradle")
 }
 
-// Remove MANAGE_EXTERNAL_STORAGE only if NO_DAM=true ──
+// Remove MANAGE_EXTERNAL_STORAGE only if NO_DAM=true
 androidComponents {
     onVariants { variant ->
         if (noDAM) {
