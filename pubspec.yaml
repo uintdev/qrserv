@@ -24,7 +24,7 @@ dependencies:
     url_launcher: ^6.3.2
     url_launcher_android: ^6.3.32
     oktoast: ^3.4.0
-    share_plus: ^13.2.1
+    share_plus: ^13.3.0
     share_handler: ^0.0.25
 
     file_picker: ^12.0.0-beta.7
