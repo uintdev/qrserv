@@ -122,15 +122,16 @@ class FileManager {
 
     if (!directAccessMode && fileSelection.length == 0) {
       // Default file picker
-      FilePickerResult? resultFilePicker = await FilePicker.pickFiles();
+      List<PlatformFile> resultFilePicker = await FilePicker.pickFiles();
 
-      if (resultFilePicker != null) {
+      if (resultFilePicker.isNotEmpty) {
         // File picker handler
-        for (int i = 0; i < resultFilePicker.files.length; i++) {
-          if (resultFilePicker.files[i].path == null) continue;
+        int fileIndex = 0;
+        for (final file in resultFilePicker) {
+          if (file.path == null) continue;
 
-          File fileToMove = File(resultFilePicker.files[i].path ?? '');
-          String fileToMoveName = resultFilePicker.files[i].name;
+          File fileToMove = File(file.path ?? '');
+          String fileToMoveName = file.name;
           String fileToMoveNewPath =
               await filePickerPath(ignoreDAM) + '/' + fileToMoveName;
 
@@ -149,12 +150,13 @@ class FileManager {
           await fileToMove.rename(fileToMoveNewPath);
 
           result['files'].addAll({
-            i: {
+            fileIndex: {
               'name': fileToMoveName,
               'path': fileToMoveNewPath,
-              'size': resultFilePicker.files[i].size,
+              'size': await file.length(),
             },
           });
+          fileIndex++;
         }
       }
     } else if (fileSelection.length > 0 &&
