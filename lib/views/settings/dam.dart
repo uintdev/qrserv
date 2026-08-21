@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:qrserv/components/preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../../components/filemanager.dart';
