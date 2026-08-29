@@ -130,7 +130,7 @@ flutter {
 }
 
 afterEvaluate {
-    apply(from = "../no-build-id.gradle")
+    apply(from = "../no-build-id.gradle.kts")
 }
 
 // Remove MANAGE_EXTERNAL_STORAGE only if NO_DAM=true
