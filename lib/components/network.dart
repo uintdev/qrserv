@@ -20,36 +20,36 @@ class Network {
   static List<String> _ipv6List = [];
 
   // Interface list builder
-  static Future internalIP() async {
+  static Future<void> internalIP() async {
     // Reset lists
     interfaceList = [];
     _ipv4List = [];
     _ipv6List = [];
 
     // Collect currently used interfaces
-    for (NetworkInterface interface in await NetworkInterface.list(
+    for (final interface in await NetworkInterface.list(
       includeLoopback: true,
     )) {
-      for (InternetAddress addr in interface.addresses) {
+      for (final addr in interface.addresses) {
         // Filter out 192.168.*.0-1
-        bool filterList =
-            !(addr.type.name == 'IPv4' &&
-                addr.rawAddress[0] == 192 &&
-                addr.rawAddress[1] == 168 &&
-                addr.rawAddress[3] < 2);
-        if (filterList) {
-          // Organize IPs into their own version lists
-          if (addr.type.name == 'IPv4') {
-            _ipv4List.add(addr.address);
-          } else if (addr.type.name == 'IPv6') {
-            _ipv6List.add(addr.address.split('%')[0]);
-          }
+        final bool isFilteredLocal =
+            addr.type.name == 'IPv4' &&
+            addr.rawAddress[0] == 192 &&
+            addr.rawAddress[1] == 168 &&
+            addr.rawAddress[3] < 2;
+        if (isFilteredLocal) continue;
+
+        // Organize IPs into their own version lists
+        if (addr.type.name == 'IPv4') {
+          _ipv4List.add(addr.address);
+        } else if (addr.type.name == 'IPv6') {
+          _ipv6List.add(addr.address.split('%')[0]);
         }
       }
     }
     // Create and organize interface list
-    _ipv4List..sort();
-    _ipv6List..sort();
+    _ipv4List.sort();
+    _ipv6List.sort();
     interfaceList
       ..addAll(_ipv4List.reversed)
       ..addAll(_ipv6List);
@@ -62,7 +62,9 @@ class Network {
     // Prepare interface list and fetch unused port for server
     await internalIP();
 
-    bool fileExists = await Server.fileExists(FileManager.readInfo()['path']);
+    final bool fileExists = await Server.fileExists(
+      FileManager.readInfo()['path'],
+    );
 
     // Server init
     if (!Server.serverRunning && fileExists) {
@@ -82,23 +84,18 @@ class Network {
       await Server.shutdownServer(context);
     }
 
-    Map<String, dynamic> networkData = {
-      'interfaces': interfaceList,
-      'port': port,
-    };
-
-    return networkData;
+    return {'interfaces': interfaceList, 'port': port};
   }
 
   // Determine IP version
   static bool checkIPv4(String? ip) {
     if (ip == null) return true;
-    return (InternetAddress.tryParse(ip)?.type == InternetAddressType.IPv4);
+    return InternetAddress.tryParse(ip)?.type == InternetAddressType.IPv4;
   }
 
   static Future<bool> checkPortUsed(int portNumber) async {
     final bool serverRunningMatchingPort =
-        (Server.serverRunning && port == portNumber);
+        Server.serverRunning && port == portNumber;
 
     final bool portUnusedIPv4 = await isAvailablePort(
       portNumber,
@@ -111,6 +108,6 @@ class Network {
 
     final bool portUsed = !(portUnusedIPv4 && portUnusedIPv6);
 
-    return (portUsed && !serverRunningMatchingPort);
+    return portUsed && !serverRunningMatchingPort;
   }
 }

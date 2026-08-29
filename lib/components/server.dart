@@ -45,99 +45,97 @@ class Server {
   }
 
   // Web server
-  static Future http(BuildContext context) async {
-    int serverPort = 0;
+  static Future<void> http(BuildContext context) async {
     final dynamic serverPortConfig = await Preferences.read(
       Preferences.PREF_SERVER_PORT,
     );
+    final int serverPort = serverPortConfig is int ? serverPortConfig : 0;
 
-    serverPort = serverPortConfig is int ? serverPortConfig : serverPort;
+    final HttpServer server = await HttpServer.bind(
+      InternetAddress.anyIPv6,
+      serverPort,
+    );
 
-    await HttpServer.bind(InternetAddress.anyIPv6, serverPort).then((server) {
-      // Update server status
-      serverRunning = true;
-      // Update port
-      Network.port = server.port;
-      // Set unique token
-      _serverToken = tokenGenerator();
+    // Update server status
+    serverRunning = true;
+    // Update port
+    Network.port = server.port;
+    // Set unique token
+    _serverToken = tokenGenerator();
 
-      server.listen((HttpRequest request) async {
-        final token = request.uri.queryParameters['token'] ?? '';
-        final response = request.response;
-        final fileInfo = FileManager.readInfo();
-        File targetFile = File(fileInfo['path']);
+    server.listen((HttpRequest request) async {
+      final token = request.uri.queryParameters['token'] ?? '';
+      final response = request.response;
+      final fileInfo = FileManager.readInfo();
+      final File targetFile = File(fileInfo['path']);
 
-        // Get requestor's IP address
-        String remoteIP = 'unknown';
-        if (request.connectionInfo?.remoteAddress != null) {
-          remoteIP = request.connectionInfo!.remoteAddress.address;
+      // Get requestor's IP address
+      final String remoteIP =
+          request.connectionInfo?.remoteAddress.address ?? 'unknown';
+
+      if (token != '') {
+        if (token == _serverToken) {
+          // If provided generated token matches then shutdown server
+          response.statusCode = HttpStatus.accepted;
+          serverRunning = false;
+        } else {
+          response.statusCode = HttpStatus.unauthorized;
         }
-
-        if (token != '') {
-          if (token == _serverToken) {
-            // If provided generated token matches then shutdown server
-            response.statusCode = HttpStatus.accepted;
-            serverRunning = false;
-          } else {
-            response.statusCode = HttpStatus.unauthorized;
-          }
-        } else if (await targetFile.exists()) {
-          // File exists, prepare response headers
+      } else if (await targetFile.exists()) {
+        // File exists, prepare response headers
+        showToast(
+          AppLocalizations.of(context)!.server_info_download_started + remoteIP,
+        );
+        response.statusCode = HttpStatus.ok;
+        response.headers.set(
+          HttpHeaders.contentTypeHeader,
+          'application/octet-stream',
+        );
+        response.headers.set(
+          'Content-Disposition',
+          'filename="${Uri.encodeComponent(fileInfo['name'])}"',
+        );
+        // Get content length
+        final RandomAccessFile openedFile = await targetFile.open();
+        response.headers.set(
+          HttpHeaders.contentLengthHeader,
+          await openedFile.length(),
+        );
+        await openedFile.close();
+        // Serve file
+        try {
+          await response.addStream(targetFile.openRead());
           showToast(
-            AppLocalizations.of(context)!.server_info_download_started +
+            AppLocalizations.of(context)!.server_info_download_finished +
                 remoteIP,
           );
-          response.statusCode = HttpStatus.ok;
-          response.headers.set(
-            HttpHeaders.contentTypeHeader,
-            'application/octet-stream',
+        } catch (error) {
+          showToast(
+            AppLocalizations.of(context)!.server_info_gone + error.toString(),
           );
-          response.headers.set(
-            'Content-Disposition',
-            'filename="${Uri.encodeComponent(fileInfo['name'])}"',
-          );
-          // Get content length
-          RandomAccessFile openedFile = await targetFile.open();
-          response.headers.set(
-            HttpHeaders.contentLengthHeader,
-            await openedFile.length(),
-          );
-          await openedFile.close();
-          // Serve file
-          try {
-            await response.addStream(targetFile.openRead());
-            showToast(
-              AppLocalizations.of(context)!.server_info_download_finished +
-                  remoteIP,
-            );
-          } catch (error) {
-            showToast(
-              AppLocalizations.of(context)!.server_info_gone + error.toString(),
-            );
-            serverRunning = false;
-          }
-        } else {
-          // File does not exist
-          response.statusCode = HttpStatus.notFound;
           serverRunning = false;
         }
-        response.close();
+      } else {
+        // File does not exist
+        response.statusCode = HttpStatus.notFound;
+        serverRunning = false;
+      }
+      response.close();
 
-        // Shutdown server
-        if (!serverRunning) {
-          await server.close();
-          serverRunning = false;
-          serverPoweringDown = false;
-          FileManager.fileImported = false;
-          FileManager.allowWatcher = false;
-          await CacheManager.deleteCache(context);
-        }
-      });
+      // Shutdown server
+      if (!serverRunning) {
+        await server.close();
+        serverRunning = false;
+        serverPoweringDown = false;
+        FileManager.fileImported = false;
+        FileManager.allowWatcher = false;
+        await CacheManager.deleteCache(context);
+      }
     });
   }
 
   // Shutdown server
-  static Future shutdownServer(BuildContext context) async {
+  static Future<void> shutdownServer(BuildContext context) async {
     // Do not proceed if server is not running
     if (!serverRunning) return;
 
@@ -145,39 +143,36 @@ class Server {
     serverPoweringDown = true;
 
     // Begin request
-    HttpClient client = HttpClient();
-    await client
-        .getUrl(
-          Uri.parse('http://localhost:${Network.port}/?token=$_serverToken'),
-        )
-        .then((HttpClientRequest request) {
-          return request.close();
-        })
-        .then((HttpClientResponse response) {
-          if (response.statusCode == 202) {
-            // Server had shutdown successfully
-          } else if (response.statusCode == 401) {
-            // Provided token did not match
-            showToast(AppLocalizations.of(context)!.server_info_tokenmismatch);
-          } else {
-            // Unhandled HTTP code (misc)
-            showToast(
-              AppLocalizations.of(context)!.server_info_shutdownfailed +
-                  response.statusCode.toString(),
-            );
-          }
-          serverPoweringDown = false;
-        })
-        .onError((error, _) async {
-          // Server not found, so probably already gone
-          showToast(
-            AppLocalizations.of(context)!.server_info_gone + error.toString(),
-          );
-          serverRunning = false;
-          serverPoweringDown = false;
-          FileManager.fileImported = false;
-          FileManager.allowWatcher = false;
-          await CacheManager.deleteCache(context);
-        });
+    final HttpClient client = HttpClient();
+    try {
+      final HttpClientRequest request = await client.getUrl(
+        Uri.parse('http://localhost:${Network.port}/?token=$_serverToken'),
+      );
+      final HttpClientResponse response = await request.close();
+
+      if (response.statusCode == 202) {
+        // Server had shutdown successfully
+      } else if (response.statusCode == 401) {
+        // Provided token did not match
+        showToast(AppLocalizations.of(context)!.server_info_tokenmismatch);
+      } else {
+        // Unhandled HTTP code (misc)
+        showToast(
+          AppLocalizations.of(context)!.server_info_shutdownfailed +
+              response.statusCode.toString(),
+        );
+      }
+      serverPoweringDown = false;
+    } catch (error) {
+      // Server not found, so probably already gone
+      showToast(
+        AppLocalizations.of(context)!.server_info_gone + error.toString(),
+      );
+      serverRunning = false;
+      serverPoweringDown = false;
+      FileManager.fileImported = false;
+      FileManager.allowWatcher = false;
+      await CacheManager.deleteCache(context);
+    }
   }
 }

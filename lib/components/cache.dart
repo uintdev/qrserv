@@ -18,38 +18,33 @@ class CacheManager {
     bool exclude = false,
     bool ignoreDAM = false,
   ]) async {
-    if (file.length == 0 || file.length > 0 && exclude) {
+    if (file.isEmpty || exclude) {
       if (cacheDeleteDir) return;
       cacheDeleteDir = true;
       // Reset archivedLast state
-      if (file.length == 0) FileManager.archivedLast = '';
+      if (file.isEmpty) FileManager.archivedLast = '';
 
       // Recursive file removal
-      String pickerDir = await FileManager.filePickerPath(ignoreDAM);
-      Directory pickerPath = Directory(pickerDir);
+      final String pickerDir = await FileManager.filePickerPath(ignoreDAM);
+      final Directory pickerPath = Directory(pickerDir);
 
       if (await pickerPath.exists()) {
-        await pickerPath.list().forEach((e) async {
-          if (!file.contains(e.path)) {
-            if (FileManager.directModeDetect(e.path)) return;
-            await e.delete(recursive: true);
-          }
-        });
+        await for (final entity in pickerPath.list()) {
+          if (file.contains(entity.path)) continue;
+          if (FileManager.directModeDetect(entity.path)) continue;
+          await entity.delete(recursive: true);
+        }
       }
       cacheDeleteDir = false;
     } else {
       if (cacheDeleteSpecific) return;
       cacheDeleteSpecific = true;
       // Individual file removal
-      List<String> pickerDir = file;
-
-      for (int i = 0; i < pickerDir.length; i++) {
-        if (FileManager.directModeDetect(pickerDir[i])) continue;
-
-        File pickerPath = File(pickerDir[i]);
+      for (final path in file) {
+        if (FileManager.directModeDetect(path)) continue;
 
         try {
-          await pickerPath.delete();
+          await File(path).delete();
         } catch (e) {
           showToast(
             AppLocalizations.of(context)!.info_exception_fileremoval +

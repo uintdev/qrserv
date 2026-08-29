@@ -6,8 +6,7 @@ class QRSTheme {
   static double titleSmallSize = 13.5;
 
   static ThemeData light(ThemeData template) {
-    var themeData = template;
-    var newThemeData = themeData.copyWith(
+    return template.copyWith(
       canvasColor: const .fromRGBO(237, 232, 243, 1),
       primaryColor: const .fromRGBO(30, 30, 45, 1),
       splashColor: const .fromRGBO(99, 81, 159, 0.3),
@@ -31,7 +30,7 @@ class QRSTheme {
       tooltipTheme: TooltipThemeData(
         textStyle: TextStyle(color: const .fromRGBO(255, 255, 255, 1)),
       ),
-      colorScheme: themeData.colorScheme.copyWith(
+      colorScheme: template.colorScheme.copyWith(
         secondaryContainer: const .fromRGBO(91, 93, 213, 1),
         secondary: const .fromRGBO(191, 180, 229, 1),
       ),
@@ -44,12 +43,10 @@ class QRSTheme {
         cursorColor: const .fromRGBO(30, 30, 45, 1),
       ),
     );
-    return newThemeData;
   }
 
   static ThemeData dark(ThemeData template) {
-    var themeData = template;
-    var newThemeData = themeData.copyWith(
+    return template.copyWith(
       canvasColor: const .fromRGBO(37, 35, 41, 1),
       primaryColor: const .fromRGBO(255, 255, 255, 1),
       splashColor: const .fromRGBO(99, 81, 159, 0.3),
@@ -73,7 +70,7 @@ class QRSTheme {
       tooltipTheme: TooltipThemeData(
         textStyle: TextStyle(color: const .fromRGBO(0, 0, 0, 1)),
       ),
-      colorScheme: themeData.colorScheme.copyWith(
+      colorScheme: template.colorScheme.copyWith(
         secondaryContainer: const .fromRGBO(91, 93, 213, 1),
         secondary: const .fromRGBO(191, 180, 229, 1),
       ),
@@ -86,6 +83,5 @@ class QRSTheme {
         cursorColor: const .fromRGBO(255, 255, 255, 1),
       ),
     );
-    return newThemeData;
   }
 }

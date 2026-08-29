@@ -30,8 +30,7 @@ class Preferences {
       final jsonString = await file.readAsString();
       _preferenceData = json.decode(jsonString) as Map<String, dynamic>;
     } else {
-      await file.create(recursive: true);
-      await file.writeAsString(json.encode(_preferenceData), flush: true);
+      await _dataWrite();
     }
   }
 
@@ -43,7 +42,7 @@ class Preferences {
 
   static Future<void> _dataWrite() async {
     final directory = await _preferencesPath();
-    final file = File('${directory}/${_preferenceFileName}');
+    final file = File('$directory/$_preferenceFileName');
     await file.create(recursive: true);
     await file.writeAsString(json.encode(_preferenceData), flush: true);
   }

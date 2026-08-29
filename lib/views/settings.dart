@@ -146,10 +146,8 @@ Column ListSubheader(
   String subheading, [
   bool initial = false,
 ]) {
-  double initialPadding = 20;
-  if (initial) {
-    initialPadding = 0;
-  }
+  final double initialPadding = initial ? 0 : 20;
+
   return Column(
     children: [
       SizedBox(height: initialPadding),
@@ -174,7 +172,7 @@ Padding ListTileEntry(
   String title,
   String? subtitle,
   Function()? onTap, [
-  bool? switchValue = null,
+  bool? switchValue,
 ]) {
   return Padding(
     padding: .fromLTRB(20, 0, 20, 0),

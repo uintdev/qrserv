@@ -11,7 +11,7 @@ class Port {
   final int portMin = 1024;
   final int portMax = 65535;
 
-  Future portDialog(BuildContext context) async {
+  Future<void> portDialog(BuildContext context) async {
     String currentPortNumber = '';
 
     final int? fetchPortNumber = await Preferences.read(
@@ -32,9 +32,7 @@ class Port {
           return Dialog(
             child: Padding(
               padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-              child: Container(
-                child: portDialogContents(context, contextDialog, setState),
-              ),
+              child: portDialogContents(context, contextDialog, setState),
             ),
           );
         },
@@ -52,13 +50,11 @@ class Port {
       children: [
         Align(
           alignment: .center,
-          child: Container(
-            child: Text(
-              AppLocalizations.of(context)!.settings_server_port_list_title,
-              style: const TextStyle(
-                fontSize: 25,
-                fontVariations: [FontVariation('wght', 500)],
-              ),
+          child: Text(
+            AppLocalizations.of(context)!.settings_server_port_list_title,
+            style: const TextStyle(
+              fontSize: 25,
+              fontVariations: [FontVariation('wght', 500)],
             ),
           ),
         ),
@@ -72,22 +68,21 @@ class Port {
             fontVariations: [FontVariation('wght', 500)],
           ),
         ),
-        Server.serverRunning
-            ? Column(
-                children: [
-                  SizedBox(height: 5),
-                  Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.settings_server_port_dialog_serveractive,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontVariations: [FontVariation('wght', 500)],
-                    ),
-                  ),
-                ],
-              )
-            : SizedBox(),
+        if (Server.serverRunning)
+          Column(
+            children: [
+              SizedBox(height: 5),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.settings_server_port_dialog_serveractive,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontVariations: [FontVariation('wght', 500)],
+                ),
+              ),
+            ],
+          ),
         SizedBox(height: 15),
         TextField(
           controller: _fieldController,
@@ -128,18 +123,25 @@ class Port {
     );
   }
 
+  // Parses the field text into a port number.
+  // Returns null for an empty field (valid — clears the saved port)
+  // or for text that isn't a valid number in range.
+  int? _parsePort() {
+    final String text = _fieldController.text;
+    if (text.isEmpty) return null;
+
+    final int? value = int.tryParse(text);
+    if (value == null) return null;
+    if (value < portMin || value > portMax) return null;
+
+    return value;
+  }
+
   bool portSubmissionValidation() {
     final String text = _fieldController.text;
-
     if (text.isEmpty) return true;
 
-    final int? value = text.isEmpty ? null : int.tryParse(text);
-
-    if (value == null) return false;
-
-    if (!(value >= portMin && value <= portMax)) return false;
-
-    return true;
+    return _parsePort() != null;
   }
 
   VoidCallback? portSubmission(
@@ -158,11 +160,8 @@ class Port {
         return;
       }
 
-      final int? value = text.isEmpty ? null : int.tryParse(text);
-
+      final int? value = _parsePort();
       if (value == null) return;
-
-      if (!(value >= portMin && value <= portMax)) return;
 
       final bool portUsed = await Network.checkPortUsed(value);
       if (portUsed) {
@@ -177,7 +176,6 @@ class Port {
         AppLocalizations.of(context)!.settings_server_port_dialog_saved,
       );
       Navigator.of(contextDialog).pop();
-      return;
     };
   }
 }
@@ -185,7 +183,7 @@ class Port {
 extension StringFormat on String {
   String format(List<dynamic> values) {
     String result = this;
-    for (var value in values) {
+    for (final value in values) {
       result = result.replaceFirst('%s', value.toString());
     }
     return result;

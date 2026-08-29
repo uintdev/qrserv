@@ -52,50 +52,27 @@ class FileManager {
   }
 
   static Future<String> filePickerPath(bool ignoreDAM) async {
-    String pickerDir = (!ignoreDAM && FileManager.directAccessMode)
+    return (!ignoreDAM && FileManager.directAccessMode)
         ? directAccessPath
         : (await getTemporaryDirectory()).path + '/file_picker';
-    return pickerDir;
   }
 
   static bool directModeDetect(String path) {
-    bool result = false;
-
-    if (path.startsWith(directAccessPath)) {
-      result = true;
-    }
-
-    return result;
+    return path.startsWith(directAccessPath);
   }
 
   static String fileSizeHuman(int length, BuildContext context) {
-    String _sizeHuman = filesize(length, 2);
-    _sizeHuman = _sizeHuman.replaceAll(
-      'TB',
-      AppLocalizations.of(context)!.page_imported_sizesymbol_tb,
-    );
-    _sizeHuman = _sizeHuman.replaceAll(
-      'GB',
-      AppLocalizations.of(context)!.page_imported_sizesymbol_gb,
-    );
-    _sizeHuman = _sizeHuman.replaceAll(
-      'MB',
-      AppLocalizations.of(context)!.page_imported_sizesymbol_mb,
-    );
-    _sizeHuman = _sizeHuman.replaceAll(
-      'KB',
-      AppLocalizations.of(context)!.page_imported_sizesymbol_kb,
-    );
-    _sizeHuman = _sizeHuman.replaceAll(
-      ' B',
-      ' ' + AppLocalizations.of(context)!.page_imported_sizesymbol_b,
-    );
-    _sizeHuman = _sizeHuman.replaceAll(
-      '.',
-      AppLocalizations.of(context)!.page_imported_decimalseparator,
-    );
+    final l10n = AppLocalizations.of(context)!;
+    String sizeHuman = filesize(length, 2);
+    sizeHuman = sizeHuman
+        .replaceAll('TB', l10n.page_imported_sizesymbol_tb)
+        .replaceAll('GB', l10n.page_imported_sizesymbol_gb)
+        .replaceAll('MB', l10n.page_imported_sizesymbol_mb)
+        .replaceAll('KB', l10n.page_imported_sizesymbol_kb)
+        .replaceAll(' B', ' ' + l10n.page_imported_sizesymbol_b)
+        .replaceAll('.', l10n.page_imported_decimalseparator);
 
-    return _sizeHuman;
+    return sizeHuman;
   }
 
   static Future selectFile(
@@ -106,23 +83,22 @@ class FileManager {
     FileManager.fileImportPending = true;
     Map<String, dynamic> result = {'files': {}};
 
-    String pickerDir = await FileManager.filePickerPath(ignoreDAM);
+    final String pickerDir = await FileManager.filePickerPath(ignoreDAM);
     Directory sourceDir = Directory(pickerDir);
 
     // Ensure file picker directory exists first
-    bool dirExists = await sourceDir.exists();
+    final bool dirExists = await sourceDir.exists();
     if (!dirExists) {
       if (directAccessMode) {
         showToast(AppLocalizations.of(context)!.dam_path_not_found);
         return;
       }
-      Directory sourceDirCreated = await sourceDir.create();
-      sourceDir = sourceDirCreated;
+      sourceDir = await sourceDir.create();
     }
 
-    if (!directAccessMode && fileSelection.length == 0) {
+    if (!directAccessMode && fileSelection.isEmpty) {
       // Default file picker
-      List<PlatformFile> resultFilePicker = await FilePicker.pickFiles();
+      final List<PlatformFile> resultFilePicker = await FilePicker.pickFiles();
 
       if (resultFilePicker.isNotEmpty) {
         // File picker handler
@@ -130,10 +106,8 @@ class FileManager {
         for (final file in resultFilePicker) {
           if (file.path == null) continue;
 
-          File fileToMove = File(file.path ?? '');
+          final File fileToMove = File(file.path!);
           String fileToMoveName = file.name;
-          String fileToMoveNewPath =
-              await filePickerPath(ignoreDAM) + '/' + fileToMoveName;
 
           // Check if selection has multiple files of the same name
           for (int j = 0; j < result['files'].length; j++) {
@@ -142,11 +116,10 @@ class FileManager {
                   Server.tokenGenerator('0123456789abcdef', 6) +
                   '_' +
                   fileToMoveName;
-              fileToMoveNewPath =
-                  await filePickerPath(ignoreDAM) + '/' + fileToMoveName;
             }
           }
 
+          final String fileToMoveNewPath = '$pickerDir/$fileToMoveName';
           await fileToMove.rename(fileToMoveNewPath);
 
           result['files'].addAll({
@@ -159,7 +132,7 @@ class FileManager {
           fileIndex++;
         }
       }
-    } else if (fileSelection.length > 0 &&
+    } else if (fileSelection.isNotEmpty &&
         directModeDetect(fileSelection['files'][0]['path'])) {
       // Direct access mode
       final File selectedFile = File(fileSelection['files'][0]['path']);
@@ -177,9 +150,9 @@ class FileManager {
       // Share sheet handler
       // Move files selected via share sheet into usual directory for archiving
       for (int i = 0; i < fileSelection['files'].length; i++) {
-        File fileRename = File(fileSelection['files'][i]['path']);
-        File fileRenamed = await fileRename.rename(
-          pickerDir + '/' + fileSelection['files'][i]['name'],
+        final File fileRename = File(fileSelection['files'][i]['path']);
+        final File fileRenamed = await fileRename.rename(
+          '$pickerDir/${fileSelection['files'][i]['name']}',
         );
         fileSelection['files'][i]['path'] = fileRenamed.path;
       }
@@ -203,16 +176,14 @@ class FileManager {
       FileManager.allowWatcher = false;
 
       // Clear out existing watcher subscription
-      if (!FileManager.allowWatcher) {
-        if (StateManager.importWatchdog != null &&
-            StateManager.importWatchdog?.cancel != null) {
-          await StateManager.importWatchdog?.cancel();
-        }
+      if (StateManager.importWatchdog != null &&
+          StateManager.importWatchdog?.cancel != null) {
+        await StateManager.importWatchdog?.cancel();
       }
 
-      multipleFiles = (result['files'].length > 1);
+      multipleFiles = result['files'].length > 1;
 
-      List<String> cacheExceptionList = [];
+      final List<String> cacheExceptionList = [];
       archivedFiles = [];
       for (int i = 0; i < result['files'].length; i++) {
         archivedFiles.add({
@@ -236,50 +207,37 @@ class FileManager {
         ignoreDAM,
       );
 
-      String _currentFile = '';
-      String _currentFullPath = '';
-      String _currentPath = '';
-      int _currentLength = 0;
+      String currentFileLocal = '';
+      String currentFullPathLocal = '';
+      String currentPathLocal = '';
+      int currentLengthLocal = 0;
 
       if (multipleFiles) {
         // Prepare archive name
-        String archiveName =
+        final String archiveName =
             Server.tokenGenerator('1234567890ABCDEF', 8) + '.zip';
-        String fullPickerPath = await filePickerPath(ignoreDAM);
-        String fullArchivePath = fullPickerPath + '/' + archiveName;
+        final String fullArchivePath = '$pickerDir/$archiveName';
 
-        List<File> files = [];
-
+        final List<File> files = [];
         for (int i = 0; i < result['files'].length; i++) {
-          await File(
-            result['files'][i]['path'] ??
-                fullPickerPath + '/' + result['files'][i]['name'],
-          ).exists().then((_) async {
-            files.add(
-              File(
-                result['files'][i]['path'] ??
-                    fullPickerPath + '/' + result['files'][i]['name'],
-              ),
-            );
-          });
+          final String path =
+              result['files'][i]['path'] ??
+              '$pickerDir/${result['files'][i]['name']}';
+          if (await File(path).exists()) {
+            files.add(File(path));
+          }
         }
-        final zipFile = File(fullArchivePath);
+
+        final File zipFile = File(fullArchivePath);
         try {
           await ZipFile.createFromFiles(
             sourceDir: sourceDir,
             files: files,
             zipFile: zipFile,
-          ).then(
-            (_) async => {
-              for (int i = 0; i < result['files'].length; i++)
-                {
-                  await File(
-                    result['files'][i]['path'] ??
-                        fullPickerPath + '/' + result['files'][i]['name'],
-                  ).delete(),
-                },
-            },
           );
+          for (final file in files) {
+            await file.delete();
+          }
         } catch (e) {
           showToast(
             AppLocalizations.of(context)!.page_imported_archive_failed +
@@ -289,27 +247,27 @@ class FileManager {
         }
 
         // Get length of created archive
-        int archiveSize = await File(fullArchivePath).length();
+        final int archiveSize = await File(fullArchivePath).length();
 
-        _currentFile = archiveName;
-        _currentFullPath = fullArchivePath;
-        _currentPath = fullPickerPath;
-        _currentLength = archiveSize;
-        archivedLast = _currentFullPath;
+        currentFileLocal = archiveName;
+        currentFullPathLocal = fullArchivePath;
+        currentPathLocal = pickerDir;
+        currentLengthLocal = archiveSize;
+        archivedLast = currentFullPathLocal;
       } else {
-        _currentFile = result['files'][0]['name'];
-        _currentFullPath = result['files'][0]['path'] ?? '';
-        _currentPath = dirname(result['files'][0]['path'] ?? '');
-        _currentLength = result['files'][0]['size'];
+        currentFileLocal = result['files'][0]['name'];
+        currentFullPathLocal = result['files'][0]['path'] ?? '';
+        currentPathLocal = dirname(result['files'][0]['path'] ?? '');
+        currentLengthLocal = result['files'][0]['size'];
         archivedFiles = [];
         archivedLast = '';
       }
 
       // Set file information
-      FileManager.currentFile = _currentFile;
-      FileManager.currentFullPath = _currentFullPath;
-      FileManager.currentPath = _currentPath;
-      FileManager.currentLength = _currentLength;
+      FileManager.currentFile = currentFileLocal;
+      FileManager.currentFullPath = currentFullPathLocal;
+      FileManager.currentPath = currentPathLocal;
+      FileManager.currentLength = currentLengthLocal;
       FileManager.fileImported = true;
       FileManager.allowWatcher = true;
       FileManager.lockWatcher = false;

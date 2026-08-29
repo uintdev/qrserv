@@ -35,8 +35,6 @@ val objcopy = findObjcopy(home)
 if (objcopy == null) {
     println("[no-build-id] llvm-objcopy not found - Build ID strip skipped")
 } else {
-    val oc = objcopy
-
     tasks.matching { it.name.startsWith("merge") && it.name.endsWith("NativeLibs") }
         .configureEach task@{
             doLast {
@@ -47,7 +45,7 @@ if (objcopy == null) {
                         .filter { it.isFile && it.name.endsWith(".so") }
                         .forEach { f ->
                             injected.execOps.exec {
-                                commandLine(oc, "--remove-section", ".note.gnu.build-id", f.absolutePath)
+                                commandLine(objcopy, "--remove-section", ".note.gnu.build-id", f.absolutePath)
                             }
                             println("[no-build-id] stripped Build ID: ${f.name}")
                         }

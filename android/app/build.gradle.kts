@@ -5,7 +5,6 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.util.Base64
-
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -101,7 +100,7 @@ android {
                 storeFile = keystoreProperties["storeFile"]?.let { file(it) }
                 storePassword = keystoreProperties["storePassword"] as String
             } else {
-                println("Keystore properties file not found. No signing configuration will be applied.");
+                println("Keystore properties file not found. No signing configuration will be applied.")
             }
         }
     }
@@ -109,7 +108,7 @@ android {
     buildTypes {
         named("release") {
             ndk.abiFilters.clear()
-            ndk.abiFilters.addAll(listOf("arm64-v8a"))
+            ndk.abiFilters += "arm64-v8a"
             isMinifyEnabled = true
             isShrinkResources = true
             if (keystorePropertiesFile.exists()) {

@@ -72,12 +72,10 @@ class QRServ extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         localeListResolutionCallback: (locales, supportedLocales) {
-          for (Locale locale in (locales ?? [])) {
-            String langCode = locale.toString();
-            langCode = langCode.split('_')[0];
-            Locale langCodeLocale = Locale(langCode);
-            List<Locale> supportedLanguages = supportedLocales.toList();
-            if (supportedLanguages.contains(langCodeLocale)) {
+          for (final locale in locales ?? <Locale>[]) {
+            final String langCode = locale.toString().split('_')[0];
+            final Locale langCodeLocale = Locale(langCode);
+            if (supportedLocales.contains(langCodeLocale)) {
               return Locale(langCode);
             }
           }
@@ -126,9 +124,8 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   }
 
   // Import via share receiver
-  void importShare(List<SharedAttachment?>? fileData) async {
-    if (fileData == null) return;
-    if (fileData.isEmpty) return;
+  Future<void> importShare(List<SharedAttachment?>? fileData) async {
+    if (fileData == null || fileData.isEmpty) return;
 
     // Prevent further execution if still loading
     if (_actionButtonLoading) {
@@ -141,11 +138,11 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       _actionButtonLoading = true;
     });
 
-    Map<String, dynamic> fileSelection = {'files': {}};
+    final Map<String, dynamic> fileSelection = {'files': {}};
     int index = 0;
-    for (var file in fileData) {
+    for (final file in fileData) {
       if (file == null) continue;
-      int fileSize = await File(file.path).length();
+      final int fileSize = await File(file.path).length();
       fileSelection['files'].addAll({
         index: {
           'name': Path.basename(file.path),
@@ -176,7 +173,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   }
 
   @override
-  dispose() {
+  void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _intentDataStreamSubscription.cancel();
     super.dispose();
@@ -187,7 +184,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   bool _actionButtonLoading = false;
 
   // File selection handling
-  void importFile() async {
+  Future<void> importFile() async {
     // Prevent further execution if still loading
     if (_actionButtonLoading) {
       showToast(AppLocalizations.of(context)!.info_pending_fileprocessing);
@@ -202,15 +199,11 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     Map<String, dynamic> fileSelection = {};
 
     if (FileManager.directAccessMode) {
-      final Permission storagePerm;
-
       final androidInfo = await DeviceInfoPlugin().androidInfo;
-      if (androidInfo.version.sdkInt <=
-          FileManager.directAccessModeNoMESMaxAPI) {
-        storagePerm = Permission.storage;
-      } else {
-        storagePerm = Permission.manageExternalStorage;
-      }
+      final Permission storagePerm =
+          androidInfo.version.sdkInt <= FileManager.directAccessModeNoMESMaxAPI
+          ? Permission.storage
+          : Permission.manageExternalStorage;
 
       await storagePerm
           .onDeniedCallback(() {
@@ -223,7 +216,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
 
       final Directory rootPath = Directory(FileManager.directAccessPath);
 
-      String? path = await FilesystemPicker.open(
+      final String? path = await FilesystemPicker.open(
         context: context,
         rootDirectory: rootPath,
         fsType: FilesystemType.file,
@@ -241,7 +234,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
       }
 
       fileSelection = {'files': {}};
-      final int fileSize = 0;
+      const int fileSize = 0;
       fileSelection['files'].addAll({
         0: {'name': Path.basename(path), 'path': path, 'size': fileSize},
       });
@@ -256,40 +249,34 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
         });
       });
     } on PlatformException catch (error) {
-      String _exceptionData = error.code;
+      final String exceptionData = error.code;
 
-      switch (_exceptionData) {
+      switch (exceptionData) {
         // System denied storage access
         case 'read_external_storage_denied':
-          {
-            pageTypeCurrent = .permissiondenied;
-            setState(() {
-              _stateView = StateManager().msgPage(context);
-            });
-          }
+          pageTypeCurrent = .permissiondenied;
+          setState(() {
+            _stateView = StateManager().msgPage(context);
+          });
           break;
 
         // Insufficient storage
         case 'unknown_path':
-          {
-            pageTypeCurrent = .insufficientstorage;
-            await Server.shutdownServer(context);
-            setState(() {
-              _stateView = StateManager().msgPage(context);
-            });
-          }
+          pageTypeCurrent = .insufficientstorage;
+          await Server.shutdownServer(context);
+          setState(() {
+            _stateView = StateManager().msgPage(context);
+          });
           break;
 
         // Unknown exception -- inform user
         default:
-          {
-            showToast(
-              AppLocalizations.of(
-                    context,
-                  )!.info_exception_fileselection_fallback +
-                  _exceptionData,
-            );
-          }
+          showToast(
+            AppLocalizations.of(
+                  context,
+                )!.info_exception_fileselection_fallback +
+                exceptionData,
+          );
           break;
       }
 
@@ -306,7 +293,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
   }
 
   // Handle server shutdown via FAB
-  void shutdownFAB() async {
+  Future<void> shutdownFAB() async {
     pageTypeCurrent = .landing;
     await Server.shutdownServer(context).whenComplete(() async {
       if (!Server.serverRunning) {
@@ -319,7 +306,7 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
     });
   }
 
-  void infoDialogInvoker(BuildContext context) async {
+  Future<void> infoDialogInvoker(BuildContext context) async {
     await About().aboutDialog(context);
   }
 
@@ -356,19 +343,17 @@ class _Page extends State<PageState> with WidgetsBindingObserver {
               ),
             ),
             actions: [
-              kDebugMode
-                  ? IconButton(
-                      onPressed: () {
-                        showToast(
-                          'App is in debug mode -- ' +
-                              'performance is degraded and behavior ' +
-                              'may not reflect the release build.',
-                        );
-                        return;
-                      },
-                      icon: const Icon(Icons.bug_report_outlined),
-                    )
-                  : SizedBox(width: 0),
+              if (kDebugMode)
+                IconButton(
+                  onPressed: () {
+                    showToast(
+                      'App is in debug mode -- '
+                      'performance is degraded and behavior '
+                      'may not reflect the release build.',
+                    );
+                  },
+                  icon: const Icon(Icons.bug_report_outlined),
+                ),
               SizedBox(width: 10),
               menuButton(context),
               SizedBox(width: 15),

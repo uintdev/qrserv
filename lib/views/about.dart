@@ -9,7 +9,7 @@ import '../components/filemanager.dart';
 
 class About {
   // URL launch management
-  void _launchURL(Uri url, BuildContext context) async {
+  Future<void> _launchURL(Uri url, BuildContext context) async {
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: .externalApplication);
     } else {
@@ -21,21 +21,18 @@ class About {
   }
 
   // Panel interface
-  Future packageInfoRequest(BuildContext context) async {
+  Future<Widget> packageInfoRequest(BuildContext context) async {
     return FutureBuilder<PackageInfo>(
       future: PackageInfo.fromPlatform(),
       builder: (contextPackage, AsyncSnapshot<PackageInfo> snapshot) {
-        String packageInfo = '';
-        String appName = '';
-        String version = '';
-        String buildNumber = '';
+        String packageInfo;
 
         if (snapshot.hasError) {
           packageInfo = AppLocalizations.of(context)!.about_packageinfofail;
         } else if (snapshot.hasData) {
-          appName = snapshot.data?.appName ?? '(null)';
-          version = snapshot.data?.version ?? '(null)';
-          buildNumber = snapshot.data?.buildNumber ?? '(null)';
+          final String appName = snapshot.data?.appName ?? '(null)';
+          final String version = snapshot.data?.version ?? '(null)';
+          final String buildNumber = snapshot.data?.buildNumber ?? '(null)';
           packageInfo = '$appName v$version (build $buildNumber)';
         } else {
           packageInfo = AppLocalizations.of(context)!.info_pending_appinfo;
@@ -53,8 +50,8 @@ class About {
   }
 
   // Panel interface
-  Future aboutDialog(BuildContext context) async {
-    Widget packageInfo = await packageInfoRequest(context);
+  Future<void> aboutDialog(BuildContext context) async {
+    final Widget packageInfo = await packageInfoRequest(context);
 
     await showDialog(
       context: context,
@@ -62,9 +59,7 @@ class About {
       builder: (contextDialog) => Dialog(
         child: Padding(
           padding: .fromLTRB(30, 20, 30, 10),
-          child: Container(
-            child: aboutDialogContents(context, contextDialog, packageInfo),
-          ),
+          child: aboutDialogContents(context, contextDialog, packageInfo),
         ),
       ),
     );
@@ -80,35 +75,30 @@ class About {
       children: [
         Align(
           alignment: .center,
-          child: Container(
-            child: Text(
-              AppLocalizations.of(context)!.about_title,
-              style: const TextStyle(
-                fontSize: 25,
-                fontVariations: [FontVariation('wght', 500)],
-              ),
+          child: Text(
+            AppLocalizations.of(context)!.about_title,
+            style: const TextStyle(
+              fontSize: 25,
+              fontVariations: [FontVariation('wght', 500)],
             ),
           ),
         ),
         const SizedBox(height: 5),
         Align(
           alignment: .center,
-          child: Container(
-            child: Column(
-              mainAxisAlignment: .center,
-              children: [
-                packageInfo,
-                Text(
-                  (kReleaseMode ? 'Release' : 'Debug') +
-                      ', ' +
-                      (FileManager.isPlayStoreBuild ? 'Play Store' : 'GitHub'),
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontVariations: [FontVariation('wght', 300)],
-                  ),
+          child: Column(
+            mainAxisAlignment: .center,
+            children: [
+              packageInfo,
+              Text(
+                '${kReleaseMode ? 'Release' : 'Debug'}, '
+                '${FileManager.isPlayStoreBuild ? 'Play Store' : 'GitHub'}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontVariations: [FontVariation('wght', 300)],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 20),
@@ -215,36 +205,24 @@ class About {
 enum ListPositionType { Front, Between, End }
 
 BorderRadius listRadiusPosition(ListPositionType listPosition) {
-  final BorderRadius result;
-
-  switch (listPosition) {
-    case .Front:
-      result = .only(
-        topLeft: .circular(16),
-        topRight: .circular(16),
-        bottomLeft: .circular(6),
-        bottomRight: .circular(6),
-      );
-      break;
-
-    case .Between:
-      result = .only(
-        topLeft: .circular(6),
-        topRight: .circular(6),
-        bottomLeft: .circular(6),
-        bottomRight: .circular(6),
-      );
-      break;
-
-    case .End:
-      result = .only(
-        topLeft: .circular(6),
-        topRight: .circular(6),
-        bottomLeft: .circular(16),
-        bottomRight: .circular(16),
-      );
-      break;
-  }
-
-  return result;
+  return switch (listPosition) {
+    .Front => .only(
+      topLeft: .circular(16),
+      topRight: .circular(16),
+      bottomLeft: .circular(6),
+      bottomRight: .circular(6),
+    ),
+    .Between => .only(
+      topLeft: .circular(6),
+      topRight: .circular(6),
+      bottomLeft: .circular(6),
+      bottomRight: .circular(6),
+    ),
+    .End => .only(
+      topLeft: .circular(6),
+      topRight: .circular(6),
+      bottomLeft: .circular(16),
+      bottomRight: .circular(16),
+    ),
+  };
 }

@@ -55,15 +55,8 @@ class StateManager extends State<StateManagerPage> {
   // Cancel watcher subscription on server shutdown
   void watcherUnsubscriber() {
     if (!FileManager.allowWatcher) {
-      if (importWatchdog != null && importWatchdog?.cancel != null) {
-        importWatchdog?.cancel();
-      }
+      importWatchdog?.cancel();
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -74,18 +67,11 @@ class StateManager extends State<StateManagerPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _outputState;
-
     watcherUnsubscriber();
 
-    if (FileManager.fileImportPending) {
-      _outputState = loadingPage();
-    } else if (pageTypeCurrent == .imported) {
-      _outputState = importedPage(context);
-    } else {
-      _outputState = msgPage(context);
-    }
-    return _outputState;
+    if (FileManager.fileImportPending) return loadingPage();
+    if (pageTypeCurrent == .imported) return importedPage(context);
+    return msgPage(context);
   }
 
   // Loading view
@@ -122,122 +108,76 @@ class StateManager extends State<StateManagerPage> {
 
   // Page view
   Widget msgPage(BuildContext context) {
-    Map _msgInfo;
-
     // Reset state bypass
     interfaceUpdate = false;
 
-    PageType pageState = pageTypeCurrent;
-
-    switch (pageState) {
+    final Map<String, dynamic> msgInfo = switch (pageTypeCurrent) {
       // Landing
-      case .landing:
-        {
-          _msgInfo = {
-            'icon': Icons.insert_drive_file,
-            'label': AppLocalizations.of(context)!.page_landing_label,
-            'msg': AppLocalizations.of(context)!.page_landing_msg,
-          };
-        }
-        break;
+      .landing => {
+        'icon': Icons.insert_drive_file,
+        'label': AppLocalizations.of(context)!.page_landing_label,
+        'msg': AppLocalizations.of(context)!.page_landing_msg,
+      },
 
       // No network
-      case .noconnection:
-        {
-          _msgInfo = {
-            'icon': Icons.signal_wifi_off,
-            'label': AppLocalizations.of(context)!.page_info_noconnection_label,
-            'msg': AppLocalizations.of(context)!.page_info_noconnection_msg,
-          };
-        }
-        break;
+      .noconnection => {
+        'icon': Icons.signal_wifi_off,
+        'label': AppLocalizations.of(context)!.page_info_noconnection_label,
+        'msg': AppLocalizations.of(context)!.page_info_noconnection_msg,
+      },
 
       // Snapshot error while gathering interface list
-      case .snapshoterror:
-        {
-          _msgInfo = {
-            'icon': Icons.error,
-            'label': AppLocalizations.of(
-              context,
-            )!.page_info_snapshoterror_label,
-            'msg': AppLocalizations.of(context)!.page_info_snapshoterror_msg,
-          };
-        }
-        break;
+      .snapshoterror => {
+        'icon': Icons.error,
+        'label': AppLocalizations.of(context)!.page_info_snapshoterror_label,
+        'msg': AppLocalizations.of(context)!.page_info_snapshoterror_msg,
+      },
 
       // Selected file was removed
-      case .fileremoved:
-        {
-          _msgInfo = {
-            'icon': Icons.block,
-            'label': AppLocalizations.of(context)!.page_info_fileremoved_label,
-            'msg': AppLocalizations.of(context)!.page_info_fileremoved_msg,
-          };
-        }
-        break;
+      .fileremoved => {
+        'icon': Icons.block,
+        'label': AppLocalizations.of(context)!.page_info_fileremoved_label,
+        'msg': AppLocalizations.of(context)!.page_info_fileremoved_msg,
+      },
 
       // Selected file was modified
-      case .filemodified:
-        {
-          _msgInfo = {
-            'icon': Icons.edit,
-            'label': AppLocalizations.of(context)!.page_info_filemodified_label,
-            'msg': AppLocalizations.of(context)!.page_info_filemodified_msg,
-          };
-        }
-        break;
+      .filemodified => {
+        'icon': Icons.edit,
+        'label': AppLocalizations.of(context)!.page_info_filemodified_label,
+        'msg': AppLocalizations.of(context)!.page_info_filemodified_msg,
+      },
 
       // Storage permission declined
-      case .permissiondenied:
-        {
-          _msgInfo = {
-            'icon': Icons.error,
-            'label': AppLocalizations.of(
-              context,
-            )!.page_info_permissiondenied_label,
-            'msg': AppLocalizations.of(context)!.page_info_permissiondenied_msg,
-          };
-        }
-        break;
+      .permissiondenied => {
+        'icon': Icons.error,
+        'label': AppLocalizations.of(context)!.page_info_permissiondenied_label,
+        'msg': AppLocalizations.of(context)!.page_info_permissiondenied_msg,
+      },
 
       // Insufficient storage
-      case .insufficientstorage:
-        {
-          _msgInfo = {
-            'icon': Icons.disc_full,
-            'label': AppLocalizations.of(
-              context,
-            )!.page_info_insufficientstorage_label,
-            'msg': AppLocalizations.of(
-              context,
-            )!.page_info_insufficientstorage_msg,
-          };
-        }
-        break;
+      .insufficientstorage => {
+        'icon': Icons.disc_full,
+        'label': AppLocalizations.of(
+          context,
+        )!.page_info_insufficientstorage_label,
+        'msg': AppLocalizations.of(context)!.page_info_insufficientstorage_msg,
+      },
 
       // Port reuse
-      case .portinuse:
-        {
-          _msgInfo = {
-            'icon': Icons.error,
-            'label': AppLocalizations.of(context)!.page_info_portinuse_label,
-            'msg': AppLocalizations.of(context)!.page_info_portinuse_msg,
-          };
-        }
-        break;
+      .portinuse => {
+        'icon': Icons.error,
+        'label': AppLocalizations.of(context)!.page_info_portinuse_label,
+        'msg': AppLocalizations.of(context)!.page_info_portinuse_msg,
+      },
 
-      default:
-        {
-          _msgInfo = {
-            'icon': Icons.error,
-            'label': AppLocalizations.of(context)!.page_info_fallback_label,
-            'msg':
-                AppLocalizations.of(context)!.page_info_fallback_msg +
-                pageState.toString(),
-          };
-        }
-        break;
-    }
+      _ => {
+        'icon': Icons.error,
+        'label': AppLocalizations.of(context)!.page_info_fallback_label,
+        'msg':
+            '${AppLocalizations.of(context)!.page_info_fallback_msg}'
+            '$pageTypeCurrent',
+      },
+    };
 
     CacheManager.deleteCache(context);
 
@@ -253,13 +193,13 @@ class StateManager extends State<StateManagerPage> {
               child: Column(
                 children: <Widget>[
                   Icon(
-                    _msgInfo['icon'],
+                    msgInfo['icon'],
                     size: 80,
-                    semanticLabel: _msgInfo['label'],
+                    semanticLabel: msgInfo['label'],
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    _msgInfo['msg'],
+                    msgInfo['msg'],
                     style: const TextStyle(
                       fontSize: 14,
                       fontVariations: [FontVariation('wght', 400)],
@@ -286,28 +226,25 @@ class StateManager extends State<StateManagerPage> {
         if (snapshot.hasError) {
           pageTypeCurrent = .snapshoterror;
           return msgPage(context);
-        } else if (snapshot.hasData && interfaceUpdate ||
-            snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
+        } else if (snapshot.hasData &&
+            (interfaceUpdate || snapshot.connectionState == .done)) {
           // Enable state bypass
           interfaceUpdate = true;
           // File information
-          Map<String, dynamic> _fileInfo = FileManager.readInfo();
+          final Map<String, dynamic> fileInfo = FileManager.readInfo();
 
           // Human readable file size
-          String _sizeHuman = FileManager.fileSizeHuman(
-            _fileInfo['length'],
+          final String sizeHuman = FileManager.fileSizeHuman(
+            fileInfo['length'],
             context,
           );
 
           // Only update on next full run or if selected IP is gone
           if (!snapshot.data!['interfaces'].contains(selectedIP.toString())) {
             // Use empty string if no initial IP address to choose from
-            if (snapshot.data!['interfaces'].isEmpty) {
-              defaultIP = '';
-            } else {
-              defaultIP = snapshot.data!['interfaces'][0];
-            }
+            defaultIP = snapshot.data!['interfaces'].isEmpty
+                ? ''
+                : snapshot.data!['interfaces'][0];
 
             // If no interfaces available, return network error page
             if (defaultIP.isEmpty) {
@@ -327,29 +264,22 @@ class StateManager extends State<StateManagerPage> {
             return msgPage(context);
           }
 
-          String? _hostFormatted;
-          String _filePath;
-
           // Formatting for IPv6
-          if (!Network.checkIPv4(selectedIP)) {
-            _hostFormatted = '[$selectedIP]';
-          } else {
-            _hostFormatted = selectedIP;
-          }
+          final String? hostFormatted = Network.checkIPv4(selectedIP)
+              ? selectedIP
+              : '[$selectedIP]';
 
           // Check if to include file name in path
-          if (FIU.state) {
-            _filePath = Uri.encodeComponent(_fileInfo['name']);
-          } else {
-            _filePath = '';
-          }
+          final String filePath = FIU.state
+              ? Uri.encodeComponent(fileInfo['name'])
+              : '';
 
-          String _hostName =
-              'http://$_hostFormatted:${snapshot.data!['port'].toString()}/$_filePath';
+          final String hostName =
+              'http://$hostFormatted:${snapshot.data!['port']}/$filePath';
 
           fileUntampered =
-              (Server.fileExists(_fileInfo['path']) &&
-              !(fileTampered == .filemodified));
+              Server.fileExists(fileInfo['path']) &&
+              fileTampered != .filemodified;
 
           if (!fileUntampered) {
             pageTypeCurrent = fileTampered;
@@ -361,65 +291,59 @@ class StateManager extends State<StateManagerPage> {
             if (!FileManager.lockWatcher) {
               FileManager.lockWatcher = true;
               watcherUnsubscriber();
-              FileWatcher watcher = FileWatcher(_fileInfo['path']);
-              importWatchdog = watcher.events.listen((event) {
-                if (!(event.path == _fileInfo['path'] &&
-                    FileManager.allowWatcher))
+              final FileWatcher fileWatcher = FileWatcher(fileInfo['path']);
+              importWatchdog = fileWatcher.events.listen((event) {
+                if (event.path != fileInfo['path'] ||
+                    !FileManager.allowWatcher) {
                   return;
+                }
 
-                bool watchedFileExists = Server.fileExists(_fileInfo['path']);
+                final bool watchedFileExists = Server.fileExists(
+                  fileInfo['path'],
+                );
 
                 if (!watchedFileExists) {
                   setFileStatus(false);
                 } else if (event.type == .MODIFY &&
                     watchedFileExists &&
-                    FileManager.directModeDetect(_fileInfo['path'])) {
+                    FileManager.directModeDetect(fileInfo['path'])) {
                   setFileStatus(false, .filemodified);
                 }
               });
             }
-          } on FileSystemException {
-            setFileStatus(false);
           } catch (_) {
             setFileStatus(false);
           }
 
           String fileDataTip() {
-            String fileResult = '';
-            List archivedFile = [];
-            List archivedList = FileManager.readInfo()['archived'];
+            final List archivedList = FileManager.readInfo()['archived'];
 
-            if (archivedList.length > 0) {
-              archivedFile.add(_fileInfo['name']);
+            if (archivedList.isNotEmpty) {
+              final List archivedFile = [fileInfo['name']];
 
-              archivedList.forEach((element) {
+              for (final element in archivedList) {
                 archivedFile.add(
-                  element['file'] +
-                      ' (' +
-                      FileManager.fileSizeHuman(element['size'], context) +
-                      ')',
+                  '${element['file']} '
+                  '(${FileManager.fileSizeHuman(element['size'], context)})',
                 );
-              });
-
-              fileResult = archivedFile.join('\n');
-            } else {
-              if (FileManager.directModeDetect(_fileInfo['path'])) {
-                fileResult = _fileInfo['path'];
-              } else {
-                fileResult = _fileInfo['name'];
               }
+
+              return archivedFile.join('\n');
             }
-            return fileResult;
+
+            return FileManager.directModeDetect(fileInfo['path'])
+                ? fileInfo['path']
+                : fileInfo['name'];
           }
 
           // Import layout
           return importedFileView(
-            _hostName,
+            hostName,
             context,
             snapshot,
             fileDataTip,
-            _fileInfo,
-            _sizeHuman,
+            fileInfo,
+            sizeHuman,
           );
         } else {
           return loadingPage();
@@ -429,16 +353,16 @@ class StateManager extends State<StateManagerPage> {
   }
 
   Column importedFileView(
-    String _hostName,
+    String hostName,
     BuildContext context,
     AsyncSnapshot<Map<String, dynamic>> snapshot,
     String fileDataTip(),
-    Map<String, dynamic> _fileInfo,
-    String _sizeHuman,
+    Map<String, dynamic> fileInfo,
+    String sizeHuman,
   ) {
     return Column(
       children: <Widget>[
-        importedFileQR(_hostName, context),
+        importedFileQR(hostName, context),
         const SizedBox(height: 30),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 330),
@@ -452,8 +376,8 @@ class StateManager extends State<StateManagerPage> {
                   importedFileInfoName(
                     context,
                     fileDataTip,
-                    _fileInfo,
-                    _sizeHuman,
+                    fileInfo,
+                    sizeHuman,
                   ),
                   const SizedBox(height: 5),
                   Row(
@@ -466,7 +390,7 @@ class StateManager extends State<StateManagerPage> {
                       const SizedBox(width: 5),
                       SizedBox(
                         width: 60,
-                        child: importedFileShare(_hostName, context),
+                        child: importedFileShare(hostName, context),
                       ),
                     ],
                   ),
@@ -474,8 +398,8 @@ class StateManager extends State<StateManagerPage> {
                   importedFileInfo(
                     context,
                     fileDataTip,
-                    _fileInfo,
-                    _sizeHuman,
+                    fileInfo,
+                    sizeHuman,
                     snapshot,
                   ),
                 ],
@@ -487,18 +411,18 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  Card importedFileQR(String _hostName, BuildContext context) {
+  Card importedFileQR(String hostName, BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: .circular(25)),
       elevation: 1,
       clipBehavior: .antiAlias,
       child: GestureDetector(
         onLongPress: () {
-          ShareManager.copyURL(_hostName, context);
+          ShareManager.copyURL(hostName, context);
         },
         child: ForceLTR(
           Tooltip(
-            message: _hostName,
+            message: hostName,
             triggerMode: .tap,
             showDuration: Duration(days: 1),
             padding: const .all(10),
@@ -509,7 +433,7 @@ class StateManager extends State<StateManagerPage> {
               fontVariations: [FontVariation('wght', 500)],
             ),
             child: QrImageView(
-              data: _hostName,
+              data: hostName,
               size: (MediaQuery.of(context).size.height * .23),
               backgroundColor: const .fromRGBO(255, 255, 255, 1),
               padding: .all((MediaQuery.of(context).size.height * .029)),
@@ -520,7 +444,7 @@ class StateManager extends State<StateManagerPage> {
     );
   }
 
-  Card importedFileShare(String _hostName, BuildContext context) {
+  Card importedFileShare(String hostName, BuildContext context) {
     return Card(
       color: Theme.of(context).canvasColor,
       shape: RoundedRectangleBorder(borderRadius: .circular(10)),
@@ -532,7 +456,7 @@ class StateManager extends State<StateManagerPage> {
             shape: RoundedRectangleBorder(borderRadius: .circular(10)),
           ),
           onPressed: () {
-            ShareManager.shareSheet(_hostName);
+            ShareManager.shareSheet(hostName);
           },
           child: Icon(
             Icons.share,
@@ -607,8 +531,8 @@ class StateManager extends State<StateManagerPage> {
 Widget importedFileInfoName(
   BuildContext context,
   String fileDataTip(),
-  Map<String, dynamic> _fileInfo,
-  String _sizeHuman,
+  Map<String, dynamic> fileInfo,
+  String sizeHuman,
 ) {
   return ForceLTR(
     Tooltip(
@@ -629,7 +553,7 @@ Widget importedFileInfoName(
           padding: const .fromLTRB(20, 18, 22, 18),
           child: Row(
             children: [
-              Icon(importedFileInfoIcon(_fileInfo['name']), size: 16),
+              Icon(importedFileInfoIcon(fileInfo['name']), size: 16),
               SizedBox(width: 15),
               Flexible(
                 fit: FlexFit.tight,
@@ -638,11 +562,11 @@ Widget importedFileInfoName(
                   children: <Widget>[
                     Flexible(
                       child: Text(
-                        truncateShowFileExtension(_fileInfo['name'])
-                            ? _fileInfo['name'].split(
-                                path.extension(_fileInfo['name']),
+                        truncateShowFileExtension(fileInfo['name'])
+                            ? fileInfo['name'].split(
+                                path.extension(fileInfo['name']),
                               )[0]
-                            : _fileInfo['name'],
+                            : fileInfo['name'],
                         style: const TextStyle(
                           fontSize: 13,
                           fontVariations: [FontVariation('wght', 300)],
@@ -653,8 +577,8 @@ Widget importedFileInfoName(
                       ),
                     ),
                     Text(
-                      truncateShowFileExtension(_fileInfo['name'])
-                          ? path.extension(_fileInfo['name'])
+                      truncateShowFileExtension(fileInfo['name'])
+                          ? path.extension(fileInfo['name'])
                           : '',
                       style: const TextStyle(
                         fontSize: 13,
@@ -675,8 +599,8 @@ Widget importedFileInfoName(
 Column importedFileInfo(
   BuildContext context,
   String fileDataTip(),
-  Map<String, dynamic> _fileInfo,
-  String _sizeHuman,
+  Map<String, dynamic> fileInfo,
+  String sizeHuman,
   AsyncSnapshot<Map<String, dynamic>> snapshot,
 ) {
   const double tableGap = 4;
@@ -709,7 +633,7 @@ Column importedFileInfo(
                 child: Center(
                   child: ForceLTR(
                     Text(
-                      _sizeHuman,
+                      sizeHuman,
                       style: const TextStyle(
                         fontSize: 13,
                         fontVariations: [FontVariation('wght', 300)],
@@ -760,15 +684,13 @@ Column importedFileInfo(
 }
 
 IconData importedFileInfoIcon(String fileName) {
-  IconData result = Icons.insert_drive_file;
-
   final int dotIndex = fileName.lastIndexOf('.');
 
-  if (dotIndex == -1) return result;
+  if (dotIndex == -1) return Icons.insert_drive_file;
 
-  final String fileExtension = (fileName.substring(dotIndex + 1)).toLowerCase();
+  final String fileExtension = fileName.substring(dotIndex + 1).toLowerCase();
 
-  final List<String> fileExtensionsArchive = [
+  const List<String> fileExtensionsArchive = [
     '7z',
     'xz',
     'bz2',
@@ -778,7 +700,7 @@ IconData importedFileInfoIcon(String fileName) {
     'rar',
     'cab',
   ];
-  final List<String> fileExtensionsImage = [
+  const List<String> fileExtensionsImage = [
     'png',
     'jpg',
     'jpeg',
@@ -792,7 +714,7 @@ IconData importedFileInfoIcon(String fileName) {
     'tif',
     'tiff',
   ];
-  final List<String> fileExtensionsVideo = [
+  const List<String> fileExtensionsVideo = [
     '3gp',
     'avi',
     'mkv',
@@ -803,7 +725,7 @@ IconData importedFileInfoIcon(String fileName) {
     'webm',
     'wmv',
   ];
-  final List<String> fileExtensionsAudio = [
+  const List<String> fileExtensionsAudio = [
     'aac',
     'aiff',
     'flac',
@@ -819,19 +741,13 @@ IconData importedFileInfoIcon(String fileName) {
     'wma',
   ];
 
-  if (fileExtensionsArchive.contains(fileExtension)) {
-    result = Icons.folder_zip;
-  } else if (fileExtensionsImage.contains(fileExtension)) {
-    result = Icons.image;
-  } else if (fileExtensionsVideo.contains(fileExtension)) {
-    result = Icons.video_file;
-  } else if (fileExtensionsAudio.contains(fileExtension)) {
-    result = Icons.audio_file;
-  } else if (fileExtension == 'apk') {
-    result = Icons.android;
-  }
+  if (fileExtensionsArchive.contains(fileExtension)) return Icons.folder_zip;
+  if (fileExtensionsImage.contains(fileExtension)) return Icons.image;
+  if (fileExtensionsVideo.contains(fileExtension)) return Icons.video_file;
+  if (fileExtensionsAudio.contains(fileExtension)) return Icons.audio_file;
+  if (fileExtension == 'apk') return Icons.android;
 
-  return result;
+  return Icons.insert_drive_file;
 }
 
 Widget ForceLTR(Widget child) {
