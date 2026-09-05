@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:material_ui/material_ui.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
