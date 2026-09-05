@@ -86,9 +86,9 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         ndk {
-            debugSymbolLevel = "SYMBOL_TABLE"
             abiFilters.clear()
             abiFilters += "arm64-v8a"
+            debugSymbolLevel = "SYMBOL_TABLE"
         }
     }
 
@@ -107,8 +107,6 @@ android {
 
     buildTypes {
         named("release") {
-            ndk.abiFilters.clear()
-            ndk.abiFilters += "arm64-v8a"
             isMinifyEnabled = true
             isShrinkResources = true
             if (keystorePropertiesFile.exists()) {
