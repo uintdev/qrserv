@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.2
+
+- Various dependency updates and migrations
+- General optimizations
+
 ## 3.1.1
 
 - Minimum supported SDK version to Flutter 3.44/Dart 3.12
