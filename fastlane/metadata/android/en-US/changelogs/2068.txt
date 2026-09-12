@@ -1,0 +1,10 @@
+- Rewritten in Kotlin and Jetpack Compose
+- Updated UI
+- Major performance, UX, and stability improvements
+- Live progress is now shown while importing single or multiple files
+- In-app theme picker
+- Direct Access Mode Browser now supports sorting by various file attributes and filtering by file name
+- Sharing text with the app via share sheet now results in a creation of a text file that can be shared
+- Available once again on more architectures
+
+For more changes, see GitHub releases.
