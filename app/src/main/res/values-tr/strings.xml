@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">Dosya seç</string>
+    <string name="page_landing_msg">Paylaşılacak dosyaları seçin...</string>
+    <string name="page_info_noconnection_label">Ağ bağlantısı yok</string>
+    <string name="page_info_noconnection_msg">Bir ağa bağlanın ve tekrar deneyin</string>
+    <string name="page_info_snapshoterror_label">Hata</string>
+    <string name="page_info_snapshoterror_msg">Ağ bilgileri toplanırken hata oluştu</string>
+    <string name="page_info_fileremoved_label">Dosya kaldırıldı</string>
+    <string name="page_info_fileremoved_msg">Dosya kaldırıldı</string>
+    <string name="page_info_filemodified_label">Dosya değiştirildi</string>
+    <string name="page_info_filemodified_msg">Dosya değiştirildi</string>
+    <string name="page_info_permissiondenied_msg">Depolama izni reddedildi</string>
+    <string name="page_info_insufficientstorage_label">Hata</string>
+    <string name="page_info_insufficientstorage_msg">Yeterli depolama alanı yok</string>
+    <string name="page_info_portinuse_label">Hata</string>
+    <string name="page_info_portinuse_msg">Sunucu zaten bağlanmış bağlantı noktasıyla başlatılmaya çalışıldı</string>
+    <string name="page_info_fallback_label">Hata</string>
+    <string name="page_info_fallback_msg">Bir hata oluştu.\nKod: %1$s</string>
+    <string name="page_info_unhandlederror_label">Hata</string>
+    <string name="page_info_unhandlederror_msg">Beklenmeyen bir hata oluştu</string>
+    <string name="page_info_unhandlederror_hint">Ayrıntıları kopyalamak için basılı tutun</string>
+
+    <string name="page_imported_share_sheet_label">Paylaş</string>
+    <string name="page_imported_share_clipboard">Kopyalandı</string>
+    <string name="page_imported_size">Boyut</string>
+    <string name="page_imported_port">Port</string>
+    <string name="page_imported_archive_morefiles">+%1$d daha</string>
+
+    <string name="fab_shutdownserver_label">Sunucuyu kapat</string>
+    <string name="fab_selectfile_label">Dosya seçin</string>
+
+    <string name="debug_build_toast">Hata ayıklama sürümü: performans sürümden farklı olabilir.</string>
+
+    <string name="info_exception_portinuse">Bağlantı noktası bağlanırken hata oluştu: %1$s</string>
+    <string name="info_exception_linkopenfailed">HTTPS bağlantılarını açacak uygulama yok</string>
+    <string name="info_pending_fileprocessing">Şu anda dosya seçimi işleniyor...</string>
+    <string name="info_pending_fileprocessing_shutdown">Dosya seçimi işlenirken sunucu durdurulamaz.</string>
+    <string name="info_pending_servershutdown">Sunucu kapatılması bekleniyor...</string>
+
+    <string name="server_info_download_started">İndirme başladı: %1$s</string>
+    <string name="server_info_download_finished">İndirme bitmiş: %1$s</string>
+    <string name="server_info_gone">Sunucu yok: %1$s</string>
+
+    <string name="about_title">Hakkında</string>
+    <string name="about_releases_title">Sürümler</string>
+    <string name="about_opensource_title">Açık kaynak</string>
+    <string name="about_donate_title">Bağış</string>
+    <string name="about_close">Kapat</string>
+
+    <string name="dam_path_not_found">Hata: Doğrudan Erişim Modu için yol bulunamadı</string>
+    <string name="dam_browser_empty_folder_label">Boş</string>
+    <string name="dam_browser_empty_folder_msg">Bu klasörde dosya veya klasör yok</string>
+    <string name="dam_browser_sort_name">Ad</string>
+    <string name="dam_browser_sort_size">Boyut</string>
+    <string name="dam_browser_sort_type">Tür</string>
+    <string name="dam_browser_sort_created">Oluşturulma</string>
+    <string name="dam_browser_sort_modified">Değiştirilme</string>
+    <string name="dam_browser_sort_order_ascending">Artan sıra</string>
+    <string name="dam_browser_sort_order_descending">Azalan sıra</string>
+    <string name="dam_browser_refresh">Yenile</string>
+    <string name="dam_browser_search_placeholder">Ara</string>
+    <string name="dam_browser_search_clear">Aramayı temizle</string>
+    <string name="dam_browser_search_noresults_label">Sonuç yok</string>
+    <string name="dam_browser_search_noresults_msg">Aramanızla eşleşen dosya veya klasör yok</string>
+    <string name="dam_browser_file_gone">Bu dosya artık mevcut değil. Listeyi güncellemek için Yenile\'ye dokunun.</string>
+    <string name="dam_browser_folder_gone">Bu klasör artık mevcut değil. Listeyi güncellemek için Yenile\'ye dokunun.</string>
+
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_subheading_server">Sunucu</string>
+    <string name="settings_server_port_list_title">Port numarası</string>
+    <string name="settings_server_port_list_subtitle">Belirli veya rastgele bir port numarası kullanın</string>
+    <string name="settings_server_port_dialog_description">Port numarası %1$s ile %2$s arasında olmalıdır. Rastgele bir port için boş bırakın.</string>
+    <string name="settings_server_port_dialog_serveractive">Değişiklikler sunucu yeniden başlatıldığında geçerli olacaktır.</string>
+    <string name="settings_server_port_dialog_submit">Portu Ayarla</string>
+    <string name="settings_server_port_dialog_portinuse">Port zaten kullanılıyor</string>
+    <string name="settings_server_port_dialog_saved">Değişiklikler kaydedildi</string>
+    <string name="settings_subheading_client">İstemci</string>
+    <string name="settings_client_dam_list_title">Doğrudan Erişim Modu</string>
+    <string name="settings_client_dam_list_subtitle">Büyük dosyalar için idealdir</string>
+    <string name="settings_client_dam_ineligiblebuild">Android 11+ GitHub sürümünü gerektirir</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">URL\'deki Dosya Adı</string>
+    <string name="settings_client_fiu_list_subtitle">Dosya adını URL\'ye dahil et</string>
+    <string name="settings_subheading_general">Genel</string>
+    <string name="settings_general_theme_list_title">Tema</string>
+    <string name="settings_general_theme_option_system">Sistem varsayılanı</string>
+    <string name="settings_general_theme_option_dark">Koyu</string>
+    <string name="settings_general_theme_option_light">Açık</string>
+    <string name="settings_general_defaults_list_title">Varsayılan ayarları geri yükle</string>
+    <string name="settings_general_defaults_success">Varsayılan ayarlar geri yüklendi</string>
+</resources>

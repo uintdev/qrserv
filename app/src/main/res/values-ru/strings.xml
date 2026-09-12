@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">Выберите файл(ы)</string>
+    <string name="page_landing_msg">Выберите файлы для обмена...</string>
+    <string name="page_info_noconnection_label">Нет подключения к сети</string>
+    <string name="page_info_noconnection_msg">Подключитесь к сети и повторите попытку</string>
+    <string name="page_info_snapshoterror_label">Ошибка</string>
+    <string name="page_info_snapshoterror_msg">Ошибка при сборе сетевой информации</string>
+    <string name="page_info_fileremoved_label">Файл удалён</string>
+    <string name="page_info_fileremoved_msg">Файл был удалён</string>
+    <string name="page_info_filemodified_label">Файл изменен</string>
+    <string name="page_info_filemodified_msg">Файл был изменен</string>
+    <string name="page_info_permissiondenied_msg">Доступ к хранилищу был запрещён</string>
+    <string name="page_info_insufficientstorage_label">Ошибка</string>
+    <string name="page_info_insufficientstorage_msg">Недостаточно свободного места</string>
+    <string name="page_info_portinuse_label">Ошибка</string>
+    <string name="page_info_portinuse_msg">Сервер пытался начать с уже привязанного порта</string>
+    <string name="page_info_fallback_label">Ошибка</string>
+    <string name="page_info_fallback_msg">Произошла ошибка. Код: %1$s</string>
+    <string name="page_info_unhandlederror_label">Ошибка</string>
+    <string name="page_info_unhandlederror_msg">Произошла непредвиденная ошибка</string>
+    <string name="page_info_unhandlederror_hint">Нажмите и удерживайте, чтобы скопировать детали</string>
+
+    <string name="page_imported_share_sheet_label">Поделиться</string>
+    <string name="page_imported_share_clipboard">Скопировано</string>
+    <string name="page_imported_size">Размер</string>
+    <string name="page_imported_port">Порт</string>
+    <string name="page_imported_archive_morefiles">+%1$d ещё</string>
+
+    <string name="fab_shutdownserver_label">Выключить сервер</string>
+    <string name="fab_selectfile_label">Выберите файл(ы)</string>
+
+    <string name="debug_build_toast">Debug-сборка: производительность может отличаться от релиза.</string>
+
+    <string name="info_exception_portinuse">Ошибка привязки порта: %1$s</string>
+    <string name="info_exception_linkopenfailed">Нет приложения для открытия HTTPS-ссылок</string>
+    <string name="info_pending_fileprocessing">Идёт обработка выбора файла...</string>
+    <string name="info_pending_fileprocessing_shutdown">Сервер нельзя остановить во время обработки файлов.</string>
+    <string name="info_pending_servershutdown">Ожидание отключения сервера...</string>
+
+    <string name="server_info_download_started">загрузка началась: %1$s</string>
+    <string name="server_info_download_finished">загрузка завершена: %1$s</string>
+    <string name="server_info_gone">Сервер недоступен: %1$s</string>
+
+    <string name="about_title">О программе</string>
+    <string name="about_releases_title">Релизы</string>
+    <string name="about_opensource_title">Открытый исходный код</string>
+    <string name="about_donate_title">Поддержать</string>
+    <string name="about_close">Закрыть</string>
+
+    <string name="dam_path_not_found">Ошибка: Путь для режима прямого доступа не найден</string>
+    <string name="dam_browser_empty_folder_label">Пусто</string>
+    <string name="dam_browser_empty_folder_msg">В этой папке нет файлов или папок</string>
+    <string name="dam_browser_sort_name">Имя</string>
+    <string name="dam_browser_sort_size">Размер</string>
+    <string name="dam_browser_sort_type">Тип</string>
+    <string name="dam_browser_sort_created">Создано</string>
+    <string name="dam_browser_sort_modified">Изменено</string>
+    <string name="dam_browser_sort_order_ascending">По возрастанию</string>
+    <string name="dam_browser_sort_order_descending">По убыванию</string>
+    <string name="dam_browser_refresh">Обновить</string>
+    <string name="dam_browser_search_placeholder">Поиск</string>
+    <string name="dam_browser_search_clear">Очистить поиск</string>
+    <string name="dam_browser_search_noresults_label">Нет результатов</string>
+    <string name="dam_browser_search_noresults_msg">Нет файлов или папок, соответствующих вашему запросу</string>
+    <string name="dam_browser_file_gone">Этот файл больше не существует. Нажмите «Обновить», чтобы обновить список.</string>
+    <string name="dam_browser_folder_gone">Эта папка больше не существует. Нажмите «Обновить», чтобы обновить список.</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_subheading_server">Сервер</string>
+    <string name="settings_server_port_list_title">номер порта</string>
+    <string name="settings_server_port_list_subtitle">Используйте определенный или случайный номер порта</string>
+    <string name="settings_server_port_dialog_description">Номер порта должен быть в диапазоне от %1$s до %2$s. Оставьте поле пустым, чтобы порт был выбран автоматически.</string>
+    <string name="settings_server_port_dialog_serveractive">Изменения вступят в силу после перезапуска сервера.</string>
+    <string name="settings_server_port_dialog_submit">Задать порт</string>
+    <string name="settings_server_port_dialog_portinuse">Порт уже используется</string>
+    <string name="settings_server_port_dialog_saved">Изменения сохранены</string>
+    <string name="settings_subheading_client">Клиент</string>
+    <string name="settings_client_dam_list_title">Режим прямого доступа</string>
+    <string name="settings_client_dam_list_subtitle">Идеально подходит для больших файлов</string>
+    <string name="settings_client_dam_ineligiblebuild">Android 11+ требует версии с GitHub</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">Имя файла в URL</string>
+    <string name="settings_client_fiu_list_subtitle">Включать имя файла в URL-адрес</string>
+    <string name="settings_subheading_general">Общие</string>
+    <string name="settings_general_theme_list_title">Тема</string>
+    <string name="settings_general_theme_option_system">Системная</string>
+    <string name="settings_general_theme_option_dark">Тёмная</string>
+    <string name="settings_general_theme_option_light">Светлая</string>
+    <string name="settings_general_defaults_list_title">Восстановить настройки по умолчанию</string>
+    <string name="settings_general_defaults_success">Настройки по умолчанию восстановлены</string>
+</resources>

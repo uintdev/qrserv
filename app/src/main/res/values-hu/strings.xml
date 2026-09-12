@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">Fájl(ok) kiválasztása</string>
+    <string name="page_landing_msg">Megosztható fájlok kiválasztása...</string>
+    <string name="page_info_noconnection_label">Nincs hálózati kapcsolat</string>
+    <string name="page_info_noconnection_msg">Ellenőrizd a hálózatot, és próbáld újra</string>
+    <string name="page_info_snapshoterror_label">Hiba</string>
+    <string name="page_info_snapshoterror_msg">Hiba történt a hálózati információk lekérdezésekor</string>
+    <string name="page_info_fileremoved_label">Fájl törölve</string>
+    <string name="page_info_fileremoved_msg">Fájl törölve lett</string>
+    <string name="page_info_filemodified_label">Fájl módosítva</string>
+    <string name="page_info_filemodified_msg">Fájl módosítva lett</string>
+    <string name="page_info_permissiondenied_msg">Tárhely hozzáférés megtagadva</string>
+    <string name="page_info_insufficientstorage_label">Hiba</string>
+    <string name="page_info_insufficientstorage_msg">Elégtelen tárolás</string>
+    <string name="page_info_portinuse_label">Hiba</string>
+    <string name="page_info_portinuse_msg">Egy már használt porton próbált indulni a szerver</string>
+    <string name="page_info_fallback_label">Hiba</string>
+    <string name="page_info_fallback_msg">Egy hiba történt.\nKód: %1$s</string>
+    <string name="page_info_unhandlederror_label">Hiba</string>
+    <string name="page_info_unhandlederror_msg">Váratlan hiba történt</string>
+    <string name="page_info_unhandlederror_hint">Tartsa lenyomva a részletek másolásához</string>
+
+    <string name="page_imported_share_sheet_label">Megosztás</string>
+    <string name="page_imported_share_clipboard">Átmásolva</string>
+    <string name="page_imported_size">Méret</string>
+    <string name="page_imported_port">Port</string>
+    <string name="page_imported_archive_morefiles">+%1$d további</string>
+
+    <string name="fab_shutdownserver_label">Szerver leállítása</string>
+    <string name="fab_selectfile_label">Fájl(ok) kiválasztása</string>
+
+    <string name="debug_build_toast">Debug build: a teljesítmény eltérhet a kiadott verziótól.</string>
+
+    <string name="info_exception_portinuse">Nem sikerült a következő port használata: %1$s</string>
+    <string name="info_exception_linkopenfailed">Nincs elérhető alkalmazás a HTTPS-hivatkozások megnyitásához</string>
+    <string name="info_pending_fileprocessing">Jelenleg a fájl kiválasztása feldolgozása zajlik...</string>
+    <string name="info_pending_fileprocessing_shutdown">A kiszolgáló nem állítható le fájlválasztás feldolgozása közben.</string>
+    <string name="info_pending_servershutdown">Szerver leállítás folyamatban...</string>
+
+    <string name="server_info_download_started">Letöltés megkezdve: %1$s</string>
+    <string name="server_info_download_finished">Letöltés kész: %1$s</string>
+    <string name="server_info_gone">A szerver eltűnt: %1$s</string>
+
+    <string name="about_title">Névjegy</string>
+    <string name="about_releases_title">Kiadások</string>
+    <string name="about_opensource_title">Nyílt forráskód</string>
+    <string name="about_donate_title">Támogatás</string>
+    <string name="about_close">Bezár</string>
+
+    <string name="dam_path_not_found">Hiba: a Közvetlen Hozzáférési Mód útvonala nem található.</string>
+    <string name="dam_browser_empty_folder_label">Üres</string>
+    <string name="dam_browser_empty_folder_msg">Ez a mappa nem tartalmaz fájlokat vagy mappákat</string>
+    <string name="dam_browser_sort_name">Név</string>
+    <string name="dam_browser_sort_size">Méret</string>
+    <string name="dam_browser_sort_type">Típus</string>
+    <string name="dam_browser_sort_created">Létrehozva</string>
+    <string name="dam_browser_sort_modified">Módosítva</string>
+    <string name="dam_browser_sort_order_ascending">Növekvő sorrend</string>
+    <string name="dam_browser_sort_order_descending">Csökkenő sorrend</string>
+    <string name="dam_browser_refresh">Frissítés</string>
+    <string name="dam_browser_search_placeholder">Keresés</string>
+    <string name="dam_browser_search_clear">Keresés törlése</string>
+    <string name="dam_browser_search_noresults_label">Nincs találat</string>
+    <string name="dam_browser_search_noresults_msg">Nincs a keresésednek megfelelő fájl vagy mappa</string>
+    <string name="dam_browser_file_gone">Ez a fájl már nem létezik. Koppintson a Frissítés gombra.</string>
+    <string name="dam_browser_folder_gone">Ez a mappa már nem létezik. Koppintson a Frissítés gombra.</string>
+
+    <string name="settings_title">Beállítások</string>
+    <string name="settings_subheading_server">Szerver</string>
+    <string name="settings_server_port_list_title">Portszám</string>
+    <string name="settings_server_port_list_subtitle">Használjon egy meghatározott vagy véletlenszerű portszámot</string>
+    <string name="settings_server_port_dialog_description">Portszám tartományának %1$s és %2$s között kell lennie. Hagyja üresen egy véletlenszerű porthoz.</string>
+    <string name="settings_server_port_dialog_serveractive">Változtatások a szerver újraindítása után lépnek érvénybe.</string>
+    <string name="settings_server_port_dialog_submit">Port Beállítása</string>
+    <string name="settings_server_port_dialog_portinuse">Port már használatban van</string>
+    <string name="settings_server_port_dialog_saved">Módosítások mentve</string>
+    <string name="settings_subheading_client">Kliens</string>
+    <string name="settings_client_dam_list_title">Közvetlen Hozzáférési Mód</string>
+    <string name="settings_client_dam_list_subtitle">Nagy méretű fájlokhoz ideális</string>
+    <string name="settings_client_dam_ineligiblebuild">Android 11+ esetén a GitHub-verzió szükséges</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">Fájlnév az URL-ben</string>
+    <string name="settings_client_fiu_list_subtitle">Fájlnév szerepeltetése az URL-ben</string>
+    <string name="settings_subheading_general">Általános</string>
+    <string name="settings_general_theme_list_title">Téma</string>
+    <string name="settings_general_theme_option_system">Rendszer alapértelmezett</string>
+    <string name="settings_general_theme_option_dark">Sötét</string>
+    <string name="settings_general_theme_option_light">Világos</string>
+    <string name="settings_general_defaults_list_title">Alapértelmezett beállítások visszaállítása</string>
+    <string name="settings_general_defaults_success">Alapértelmezett beállítások visszaállítva</string>
+</resources>

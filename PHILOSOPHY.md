@@ -10,15 +10,13 @@ In this case, the primary purpose is to make a file selection accessible through
 
 ## Why does the app struggle with large files?
 
-QRServ was built using the Flutter UI framework.
+Android's document picker and share sheet only hand the app a content URI, not a real filesystem path-there is no way to read the original file directly from that. To work around this, the file picker has to copy the selected file into the app's own app data (cache) before it can be served. As a result, this temporarily uses more storage and adds the extra processing of making a copy of the selection. How fast this is depends on the SoC and NAND flash storage bandwidth. As you can imagine, this can be a struggle on lower-end devices.
 
-The file picker dependencies for the share sheet and the document UI do not allow gathering the original path and instead copy the selected file into cache. As a result, this temporarily uses more storage and adds the extra processing of making a copy of the selection. How fast this is depends on the SoC and NAND flash storage bandwidth. As you can imagine, this can be a struggle on lower-end devices.
-
-It is worth noting that the limitations are not specific to this application. Similar applications built using Flutter experience such limitations as well.
+It is worth noting that this limitation is not specific to this application. Any app relying on the document picker or share sheet for arbitrary files faces the same constraint.
 
 Despite that, you can use Direct Access Mode to avoid the extra overhead (only one file can be selected at a time). This is the SD card icon at the top of the app. Please note that when using the share sheet to pass the file selection over, it uses the app cache method from the get-go, so DAM cannot be used in that case.
 <br>
-Due to Google Play restrictions, Direct Access Mode is only available for GitHub releases.
+Due to Google Play restrictions in regard to Manage External Storage permission (required for direct file access on Android 11+), Direct Access Mode is only available for GitHub releases.
 
 ## Why does the HTTP server not offer a secure connection?
 

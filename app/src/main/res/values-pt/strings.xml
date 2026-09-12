@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">Selecione o(s) arquivo(s)</string>
+    <string name="page_landing_msg">Selecione arquivos para compartilhar...</string>
+    <string name="page_info_noconnection_label">Nenhuma conexão de rede</string>
+    <string name="page_info_noconnection_msg">Conecte-se a uma rede e tente novamente</string>
+    <string name="page_info_snapshoterror_label">Erro</string>
+    <string name="page_info_snapshoterror_msg">Erro ao coletar informações de rede</string>
+    <string name="page_info_fileremoved_label">Arquivo removido</string>
+    <string name="page_info_fileremoved_msg">Arquivo foi removido</string>
+    <string name="page_info_filemodified_label">Arquivo modificado</string>
+    <string name="page_info_filemodified_msg">Arquivo foi modificado</string>
+    <string name="page_info_permissiondenied_msg">A permissão de armazenamento foi negada</string>
+    <string name="page_info_insufficientstorage_label">Erro</string>
+    <string name="page_info_insufficientstorage_msg">Armazenamento insuficiente</string>
+    <string name="page_info_portinuse_label">Erro</string>
+    <string name="page_info_portinuse_msg">O servidor tentou começar com uma porta já usada</string>
+    <string name="page_info_fallback_label">Erro</string>
+    <string name="page_info_fallback_msg">Ocorreu um erro.\nCódigo: %1$s</string>
+    <string name="page_info_unhandlederror_label">Erro</string>
+    <string name="page_info_unhandlederror_msg">Ocorreu um erro inesperado</string>
+    <string name="page_info_unhandlederror_hint">Toque e segure para copiar os detalhes</string>
+
+    <string name="page_imported_share_sheet_label">Compartilhar</string>
+    <string name="page_imported_share_clipboard">Copiado</string>
+    <string name="page_imported_size">Tamanho</string>
+    <string name="page_imported_port">Porta</string>
+    <string name="page_imported_archive_morefiles">+%1$d a mais</string>
+
+    <string name="fab_shutdownserver_label">Desligar servidor</string>
+    <string name="fab_selectfile_label">Selecione arquivo(s)</string>
+
+    <string name="debug_build_toast">Build de depuração: desempenho pode diferir da versão final.</string>
+
+    <string name="info_exception_portinuse">Erro ao vincular porta: %1$s</string>
+    <string name="info_exception_linkopenfailed">Nenhum aplicativo disponível para abrir links HTTPS</string>
+    <string name="info_pending_fileprocessing">Atualmente processando seleção de arquivo...</string>
+    <string name="info_pending_fileprocessing_shutdown">Não é possível parar o servidor durante o processamento de arquivos.</string>
+    <string name="info_pending_servershutdown">Desligamento do servidor pendente...</string>
+
+    <string name="server_info_download_started">Descarregar iniciado: %1$s</string>
+    <string name="server_info_download_finished">Descarregar terminado: %1$s</string>
+    <string name="server_info_gone">Servidor desaparecido: %1$s</string>
+
+    <string name="about_title">Sobre</string>
+    <string name="about_releases_title">Versões</string>
+    <string name="about_opensource_title">Código aberto</string>
+    <string name="about_donate_title">Doar</string>
+    <string name="about_close">Fechar</string>
+
+    <string name="dam_path_not_found">Erro: caminho para o Modo de Acesso Direto não encontrado</string>
+    <string name="dam_browser_empty_folder_label">Vazio</string>
+    <string name="dam_browser_empty_folder_msg">Esta pasta não tem arquivos ou pastas</string>
+    <string name="dam_browser_sort_name">Nome</string>
+    <string name="dam_browser_sort_size">Tamanho</string>
+    <string name="dam_browser_sort_type">Tipo</string>
+    <string name="dam_browser_sort_created">Criado</string>
+    <string name="dam_browser_sort_modified">Modificado</string>
+    <string name="dam_browser_sort_order_ascending">Ordem crescente</string>
+    <string name="dam_browser_sort_order_descending">Ordem decrescente</string>
+    <string name="dam_browser_refresh">Atualizar</string>
+    <string name="dam_browser_search_placeholder">Pesquisar</string>
+    <string name="dam_browser_search_clear">Limpar pesquisa</string>
+    <string name="dam_browser_search_noresults_label">Nenhum resultado</string>
+    <string name="dam_browser_search_noresults_msg">Nenhum arquivo ou pasta corresponde à sua pesquisa</string>
+    <string name="dam_browser_file_gone">Este arquivo não existe mais. Toque em Atualizar para atualizar a lista.</string>
+    <string name="dam_browser_folder_gone">Esta pasta não existe mais. Toque em Atualizar para atualizar a lista.</string>
+
+    <string name="settings_title">Configurações</string>
+    <string name="settings_subheading_server">Servidor</string>
+    <string name="settings_server_port_list_title">Número da porta</string>
+    <string name="settings_server_port_list_subtitle">Use um número de porta específico ou aleatório</string>
+    <string name="settings_server_port_dialog_description">Número da porta deve ser entre %1$s e %2$s. Deixe em branco para uma porta aleatória.</string>
+    <string name="settings_server_port_dialog_serveractive">Alterações entrarão em vigor quando o servidor for reiniciado.</string>
+    <string name="settings_server_port_dialog_submit">Definir Porta</string>
+    <string name="settings_server_port_dialog_portinuse">Porta já está em uso</string>
+    <string name="settings_server_port_dialog_saved">Alterações salvas</string>
+    <string name="settings_subheading_client">Cliente</string>
+    <string name="settings_client_dam_list_title">Modo de Acesso Direto</string>
+    <string name="settings_client_dam_list_subtitle">Ideal para arquivos grandes</string>
+    <string name="settings_client_dam_ineligiblebuild">Android 11+ requer a versão do GitHub</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">Nome do arquivo no URL</string>
+    <string name="settings_client_fiu_list_subtitle">Incluir nome do arquivo no URL</string>
+    <string name="settings_subheading_general">Geral</string>
+    <string name="settings_general_theme_list_title">Tema</string>
+    <string name="settings_general_theme_option_system">Padrão do sistema</string>
+    <string name="settings_general_theme_option_dark">Escuro</string>
+    <string name="settings_general_theme_option_light">Claro</string>
+    <string name="settings_general_defaults_list_title">Restaurar configurações padrão</string>
+    <string name="settings_general_defaults_success">Configurações padrão restauradas</string>
+</resources>

@@ -27,8 +27,8 @@
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Screenshot of app on the main screen" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Screenshot of app after selecting a file" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Screenshot of app after opening IP address list" height="380">
-        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with full file name" height="380">
-        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tool tip is shown with original file names sizes of those included in the resulting file archive" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tooltip is shown with full file name" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tooltip is shown with original file names sizes of those included in the resulting file archive" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Screenshot of app showing that a 10 Gigabit file was selected -- this shows the ability to work with large files" height="380">
     </p>
 </details>
@@ -36,60 +36,53 @@
 
 ## About
 
-QRServ is a file sharing application that utilises its own HTTP server to serve files while having a clean & functional user interface.
+QRServ is a file sharing application that utilizes its own HTTP server to serve files while having a clean & functional user interface.
+
+The app is a native Android app written in Kotlin with Jetpack Compose. Prior to v4.0.0, it was built with Flutter/Dart.
 
 ## Features
 
 - QR Code
-    - Tap the QR code to show the URL in a tooltip
-    - Press and hold the QR code to copy URL to clipboard
-- Share option
-- Multi-file selection support
-    - Multi-file selection would result in a ZIP archive
-        - Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
-- Direct Access Mode
-    - Available only on Android 10 or earlier on the Play Store version
-    - To use this feature on Android 11 or later, use the GitHub version (link is in-app under the 'about' dialog) -- please note that the Play Store version must be uninstalled first as it is signed using a different certificate
-    - Large files? Use direct access mode to use direct access to internal storage as to avoid attempting to copy the selection into app cache
-    - The file manager for this mode supports only single file selection
-    - The mode can be toggled via settings
-- File selection removal and modification detection (latter only available with DAM)
-- Import via sharesheet
-- Show or hide filename in download URL
-- Notify when a client requested the hosted file and when that download finishes (includes requestor's IP address)
-- Various IP addresses from different network interfaces can be chosen
-- HTTP server uses an unused random or user configurable port
+  - Tap to show the URL in a tooltip
+  - Press and hold to copy the URL to the clipboard
+- Share the download URL via the system share sheet
+- Import files via the system share sheet from other apps
+- Shows import progress, whether for a single file or while building a ZIP archive
+- Multi-file selection
+  - Bundled into a ZIP archive
+  - Press and hold the archive's filename to see the originally selected files in a tooltip
+- Direct Access Mode -- serves the file directly from storage instead of copying it into app cache first, ideal for large files
+  - Single file selection only
+  - Always available on the GitHub release; Play Store builds only support it on Android 10 or earlier (see [Play Store and GitHub version differences](#play-store-and-github-version-differences))
+  - Toggleable in settings
+- Detects if the selected file is removed while being served, or modified (Direct Access Mode only)
+- Show or hide the filename in the download URL
+- Notifies when a client requests or finishes downloading the file, including their IP address
+- Choose which network interface's IP address to serve from
+- HTTP server binds to a random free port by default, or a user-configured one
+- In-app theme selection
 - Supports various languages:
-    - English
-    - French (Français)
-    - German (Deutsch)
-    - Hungarian (Magyar)
-    - Italian (Italiano)
-    - Polish (Polski)
-    - Portuguese (Português)
-    - Spanish (Español)
-    - Russian (Русский)
-    - Turkish (Türkçe)
-    - Persian (فارسی)
-    - Hebrew (עברית)
+  - English
+  - French (Français)
+  - German (Deutsch)
+  - Hungarian (Magyar)
+  - Italian (Italiano)
+  - Polish (Polski)
+  - Portuguese (Português)
+  - Spanish (Español)
+  - Russian (Русский)
+  - Turkish (Türkçe)
+  - Persian (فارسی)
+  - Hebrew (עברית)
 
 ## System Requirements
 
 - **System:** Android
 - **Minimum version:** 7.0
-- **Architecture:** ARM64
 
 ## Releases
 
-Android builds can be found in the [releases](../../releases) section of this repository.
-
-**From version 3.0.0:**
-
-- Builds are ARM64-only
-- APK file sizes are much larger
-    - This is because native libraries are no longer compressed
-    - When installed, the app size will be only a little larger than the APK file itself
-    - When using compressed native libraries (as was default in older builds), although the APK file is smaller, the installed size ends up far larger than if it were not compressed
+Releases can be found in the [releases](../../releases) section of this repository.
 
 Note: Android builds on GitHub will have a different certificate than builds on the Play Store. In other words, you cannot upgrade a build from installation source A via source B, and vice versa.
 
@@ -100,8 +93,8 @@ As you may be aware, there are two different Android builds of this application.
 #### Play Store
 
 - Direct Access Mode is **not** available for Android 11 or later due to the `MANAGE_EXTERNAL_STORAGE` runtime permission requirement (see issue #20).
-    - In short, Google Play became far stricter about the usage of such sensitive permissions in June 2024.
-    - There hasn't been much luck using the MediaStore API-at least with existing Flutter packages that kind of act like wrappers (typically, there are issues and limitations)-so it would likely require writing that functionality from scratch in Kotlin.
+  - In short, Google Play became far stricter about the usage of such sensitive permissions in June 2024.
+  - The MediaStore API has its own limitations for this use case that would require a substantial amount of custom implementation to work around.
 
 #### GitHub
 
@@ -109,11 +102,11 @@ As you may be aware, there are two different Android builds of this application.
 
 #### Changing build types
 
-By default, the source code builds the GitHub version. The version used for the Play Store uses the build command `flutter build appbundle --release --dart-define=NO_DAM=true` so that the `MANAGE_EXTERNAL_STORAGE` permission gets patched out and the build would be accepted.
+By default, the source code builds the GitHub version. The version used for the Play Store uses the build command `./gradlew bundleRelease -PNO_MES=true` so that the `MANAGE_EXTERNAL_STORAGE` permission gets patched out and the build would be accepted.
 
 ### Desktop
 
-The last desktop builds (Windows, Linux) can be found in the [releases section under v1.1.1](../../releases/tag/v1.1.1).
+The last desktop builds (Windows, Linux) can be found in the [releases section under v1.1.1](../../releases/tag/v1.1.1). These predate the Kotlin rewrite and can no longer be built from the current source, which targets Android only.
 
 ## Contributing
 
@@ -121,15 +114,15 @@ If you are considering contributing to QRServ or reporting issues, more informat
 
 ## Building
 
-If you wish to have debugging symbols for an app bundle release, ensure you have the Android NDK installed. You may need to specify `ndk.dir` in the `local.properties` file.
+Ensure you have the Android NDK installed to build a release variant. You may need to specify `ndk.dir` in the `local.properties` file.
 <br>
-However, if you do not plan to do a Play Store release, you may remove the `ndk` block from `android.defaultConfig` in the [Gradle build file](android/build.gradle.kts).
+The NDK is used by the `no-build-id` plugin (see `noBuildId.ndkDirectory` in the [app Gradle build file](app/build.gradle.kts)) to strip `.note.gnu.build-id` from native libraries for reproducible builds. If you do not need this, you can remove that plugin block.
 
 ## Licenses
 
 Google Play and the Google Play logo are trademarks of Google LLC.
 
-Nunito (the font) is licensed under [OFL-1.1](fonts/OFL.txt).
+Nunito (the font) is licensed under [OFL-1.1](app/src/main/res/raw/nunito_ofl.txt).
 
 QRServ is licensed under the [MIT license](LICENSE).
 

@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">Select file(s)</string>
+    <string name="page_landing_msg">Select files to share…</string>
+    <string name="page_info_noconnection_label">No network connection</string>
+    <string name="page_info_noconnection_msg">Connect to a network and try again</string>
+    <string name="page_info_snapshoterror_label">Error</string>
+    <string name="page_info_snapshoterror_msg">Error collecting network information</string>
+    <string name="page_info_fileremoved_label">File removed</string>
+    <string name="page_info_fileremoved_msg">File was removed</string>
+    <string name="page_info_filemodified_label">File modified</string>
+    <string name="page_info_filemodified_msg">File was modified</string>
+    <string name="page_info_permissiondenied_msg">Storage permission was denied</string>
+    <string name="page_info_insufficientstorage_label">Error</string>
+    <string name="page_info_insufficientstorage_msg">Insufficient storage</string>
+    <string name="page_info_portinuse_label">Error</string>
+    <string name="page_info_portinuse_msg">Server tried to start with an already bound port</string>
+    <string name="page_info_fallback_label">Error</string>
+    <string name="page_info_fallback_msg">An error has occurred.\nCode: %1$s</string>
+    <string name="page_info_unhandlederror_label">Error</string>
+    <string name="page_info_unhandlederror_msg">An unexpected error occurred</string>
+    <string name="page_info_unhandlederror_hint">Press and hold to copy details</string>
+
+    <string name="page_imported_share_sheet_label">Share</string>
+    <string name="page_imported_share_clipboard">Copied</string>
+    <string name="page_imported_size">Size</string>
+    <string name="page_imported_port">Port</string>
+    <string name="page_imported_archive_morefiles">+%1$d more</string>
+
+    <string name="fab_shutdownserver_label">Shutdown server</string>
+    <string name="fab_selectfile_label">Select file(s)</string>
+
+    <string name="debug_build_toast">Debug build: performance/behavior may differ from release.</string>
+
+    <string name="info_exception_portinuse">Error binding port: %1$s</string>
+    <string name="info_exception_linkopenfailed">No app available to open HTTPS links</string>
+    <string name="info_pending_fileprocessing">Currently processing file selection…</string>
+    <string name="info_pending_fileprocessing_shutdown">Can\'t stop server while processing file selection.</string>
+    <string name="info_pending_servershutdown">Server shutdown pending…</string>
+
+    <string name="server_info_download_started">Download started: %1$s</string>
+    <string name="server_info_download_finished">Download finished: %1$s</string>
+    <string name="server_info_gone">Server is gone: %1$s</string>
+
+    <string name="about_title">About</string>
+    <string name="about_releases_title">Releases</string>
+    <string name="about_opensource_title">Open source</string>
+    <string name="about_donate_title">Donate</string>
+    <string name="about_close">Close</string>
+
+    <string name="dam_path_not_found">Error: path for Direct Access Mode not found</string>
+    <string name="dam_browser_empty_folder_label">Empty</string>
+    <string name="dam_browser_empty_folder_msg">This folder has no files or folders</string>
+    <string name="dam_browser_sort_name">Name</string>
+    <string name="dam_browser_sort_size">Size</string>
+    <string name="dam_browser_sort_type">Type</string>
+    <string name="dam_browser_sort_created">Created</string>
+    <string name="dam_browser_sort_modified">Modified</string>
+    <string name="dam_browser_sort_order_ascending">Ascending order</string>
+    <string name="dam_browser_sort_order_descending">Descending order</string>
+    <string name="dam_browser_refresh">Refresh</string>
+    <string name="dam_browser_search_placeholder">Search</string>
+    <string name="dam_browser_search_clear">Clear search</string>
+    <string name="dam_browser_search_noresults_label">No results</string>
+    <string name="dam_browser_search_noresults_msg">No files or folders match your search</string>
+    <string name="dam_browser_file_gone">This file no longer exists. Tap Refresh to update the list.</string>
+    <string name="dam_browser_folder_gone">This folder no longer exists. Tap Refresh to update the list.</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_subheading_server">Server</string>
+    <string name="settings_server_port_list_title">Port number</string>
+    <string name="settings_server_port_list_subtitle">Use a specific or random port number</string>
+    <string name="settings_server_port_dialog_description">Port number must be between %1$s and %2$s. Leave blank for a random port.</string>
+    <string name="settings_server_port_dialog_serveractive">Changes will take effect when the server is restarted.</string>
+    <string name="settings_server_port_dialog_submit">Set Port</string>
+    <string name="settings_server_port_dialog_portinuse">Port is already in use</string>
+    <string name="settings_server_port_dialog_saved">Changes saved</string>
+    <string name="settings_subheading_client">Client</string>
+    <string name="settings_client_dam_list_title">Direct Access Mode</string>
+    <string name="settings_client_dam_list_subtitle">Ideal for large files</string>
+    <string name="settings_client_dam_ineligiblebuild">Android 11+ requires the GitHub release</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">Filename in URL</string>
+    <string name="settings_client_fiu_list_subtitle">Include filename in URL</string>
+    <string name="settings_subheading_general">General</string>
+    <string name="settings_general_theme_list_title">Theme</string>
+    <string name="settings_general_theme_option_system">System default</string>
+    <string name="settings_general_theme_option_dark">Dark</string>
+    <string name="settings_general_theme_option_light">Light</string>
+    <string name="settings_general_defaults_list_title">Restore default settings</string>
+    <string name="settings_general_defaults_success">Default settings restored</string>
+</resources>

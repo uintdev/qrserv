@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">Sélectionner fichier·s</string>
+    <string name="page_landing_msg">Sélectionnez des fichiers à partager...</string>
+    <string name="page_info_noconnection_label">Aucune connexion réseau</string>
+    <string name="page_info_noconnection_msg">Connectez-vous à un réseau et réessayez</string>
+    <string name="page_info_snapshoterror_label">Erreur</string>
+    <string name="page_info_snapshoterror_msg">Échec de la collecte des informations réseau</string>
+    <string name="page_info_fileremoved_label">Fichier supprimé</string>
+    <string name="page_info_fileremoved_msg">Fichier était supprimé</string>
+    <string name="page_info_filemodified_label">Fichier modifié</string>
+    <string name="page_info_filemodified_msg">Fichier était modifié</string>
+    <string name="page_info_permissiondenied_msg">La demande de stockage a été refusée</string>
+    <string name="page_info_insufficientstorage_label">Erreur</string>
+    <string name="page_info_insufficientstorage_msg">Stockage insuffisant</string>
+    <string name="page_info_portinuse_label">Erreur</string>
+    <string name="page_info_portinuse_msg">Le serveur a essayé de démarrer avec un port en utilisation</string>
+    <string name="page_info_fallback_label">Erreur</string>
+    <string name="page_info_fallback_msg">Une erreur est survenue.\nCode: %1$s</string>
+    <string name="page_info_unhandlederror_label">Erreur</string>
+    <string name="page_info_unhandlederror_msg">Une erreur inattendue s\'est produite</string>
+    <string name="page_info_unhandlederror_hint">Maintenez appuyé pour copier les détails</string>
+
+    <string name="page_imported_share_sheet_label">Partager</string>
+    <string name="page_imported_share_clipboard">Copie effectuée</string>
+    <string name="page_imported_size">Taille</string>
+    <string name="page_imported_port">Port</string>
+    <string name="page_imported_archive_morefiles">+%1$d de plus</string>
+
+    <string name="fab_shutdownserver_label">Arrêter le serveur</string>
+    <string name="fab_selectfile_label">Sélectionner fichier·s</string>
+
+    <string name="debug_build_toast">Build de débogage : performances/comportement peuvent différer.</string>
+
+    <string name="info_exception_portinuse">La liaison au port a échouée: %1$s</string>
+    <string name="info_exception_linkopenfailed">Aucune application disponible pour ouvrir les liens HTTPS</string>
+    <string name="info_pending_fileprocessing">Fichier·s en cours de traitement...</string>
+    <string name="info_pending_fileprocessing_shutdown">Impossible d\'arrêter le serveur pendant le traitement des fichiers.</string>
+    <string name="info_pending_servershutdown">Arrêt du serveur en cours...</string>
+
+    <string name="server_info_download_started">Téléchargement commencé: %1$s</string>
+    <string name="server_info_download_finished">Téléchargement terminé: %1$s</string>
+    <string name="server_info_gone">Le serveur est parti: %1$s</string>
+
+    <string name="about_title">À propos</string>
+    <string name="about_releases_title">Versions</string>
+    <string name="about_opensource_title">Open source</string>
+    <string name="about_donate_title">Faire un don</string>
+    <string name="about_close">Fermer</string>
+
+    <string name="dam_path_not_found">Erreur: chemin d\'accès au Mode d\'Accès Direct non trouvé</string>
+    <string name="dam_browser_empty_folder_label">Vide</string>
+    <string name="dam_browser_empty_folder_msg">Ce dossier ne contient aucun fichier ni dossier</string>
+    <string name="dam_browser_sort_name">Nom</string>
+    <string name="dam_browser_sort_size">Taille</string>
+    <string name="dam_browser_sort_type">Type</string>
+    <string name="dam_browser_sort_created">Créé</string>
+    <string name="dam_browser_sort_modified">Modifié</string>
+    <string name="dam_browser_sort_order_ascending">Ordre croissant</string>
+    <string name="dam_browser_sort_order_descending">Ordre décroissant</string>
+    <string name="dam_browser_refresh">Actualiser</string>
+    <string name="dam_browser_search_placeholder">Rechercher</string>
+    <string name="dam_browser_search_clear">Effacer la recherche</string>
+    <string name="dam_browser_search_noresults_label">Aucun résultat</string>
+    <string name="dam_browser_search_noresults_msg">Aucun fichier ou dossier ne correspond à votre recherche</string>
+    <string name="dam_browser_file_gone">Ce fichier n\'existe plus. Appuyez sur Actualiser.</string>
+    <string name="dam_browser_folder_gone">Ce dossier n\'existe plus. Appuyez sur Actualiser.</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_subheading_server">Serveur</string>
+    <string name="settings_server_port_list_title">Numéro de port</string>
+    <string name="settings_server_port_list_subtitle">Utiliser un numéro de port spécifique ou aléatoire</string>
+    <string name="settings_server_port_dialog_description">Numéros de port doit être comprise entre %1$s et %2$s. Laissez vide pour utiliser un port aléatoire.</string>
+    <string name="settings_server_port_dialog_serveractive">Modifications prendront effet au redémarrage du serveur.</string>
+    <string name="settings_server_port_dialog_submit">Définir Port</string>
+    <string name="settings_server_port_dialog_portinuse">Port est déjà utilisé</string>
+    <string name="settings_server_port_dialog_saved">Modifications enregistrées</string>
+    <string name="settings_subheading_client">Client</string>
+    <string name="settings_client_dam_list_title">Mode d\'Accès Direct</string>
+    <string name="settings_client_dam_list_subtitle">Idéal pour les fichiers volumineux</string>
+    <string name="settings_client_dam_ineligiblebuild">Android 11+ nécessite la version GitHub</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">Nom de fichier dans l\'URL</string>
+    <string name="settings_client_fiu_list_subtitle">Inclure le nom de fichier dans l\'URL</string>
+    <string name="settings_subheading_general">Général</string>
+    <string name="settings_general_theme_list_title">Thème</string>
+    <string name="settings_general_theme_option_system">Système par défaut</string>
+    <string name="settings_general_theme_option_dark">Sombre</string>
+    <string name="settings_general_theme_option_light">Clair</string>
+    <string name="settings_general_defaults_list_title">Restaurer les paramètres par défaut</string>
+    <string name="settings_general_defaults_success">Paramètres par défaut restaurés</string>
+</resources>

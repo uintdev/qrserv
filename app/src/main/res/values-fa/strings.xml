@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">انتخاب پرونده(ها)</string>
+    <string name="page_landing_msg">پرونده ها را برای هم‌رسانی انتخاب کنید</string>
+    <string name="page_info_noconnection_label">بدون اتصال شبکه</string>
+    <string name="page_info_noconnection_msg">به یک شبکه متصل شده و دوباره امتحان کنید</string>
+    <string name="page_info_snapshoterror_label">خطا</string>
+    <string name="page_info_snapshoterror_msg">خطا در دریافت اطلاعات شبکه</string>
+    <string name="page_info_fileremoved_label">پرونده پاک شد</string>
+    <string name="page_info_fileremoved_msg">پرونده پاک شد</string>
+    <string name="page_info_filemodified_label">پرونده تغییر یافته</string>
+    <string name="page_info_filemodified_msg">پرونده تغییر یافته</string>
+    <string name="page_info_permissiondenied_msg">دسترسی به حافظه رد شد</string>
+    <string name="page_info_insufficientstorage_label">خطا</string>
+    <string name="page_info_insufficientstorage_msg">حافظه ناکافی</string>
+    <string name="page_info_portinuse_label">خطا</string>
+    <string name="page_info_portinuse_msg">سرور تلاش میکرد با پورتی متصل شود که از پیش استفاده شده بود</string>
+    <string name="page_info_fallback_label">خطا</string>
+    <string name="page_info_fallback_msg">خطایی رخ داد.\nCode: %1$s</string>
+    <string name="page_info_unhandlederror_label">خطا</string>
+    <string name="page_info_unhandlederror_msg">خطای غیرمنتظره‌ای رخ داد</string>
+    <string name="page_info_unhandlederror_hint">برای کپی جزئیات، لمس کرده و نگه دارید</string>
+
+    <string name="page_imported_share_sheet_label">هم‌رسانی</string>
+    <string name="page_imported_share_clipboard">رونویسی شد</string>
+    <string name="page_imported_size">اندازه</string>
+    <string name="page_imported_port">پورت</string>
+    <string name="page_imported_archive_morefiles">+%1$d مورد دیگر</string>
+
+    <string name="fab_shutdownserver_label">خاموش کردن سرور</string>
+    <string name="fab_selectfile_label">انتخاب پرونده(ها)</string>
+
+    <string name="debug_build_toast">نسخه اشکال‌زدایی: عملکرد ممکن است با نسخه نهایی متفاوت باشد.</string>
+
+    <string name="info_exception_portinuse">خطا در تعریف پورت: %1$s</string>
+    <string name="info_exception_linkopenfailed">هیچ برنامه‌ای برای باز کردن پیوندهای HTTPS در دسترس نیست</string>
+    <string name="info_pending_fileprocessing">در حال پردازش پرونده های انتخابی...</string>
+    <string name="info_pending_fileprocessing_shutdown">سرور در حین پردازش انتخاب پرونده متوقف نمی‌شود.</string>
+    <string name="info_pending_servershutdown">خاموش کردن سرور...</string>
+
+    <string name="server_info_download_started">دریافت آغاز شد: %1$s</string>
+    <string name="server_info_download_finished">دریافت به پایان رسید: %1$s</string>
+    <string name="server_info_gone">سرور از بین رفته است: %1$s</string>
+
+    <string name="about_title">درباره</string>
+    <string name="about_releases_title">انتشارها</string>
+    <string name="about_opensource_title">متن باز</string>
+    <string name="about_donate_title">حمایت</string>
+    <string name="about_close">بستن</string>
+
+    <string name="dam_path_not_found">خطا: مسیر برای حالت دسترسی مستقیم پیدا نشد</string>
+    <string name="dam_browser_empty_folder_label">خالی</string>
+    <string name="dam_browser_empty_folder_msg">این پوشه هیچ فایل یا پوشه‌ای ندارد</string>
+    <string name="dam_browser_sort_name">نام</string>
+    <string name="dam_browser_sort_size">اندازه</string>
+    <string name="dam_browser_sort_type">نوع</string>
+    <string name="dam_browser_sort_created">ایجاد شده</string>
+    <string name="dam_browser_sort_modified">تغییر یافته</string>
+    <string name="dam_browser_sort_order_ascending">ترتیب صعودی</string>
+    <string name="dam_browser_sort_order_descending">ترتیب نزولی</string>
+    <string name="dam_browser_refresh">تازه‌سازی</string>
+    <string name="dam_browser_search_placeholder">جستجو</string>
+    <string name="dam_browser_search_clear">پاک کردن جستجو</string>
+    <string name="dam_browser_search_noresults_label">بدون نتیجه</string>
+    <string name="dam_browser_search_noresults_msg">هیچ فایل یا پوشه‌ای با جستجوی شما مطابقت ندارد</string>
+    <string name="dam_browser_file_gone">این فایل دیگر وجود ندارد. برای به‌روزرسانی فهرست، تازه‌سازی را لمس کنید.</string>
+    <string name="dam_browser_folder_gone">این پوشه دیگر وجود ندارد. برای به‌روزرسانی فهرست، تازه‌سازی را لمس کنید.</string>
+
+    <string name="settings_title">تنظیمات</string>
+    <string name="settings_subheading_server">سرور</string>
+    <string name="settings_server_port_list_title">شماره پورت</string>
+    <string name="settings_server_port_list_subtitle">از یک شماره پورت مشخص یا تصادفی استفاده کنید</string>
+    <string name="settings_server_port_dialog_description">شماره پورت باید بین %1$s و %2$s باشد. برای انتخاب یک پورت تصادفی، این قسمت را خالی بگذارید.</string>
+    <string name="settings_server_port_dialog_serveractive">تغییرات پس از راه‌اندازی مجدد سرور اعمال خواهند شد.</string>
+    <string name="settings_server_port_dialog_submit">تنظیم پورت</string>
+    <string name="settings_server_port_dialog_portinuse">پورت در حال استفاده است</string>
+    <string name="settings_server_port_dialog_saved">تغییرات ذخیره شد</string>
+    <string name="settings_subheading_client">کلاینت</string>
+    <string name="settings_client_dam_list_title">حالت دسترسی مستقیم</string>
+    <string name="settings_client_dam_list_subtitle">ایده‌آل برای فایل‌های حجیم</string>
+    <string name="settings_client_dam_ineligiblebuild">اندروید ۱۱ و بالاتر به نسخه گیت‌هاب نیاز دارد</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">نام فایل در URL</string>
+    <string name="settings_client_fiu_list_subtitle">گنجاندن نام فایل در URL</string>
+    <string name="settings_subheading_general">عمومی</string>
+    <string name="settings_general_theme_list_title">تم</string>
+    <string name="settings_general_theme_option_system">پیش‌فرض سیستم</string>
+    <string name="settings_general_theme_option_dark">تیره</string>
+    <string name="settings_general_theme_option_light">روشن</string>
+    <string name="settings_general_defaults_list_title">بازگردانی به تنظیمات پیش‌فرض</string>
+    <string name="settings_general_defaults_success">تنظیمات پیش‌فرض بازیابی شد</string>
+</resources>

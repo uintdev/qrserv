@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">QRServ</string>
+
+    <string name="page_landing_label">בחר קובץ(ים)</string>
+    <string name="page_landing_msg">בחר קבצים לשיתוף...</string>
+    <string name="page_info_noconnection_label">אין חיבור לרשת</string>
+    <string name="page_info_noconnection_msg">התחבר לרשת ונסה שוב</string>
+    <string name="page_info_snapshoterror_label">שגיאה</string>
+    <string name="page_info_snapshoterror_msg">שגיאה באיסוף מידע על הרשת</string>
+    <string name="page_info_fileremoved_label">קובץ הוסר</string>
+    <string name="page_info_fileremoved_msg">הקובץ הוסר</string>
+    <string name="page_info_filemodified_label">קובץ שונה</string>
+    <string name="page_info_filemodified_msg">הקובץ שונה</string>
+    <string name="page_info_permissiondenied_msg">הגישה לאחסון נדחתה</string>
+    <string name="page_info_insufficientstorage_label">שגיאה</string>
+    <string name="page_info_insufficientstorage_msg">אין מספיק מקום אחסון</string>
+    <string name="page_info_portinuse_label">שגיאה</string>
+    <string name="page_info_portinuse_msg">השרת ניסה לפעול על פורט שכבר נמצא בשימוש</string>
+    <string name="page_info_fallback_label">שגיאה</string>
+    <string name="page_info_fallback_msg">אירעה שגיאה.\nקוד: %1$s</string>
+    <string name="page_info_unhandlederror_label">שגיאה</string>
+    <string name="page_info_unhandlederror_msg">אירעה שגיאה בלתי צפויה</string>
+    <string name="page_info_unhandlederror_hint">לחץ והחזק כדי להעתיק את הפרטים</string>
+
+    <string name="page_imported_share_sheet_label">שתף</string>
+    <string name="page_imported_share_clipboard">הועתק</string>
+    <string name="page_imported_size">גודל</string>
+    <string name="page_imported_port">פורט</string>
+    <string name="page_imported_archive_morefiles">+%1$d נוספים</string>
+
+    <string name="fab_shutdownserver_label">כבה שרת</string>
+    <string name="fab_selectfile_label">בחר קובץ(ים)</string>
+
+    <string name="debug_build_toast">גרסת ניפוי באגים: הביצועים עשויים להיות שונים מהגרסה הסופית.</string>
+
+    <string name="info_exception_portinuse">שגיאה בקישור פורט:%1$s</string>
+    <string name="info_exception_linkopenfailed">אין אפליקציה זמינה לפתיחת קישורי HTTPS</string>
+    <string name="info_pending_fileprocessing">מעבד בחירת קבצים...</string>
+    <string name="info_pending_fileprocessing_shutdown">לא ניתן לעצור את השרת בזמן עיבוד בחירת הקבצים.</string>
+    <string name="info_pending_servershutdown">כיבוי שרת ממתין...</string>
+
+    <string name="server_info_download_started">ההורדה החלה: %1$s</string>
+    <string name="server_info_download_finished">ההורדה הושלמה: %1$s</string>
+    <string name="server_info_gone">השרת נעלם: %1$s</string>
+
+    <string name="about_title">אודות</string>
+    <string name="about_releases_title">מהדורות</string>
+    <string name="about_opensource_title">קוד פתוח</string>
+    <string name="about_donate_title">תרום</string>
+    <string name="about_close">סגור</string>
+
+    <string name="dam_path_not_found">שגיאה: לא נמצא נתיב למצב גישה ישירה</string>
+    <string name="dam_browser_empty_folder_label">ריק</string>
+    <string name="dam_browser_empty_folder_msg">התיקייה הזו לא מכילה קבצים או תיקיות</string>
+    <string name="dam_browser_sort_name">שם</string>
+    <string name="dam_browser_sort_size">גודל</string>
+    <string name="dam_browser_sort_type">סוג</string>
+    <string name="dam_browser_sort_created">נוצר</string>
+    <string name="dam_browser_sort_modified">שונה</string>
+    <string name="dam_browser_sort_order_ascending">סדר עולה</string>
+    <string name="dam_browser_sort_order_descending">סדר יורד</string>
+    <string name="dam_browser_refresh">רענון</string>
+    <string name="dam_browser_search_placeholder">חיפוש</string>
+    <string name="dam_browser_search_clear">נקה חיפוש</string>
+    <string name="dam_browser_search_noresults_label">אין תוצאות</string>
+    <string name="dam_browser_search_noresults_msg">אין קבצים או תיקיות התואמים את החיפוש שלך</string>
+    <string name="dam_browser_file_gone">קובץ זה כבר לא קיים. הקש על רענון כדי לעדכן את הרשימה.</string>
+    <string name="dam_browser_folder_gone">תיקייה זו כבר לא קיימת. הקש על רענון כדי לעדכן את הרשימה.</string>
+
+    <string name="settings_title">הגדרות</string>
+    <string name="settings_subheading_server">שרת</string>
+    <string name="settings_server_port_list_title">מספר פורט</string>
+    <string name="settings_server_port_list_subtitle">השתמש במספר פורט ספציפי או אקראי</string>
+    <string name="settings_server_port_dialog_description">מספר הפורט חייב להיות בין %1$s ל-%2$s. יש להשאיר ריק לבחירת פורט אקראי.</string>
+    <string name="settings_server_port_dialog_serveractive">השינויים ייכנסו לתוקף לאחר הפעלה מחדש של השרת.</string>
+    <string name="settings_server_port_dialog_submit">הגדר פורט</string>
+    <string name="settings_server_port_dialog_portinuse">הפורט כבר נמצא בשימוש</string>
+    <string name="settings_server_port_dialog_saved">השינויים נשמרו</string>
+    <string name="settings_subheading_client">לקוח</string>
+    <string name="settings_client_dam_list_title">מצב גישה ישירה</string>
+    <string name="settings_client_dam_list_subtitle">אידיאלי לקבצים גדולים</string>
+    <string name="settings_client_dam_ineligiblebuild">אנדרואיד 11 ומעלה דורש את גרסת ה-GitHub</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_fiu_list_title">שם קובץ בכתובת URL</string>
+    <string name="settings_client_fiu_list_subtitle">כלול את שם הקובץ בכתובת ה-URL</string>
+    <string name="settings_subheading_general">כללי</string>
+    <string name="settings_general_theme_list_title">ערכת נושא</string>
+    <string name="settings_general_theme_option_system">ברירת מחדל של המערכת</string>
+    <string name="settings_general_theme_option_dark">כהה</string>
+    <string name="settings_general_theme_option_light">בהיר</string>
+    <string name="settings_general_defaults_list_title">שחזור הגדרות ברירת מחדל</string>
+    <string name="settings_general_defaults_success">הגדרות ברירת המחדל שוחזרו</string>
+</resources>

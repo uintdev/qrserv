@@ -15,8 +15,8 @@ At this time, translations are being accepted through GitHub.
 
 When adding a new language:
 
-- Add a language file to [lib/l10n/](lib/l10n/) with the file name format `app_{language_code}.arb` (ISO 639-1 -- two-character language code) and based on [app_en.arb](lib/l10n/app_en.arb). Ensure that `@@locale` within the file also has the respective language code.
-- Add a new entry to the bottom of the list in [locales_config.xml](android/app/src/main/res/xml/locales_config.xml) within the `locale-config` tags -- this is used for the per-app language feature.
+- Add a string resource file under [app/src/main/res/](app/src/main/res/) named `values-{language_code}/strings.xml` (ISO 639-1 -- two-character language code), based on [the default strings.xml](app/src/main/res/values/strings.xml).
+- Add a new entry to the bottom of the list in [locales_config.xml](app/src/main/res/xml/locales_config.xml) within the `locale-config` tags -- this is used for the per-app language feature.
 
 Addition and modification of translations during development:
 
@@ -33,5 +33,5 @@ Addition and modification of translations during development:
 When creating or updating a changelog for a new release:
 
 - Update [CHANGELOG.md](CHANGELOG.md).
-- Add a new file under [fastlane/metadata/android/en-US/changelogs/](fastlane/metadata/android/en-US/changelogs/) with the file name format `{version_code}.txt`, where `{version_code}` is the number found after the `+` sign under the `version` key in [pubspec.yaml](pubspec.yaml). This is for IzzyOnDroid.
+- Add a new file under [fastlane/metadata/android/en-US/changelogs/](fastlane/metadata/android/en-US/changelogs/) with the file name format `{version_code}.txt`, where `{version_code}` is the `versionCode` value in [the app Gradle build file](app/build.gradle.kts). This is for IzzyOnDroid.
     - Please note that once a new release is published, the version of the fastlane changelog under that release cannot be updated.
