@@ -34,6 +34,9 @@
 </details>
 <br>
 
+> [!NOTE]  
+> The details here reflect an unreleased major rewrite. Some features may not be present in Flutter-based builds. The new build is coming soon.
+
 ## About
 
 QRServ is a file sharing application that utilizes its own HTTP server to serve files while having a clean & functional user interface.
@@ -47,7 +50,7 @@ The app is a native Android app written in Kotlin with Jetpack Compose. Prior to
   - Press and hold to copy the URL to the clipboard
 - Share the download URL via the system share sheet
 - Import files via the system share sheet from other apps
-- Shows import progress, whether for a single file or while building a ZIP archive
+- Shows live import progress, whether for a single file or multiple
 - Multi-file selection
   - Bundled into a ZIP archive
   - Press and hold the archive's filename to see the originally selected files in a tooltip
