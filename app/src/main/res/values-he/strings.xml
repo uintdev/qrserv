@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">אירעה שגיאה.\nקוד: %1$s</string>
     <string name="page_info_unhandlederror_label">שגיאה</string>
     <string name="page_info_unhandlederror_msg">אירעה שגיאה בלתי צפויה</string>
-    <string name="page_info_unhandlederror_hint">לחץ והחזק כדי להעתיק את הפרטים</string>
+    <string name="page_info_unhandlederror_hint">לחץ והחזק כדי לשתף את הפרטים</string>
 
     <string name="page_imported_share_sheet_label">שתף</string>
     <string name="page_imported_share_clipboard">הועתק</string>

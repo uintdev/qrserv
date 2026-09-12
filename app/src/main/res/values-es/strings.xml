@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Se ha producido un error.\nCódigo: %1$s</string>
     <string name="page_info_unhandlederror_label">Error</string>
     <string name="page_info_unhandlederror_msg">Se ha producido un error inesperado</string>
-    <string name="page_info_unhandlederror_hint">Mantén pulsado para copiar los detalles</string>
+    <string name="page_info_unhandlederror_hint">Mantén pulsado para compartir los detalles</string>
 
     <string name="page_imported_share_sheet_label">Compartir</string>
     <string name="page_imported_share_clipboard">Copiado</string>

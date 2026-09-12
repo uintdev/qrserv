@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Bir hata oluştu.\nKod: %1$s</string>
     <string name="page_info_unhandlederror_label">Hata</string>
     <string name="page_info_unhandlederror_msg">Beklenmeyen bir hata oluştu</string>
-    <string name="page_info_unhandlederror_hint">Ayrıntıları kopyalamak için basılı tutun</string>
+    <string name="page_info_unhandlederror_hint">Ayrıntıları paylaşmak için basılı tutun</string>
 
     <string name="page_imported_share_sheet_label">Paylaş</string>
     <string name="page_imported_share_clipboard">Kopyalandı</string>

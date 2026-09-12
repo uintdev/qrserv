@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Une erreur est survenue.\nCode: %1$s</string>
     <string name="page_info_unhandlederror_label">Erreur</string>
     <string name="page_info_unhandlederror_msg">Une erreur inattendue s\'est produite</string>
-    <string name="page_info_unhandlederror_hint">Maintenez appuyé pour copier les détails</string>
+    <string name="page_info_unhandlederror_hint">Maintenez appuyé pour partager les détails</string>
 
     <string name="page_imported_share_sheet_label">Partager</string>
     <string name="page_imported_share_clipboard">Copie effectuée</string>

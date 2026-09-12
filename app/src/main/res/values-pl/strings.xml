@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Wystąpił nieuwzględniony błąd.\nKod: %1$s</string>
     <string name="page_info_unhandlederror_label">Błąd</string>
     <string name="page_info_unhandlederror_msg">Wystąpił nieoczekiwany błąd</string>
-    <string name="page_info_unhandlederror_hint">Naciśnij i przytrzymaj, aby skopiować szczegóły</string>
+    <string name="page_info_unhandlederror_hint">Naciśnij i przytrzymaj, aby udostępnić szczegóły</string>
 
     <string name="page_imported_share_sheet_label">Udostępnianie</string>
     <string name="page_imported_share_clipboard">Skopiowano</string>

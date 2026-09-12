@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Egy hiba történt.\nKód: %1$s</string>
     <string name="page_info_unhandlederror_label">Hiba</string>
     <string name="page_info_unhandlederror_msg">Váratlan hiba történt</string>
-    <string name="page_info_unhandlederror_hint">Tartsa lenyomva a részletek másolásához</string>
+    <string name="page_info_unhandlederror_hint">Tartsa lenyomva a részletek megosztásához</string>
 
     <string name="page_imported_share_sheet_label">Megosztás</string>
     <string name="page_imported_share_clipboard">Átmásolva</string>

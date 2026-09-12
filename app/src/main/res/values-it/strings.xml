@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">C\'è stato un errore.\nCodice: %1$s</string>
     <string name="page_info_unhandlederror_label">Errore</string>
     <string name="page_info_unhandlederror_msg">Si è verificato un errore imprevisto</string>
-    <string name="page_info_unhandlederror_hint">Tieni premuto per copiare i dettagli</string>
+    <string name="page_info_unhandlederror_hint">Tieni premuto per condividere i dettagli</string>
 
     <string name="page_imported_share_sheet_label">Condividi</string>
     <string name="page_imported_share_clipboard">Copiato</string>

@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">خطایی رخ داد.\nCode: %1$s</string>
     <string name="page_info_unhandlederror_label">خطا</string>
     <string name="page_info_unhandlederror_msg">خطای غیرمنتظره‌ای رخ داد</string>
-    <string name="page_info_unhandlederror_hint">برای کپی جزئیات، لمس کرده و نگه دارید</string>
+    <string name="page_info_unhandlederror_hint">برای هم‌رسانی جزئیات، لمس کرده و نگه دارید</string>
 
     <string name="page_imported_share_sheet_label">هم‌رسانی</string>
     <string name="page_imported_share_clipboard">رونویسی شد</string>

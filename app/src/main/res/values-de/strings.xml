@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Ein Fehler ist aufgetreten.\nCode: %1$s</string>
     <string name="page_info_unhandlederror_label">Fehler</string>
     <string name="page_info_unhandlederror_msg">Ein unerwarteter Fehler ist aufgetreten</string>
-    <string name="page_info_unhandlederror_hint">Zum Kopieren der Details gedrückt halten</string>
+    <string name="page_info_unhandlederror_hint">Zum Teilen der Details gedrückt halten</string>
 
     <string name="page_imported_share_sheet_label">Teilen</string>
     <string name="page_imported_share_clipboard">Kopiert</string>

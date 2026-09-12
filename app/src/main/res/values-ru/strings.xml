@@ -20,7 +20,7 @@
     <string name="page_info_fallback_msg">Произошла ошибка. Код: %1$s</string>
     <string name="page_info_unhandlederror_label">Ошибка</string>
     <string name="page_info_unhandlederror_msg">Произошла непредвиденная ошибка</string>
-    <string name="page_info_unhandlederror_hint">Нажмите и удерживайте, чтобы скопировать детали</string>
+    <string name="page_info_unhandlederror_hint">Нажмите и удерживайте, чтобы поделиться деталями</string>
 
     <string name="page_imported_share_sheet_label">Поделиться</string>
     <string name="page_imported_share_clipboard">Скопировано</string>

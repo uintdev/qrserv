@@ -350,59 +350,69 @@ private fun MessageForPageType(pageType: PageType) {
 @Composable
 private fun UnhandledErrorContent(detail: String) {
     val context = LocalContext.current
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val copiedMessage = stringResource(R.string.page_imported_share_clipboard)
 
-    Card(
-        modifier = Modifier.widthIn(max = 320.dp),
-        shape = MaterialTheme.shapes.extraLarge,
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
-    ) {
-        Column(
-            modifier = Modifier.padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+    BoxWithConstraints {
+        // The icon/message/hint/padding around the detail box are fixed height, so a short
+        // window (landscape phone) can run out of room before reaching the hint below it --
+        // shrink the box's cap with the available height instead of letting the hint get
+        // pushed past the bottom of the screen.
+        val detailMaxHeight = (maxHeight * 0.3f).coerceIn(56.dp, 160.dp)
+        val cardPadding = if (maxHeight < 360.dp) 20.dp else 32.dp
+
+        Card(
+            modifier = Modifier.widthIn(max = 320.dp),
+            shape = MaterialTheme.shapes.extraLarge,
+            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+            colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
         ) {
-            Icon(
-                Icons.Filled.Error,
-                contentDescription = stringResource(R.string.page_info_unhandlederror_label),
-                modifier = Modifier.size(72.dp),
-            )
-            Spacer(Modifier.size(20.dp))
-            Text(
-                text = stringResource(R.string.page_info_unhandlederror_msg),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(Modifier.size(16.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 160.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .combinedClickable(
-                        onClick = {},
-                        onLongClick = {
-                            clipboard.setPrimaryClip(ClipData.newPlainText("Error details", detail))
-                            android.widget.Toast.makeText(context, copiedMessage, android.widget.Toast.LENGTH_SHORT).show()
-                        },
-                    )
-                    .padding(12.dp)
-                    .verticalScroll(rememberScrollState()),
+            Column(
+                modifier = Modifier.padding(cardPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Icon(
+                    Icons.Filled.Error,
+                    contentDescription = stringResource(R.string.page_info_unhandlederror_label),
+                    modifier = Modifier.size(72.dp),
+                )
+                Spacer(Modifier.size(20.dp))
                 Text(
-                    text = detail,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontFamily = FontFamily.Monospace,
+                    text = stringResource(R.string.page_info_unhandlederror_msg),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.size(16.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = detailMaxHeight)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.background)
+                        .combinedClickable(
+                            onClick = {},
+                            onLongClick = {
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, detail)
+                                }
+                                context.startActivity(Intent.createChooser(shareIntent, null))
+                            },
+                        )
+                        .padding(12.dp)
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    Text(
+                        text = detail,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                    )
+                }
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = stringResource(R.string.page_info_unhandlederror_hint),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Spacer(Modifier.size(8.dp))
-            Text(
-                text = stringResource(R.string.page_info_unhandlederror_hint),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
         }
     }
 }
