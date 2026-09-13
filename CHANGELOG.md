@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.0.0
+
+- Rewritten in Kotlin and Jetpack Compose
+- Updated UI
+- Major performance, UX, and stability improvements
+- Landscape, tablet and foldable layout support
+- Live progress is now shown while importing single or multiple files
+- In-app theme picker
+- Restore default settings option now has a confirmation prompt
+- Direct Access Mode Browser now supports sorting by various file attributes and filtering by file name
+- Sharing text with the app via share sheet now results in a creation of a text file that can be shared
+- Unhandled exceptions (errors) are now displayed on a dedicated view with the option to share
+- Available once again on more architectures
+
 ## 3.1.2
 
 - Various dependency updates and migrations
