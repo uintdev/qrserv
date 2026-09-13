@@ -90,7 +90,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun purgeStaleCacheOnLaunch() {
         viewModelScope.launch(Dispatchers.IO) {
-            CacheManager.deleteCache(fileRepo.pickerDir(), directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT)
+            CacheManager.deleteCache(fileRepo.pickerDir(ignoreDam = true), directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT)
         }
     }
 
@@ -255,7 +255,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 CacheManager.deleteCache(
-                    fileRepo.pickerDir(),
+                    fileRepo.pickerDir(ignoreDam = true),
                     directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT,
                 )
             }
