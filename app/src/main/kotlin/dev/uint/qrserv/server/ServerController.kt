@@ -25,6 +25,8 @@ class ServerController(
     val port: Int
         get() = server?.listeningPort ?: 0
 
+    fun currentSession(): Any? = server
+
     /** Starts the server on [requestedPort] (0 = OS-assigned ephemeral port). Throws on bind failure. */
     @Throws(IOException::class)
     fun start(requestedPort: Int, fileInfoProvider: () -> FileInfo?, hasStoragePermission: (String) -> Boolean) {
@@ -67,9 +69,10 @@ class ServerController(
      * fire from inside the route handler before Ktor has flushed the (small, bodiless) response.
      */
     private fun stopDeferred() {
+        val stale = server
         CoroutineScope(Dispatchers.IO).launch {
             delay(200.milliseconds)
-            stop()
+            if (server === stale) stop()
         }
     }
 }

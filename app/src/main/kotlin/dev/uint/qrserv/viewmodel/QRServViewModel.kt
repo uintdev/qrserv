@@ -297,7 +297,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         when (event and FileObserver.ALL_EVENTS) {
             FileObserver.DELETE, FileObserver.MOVED_FROM -> {
                 if (!file.exists()) {
+                    val session = serverController.currentSession()
                     viewModelScope.launch {
+                        if (serverController.currentSession() !== session) return@launch
                         if (isDirectAccessFile && !hasDirectAccessPermission()) {
                             // The file didn't actually go anywhere -- losing MANAGE_EXTERNAL_STORAGE
                             // makes scoped storage report it as gone, which looks identical to a
@@ -313,7 +315,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             }
             FileObserver.MODIFY -> {
                 if (isDirectAccessFile && file.exists()) {
+                    val session = serverController.currentSession()
                     viewModelScope.launch {
+                        if (serverController.currentSession() !== session) return@launch
                         _uiState.update { it.copy(pageType = PageType.FILE_MODIFIED) }
                         stopServing()
                     }
