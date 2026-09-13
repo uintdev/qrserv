@@ -34,9 +34,6 @@
 </details>
 <br>
 
-> [!NOTE]  
-> The details here reflect an unreleased major rewrite. Some features may not be present in Flutter-based builds. The new build is coming soon.
-
 ## About
 
 QRServ is a file sharing application that utilizes its own HTTP server to serve files while having a clean & functional user interface.
