@@ -182,6 +182,7 @@ class FileRepository(private val context: Context) {
                 }
             }
         } catch (e: Exception) {
+            archiveFile.delete()
             return@withContext importFailureResult(e)
         }
 
