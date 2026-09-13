@@ -113,6 +113,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onFilesPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return
+        if (rejectIfBusy()) return
         setLoading(true)
         stopFileObserver()
         viewModelScope.launch {
@@ -141,6 +142,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onDirectAccessFileChosen(path: String) {
+        if (rejectIfBusy()) return
         setLoading(true)
         stopFileObserver()
         viewModelScope.launch {
@@ -150,8 +152,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onSharedFilesReceived(uris: List<Uri>) {
-        if (uris.isEmpty()) return
-        if (rejectIfBusy()) return
         onFilesPicked(uris)
     }
 
