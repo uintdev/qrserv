@@ -87,15 +87,16 @@ fun QRServApp(
 
     // A sharesheet import can start while Settings/DAM browser is active (e.g. resumed via
     // onNewIntent) -- fall back to MAIN so it doesn't show either screen over an import it didn't
-    // start. Derived (not a plain val) so it stays live-read in the no-key remember blocks below.
-    val effectiveScreen by remember {
-        derivedStateOf { if (screen != Screen.MAIN && uiState.actionButtonLoading) Screen.MAIN else screen }
-    }
-
-    // Same reasoning as effectiveScreen above, but the About dialog isn't part of the screen enum
-    // -- it can be open regardless of `screen` -- so it needs its own guard.
+    // start. Edge-triggered on loading's false->true transition, not a continuous gate -- otherwise
+    // navigating to Settings/DAM browser during an already-running import (which didn't interrupt
+    // either screen) would be suppressed too, stuck showing MAIN until the import finished.
     LaunchedEffect(uiState.actionButtonLoading) {
-        if (uiState.actionButtonLoading) showAbout = false
+        if (uiState.actionButtonLoading) {
+            if (screen != Screen.MAIN) screen = Screen.MAIN
+            // Same reasoning as above, but the About dialog isn't part of the screen enum -- it can
+            // be open regardless of `screen` -- so it needs its own guard.
+            showAbout = false
+        }
     }
 
     LaunchedEffect(viewModel) {
@@ -132,18 +133,16 @@ fun QRServApp(
 
     // screen = Screen.MAIN flips PredictiveBackHandler's enabled to false, canceling its own
     // coroutine -- so resetting these inline right after that assignment risks landing on that
-    // cancellation point. Keying off effectiveScreen here instead sidesteps the race, and also
-    // persists the suppression case above back onto `screen` once it takes effect.
-    LaunchedEffect(effectiveScreen) {
-        if (effectiveScreen == Screen.MAIN) {
+    // cancellation point. A separate LaunchedEffect keyed on the same value sidesteps the race.
+    LaunchedEffect(screen) {
+        if (screen == Screen.MAIN) {
             backProgressAnim.snapTo(0f)
             commitFadeAnim.snapTo(0f)
             isPlayingBackTransition = false
-            screen = Screen.MAIN
         }
     }
 
-    PredictiveBackHandler(enabled = effectiveScreen != Screen.MAIN) { progress ->
+    PredictiveBackHandler(enabled = screen != Screen.MAIN) { progress ->
         try {
             // Tracks finger speed at release so the commit spring can inherit it instead of
             // always starting from rest.
@@ -190,7 +189,7 @@ fun QRServApp(
     // Only the 0/nonzero threshold crossing needs to trigger recomposition -- the continuous value
     // is read directly inside the graphicsLayer blocks instead, so a live drag (touching this dozens
     // of times a second) doesn't recompose the whole app every frame.
-    val showPeek by remember { derivedStateOf { effectiveScreen != Screen.MAIN && backProgressAnim.value > 0f } }
+    val showPeek by remember { derivedStateOf { screen != Screen.MAIN && backProgressAnim.value > 0f } }
 
     // Mimics the system's predictive-back preview: outgoing screen shrinks/rounds while sliding to
     // the left edge (pivoting from that edge, not center), lifting off peekScrimModifier's flat
@@ -302,13 +301,13 @@ fun QRServApp(
             MainScreen(
                 viewModel = viewModel,
                 modifier = Modifier.padding(padding).then(if (showPeek) peekBackgroundModifier else Modifier),
-                onOpenSettings = { if (effectiveScreen == Screen.MAIN) screen = Screen.SETTINGS },
-                onOpenAbout = { if (effectiveScreen == Screen.MAIN) showAbout = true },
+                onOpenSettings = { if (screen == Screen.MAIN) screen = Screen.SETTINGS },
+                onOpenAbout = { if (screen == Screen.MAIN) showAbout = true },
             )
             if (showPeek) {
                 Box(modifier = Modifier.fillMaxSize().then(peekScrimModifier))
             }
-            when (effectiveScreen) {
+            when (screen) {
                 Screen.MAIN -> Unit
                 Screen.SETTINGS -> SettingsScreen(
                     viewModel = viewModel,
