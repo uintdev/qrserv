@@ -97,6 +97,7 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(bottom = 8.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
             SectionHeader(stringResource(R.string.settings_subheading_server))
