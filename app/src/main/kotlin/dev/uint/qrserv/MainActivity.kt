@@ -69,7 +69,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        handleShareIntent(intent)
+        if (!handleShareIntent(intent)) {
+            viewModel.purgeStaleCacheOnLaunch()
+        }
 
         setContent {
             val uiState by viewModel.uiState.collectAsState()
@@ -114,8 +116,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun handleShareIntent(intent: Intent?) {
-        if (intent == null) return
+    private fun handleShareIntent(intent: Intent?): Boolean {
+        if (intent == null) return false
         val uris: List<Uri> = when (intent.action) {
             Intent.ACTION_SEND -> {
                 val single = if (Build.VERSION.SDK_INT >= 33) {
@@ -140,7 +142,7 @@ class MainActivity : ComponentActivity() {
             viewModel.onSharedFilesReceived(uris)
             // Clear the action so rotation / process restarts don't re-import the same share.
             intent.action = null
-            return
+            return true
         }
 
         // No file stream -- fall back to shared plain text (e.g. a URL shared from a browser).
@@ -149,7 +151,9 @@ class MainActivity : ComponentActivity() {
             if (!text.isNullOrEmpty()) {
                 viewModel.onSharedTextReceived(text)
                 intent.action = null
+                return true
             }
         }
+        return false
     }
 }

@@ -88,6 +88,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun purgeStaleCacheOnLaunch() {
+        viewModelScope.launch(Dispatchers.IO) {
+            CacheManager.deleteCache(fileRepo.pickerDir(), directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT)
+        }
+    }
+
     fun onImportClicked() {
         if (rejectIfBusy()) return
         if (fileRepo.directAccessMode) {
