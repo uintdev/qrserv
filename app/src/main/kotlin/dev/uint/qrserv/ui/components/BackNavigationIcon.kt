@@ -17,6 +17,7 @@ import dev.uint.qrserv.ui.theme.subtleContainerColor
 @Composable
 fun BackNavigationIcon(onClick: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
+        Spacer(Modifier.width(8.dp))
         FilledIconButton(
             onClick = onClick,
             colors = IconButtonDefaults.filledIconButtonColors(containerColor = subtleContainerColor()),

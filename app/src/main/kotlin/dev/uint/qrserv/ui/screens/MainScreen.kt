@@ -263,7 +263,7 @@ fun MainScreen(
                             )
                         }
                     }
-                    Spacer(Modifier.width(4.dp))
+                    Spacer(Modifier.width(12.dp))
                 },
             )
         },
