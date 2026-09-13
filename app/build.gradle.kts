@@ -50,6 +50,7 @@ plugins {
 android {
     namespace = "dev.uint.qrserv"
     compileSdk = 37
+    ndkVersion = "30.0.16248370"
 
     defaultConfig {
         applicationId = "dev.uint.qrserv"
