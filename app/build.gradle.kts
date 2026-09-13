@@ -56,8 +56,8 @@ android {
         applicationId = "dev.uint.qrserv"
         minSdk = 24
         targetSdk = 37
-        versionCode = 2068
-        versionName = "4.0.0"
+        versionCode = 2069
+        versionName = "4.0.1"
         vectorDrawables { useSupportLibrary = true }
     }
 

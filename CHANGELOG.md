@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.1
+
+- UI improvements to header action buttons and the settings page view
+- Cache is now cleared on app launch
+- Settings can now be opened during file import
+- Fixed a couple race condition with the file observer
+- Fixed an issue where data shared via share sheet will not clear on server shutdown while DAM is enabled
+- Hardened checks against simultaneous imports
+- During file multi-selection archival, the archive file now gets removed if an error occurs
+
 ## 4.0.0
 
 - Rewritten in Kotlin and Jetpack Compose
@@ -142,12 +152,12 @@ Note: the next release will increase the minimum Android version to 7 (SDK versi
 ## 2.3.1
 
 - Limited file tamper check to shared internal storage due to modification misreporting with application cache
-    - Bug fixed: selection with Direct Access Mode off and putting the application in the background can result in the file system watcher to misreport the file as modified
+  - Bug fixed: selection with Direct Access Mode off and putting the application in the background can result in the file system watcher to misreport the file as modified
 
 ## 2.3.0
 
 - Added file tamper check (uses existing file removal detection method)
-    - This is an additional security measure, now that direct access to shared internal storage is possible
+  - This is an additional security measure, now that direct access to shared internal storage is possible
 - Press and holding QR code shows full URL in a tooltip
 - Moved file import button to the middle (for improved ergonomics on mobile)
 - File name tooltip now shows the full file path if file selection was done while in Direct Access Mode
@@ -155,9 +165,9 @@ Note: the next release will increase the minimum Android version to 7 (SDK versi
 ## 2.2.0
 
 - Added support for direct internal storage access (press on the SD card icon to toggle) -- ideal for large files
-    - Direct access mode does not support multi-file selection
-    - For this to function under Android 13 or later, a new permission 'MANAGE_EXTERNAL_STORAGE' was added
-    - This grants access to '/storage/emulated/0'
+  - Direct access mode does not support multi-file selection
+  - For this to function under Android 13 or later, a new permission 'MANAGE_EXTERNAL_STORAGE' was added
+  - This grants access to '/storage/emulated/0'
 - Fixed an issue where there would be multiple instances of the file system watcher
 - File system watcher is now focused on the specific selected file rather than the directory it is under
 
@@ -180,8 +190,8 @@ Note: the next release will increase the minimum Android version to 7 (SDK versi
 
 - Adjusted 'about' dialogue box UI
 - Fixes and workarounds relating to recent releases of Flutter
-    - Increased Kotlin version -- there will be warnings from (abandoned) dependencies relying on the older version but nothing that would prevent building
-    - Reconstructed share button due to recent ElevatedButton defects regarding child widget alignment
+  - Increased Kotlin version -- there will be warnings from (abandoned) dependencies relying on the older version but nothing that would prevent building
+  - Reconstructed share button due to recent ElevatedButton defects regarding child widget alignment
 
 ## 2.1.4
 
@@ -213,24 +223,24 @@ Android:
 
 - Potential bug fix on certain devices regarding system UI colour changing animation (status and navigation bar -- by not animating them)
 - Unrestricted rotation for tablets
-    - Note: this does not mean the UI is optimised for large displays -- this is just for convenience
+  - Note: this does not mean the UI is optimised for large displays -- this is just for convenience
 - Added Turkish translation
 
 All:
 
 - Updated UI
-    - New light theme
-    - Updated dark theme
-    - Changes depending on system theme
+  - New light theme
+  - Updated dark theme
+  - Changes depending on system theme
 
 ## 2.0.0
 
 Android:
 
 - Multi-file selection support
-    - In-app and via sharesheet (i.e. selecting multiple images)
-    - Will be made into a ZIP archive file
-    - Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
+  - In-app and via sharesheet (i.e. selecting multiple images)
+  - Will be made into a ZIP archive file
+  - Tooltip when press and holding on the resulting archive file name will reveal the originally selected files
 - Themed icon support
 - Target Android 13 (SDK 33)
 - Added Russian translation
@@ -239,8 +249,8 @@ Android:
 All:
 
 - Updated UI
-    - Improved appearance of dropdown
-    - Replaced slide panel with dialogue box
+  - Improved appearance of dropdown
+  - Replaced slide panel with dialogue box
 - Reduced file selection FAB animation duration by 50ms
 - Added network check during import process
 - Improved state management

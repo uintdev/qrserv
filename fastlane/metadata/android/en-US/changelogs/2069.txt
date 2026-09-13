@@ -1,0 +1,7 @@
+- UI improvements to header action buttons and the settings page view
+- Cache is now cleared on app launch
+- Settings can now be opened during file import
+- Fixed a couple race condition with the file observer
+- Fixed an issue where data shared via share sheet will not clear on server shutdown while DAM is enabled
+- Hardened checks against simultaneous imports
+- During file multi-selection archival, the archive file now gets removed if an error occurs
