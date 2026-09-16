@@ -4,8 +4,6 @@
              (the closest thing this app has to a splash screen) doesn't flash a different
              color before Compose draws the real background. -->
         <item name="android:windowBackground">#FF252329</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
