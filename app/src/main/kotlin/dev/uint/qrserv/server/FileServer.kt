@@ -16,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import java.net.URLEncoder
 
 class FileServer(
     private val port: Int,
@@ -71,10 +70,8 @@ class FileServer(
                             return@handle
                         }
 
-                        call.response.header(
-                            "Content-Disposition",
-                            "filename=\"${URLEncoder.encode(info.name, "UTF-8")}\"",
-                        )
+                        call.response.header("Content-Disposition", contentDispositionHeader(info.name))
+                        call.response.header("X-Content-Type-Options", "nosniff")
 
                         listener.onDownloadStarted(remoteIp)
                         try {
@@ -99,4 +96,23 @@ class FileServer(
         server?.stop(gracePeriodMillis = 0, timeoutMillis = 200)
         server = null
     }
+}
+
+private const val Rfc5987AttrChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#\$&+-.^_`|~"
+
+private fun rfc5987Encode(name: String): String =
+    name.toByteArray(Charsets.UTF_8).joinToString("") { byte ->
+        val char = byte.toInt().toChar()
+        if (char.code < 128 && Rfc5987AttrChars.contains(char)) char.toString() else "%%%02X".format(byte.toInt() and 0xFF)
+    }
+
+private fun contentDispositionHeader(name: String): String {
+    val asciiFallback = name
+        .map { if (it.code in 0x20..0x7E) it else '_' }
+        .joinToString("")
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+        .ifBlank { "download" }
+    return "attachment; filename=\"$asciiFallback\"; filename*=UTF-8''${rfc5987Encode(name)}"
 }
