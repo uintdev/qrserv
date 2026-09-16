@@ -1,7 +1,6 @@
 package dev.uint.qrserv.util
 
 import java.util.Locale
-import kotlin.math.abs
 import kotlin.math.roundToLong
 
 object FileSizeFormatter {
@@ -18,7 +17,11 @@ object FileSizeFormatter {
             unitIndex++
         }
 
-        val rounded = (size * 100.0).let { if (it < 0) -abs(it) else it }.roundToLong() / 100.0
+        var rounded = roundTo2Decimals(size)
+        if (rounded >= 1024.0 && unitIndex < UNITS.lastIndex) {
+            unitIndex++
+            rounded = roundTo2Decimals(rounded / 1024.0)
+        }
 
         val formatted = if (unitIndex == 0) {
             rounded.toLong().toString()
@@ -28,4 +31,6 @@ object FileSizeFormatter {
 
         return "$formatted ${UNITS[unitIndex]}"
     }
+
+    private fun roundTo2Decimals(value: Double): Double = (value * 100.0).roundToLong() / 100.0
 }
