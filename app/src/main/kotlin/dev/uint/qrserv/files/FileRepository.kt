@@ -47,7 +47,7 @@ class FileRepository(private val context: Context) {
         private set
 
     companion object {
-        const val DIRECT_ACCESS_ROOT = "/storage/emulated/0"
+        val DIRECT_ACCESS_ROOT: String = Environment.getExternalStorageDirectory()?.path ?: "/storage/emulated/0"
     }
 
     fun pickerDir(ignoreDam: Boolean = false): String {
