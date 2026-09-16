@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.2
+
+- Internal cleanup to resolve a Play Store edge-to-edge compatibility warning
+- External storage path is now gathered dynamically
+- Fix Content-Disposition filename encoding (RFC 5987)
+- File size now calculates correctly when it comes to rounding
+- Deprioritize self-hosted IPs over excluding them from the interface list
+
 ## 4.0.1
 
 - UI improvements to header action buttons and the settings page view
