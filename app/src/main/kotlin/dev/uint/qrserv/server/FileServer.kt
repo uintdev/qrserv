@@ -10,8 +10,8 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.plugins.origin
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.cio.readChannel
 import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileInputStream
@@ -62,8 +62,9 @@ class FileServer(
                             return@handle
                         }
 
-                        try {
-                            FileInputStream(file).close()
+                        // Doubles as the readability probe this used to do with a throwaway open.
+                        val (stream, length) = try {
+                            openWithLength(file)
                         } catch (error: IOException) {
                             listener.onServerGone(error.toString())
                             call.respondText("", status = HttpStatusCode.InternalServerError)
@@ -77,10 +78,14 @@ class FileServer(
                         try {
                             call.respond(object : OutgoingContent.ReadChannelContent() {
                                 override val contentType = ContentType.Application.OctetStream
-                                override val contentLength = file.length()
-                                override fun readFrom(): ByteReadChannel = file.readChannel()
+                                override val contentLength = length
+                                override fun readFrom(): ByteReadChannel = stream.toByteReadChannel()
                             })
                         } finally {
+                            // Ktor cancels the channel -- closing the stream with it -- once the body has
+                            // been written, but not if it never got as far as asking for the channel at all.
+                            // Closing an already-closed FileInputStream is a no-op.
+                            runCatching { stream.close() }
                             listener.onDownloadFinished(remoteIp)
                         }
                     }
@@ -98,6 +103,24 @@ class FileServer(
     }
 }
 
+/**
+ * Opens [file] and measures it through that same descriptor, so the advertised Content-Length and
+ * the bytes actually sent can't disagree. Taking the length from the path instead (File.length(),
+ * as Ktor's own File.readChannel() also does internally) stats it separately from the open that
+ * streams it -- and Ktor doesn't call readFrom() until after the response object is built, leaving
+ * a window in which the file can be replaced or resized. Ktor then copies exactly Content-Length
+ * bytes and rejects the mismatch, failing the transfer partway through.
+ */
+private fun openWithLength(file: File): Pair<FileInputStream, Long> {
+    val stream = FileInputStream(file)
+    return try {
+        stream to stream.channel.size()
+    } catch (error: IOException) {
+        stream.close()
+        throw error
+    }
+}
+
 private const val Rfc5987AttrChars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#\$&+-.^_`|~"
 
@@ -107,12 +130,24 @@ private fun rfc5987Encode(name: String): String =
         if (char.code < 128 && Rfc5987AttrChars.contains(char)) char.toString() else "%%%02X".format(byte.toInt() and 0xFF)
     }
 
-private fun contentDispositionHeader(name: String): String {
+/**
+ * Drops anything a client could read as a path rather than a name. RFC 6266 leaves it to the
+ * recipient to ignore path information and browsers do, but separators (or a bare "..") are never
+ * legitimate in a name we're handing out, so they shouldn't reach a downloader that takes the
+ * header literally -- including one on Windows, where a backslash separates paths too.
+ */
+private fun sanitizeFileName(name: String): String {
+    val flattened = name.map { if (it == '/' || it == '\\') '_' else it }.joinToString("")
+    return if (flattened.isBlank() || flattened == "." || flattened == "..") "download" else flattened
+}
+
+private fun contentDispositionHeader(rawName: String): String {
+    val name = sanitizeFileName(rawName)
+    // Anything outside printable ASCII -- a header-injecting CR/LF included -- can't go in the
+    // plain filename parameter; filename* below carries the real name for clients that read it.
     val asciiFallback = name
         .map { if (it.code in 0x20..0x7E) it else '_' }
         .joinToString("")
-        .replace("\\", "\\\\")
         .replace("\"", "\\\"")
-        .ifBlank { "download" }
     return "attachment; filename=\"$asciiFallback\"; filename*=UTF-8''${rfc5987Encode(name)}"
 }
