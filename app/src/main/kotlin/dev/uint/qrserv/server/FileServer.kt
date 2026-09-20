@@ -81,12 +81,17 @@ class FileServer(
                                 override val contentLength = length
                                 override fun readFrom(): ByteReadChannel = stream.toByteReadChannel()
                             })
+                            // Deliberately not in the finally below: respond() throws if the client
+                            // disconnects part-way, if the write fails, or if Ktor's own
+                            // Content-Length check rejects the body -- and announcing a finished
+                            // download for a transfer the other end never received is worse than
+                            // saying nothing at all.
+                            listener.onDownloadFinished(remoteIp)
                         } finally {
                             // Ktor cancels the channel -- closing the stream with it -- once the body has
                             // been written, but not if it never got as far as asking for the channel at all.
                             // Closing an already-closed FileInputStream is a no-op.
                             runCatching { stream.close() }
-                            listener.onDownloadFinished(remoteIp)
                         }
                     }
                 }
