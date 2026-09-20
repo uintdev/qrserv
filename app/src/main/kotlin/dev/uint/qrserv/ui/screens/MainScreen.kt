@@ -337,8 +337,8 @@ private fun MessageForPageType(pageType: PageType) {
         PageType.FILE_MODIFIED -> Triple(Icons.Filled.Edit, R.string.page_info_filemodified_label, R.string.page_info_filemodified_msg)
         PageType.INSUFFICIENT_STORAGE -> Triple(Icons.Filled.Storage, R.string.page_info_insufficientstorage_label, R.string.page_info_insufficientstorage_msg)
         PageType.PORT_IN_USE -> Triple(Icons.Filled.Error, R.string.page_info_portinuse_label, R.string.page_info_portinuse_msg)
-        PageType.FALLBACK, PageType.IMPORTED, PageType.PERMISSION_DENIED, PageType.UNHANDLED_ERROR ->
-            Triple(Icons.Filled.Error, R.string.page_info_fallback_label, R.string.page_info_fallback_msg)
+        PageType.IMPORTED, PageType.PERMISSION_DENIED, PageType.UNHANDLED_ERROR ->
+            Triple(Icons.Filled.Error, R.string.page_info_unhandlederror_label, R.string.page_info_unhandlederror_msg)
     }
     StatusCard(
         icon = icon,

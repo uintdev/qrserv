@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Niewystarczające składowanie</string>
     <string name="page_info_portinuse_label">Błąd</string>
     <string name="page_info_portinuse_msg">Serwer próbował uruchomić z już powiązanym portem sieciowym</string>
-    <string name="page_info_fallback_label">Błąd</string>
-    <string name="page_info_fallback_msg">Wystąpił nieuwzględniony błąd.\nKod: %1$s</string>
     <string name="page_info_unhandlederror_label">Błąd</string>
     <string name="page_info_unhandlederror_msg">Wystąpił nieoczekiwany błąd</string>
     <string name="page_info_unhandlederror_hint">Naciśnij i przytrzymaj, aby udostępnić szczegóły</string>

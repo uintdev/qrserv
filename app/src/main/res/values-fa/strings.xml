@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">حافظه ناکافی</string>
     <string name="page_info_portinuse_label">خطا</string>
     <string name="page_info_portinuse_msg">سرور تلاش میکرد با پورتی متصل شود که از پیش استفاده شده بود</string>
-    <string name="page_info_fallback_label">خطا</string>
-    <string name="page_info_fallback_msg">خطایی رخ داد.\nCode: %1$s</string>
     <string name="page_info_unhandlederror_label">خطا</string>
     <string name="page_info_unhandlederror_msg">خطای غیرمنتظره‌ای رخ داد</string>
     <string name="page_info_unhandlederror_hint">برای هم‌رسانی جزئیات، لمس کرده و نگه دارید</string>

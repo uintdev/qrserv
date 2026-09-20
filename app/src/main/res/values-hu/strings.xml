@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Elégtelen tárolás</string>
     <string name="page_info_portinuse_label">Hiba</string>
     <string name="page_info_portinuse_msg">Egy már használt porton próbált indulni a szerver</string>
-    <string name="page_info_fallback_label">Hiba</string>
-    <string name="page_info_fallback_msg">Egy hiba történt.\nKód: %1$s</string>
     <string name="page_info_unhandlederror_label">Hiba</string>
     <string name="page_info_unhandlederror_msg">Váratlan hiba történt</string>
     <string name="page_info_unhandlederror_hint">Tartsa lenyomva a részletek megosztásához</string>

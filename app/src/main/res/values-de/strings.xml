@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Zu wenig Speicher</string>
     <string name="page_info_portinuse_label">Fehler</string>
     <string name="page_info_portinuse_msg">Server hat versucht, mit einem bereits belegten Port zu beginnen</string>
-    <string name="page_info_fallback_label">Fehler</string>
-    <string name="page_info_fallback_msg">Ein Fehler ist aufgetreten.\nCode: %1$s</string>
     <string name="page_info_unhandlederror_label">Fehler</string>
     <string name="page_info_unhandlederror_msg">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="page_info_unhandlederror_hint">Zum Teilen der Details gedrückt halten</string>

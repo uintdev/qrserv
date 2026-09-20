@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Stoccaggio insufficiente</string>
     <string name="page_info_portinuse_label">Errore</string>
     <string name="page_info_portinuse_msg">Il server ha cercato di usare una porta già in utilizzo</string>
-    <string name="page_info_fallback_label">Errore</string>
-    <string name="page_info_fallback_msg">C\'è stato un errore.\nCodice: %1$s</string>
     <string name="page_info_unhandlederror_label">Errore</string>
     <string name="page_info_unhandlederror_msg">Si è verificato un errore imprevisto</string>
     <string name="page_info_unhandlederror_hint">Tieni premuto per condividere i dettagli</string>

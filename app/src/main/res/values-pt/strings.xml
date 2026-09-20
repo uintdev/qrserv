@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Armazenamento insuficiente</string>
     <string name="page_info_portinuse_label">Erro</string>
     <string name="page_info_portinuse_msg">O servidor tentou começar com uma porta já usada</string>
-    <string name="page_info_fallback_label">Erro</string>
-    <string name="page_info_fallback_msg">Ocorreu um erro.\nCódigo: %1$s</string>
     <string name="page_info_unhandlederror_label">Erro</string>
     <string name="page_info_unhandlederror_msg">Ocorreu um erro inesperado</string>
     <string name="page_info_unhandlederror_hint">Toque e segure para compartilhar os detalhes</string>

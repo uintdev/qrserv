@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Almacenamiento insuficiente</string>
     <string name="page_info_portinuse_label">Error</string>
     <string name="page_info_portinuse_msg">El servidor intentó ejecutarse con un puerto en uso</string>
-    <string name="page_info_fallback_label">Error</string>
-    <string name="page_info_fallback_msg">Se ha producido un error.\nCódigo: %1$s</string>
     <string name="page_info_unhandlederror_label">Error</string>
     <string name="page_info_unhandlederror_msg">Se ha producido un error inesperado</string>
     <string name="page_info_unhandlederror_hint">Mantén pulsado para compartir los detalles</string>

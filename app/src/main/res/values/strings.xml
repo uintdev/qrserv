@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Insufficient storage</string>
     <string name="page_info_portinuse_label">Error</string>
     <string name="page_info_portinuse_msg">Server tried to start with an already bound port</string>
-    <string name="page_info_fallback_label">Error</string>
-    <string name="page_info_fallback_msg">An error has occurred.\nCode: %1$s</string>
     <string name="page_info_unhandlederror_label">Error</string>
     <string name="page_info_unhandlederror_msg">An unexpected error occurred</string>
     <string name="page_info_unhandlederror_hint">Press and hold to share details</string>

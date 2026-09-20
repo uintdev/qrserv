@@ -10,7 +10,6 @@ enum class PageType {
     PERMISSION_DENIED,
     INSUFFICIENT_STORAGE,
     PORT_IN_USE,
-    FALLBACK,
     UNHANDLED_ERROR,
 }
 
@@ -71,7 +70,6 @@ data class AppUiState(
     val damEligible: Boolean = true,
     val damBuildIneligible: Boolean = false,
     val fiuEnabled: Boolean = false,
-    val fallbackCode: String = "",
     val importProgress: ImportProgress? = null,
     /** Raw exception detail shown (and copyable) on [PageType.UNHANDLED_ERROR]. */
     val errorDetail: String = "",

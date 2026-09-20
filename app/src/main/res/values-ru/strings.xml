@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">Недостаточно свободного места</string>
     <string name="page_info_portinuse_label">Ошибка</string>
     <string name="page_info_portinuse_msg">Сервер пытался начать с уже привязанного порта</string>
-    <string name="page_info_fallback_label">Ошибка</string>
-    <string name="page_info_fallback_msg">Произошла ошибка. Код: %1$s</string>
     <string name="page_info_unhandlederror_label">Ошибка</string>
     <string name="page_info_unhandlederror_msg">Произошла непредвиденная ошибка</string>
     <string name="page_info_unhandlederror_hint">Нажмите и удерживайте, чтобы поделиться деталями</string>

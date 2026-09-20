@@ -16,8 +16,6 @@
     <string name="page_info_insufficientstorage_msg">אין מספיק מקום אחסון</string>
     <string name="page_info_portinuse_label">שגיאה</string>
     <string name="page_info_portinuse_msg">השרת ניסה לפעול על פורט שכבר נמצא בשימוש</string>
-    <string name="page_info_fallback_label">שגיאה</string>
-    <string name="page_info_fallback_msg">אירעה שגיאה.\nקוד: %1$s</string>
     <string name="page_info_unhandlederror_label">שגיאה</string>
     <string name="page_info_unhandlederror_msg">אירעה שגיאה בלתי צפויה</string>
     <string name="page_info_unhandlederror_hint">לחץ והחזק כדי לשתף את הפרטים</string>
