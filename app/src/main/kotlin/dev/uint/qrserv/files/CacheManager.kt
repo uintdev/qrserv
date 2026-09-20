@@ -1,12 +1,22 @@
 package dev.uint.qrserv.files
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 
 object CacheManager {
-    private var deletingDir = false
-    private var deletingSpecific = false
+    /**
+     * A lock rather than the pair of in-progress flags this used to keep: those made an
+     * overlapping call return having deleted nothing, so a purge that raced another one left
+     * copies of previously shared files sitting in the cache -- silently, and for an app whose
+     * whole job is handing files to strangers. Waiting is the right answer; skipping isn't.
+     *
+     * One lock covers both branches below because both operate on the same cache directory, and
+     * the specific-file branch can name a file the directory sweep is walking.
+     */
+    private val mutex = Mutex()
 
     /**
      * When [exclude] is true, everything in [pickerDir] EXCEPT paths in [files] is deleted
@@ -19,10 +29,8 @@ object CacheManager {
         exclude: Boolean = false,
         directAccessRoot: String? = null,
     ) = withContext(Dispatchers.IO) {
-        if (files.isEmpty() || exclude) {
-            if (deletingDir) return@withContext
-            deletingDir = true
-            try {
+        mutex.withLock {
+            if (files.isEmpty() || exclude) {
                 val dir = File(pickerDir)
                 if (dir.exists()) {
                     dir.listFiles()?.forEach { entity ->
@@ -31,19 +39,11 @@ object CacheManager {
                         entity.deleteRecursively()
                     }
                 }
-            } finally {
-                deletingDir = false
-            }
-        } else {
-            if (deletingSpecific) return@withContext
-            deletingSpecific = true
-            try {
+            } else {
                 for (path in files) {
                     if (directAccessRoot != null && path.startsWith(directAccessRoot)) continue
                     runCatching { File(path).delete() }
                 }
-            } finally {
-                deletingSpecific = false
             }
         }
     }
