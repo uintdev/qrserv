@@ -27,6 +27,10 @@
     <string name="page_imported_size">Taille</string>
     <string name="page_imported_port">Port</string>
     <string name="page_imported_archive_morefiles">+%1$d de plus</string>
+    <string name="page_imported_iface_group_network">Réseau</string>
+    <string name="page_imported_iface_group_hotspot">Point d\'accès</string>
+    <string name="page_imported_iface_group_linklocal">Lien-local</string>
+    <string name="page_imported_iface_group_loopback">Boucle locale</string>
 
     <string name="fab_shutdownserver_label">Arrêter le serveur</string>
     <string name="fab_selectfile_label">Sélectionner fichier·s</string>

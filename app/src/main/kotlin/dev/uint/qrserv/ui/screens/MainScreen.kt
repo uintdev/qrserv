@@ -107,6 +107,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.uint.qrserv.BuildConfig
 import dev.uint.qrserv.R
+import dev.uint.qrserv.data.AddressGroup
 import dev.uint.qrserv.data.AppUiState
 import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.data.PageType
@@ -654,6 +655,13 @@ private val NoSelectionTextToolbar = object : TextToolbar {
 // character early) rather than risk overflow into/behind the dropdown icon.
 private val InterfaceDropdownChromeWidth = 72.dp
 
+private fun addressGroupLabel(group: AddressGroup): Int = when (group) {
+    AddressGroup.ROUTABLE -> R.string.page_imported_iface_group_network
+    AddressGroup.HOSTED -> R.string.page_imported_iface_group_hotspot
+    AddressGroup.LINK_LOCAL -> R.string.page_imported_iface_group_linklocal
+    AddressGroup.LOOPBACK -> R.string.page_imported_iface_group_loopback
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, modifier: Modifier = Modifier) {
@@ -715,14 +723,25 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
                 onDismissRequest = { expanded = false },
                 containerColor = subtleContainerColor(),
             ) {
-                uiState.interfaces.forEach { ip ->
-                    DropdownMenuItem(
-                        text = { Text(ip, overflow = TextOverflow.Ellipsis, maxLines = 2) },
-                        onClick = {
-                            viewModel.onIpSelected(ip)
-                            expanded = false
-                        },
+                AddressGroup.entries.forEach { group ->
+                    val addresses = uiState.interfaces.filter { it.group == group }
+                    // A heading with nothing under it says less than no heading at all.
+                    if (addresses.isEmpty()) return@forEach
+                    Text(
+                        text = stringResource(addressGroupLabel(group)),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 2.dp),
                     )
+                    addresses.forEach { entry ->
+                        DropdownMenuItem(
+                            text = { Text(entry.address, overflow = TextOverflow.Ellipsis, maxLines = 2) },
+                            onClick = {
+                                viewModel.onIpSelected(entry.address)
+                                expanded = false
+                            },
+                        )
+                    }
                 }
             }
         }

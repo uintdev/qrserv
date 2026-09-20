@@ -215,7 +215,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
 
-        val selected = _uiState.value.selectedIp.takeIf { it in interfaces } ?: interfaces.first()
+        val current = _uiState.value.selectedIp
+        val selected = if (interfaces.any { it.address == current }) current else interfaces.first().address
 
         _uiState.update {
             it.copy(

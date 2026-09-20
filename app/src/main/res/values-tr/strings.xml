@@ -27,6 +27,10 @@
     <string name="page_imported_size">Boyut</string>
     <string name="page_imported_port">Port</string>
     <string name="page_imported_archive_morefiles">+%1$d daha</string>
+    <string name="page_imported_iface_group_network">Ağ</string>
+    <string name="page_imported_iface_group_hotspot">Etkin nokta</string>
+    <string name="page_imported_iface_group_linklocal">Bağlantı-yerel</string>
+    <string name="page_imported_iface_group_loopback">Geri döngü</string>
 
     <string name="fab_shutdownserver_label">Sunucuyu kapat</string>
     <string name="fab_selectfile_label">Dosya seçin</string>

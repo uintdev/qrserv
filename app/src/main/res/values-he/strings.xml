@@ -27,6 +27,10 @@
     <string name="page_imported_size">גודל</string>
     <string name="page_imported_port">פורט</string>
     <string name="page_imported_archive_morefiles">+%1$d נוספים</string>
+    <string name="page_imported_iface_group_network">רשת</string>
+    <string name="page_imported_iface_group_hotspot">נקודה חמה</string>
+    <string name="page_imported_iface_group_linklocal">מקומי לקישור</string>
+    <string name="page_imported_iface_group_loopback">לולאה מקומית</string>
 
     <string name="fab_shutdownserver_label">כבה שרת</string>
     <string name="fab_selectfile_label">בחר קובץ(ים)</string>

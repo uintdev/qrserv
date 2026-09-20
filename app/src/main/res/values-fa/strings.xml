@@ -27,6 +27,10 @@
     <string name="page_imported_size">اندازه</string>
     <string name="page_imported_port">پورت</string>
     <string name="page_imported_archive_morefiles">+%1$d مورد دیگر</string>
+    <string name="page_imported_iface_group_network">شبکه</string>
+    <string name="page_imported_iface_group_hotspot">نقطه اتصال</string>
+    <string name="page_imported_iface_group_linklocal">پیوند محلی</string>
+    <string name="page_imported_iface_group_loopback">حلقه بازگشتی</string>
 
     <string name="fab_shutdownserver_label">خاموش کردن سرور</string>
     <string name="fab_selectfile_label">انتخاب پرونده(ها)</string>

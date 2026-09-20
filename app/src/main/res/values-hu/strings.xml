@@ -27,6 +27,10 @@
     <string name="page_imported_size">Méret</string>
     <string name="page_imported_port">Port</string>
     <string name="page_imported_archive_morefiles">+%1$d további</string>
+    <string name="page_imported_iface_group_network">Hálózat</string>
+    <string name="page_imported_iface_group_hotspot">Hotspot</string>
+    <string name="page_imported_iface_group_linklocal">Link-local</string>
+    <string name="page_imported_iface_group_loopback">Visszacsatolás</string>
 
     <string name="fab_shutdownserver_label">Szerver leállítása</string>
     <string name="fab_selectfile_label">Fájl(ok) kiválasztása</string>

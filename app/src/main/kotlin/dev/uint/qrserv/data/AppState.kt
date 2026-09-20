@@ -14,6 +14,16 @@ enum class PageType {
     UNHANDLED_ERROR,
 }
 
+/**
+ * How likely a client on another device is to be able to reach an address. Declaration order is
+ * the order the interface list is grouped and sorted in -- most reachable first -- so it is not
+ * arbitrary; [dev.uint.qrserv.net.NetworkUtils.listInterfaces] sorts on it directly.
+ */
+enum class AddressGroup { ROUTABLE, HOSTED, LINK_LOCAL, LOOPBACK }
+
+/** One address this device can be reached at, and the group it is listed under. */
+data class InterfaceAddress(val address: String, val group: AddressGroup)
+
 /** One entry inside a multi-file archive. */
 data class ArchivedEntry(val name: String, val size: Long)
 
@@ -53,7 +63,7 @@ data class AppUiState(
     val serverRunning: Boolean = false,
     val serverPoweringDown: Boolean = false,
     val fileInfo: FileInfo = FileInfo(),
-    val interfaces: List<String> = emptyList(),
+    val interfaces: List<InterfaceAddress> = emptyList(),
     val selectedIp: String = "",
     val port: Int = 0,
     val savedPort: Int = 0,
