@@ -1,5 +1,6 @@
 package dev.uint.qrserv
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -137,7 +138,8 @@ class MainActivity : ComponentActivity() {
                 } ?: emptyList()
             }
             else -> emptyList()
-        }
+        }.filter(::isAcceptableShareUri)
+
         if (uris.isNotEmpty()) {
             viewModel.onSharedFilesReceived(uris)
             // Clear the action so rotation / process restarts don't re-import the same share.
@@ -157,3 +159,13 @@ class MainActivity : ComponentActivity() {
         return false
     }
 }
+
+/**
+ * Whether a URI handed over by another app is one this app is willing to open. ContentResolver
+ * resolves file:// and android.resource:// just as happily as content://, and the StrictMode guard
+ * that's meant to stop an app passing out a file:// URI runs in the *sender's* process -- nothing
+ * enforces it here. Without this, any app willing to relax its own VM policy could point QRServ at
+ * a file it can't read itself and have it copied out and served on the network under QRServ's uid.
+ */
+private fun isAcceptableShareUri(uri: Uri): Boolean =
+    uri.scheme.equals(ContentResolver.SCHEME_CONTENT, ignoreCase = true)
