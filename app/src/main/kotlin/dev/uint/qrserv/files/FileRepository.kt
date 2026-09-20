@@ -37,6 +37,28 @@ data class PickedFile(val name: String, val directPath: String? = null)
 private fun importFailureResult(error: Throwable): ImportResult =
     if (error is FileNotFoundException) ImportResult.FileGone else ImportResult.SelectionFailed(error.toString())
 
+/**
+ * Reduces a provider-supplied name to a bare filename. DISPLAY_NAME is whatever the providing app
+ * chose to return -- and a share intent can arrive from any installed app -- so it may carry path
+ * separators, or be "." / ".." outright. File(dir, name) joins without normalising and leaves the
+ * OS to resolve the result at open time, which would put the write outside the cache directory
+ * entirely. Backslashes go the same way: not separators on Android, but this name also becomes a
+ * ZIP entry, read back by extractors on platforms where they are.
+ */
+private fun sanitizePickedName(rawName: String): String {
+    val base = rawName
+        .substringAfterLast('/')
+        .substringAfterLast('\\')
+        .map { if (it.code < 0x20 || it.code == 0x7F) '_' else it }
+        .joinToString("")
+        .trim()
+    return if (base.isEmpty() || base == "." || base == "..") "file" else base
+}
+
+/** Last line of defence behind [sanitizePickedName]: the write really does land inside [dir]. */
+private fun isContainedIn(file: File, dir: File): Boolean =
+    runCatching { file.canonicalPath.startsWith(dir.canonicalPath + File.separator) }.getOrDefault(false)
+
 class FileRepository(private val context: Context) {
 
     /** Whether Direct Access Mode (browsing the full shared storage tree) is active. */
@@ -60,7 +82,11 @@ class FileRepository(private val context: Context) {
 
     fun directModeDetect(path: String): Boolean = path.startsWith(DIRECT_ACCESS_ROOT)
 
-    /** Resolves a content:// URI's display name and size via the ContentResolver. */
+    /**
+     * Resolves a content:// URI's display name and size via the ContentResolver. The name is
+     * sanitised here rather than at each use site, so nothing downstream -- a cache path, a ZIP
+     * entry, a Content-Disposition header -- ever sees the provider's raw string.
+     */
     private fun resolveUriMeta(resolver: ContentResolver, uri: Uri): Pair<String, Long> {
         var name = uri.lastPathSegment ?: "file"
         var size = 0L
@@ -72,7 +98,7 @@ class FileRepository(private val context: Context) {
                 if (sizeIdx >= 0 && !cursor.isNull(sizeIdx)) size = cursor.getLong(sizeIdx)
             }
         }
-        return name to size
+        return sanitizePickedName(name) to size
     }
 
     /**
@@ -119,6 +145,9 @@ class FileRepository(private val context: Context) {
             val uri = uris.first()
             val (rawName, size) = resolveUriMeta(resolver, uri)
             val destFile = File(dir, rawName)
+            if (!isContainedIn(destFile, dir)) {
+                return@withContext ImportResult.SelectionFailed("Rejected file name: $rawName")
+            }
             val totalBytes = size.coerceAtLeast(1L)
             var finalBytes = 0L
             val copyResult = runCatching {
