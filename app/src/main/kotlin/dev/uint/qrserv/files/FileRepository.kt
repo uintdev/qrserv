@@ -26,6 +26,8 @@ sealed class ImportResult {
     object EmptySelection : ImportResult()
     object FileGone : ImportResult()
     object DirectAccessPathMissing : ImportResult()
+    /** The device ran out of room, either before the copy started or part-way through it. */
+    object InsufficientStorage : ImportResult()
     /** A picked file couldn't be read/archived, or a shared text file couldn't be written --
      * for any reason other than [FileGone] (e.g. deleted between selection and confirmation). */
     data class SelectionFailed(val message: String) : ImportResult()
@@ -34,8 +36,27 @@ sealed class ImportResult {
 /** One picked item before it's copied/zipped. */
 data class PickedFile(val name: String, val directPath: String? = null)
 
-private fun importFailureResult(error: Throwable): ImportResult =
-    if (error is FileNotFoundException) ImportResult.FileGone else ImportResult.SelectionFailed(error.toString())
+private fun importFailureResult(error: Throwable): ImportResult = when {
+    // Ahead of the FileNotFoundException check: opening the destination on a full disk fails with
+    // exactly that exception, and it means no room rather than a file that went missing.
+    isOutOfSpace(error) -> ImportResult.InsufficientStorage
+    error is FileNotFoundException -> ImportResult.FileGone
+    else -> ImportResult.SelectionFailed(error.toString())
+}
+
+/**
+ * Android reports a full disk as an ErrnoException wrapped in an IOException, so the errno name has
+ * to be read out of the message and the whole cause chain has to be walked to find it. ENOSPC is
+ * matched rather than the text beside it, being the part that isn't free to be reworded.
+ */
+private fun isOutOfSpace(error: Throwable): Boolean {
+    var current: Throwable? = error
+    while (current != null) {
+        if (current.message?.contains("ENOSPC") == true) return true
+        current = current.cause
+    }
+    return false
+}
 
 /**
  * Reduces a provider-supplied name to a bare filename. DISPLAY_NAME is whatever the providing app
@@ -148,6 +169,9 @@ class FileRepository(private val context: Context) {
             if (!isContainedIn(destFile, dir)) {
                 return@withContext ImportResult.SelectionFailed("Rejected file name: $rawName")
             }
+            // A byte-for-byte copy, so a reported size is exactly what it will occupy -- worth
+            // failing on now rather than after spending minutes filling the last of the disk.
+            if (size > 0 && dir.usableSpace < size) return@withContext ImportResult.InsufficientStorage
             val totalBytes = size.coerceAtLeast(1L)
             var finalBytes = 0L
             val copyResult = runCatching {

@@ -182,6 +182,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             ImportResult.DirectAccessPathMissing -> {
                 postToast(R.string.dam_path_not_found)
             }
+            ImportResult.InsufficientStorage -> {
+                _uiState.update { it.copy(pageType = PageType.INSUFFICIENT_STORAGE) }
+                stopServing()
+            }
             is ImportResult.SelectionFailed -> {
                 _uiState.update { it.copy(pageType = PageType.UNHANDLED_ERROR, errorDetail = result.message) }
                 stopServing()
