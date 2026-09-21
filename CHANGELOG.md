@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.1.0
+
+- IP addresses in the interface list are now grouped
+- Hooked up insufficient storage and interface lookup error pages
+- Content-Disposition file name is further sanitized
+- File content length validation improved
+- `content://` URI display name is now sanitized
+- Non-content URIs are now dropped
+- MiddleEllipsisText is now multi-byte aware
+- Cache is now cleared correctly when operations overlap
+- `Download finished` no longer fires on error
+- Use better random generator source
+
 ## 4.0.2
 
 - Internal cleanup to resolve a Play Store edge-to-edge compatibility warning
