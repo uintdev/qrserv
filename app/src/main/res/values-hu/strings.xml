@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Megosztható fájlok kiválasztása...</string>
     <string name="page_info_noconnection_label">Nincs hálózati kapcsolat</string>
     <string name="page_info_noconnection_msg">Ellenőrizd a hálózatot, és próbáld újra</string>
-    <string name="page_info_snapshoterror_label">Hiba</string>
-    <string name="page_info_snapshoterror_msg">Hiba történt a hálózati információk lekérdezésekor</string>
+    <string name="page_info_interfacelookuperror_label">Hiba</string>
+    <string name="page_info_interfacelookuperror_msg">Hiba történt a hálózati információk lekérdezésekor</string>
     <string name="page_info_fileremoved_label">Fájl törölve</string>
     <string name="page_info_fileremoved_msg">Fájl törölve lett</string>
     <string name="page_info_filemodified_label">Fájl módosítva</string>

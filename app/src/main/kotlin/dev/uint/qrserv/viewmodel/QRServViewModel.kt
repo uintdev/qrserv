@@ -195,7 +195,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private suspend fun startServing(fileInfo: FileInfo) {
-        val interfaces = withContext(Dispatchers.IO) { NetworkUtils.listInterfaces() }
+        val interfaces = withContext(Dispatchers.IO) { NetworkUtils.listInterfaces() }.getOrElse {
+            _uiState.update { it.copy(pageType = PageType.INTERFACE_LOOKUP_ERROR, interfaces = emptyList()) }
+            stopServing()
+            return
+        }
         if (interfaces.isEmpty()) {
             _uiState.update { it.copy(pageType = PageType.NO_CONNECTION, interfaces = emptyList()) }
             stopServing()

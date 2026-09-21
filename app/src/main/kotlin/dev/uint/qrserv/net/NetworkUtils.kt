@@ -20,8 +20,9 @@ object NetworkUtils {
      * only thing that could work. Within a group, IPv4 comes before IPv6 and each sorts
      * numerically.
      */
-    suspend fun listInterfaces(): List<InterfaceAddress> = withContext(Dispatchers.IO) {
+    suspend fun listInterfaces(): Result<List<InterfaceAddress>> = withContext(Dispatchers.IO) {
         val candidates = mutableListOf<Candidate>()
+        var failure: Exception? = null
 
         try {
             val interfaces = NetworkInterface.getNetworkInterfaces()
@@ -42,11 +43,14 @@ object NetworkUtils {
                     }
                 }
             }
-        } catch (_: Exception) {
-            // Leave whatever was collected so far; caller treats empty list as "no connection".
+        } catch (error: Exception) {
+            failure = error
         }
 
-        candidates.sortedWith(ByReachability).map { InterfaceAddress(it.address, it.group) }
+        val addresses = candidates.sortedWith(ByReachability).map { InterfaceAddress(it.address, it.group) }
+        // Whatever was collected before the failure still stands -- a partial list is a usable one.
+        // Only a failure that produced nothing is worth reporting as a failure at all.
+        if (addresses.isEmpty() && failure != null) Result.failure(failure) else Result.success(addresses)
     }
 
     private class Candidate(

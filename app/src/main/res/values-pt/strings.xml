@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Selecione arquivos para compartilhar...</string>
     <string name="page_info_noconnection_label">Nenhuma conexão de rede</string>
     <string name="page_info_noconnection_msg">Conecte-se a uma rede e tente novamente</string>
-    <string name="page_info_snapshoterror_label">Erro</string>
-    <string name="page_info_snapshoterror_msg">Erro ao coletar informações de rede</string>
+    <string name="page_info_interfacelookuperror_label">Erro</string>
+    <string name="page_info_interfacelookuperror_msg">Erro ao coletar informações de rede</string>
     <string name="page_info_fileremoved_label">Arquivo removido</string>
     <string name="page_info_fileremoved_msg">Arquivo foi removido</string>
     <string name="page_info_filemodified_label">Arquivo modificado</string>

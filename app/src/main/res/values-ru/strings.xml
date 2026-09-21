@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Выберите файлы для обмена...</string>
     <string name="page_info_noconnection_label">Нет подключения к сети</string>
     <string name="page_info_noconnection_msg">Подключитесь к сети и повторите попытку</string>
-    <string name="page_info_snapshoterror_label">Ошибка</string>
-    <string name="page_info_snapshoterror_msg">Ошибка при сборе сетевой информации</string>
+    <string name="page_info_interfacelookuperror_label">Ошибка</string>
+    <string name="page_info_interfacelookuperror_msg">Ошибка при сборе сетевой информации</string>
     <string name="page_info_fileremoved_label">Файл удалён</string>
     <string name="page_info_fileremoved_msg">Файл был удалён</string>
     <string name="page_info_filemodified_label">Файл изменен</string>

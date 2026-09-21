@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Sélectionnez des fichiers à partager...</string>
     <string name="page_info_noconnection_label">Aucune connexion réseau</string>
     <string name="page_info_noconnection_msg">Connectez-vous à un réseau et réessayez</string>
-    <string name="page_info_snapshoterror_label">Erreur</string>
-    <string name="page_info_snapshoterror_msg">Échec de la collecte des informations réseau</string>
+    <string name="page_info_interfacelookuperror_label">Erreur</string>
+    <string name="page_info_interfacelookuperror_msg">Échec de la collecte des informations réseau</string>
     <string name="page_info_fileremoved_label">Fichier supprimé</string>
     <string name="page_info_fileremoved_msg">Fichier était supprimé</string>
     <string name="page_info_filemodified_label">Fichier modifié</string>

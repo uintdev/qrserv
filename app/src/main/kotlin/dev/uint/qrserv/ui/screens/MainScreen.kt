@@ -332,7 +332,7 @@ private fun MessageForPageType(pageType: PageType) {
     val (icon, labelRes, msgRes) = when (pageType) {
         PageType.LANDING -> Triple(Icons.AutoMirrored.Filled.InsertDriveFile, R.string.page_landing_label, R.string.page_landing_msg)
         PageType.NO_CONNECTION -> Triple(Icons.Filled.SignalWifiOff, R.string.page_info_noconnection_label, R.string.page_info_noconnection_msg)
-        PageType.SNAPSHOT_ERROR -> Triple(Icons.Filled.Error, R.string.page_info_snapshoterror_label, R.string.page_info_snapshoterror_msg)
+        PageType.INTERFACE_LOOKUP_ERROR -> Triple(Icons.Filled.Error, R.string.page_info_interfacelookuperror_label, R.string.page_info_interfacelookuperror_msg)
         PageType.FILE_REMOVED -> Triple(Icons.Filled.Block, R.string.page_info_fileremoved_label, R.string.page_info_fileremoved_msg)
         PageType.FILE_MODIFIED -> Triple(Icons.Filled.Edit, R.string.page_info_filemodified_label, R.string.page_info_filemodified_msg)
         PageType.INSUFFICIENT_STORAGE -> Triple(Icons.Filled.Storage, R.string.page_info_insufficientstorage_label, R.string.page_info_insufficientstorage_msg)

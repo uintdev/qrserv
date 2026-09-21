@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Paylaşılacak dosyaları seçin...</string>
     <string name="page_info_noconnection_label">Ağ bağlantısı yok</string>
     <string name="page_info_noconnection_msg">Bir ağa bağlanın ve tekrar deneyin</string>
-    <string name="page_info_snapshoterror_label">Hata</string>
-    <string name="page_info_snapshoterror_msg">Ağ bilgileri toplanırken hata oluştu</string>
+    <string name="page_info_interfacelookuperror_label">Hata</string>
+    <string name="page_info_interfacelookuperror_msg">Ağ bilgileri toplanırken hata oluştu</string>
     <string name="page_info_fileremoved_label">Dosya kaldırıldı</string>
     <string name="page_info_fileremoved_msg">Dosya kaldırıldı</string>
     <string name="page_info_filemodified_label">Dosya değiştirildi</string>

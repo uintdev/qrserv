@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Wybierz plik(i) do wysłania......</string>
     <string name="page_info_noconnection_label">Brak połączenia z siecią</string>
     <string name="page_info_noconnection_msg">połącz się z siecią i spróbuj ponownie</string>
-    <string name="page_info_snapshoterror_label">Błąd</string>
-    <string name="page_info_snapshoterror_msg">Błąd podczas zbierania informacji o sieci</string>
+    <string name="page_info_interfacelookuperror_label">Błąd</string>
+    <string name="page_info_interfacelookuperror_msg">Błąd podczas zbierania informacji o sieci</string>
     <string name="page_info_fileremoved_label">Plik usunięty</string>
     <string name="page_info_fileremoved_msg">Plik został usunięty</string>
     <string name="page_info_filemodified_label">Plik zmodyfikowany</string>

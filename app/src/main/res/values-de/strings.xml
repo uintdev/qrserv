@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Dateien zum Teilen auswählen...</string>
     <string name="page_info_noconnection_label">Keine Netzwerk Verbindung</string>
     <string name="page_info_noconnection_msg">Verbinden Sie sich mit einem Netzwerk und versuchen Sie es erneut</string>
-    <string name="page_info_snapshoterror_label">Fehler</string>
-    <string name="page_info_snapshoterror_msg">Fehler beim Sammeln von Netzwerkinformationen</string>
+    <string name="page_info_interfacelookuperror_label">Fehler</string>
+    <string name="page_info_interfacelookuperror_msg">Fehler beim Sammeln von Netzwerkinformationen</string>
     <string name="page_info_fileremoved_label">Datei entfernt</string>
     <string name="page_info_fileremoved_msg">Datei wurde entfernt</string>
     <string name="page_info_filemodified_label">Datei geändert</string>

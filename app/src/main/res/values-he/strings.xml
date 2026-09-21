@@ -5,8 +5,8 @@
     <string name="page_landing_msg">בחר קבצים לשיתוף...</string>
     <string name="page_info_noconnection_label">אין חיבור לרשת</string>
     <string name="page_info_noconnection_msg">התחבר לרשת ונסה שוב</string>
-    <string name="page_info_snapshoterror_label">שגיאה</string>
-    <string name="page_info_snapshoterror_msg">שגיאה באיסוף מידע על הרשת</string>
+    <string name="page_info_interfacelookuperror_label">שגיאה</string>
+    <string name="page_info_interfacelookuperror_msg">שגיאה באיסוף מידע על הרשת</string>
     <string name="page_info_fileremoved_label">קובץ הוסר</string>
     <string name="page_info_fileremoved_msg">הקובץ הוסר</string>
     <string name="page_info_filemodified_label">קובץ שונה</string>

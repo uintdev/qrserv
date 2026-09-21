@@ -5,8 +5,8 @@
     <string name="page_landing_msg">Select files to share…</string>
     <string name="page_info_noconnection_label">No network connection</string>
     <string name="page_info_noconnection_msg">Connect to a network and try again</string>
-    <string name="page_info_snapshoterror_label">Error</string>
-    <string name="page_info_snapshoterror_msg">Error collecting network information</string>
+    <string name="page_info_interfacelookuperror_label">Error</string>
+    <string name="page_info_interfacelookuperror_msg">Error collecting network information</string>
     <string name="page_info_fileremoved_label">File removed</string>
     <string name="page_info_fileremoved_msg">File was removed</string>
     <string name="page_info_filemodified_label">File modified</string>

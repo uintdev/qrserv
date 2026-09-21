@@ -5,8 +5,8 @@
     <string name="page_landing_msg">پرونده ها را برای هم‌رسانی انتخاب کنید</string>
     <string name="page_info_noconnection_label">بدون اتصال شبکه</string>
     <string name="page_info_noconnection_msg">به یک شبکه متصل شده و دوباره امتحان کنید</string>
-    <string name="page_info_snapshoterror_label">خطا</string>
-    <string name="page_info_snapshoterror_msg">خطا در دریافت اطلاعات شبکه</string>
+    <string name="page_info_interfacelookuperror_label">خطا</string>
+    <string name="page_info_interfacelookuperror_msg">خطا در دریافت اطلاعات شبکه</string>
     <string name="page_info_fileremoved_label">پرونده پاک شد</string>
     <string name="page_info_fileremoved_msg">پرونده پاک شد</string>
     <string name="page_info_filemodified_label">پرونده تغییر یافته</string>
