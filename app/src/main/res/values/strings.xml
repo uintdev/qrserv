@@ -26,7 +26,7 @@
     <string name="page_imported_port">Port</string>
     <string name="page_imported_archive_morefiles">+%1$d more</string>
     <string name="page_imported_iface_group_network">Network</string>
-    <string name="page_imported_iface_group_hotspot">Hotspot</string>
+    <string name="page_imported_iface_group_tethering">Tethering</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Loopback</string>
 
@@ -44,6 +44,48 @@
     <string name="server_info_download_started">Download started: %1$s</string>
     <string name="server_info_download_finished">Download finished: %1$s</string>
     <string name="server_info_gone">Server is gone: %1$s</string>
+
+    <string name="notification_channel_name">Sharing</string>
+    <string name="notification_sharing_title">Sharing %1$s</string>
+    <string name="notification_preparing_title">Preparing to share…</string>
+    <string name="notification_public_title">Sharing a file</string>
+    <string name="notification_action_stop">Stop</string>
+    <string name="notification_starting_hotspot">Starting private hotspot…</string>
+    <string name="notification_hotspot_detail">Private hotspot · %1$s</string>
+
+    <string name="hotspot_share_button">Share via private hotspot</string>
+    <string name="hotspot_note_disconnects">Wi-Fi disconnects while sharing</string>
+    <string name="hotspot_unavailable_android">Requires Android 13 or later</string>
+    <string name="hotspot_unavailable_nowifi">This device has no Wi-Fi</string>
+    <string name="hotspot_unavailable_blocked">Hotspots are blocked on this device</string>
+    <string name="hotspot_failed_label">Couldn\'t start the private hotspot</string>
+    <string name="hotspot_failed_incompatible">Turn off other hotspots, then try again</string>
+    <string name="hotspot_failed_nochannel">No free Wi-Fi channel right now</string>
+    <string name="hotspot_failed_generic">Couldn\'t start the private hotspot</string>
+    <string name="hotspot_try_again">Try again</string>
+    <string name="hotspot_lost_stopped">Hotspot was turned off, so sharing stopped</string>
+    <string name="hotspot_lost_wificontrol">Wi-Fi control was turned off, so sharing stopped</string>
+    <string name="hotspot_lost_nearby">Nearby devices permission was removed, so sharing stopped</string>
+    <string name="hotspot_dialog_title">Permission needed</string>
+    <string name="hotspot_dialog_nearby">Allow Nearby devices so QRServ can create a private hotspot.</string>
+    <string name="hotspot_dialog_wificontrol">Allow Wi-Fi control so QRServ can create a private hotspot.</string>
+    <string name="hotspot_dialog_notnow">Not now</string>
+    <string name="hotspot_dialog_continue">Continue</string>
+    <string name="hotspot_dialog_settings">Open settings</string>
+    <string name="hotspot_screen_title">Private hotspot</string>
+    <string name="hotspot_scan_hint">Scan to join this network</string>
+    <string name="hotspot_forget_hint">Forget it once you\'re done</string>
+    <string name="hotspot_network">Network</string>
+    <string name="hotspot_password">Password</string>
+    <string name="hotspot_security">Security</string>
+    <string name="hotspot_security_open">None</string>
+    <string name="hotspot_password_show">Show password</string>
+    <string name="hotspot_password_hide">Hide password</string>
+    <string name="hotspot_copy_network">Copy network name</string>
+    <string name="hotspot_copy_password">Copy password</string>
+    <string name="hotspot_stop">Stop private hotspot</string>
+    <string name="hotspot_switch">Switch to private hotspot</string>
+    <string name="hotspot_open_details">Private hotspot details</string>
 
     <string name="about_title">About</string>
     <string name="about_releases_title">Releases</string>

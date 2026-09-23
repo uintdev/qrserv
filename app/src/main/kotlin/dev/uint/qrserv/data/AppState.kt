@@ -1,5 +1,9 @@
 package dev.uint.qrserv.data
 
+import dev.uint.qrserv.net.HotspotAvailability
+import dev.uint.qrserv.net.HotspotFailure
+import dev.uint.qrserv.net.HotspotInfo
+
 enum class PageType {
     LANDING,
     IMPORTED,
@@ -10,6 +14,8 @@ enum class PageType {
     INSUFFICIENT_STORAGE,
     PORT_IN_USE,
     UNHANDLED_ERROR,
+
+    HOTSPOT_FAILED,
 }
 
 /**
@@ -24,6 +30,14 @@ data class InterfaceAddress(val address: String, val group: AddressGroup)
 
 /** One entry inside a multi-file archive. */
 data class ArchivedEntry(val name: String, val size: Long)
+
+enum class HotspotDialog {
+    EXPLAIN_NEARBY,
+
+    NEARBY_SETTINGS,
+
+    WIFI_CONTROL_SETTINGS,
+}
 
 /** User's app theme preference, persisted via [dev.uint.qrserv.data.Preferences]. */
 enum class ThemeMode { SYSTEM, DARK, LIGHT }
@@ -73,4 +87,12 @@ data class AppUiState(
     /** Raw exception detail shown (and copyable) on [PageType.UNHANDLED_ERROR]. */
     val errorDetail: String = "",
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val notificationPermissionPending: Boolean = false,
+    val hotspot: HotspotInfo? = null,
+    val hotspotStarting: Boolean = false,
+    val hotspotAvailability: HotspotAvailability = HotspotAvailability(),
+    val hotspotFailure: HotspotFailure? = null,
+    val hotspotDialog: HotspotDialog? = null,
+    val nearbyPermissionRequest: Boolean = false,
+    val hotspotScreenPending: Boolean = false,
 )

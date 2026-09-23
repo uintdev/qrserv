@@ -26,7 +26,7 @@
     <string name="page_imported_port">Port</string>
     <string name="page_imported_archive_morefiles">+%1$d további</string>
     <string name="page_imported_iface_group_network">Hálózat</string>
-    <string name="page_imported_iface_group_hotspot">Hotspot</string>
+    <string name="page_imported_iface_group_tethering">Internetmegosztás</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Visszacsatolás</string>
 
@@ -44,6 +44,47 @@
     <string name="server_info_download_started">Letöltés megkezdve: %1$s</string>
     <string name="server_info_download_finished">Letöltés kész: %1$s</string>
     <string name="server_info_gone">A szerver eltűnt: %1$s</string>
+
+    <string name="notification_channel_name">Megosztás</string>
+    <string name="notification_sharing_title">Megosztás: %1$s</string>
+    <string name="notification_preparing_title">Megosztás előkészítése…</string>
+    <string name="notification_public_title">Fájl megosztása</string>
+    <string name="notification_action_stop">Leállítás</string>
+    <string name="notification_starting_hotspot">Privát hotspot indítása…</string>
+    <string name="notification_hotspot_detail">Privát hotspot · %1$s</string>
+    <string name="hotspot_share_button">Megosztás privát hotspoton</string>
+    <string name="hotspot_note_disconnects">A Wi-Fi megszakad a megosztás alatt</string>
+    <string name="hotspot_unavailable_android">Android 13 vagy újabb szükséges</string>
+    <string name="hotspot_unavailable_nowifi">Ezen az eszközön nincs Wi-Fi</string>
+    <string name="hotspot_unavailable_blocked">A hotspotok le vannak tiltva ezen az eszközön</string>
+    <string name="hotspot_failed_label">Nem sikerült elindítani a privát hotspotot</string>
+    <string name="hotspot_failed_incompatible">Kapcsolja ki a többi hotspotot, majd próbálja újra</string>
+    <string name="hotspot_failed_nochannel">Jelenleg nincs szabad Wi-Fi-csatorna</string>
+    <string name="hotspot_failed_generic">Nem sikerült elindítani a privát hotspotot</string>
+    <string name="hotspot_try_again">Újra</string>
+    <string name="hotspot_lost_stopped">A hotspot kikapcsolt, a megosztás leállt</string>
+    <string name="hotspot_lost_wificontrol">A Wi-Fi-vezérlés ki lett kapcsolva, a megosztás leállt</string>
+    <string name="hotspot_lost_nearby">A Közeli eszközök engedély visszavonva, a megosztás leállt</string>
+    <string name="hotspot_dialog_title">Engedély szükséges</string>
+    <string name="hotspot_dialog_nearby">Engedélyezze a „Közeli eszközök” hozzáférést, hogy a QRServ privát hotspotot hozhasson létre.</string>
+    <string name="hotspot_dialog_wificontrol">Engedélyezze a „Wi-Fi-vezérlés” hozzáférést, hogy a QRServ privát hotspotot hozhasson létre.</string>
+    <string name="hotspot_dialog_notnow">Most nem</string>
+    <string name="hotspot_dialog_continue">Tovább</string>
+    <string name="hotspot_dialog_settings">Beállítások megnyitása</string>
+    <string name="hotspot_screen_title">Privát hotspot</string>
+    <string name="hotspot_scan_hint">Olvassa be a hálózathoz való csatlakozáshoz</string>
+    <string name="hotspot_forget_hint">Ha végzett, felejtse el</string>
+    <string name="hotspot_network">Hálózat</string>
+    <string name="hotspot_password">Jelszó</string>
+    <string name="hotspot_security">Biztonság</string>
+    <string name="hotspot_security_open">Nincs</string>
+    <string name="hotspot_password_show">Jelszó megjelenítése</string>
+    <string name="hotspot_password_hide">Jelszó elrejtése</string>
+    <string name="hotspot_copy_network">Hálózatnév másolása</string>
+    <string name="hotspot_copy_password">Jelszó másolása</string>
+    <string name="hotspot_stop">Privát hotspot leállítása</string>
+    <string name="hotspot_switch">Váltás privát hotspotra</string>
+    <string name="hotspot_open_details">Privát hotspot részletei</string>
 
     <string name="about_title">Névjegy</string>
     <string name="about_releases_title">Kiadások</string>

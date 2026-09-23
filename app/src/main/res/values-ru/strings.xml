@@ -26,7 +26,7 @@
     <string name="page_imported_port">Порт</string>
     <string name="page_imported_archive_morefiles">+%1$d ещё</string>
     <string name="page_imported_iface_group_network">Сеть</string>
-    <string name="page_imported_iface_group_hotspot">Точка доступа</string>
+    <string name="page_imported_iface_group_tethering">Режим модема</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Петля</string>
 
@@ -44,6 +44,47 @@
     <string name="server_info_download_started">загрузка началась: %1$s</string>
     <string name="server_info_download_finished">загрузка завершена: %1$s</string>
     <string name="server_info_gone">Сервер недоступен: %1$s</string>
+
+    <string name="notification_channel_name">Раздача</string>
+    <string name="notification_sharing_title">Раздаётся %1$s</string>
+    <string name="notification_preparing_title">Подготовка к раздаче…</string>
+    <string name="notification_public_title">Раздаётся файл</string>
+    <string name="notification_action_stop">Остановить</string>
+    <string name="notification_starting_hotspot">Запуск частной точки доступа…</string>
+    <string name="notification_hotspot_detail">Частная точка доступа · %1$s</string>
+    <string name="hotspot_share_button">Раздать через частную точку доступа</string>
+    <string name="hotspot_note_disconnects">Wi-Fi отключится на время раздачи</string>
+    <string name="hotspot_unavailable_android">Требуется Android 13 или новее</string>
+    <string name="hotspot_unavailable_nowifi">На этом устройстве нет Wi-Fi</string>
+    <string name="hotspot_unavailable_blocked">Точки доступа заблокированы на этом устройстве</string>
+    <string name="hotspot_failed_label">Не удалось запустить частную точку доступа</string>
+    <string name="hotspot_failed_incompatible">Отключите другие точки доступа и повторите попытку</string>
+    <string name="hotspot_failed_nochannel">Сейчас нет свободного канала Wi-Fi</string>
+    <string name="hotspot_failed_generic">Не удалось запустить частную точку доступа</string>
+    <string name="hotspot_try_again">Повторить</string>
+    <string name="hotspot_lost_stopped">Точка доступа выключена, раздача остановлена</string>
+    <string name="hotspot_lost_wificontrol">Управление Wi-Fi отключено, раздача остановлена</string>
+    <string name="hotspot_lost_nearby">Разрешение «Устройства поблизости» отозвано, раздача остановлена</string>
+    <string name="hotspot_dialog_title">Требуется разрешение</string>
+    <string name="hotspot_dialog_nearby">Разрешите «Устройства поблизости», чтобы QRServ мог создать частную точку доступа.</string>
+    <string name="hotspot_dialog_wificontrol">Разрешите «Управление Wi-Fi», чтобы QRServ мог создать частную точку доступа.</string>
+    <string name="hotspot_dialog_notnow">Не сейчас</string>
+    <string name="hotspot_dialog_continue">Продолжить</string>
+    <string name="hotspot_dialog_settings">Открыть настройки</string>
+    <string name="hotspot_screen_title">Частная точка доступа</string>
+    <string name="hotspot_scan_hint">Отсканируйте, чтобы подключиться к этой сети</string>
+    <string name="hotspot_forget_hint">Удалите её, когда закончите</string>
+    <string name="hotspot_network">Сеть</string>
+    <string name="hotspot_password">Пароль</string>
+    <string name="hotspot_security">Защита</string>
+    <string name="hotspot_security_open">Нет</string>
+    <string name="hotspot_password_show">Показать пароль</string>
+    <string name="hotspot_password_hide">Скрыть пароль</string>
+    <string name="hotspot_copy_network">Копировать имя сети</string>
+    <string name="hotspot_copy_password">Копировать пароль</string>
+    <string name="hotspot_stop">Остановить частную точку доступа</string>
+    <string name="hotspot_switch">Перейти на частную точку доступа</string>
+    <string name="hotspot_open_details">Сведения о частной точке доступа</string>
 
     <string name="about_title">О программе</string>
     <string name="about_releases_title">Релизы</string>

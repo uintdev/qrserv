@@ -26,7 +26,7 @@
     <string name="page_imported_port">پورت</string>
     <string name="page_imported_archive_morefiles">+%1$d مورد دیگر</string>
     <string name="page_imported_iface_group_network">شبکه</string>
-    <string name="page_imported_iface_group_hotspot">نقطه اتصال</string>
+    <string name="page_imported_iface_group_tethering">اشتراک‌گذاری اینترنت</string>
     <string name="page_imported_iface_group_linklocal">پیوند محلی</string>
     <string name="page_imported_iface_group_loopback">حلقه بازگشتی</string>
 
@@ -44,6 +44,47 @@
     <string name="server_info_download_started">دریافت آغاز شد: %1$s</string>
     <string name="server_info_download_finished">دریافت به پایان رسید: %1$s</string>
     <string name="server_info_gone">سرور از بین رفته است: %1$s</string>
+
+    <string name="notification_channel_name">هم‌رسانی</string>
+    <string name="notification_sharing_title">در حال هم‌رسانی %1$s</string>
+    <string name="notification_preparing_title">آماده‌سازی برای هم‌رسانی…</string>
+    <string name="notification_public_title">در حال هم‌رسانی یک پرونده</string>
+    <string name="notification_action_stop">توقف</string>
+    <string name="notification_starting_hotspot">در حال راه‌اندازی نقطه اتصال خصوصی…</string>
+    <string name="notification_hotspot_detail">نقطه اتصال خصوصی · %1$s</string>
+    <string name="hotspot_share_button">هم‌رسانی از طریق نقطه اتصال خصوصی</string>
+    <string name="hotspot_note_disconnects">Wi-Fi هنگام هم‌رسانی قطع می‌شود</string>
+    <string name="hotspot_unavailable_android">به Android 13 یا بالاتر نیاز دارد</string>
+    <string name="hotspot_unavailable_nowifi">این دستگاه Wi-Fi ندارد</string>
+    <string name="hotspot_unavailable_blocked">نقطه‌های اتصال در این دستگاه مسدود هستند</string>
+    <string name="hotspot_failed_label">راه‌اندازی نقطه اتصال خصوصی ممکن نشد</string>
+    <string name="hotspot_failed_incompatible">نقطه‌های اتصال دیگر را خاموش کرده و دوباره امتحان کنید</string>
+    <string name="hotspot_failed_nochannel">در حال حاضر کانال Wi-Fi آزادی وجود ندارد</string>
+    <string name="hotspot_failed_generic">راه‌اندازی نقطه اتصال خصوصی ممکن نشد</string>
+    <string name="hotspot_try_again">تلاش دوباره</string>
+    <string name="hotspot_lost_stopped">نقطه اتصال خاموش شد، هم‌رسانی متوقف شد</string>
+    <string name="hotspot_lost_wificontrol">کنترل Wi-Fi خاموش شد، هم‌رسانی متوقف شد</string>
+    <string name="hotspot_lost_nearby">مجوز «دستگاه‌های اطراف» برداشته شد، هم‌رسانی متوقف شد</string>
+    <string name="hotspot_dialog_title">مجوز لازم است</string>
+    <string name="hotspot_dialog_nearby">به «دستگاه‌های اطراف» اجازه دهید تا QRServ بتواند نقطه اتصال خصوصی بسازد.</string>
+    <string name="hotspot_dialog_wificontrol">به «کنترل Wi-Fi» اجازه دهید تا QRServ بتواند نقطه اتصال خصوصی بسازد.</string>
+    <string name="hotspot_dialog_notnow">اکنون نه</string>
+    <string name="hotspot_dialog_continue">ادامه</string>
+    <string name="hotspot_dialog_settings">باز کردن تنظیمات</string>
+    <string name="hotspot_screen_title">نقطه اتصال خصوصی</string>
+    <string name="hotspot_scan_hint">برای پیوستن به این شبکه اسکن کنید</string>
+    <string name="hotspot_forget_hint">پس از پایان، آن را فراموش کنید</string>
+    <string name="hotspot_network">شبکه</string>
+    <string name="hotspot_password">گذرواژه</string>
+    <string name="hotspot_security">امنیت</string>
+    <string name="hotspot_security_open">هیچ</string>
+    <string name="hotspot_password_show">نمایش گذرواژه</string>
+    <string name="hotspot_password_hide">پنهان کردن گذرواژه</string>
+    <string name="hotspot_copy_network">رونویسی نام شبکه</string>
+    <string name="hotspot_copy_password">رونویسی گذرواژه</string>
+    <string name="hotspot_stop">توقف نقطه اتصال خصوصی</string>
+    <string name="hotspot_switch">تغییر به نقطه اتصال خصوصی</string>
+    <string name="hotspot_open_details">جزئیات نقطه اتصال خصوصی</string>
 
     <string name="about_title">درباره</string>
     <string name="about_releases_title">انتشارها</string>

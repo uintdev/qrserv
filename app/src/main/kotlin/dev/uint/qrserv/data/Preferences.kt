@@ -12,6 +12,10 @@ object Preferences {
     const val PREF_CLIENT_DAM = "client_dam"
     const val PREF_CLIENT_FIU = "client_fiu"
     const val PREF_THEME_MODE = "theme_mode"
+    const val PREF_NOTIFICATIONS_ASKED = "notifications_asked"
+
+    const val PREF_SESSION_ACTIVE = "session_active"
+    const val PREF_SESSION_HOTSPOT = "session_hotspot"
 
     private lateinit var prefs: SharedPreferences
 

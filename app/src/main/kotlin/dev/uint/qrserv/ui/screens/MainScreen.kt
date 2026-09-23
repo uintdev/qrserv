@@ -4,12 +4,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,17 +34,21 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PortableWifiOff
 import androidx.compose.material.icons.filled.PowerSettingsNew
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.WifiLock
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -54,6 +60,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -72,11 +79,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -87,9 +94,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
@@ -111,9 +121,15 @@ import dev.uint.qrserv.data.AddressGroup
 import dev.uint.qrserv.data.AppUiState
 import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.data.PageType
+import dev.uint.qrserv.net.HotspotFailure
+import dev.uint.qrserv.ui.components.HotspotButton
+import dev.uint.qrserv.ui.components.HotspotOption
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
+import dev.uint.qrserv.ui.components.hotspotNote
 import dev.uint.qrserv.ui.components.QrCodeImage
+import dev.uint.qrserv.ui.components.QrDetailsLayout
 import dev.uint.qrserv.ui.components.StatusCard
+import dev.uint.qrserv.ui.components.rememberIsWideScreen
 import dev.uint.qrserv.ui.components.middleEllipsis
 import dev.uint.qrserv.ui.theme.BrandError
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
@@ -122,13 +138,9 @@ import dev.uint.qrserv.ui.theme.transparentTopAppBarColors
 import dev.uint.qrserv.util.FileSizeFormatter
 import dev.uint.qrserv.util.iconForFileName
 import dev.uint.qrserv.viewmodel.QRServViewModel
-import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.computeWindowSizeClass
-import androidx.window.layout.FoldingFeature
-import androidx.window.layout.WindowInfoTracker
+import dev.uint.qrserv.viewmodel.hotspotFailureMessageRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,6 +150,8 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     onOpenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenHotspot: () -> Unit,
+    onHotspotScreenDue: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -149,6 +163,10 @@ fun MainScreen(
     val progressAnim = remember { Animatable(0f) }
     var progressBarPending by remember { mutableStateOf(false) }
     var lastProgress by remember { mutableStateOf<ImportProgress?>(null) }
+    var operationShowedProgress by remember { mutableStateOf(false) }
+    LaunchedEffect(uiState.actionButtonLoading) {
+        if (uiState.actionButtonLoading) operationShowedProgress = false
+    }
     // Keyed on Unit (not uiState.importProgress) so this coroutine survives for the composable's
     // whole lifetime -- the ViewModel resets importProgress to null immediately once it's done,
     // and keying on that value would cancel an in-flight animateTo(1f) at that exact moment,
@@ -157,6 +175,7 @@ fun MainScreen(
         snapshotFlow { uiState.importProgress }.filterNotNull().collect { progress ->
             lastProgress = progress
             progressBarPending = true
+            operationShowedProgress = true
             // completedFiles/totalFiles (exact Ints) rather than a bytesCopied>=totalBytes float
             // comparison -- for a large file (e.g. 250MB), converting both to Float loses enough
             // precision that the computed fraction can land just under 1f even once the copy is
@@ -176,36 +195,15 @@ fun MainScreen(
             if (isFinal) progressBarPending = false
         }
     }
+    // Waits for the progress bar too: its fill to 100% outlives the loading state.
+    LaunchedEffect(uiState.hotspotScreenPending, uiState.actionButtonLoading, progressBarPending) {
+        if (uiState.hotspotScreenPending && !uiState.actionButtonLoading && !progressBarPending) {
+            onHotspotScreenDue()
+        }
+    }
+
     var menuExpanded by remember { mutableStateOf(false) }
-    // containerSize/containerDpSize reflects the actual hosting window, unlike
-    // Configuration.screenWidthDp/screenHeightDp which can be stale or mismatched in
-    // multi-window/embedded scenarios.
-    val containerDpSize = LocalWindowInfo.current.containerDpSize
-    // On a foldable opened flat on a table, the hinge runs horizontally and the screen is
-    // effectively split top/bottom -- same reachability problem as a wide/short window, so both
-    // trigger the same adaptive treatment below.
-    val activity = LocalActivity.current
-    val isTabletopPosture by produceState(initialValue = false, activity) {
-        if (activity == null) return@produceState
-        WindowInfoTracker.getOrCreate(activity).windowLayoutInfo(activity)
-            .map { layoutInfo ->
-                layoutInfo.displayFeatures.filterIsInstance<FoldingFeature>().any {
-                    it.state == FoldingFeature.State.HALF_OPENED && it.orientation == FoldingFeature.Orientation.HORIZONTAL
-                }
-            }
-            .collect { value = it }
-    }
-    // A width breakpoint (not aspect ratio) -- this needs to stay true for a tablet in portrait
-    // too, which is still comfortably wide despite being taller than it is wide. Covers a phone
-    // rotated to landscape, a tablet in either orientation, and a foldable unfolded to its large
-    // display, all alike.
-    val windowSizeClass = remember(containerDpSize) {
-        WindowSizeClass.BREAKPOINTS_V1.computeWindowSizeClass(
-            widthDp = containerDpSize.width.value,
-            heightDp = containerDpSize.height.value,
-        )
-    }
-    val isWideScreen = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) || isTabletopPosture
+    val isWideScreen = rememberIsWideScreen()
 
     Scaffold(
         modifier = modifier,
@@ -276,7 +274,8 @@ fun MainScreen(
         ) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 when {
-                    progressBarPending ||
+                    // Held at 100% so the hotspot screen replaces the card without the imported screen flashing up.
+                    progressBarPending || (uiState.hotspotScreenPending && operationShowedProgress) ||
                         (uiState.actionButtonLoading &&
                             (uiState.pageType != PageType.IMPORTED || uiState.importProgress != null)) -> {
                         Card(
@@ -317,9 +316,9 @@ fun MainScreen(
                             }
                         }
                     }
-                    uiState.pageType == PageType.IMPORTED -> ImportedContent(uiState, viewModel, isWideScreen)
-                    uiState.pageType == PageType.UNHANDLED_ERROR -> UnhandledErrorContent(uiState.errorDetail)
-                    else -> MessageForPageType(uiState.pageType)
+                    uiState.pageType == PageType.IMPORTED -> ImportedContent(uiState, viewModel, isWideScreen, onOpenHotspot)
+                    uiState.pageType == PageType.UNHANDLED_ERROR -> UnhandledErrorContent(uiState, viewModel, isWideScreen)
+                    else -> MessageForPageType(uiState, viewModel)
                 }
             }
             FabRow(uiState = uiState, viewModel = viewModel, isWideScreen = isWideScreen, modifier = Modifier.fillMaxSize())
@@ -328,8 +327,12 @@ fun MainScreen(
 }
 
 @Composable
-private fun MessageForPageType(pageType: PageType) {
-    val (icon, labelRes, msgRes) = when (pageType) {
+private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) {
+    if (uiState.pageType == PageType.HOTSPOT_FAILED) {
+        HotspotFailedContent(uiState, viewModel)
+        return
+    }
+    val (icon, labelRes, msgRes) = when (uiState.pageType) {
         PageType.LANDING -> Triple(Icons.AutoMirrored.Filled.InsertDriveFile, R.string.page_landing_label, R.string.page_landing_msg)
         PageType.NO_CONNECTION -> Triple(Icons.Filled.SignalWifiOff, R.string.page_info_noconnection_label, R.string.page_info_noconnection_msg)
         PageType.INTERFACE_LOOKUP_ERROR -> Triple(Icons.Filled.Error, R.string.page_info_interfacelookuperror_label, R.string.page_info_interfacelookuperror_msg)
@@ -337,85 +340,155 @@ private fun MessageForPageType(pageType: PageType) {
         PageType.FILE_MODIFIED -> Triple(Icons.Filled.Edit, R.string.page_info_filemodified_label, R.string.page_info_filemodified_msg)
         PageType.INSUFFICIENT_STORAGE -> Triple(Icons.Filled.Storage, R.string.page_info_insufficientstorage_label, R.string.page_info_insufficientstorage_msg)
         PageType.PORT_IN_USE -> Triple(Icons.Filled.Error, R.string.page_info_portinuse_label, R.string.page_info_portinuse_msg)
-        PageType.IMPORTED, PageType.UNHANDLED_ERROR ->
+        PageType.IMPORTED, PageType.UNHANDLED_ERROR, PageType.HOTSPOT_FAILED ->
             Triple(Icons.Filled.Error, R.string.page_info_unhandlederror_label, R.string.page_info_unhandlederror_msg)
     }
     StatusCard(
         icon = icon,
         label = stringResource(labelRes),
         message = stringResource(msgRes),
+        footer = { HotspotOption(uiState.hotspotAvailability, onClick = viewModel::onHotspotClicked) },
+    )
+}
+
+@Composable
+private fun HotspotFailedContent(uiState: AppUiState, viewModel: QRServViewModel) {
+    val reason = uiState.hotspotFailure ?: HotspotFailure.GENERIC
+    StatusCard(
+        icon = Icons.Filled.PortableWifiOff,
+        label = stringResource(R.string.hotspot_failed_label),
+        message = stringResource(hotspotFailureMessageRes(reason)),
+        footer = if (reason == HotspotFailure.TETHERING_DISALLOWED) {
+            null
+        } else {
+            {
+                HotspotButton(
+                    icon = Icons.Filled.Refresh,
+                    text = stringResource(R.string.hotspot_try_again),
+                    enabled = uiState.hotspotAvailability.unavailable == null,
+                    onClick = viewModel::onHotspotClicked,
+                )
+            }
+        },
+    )
+}
+
+@Composable
+private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewModel, isWideScreen: Boolean) {
+    BoxWithConstraints {
+        val cardPadding = if (maxHeight < 360.dp) 20.dp else 32.dp
+
+        if (isWideScreen) {
+            // Measured rather than IntrinsicSize, which stack-overflows inside BoxWithConstraints.
+            var leftHeightPx by remember { mutableIntStateOf(0) }
+            val density = LocalDensity.current
+            Card(
+                modifier = Modifier.widthIn(max = 560.dp),
+                shape = MaterialTheme.shapes.extraLarge,
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
+            ) {
+                Row(modifier = Modifier.padding(cardPadding), verticalAlignment = Alignment.CenterVertically) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.weight(1f).onSizeChanged { leftHeightPx = it.height },
+                    ) {
+                        UnhandledErrorHeader()
+                        Spacer(Modifier.size(16.dp))
+                        HotspotOption(uiState.hotspotAvailability, onClick = viewModel::onHotspotClicked)
+                    }
+                    Spacer(Modifier.width(24.dp))
+                    Column(modifier = Modifier.weight(1.2f)) {
+                        val boxHeight = with(density) { leftHeightPx.toDp() } - UnhandledErrorHintAllowance
+                        UnhandledErrorDetail(uiState.errorDetail, Modifier.height(boxHeight.coerceAtLeast(56.dp)))
+                        Spacer(Modifier.size(8.dp))
+                        UnhandledErrorHint()
+                    }
+                }
+            }
+        } else {
+            // The icon/message/hint/padding around the detail box are fixed height, so a short
+            // window (landscape phone) can run out of room before reaching the hint below it --
+            // shrink the box's cap with the available height instead of letting the hint get
+            // pushed past the bottom of the screen.
+            val detailMaxHeight = (maxHeight * 0.3f).coerceIn(56.dp, 160.dp)
+            Card(
+                modifier = Modifier.widthIn(max = 320.dp),
+                shape = MaterialTheme.shapes.extraLarge,
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
+            ) {
+                Column(
+                    modifier = Modifier.padding(cardPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    UnhandledErrorHeader()
+                    Spacer(Modifier.size(16.dp))
+                    UnhandledErrorDetail(uiState.errorDetail, Modifier.heightIn(max = detailMaxHeight))
+                    Spacer(Modifier.size(8.dp))
+                    UnhandledErrorHint()
+                    Spacer(Modifier.size(16.dp))
+                    HotspotOption(uiState.hotspotAvailability, onClick = viewModel::onHotspotClicked)
+                }
+            }
+        }
+    }
+}
+
+private val UnhandledErrorHintAllowance = 28.dp
+
+@Composable
+private fun UnhandledErrorHeader() {
+    Icon(
+        Icons.Filled.Error,
+        contentDescription = stringResource(R.string.page_info_unhandlederror_label),
+        modifier = Modifier.size(72.dp),
+    )
+    Spacer(Modifier.size(20.dp))
+    Text(
+        text = stringResource(R.string.page_info_unhandlederror_msg),
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Center,
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun UnhandledErrorContent(detail: String) {
+private fun UnhandledErrorDetail(detail: String, modifier: Modifier) {
     val context = LocalContext.current
-
-    BoxWithConstraints {
-        // The icon/message/hint/padding around the detail box are fixed height, so a short
-        // window (landscape phone) can run out of room before reaching the hint below it --
-        // shrink the box's cap with the available height instead of letting the hint get
-        // pushed past the bottom of the screen.
-        val detailMaxHeight = (maxHeight * 0.3f).coerceIn(56.dp, 160.dp)
-        val cardPadding = if (maxHeight < 360.dp) 20.dp else 32.dp
-
-        Card(
-            modifier = Modifier.widthIn(max = 320.dp),
-            shape = MaterialTheme.shapes.extraLarge,
-            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-            colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
-        ) {
-            Column(
-                modifier = Modifier.padding(cardPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    Icons.Filled.Error,
-                    contentDescription = stringResource(R.string.page_info_unhandlederror_label),
-                    modifier = Modifier.size(72.dp),
-                )
-                Spacer(Modifier.size(20.dp))
-                Text(
-                    text = stringResource(R.string.page_info_unhandlederror_msg),
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(Modifier.size(16.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = detailMaxHeight)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.background)
-                        .combinedClickable(
-                            onClick = {},
-                            onLongClick = {
-                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "text/plain"
-                                    putExtra(Intent.EXTRA_TEXT, detail)
-                                }
-                                context.startActivity(Intent.createChooser(shareIntent, null))
-                            },
-                        )
-                        .padding(12.dp)
-                        .verticalScroll(rememberScrollState()),
-                ) {
-                    Text(
-                        text = detail,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontFamily = FontFamily.Monospace,
-                    )
-                }
-                Spacer(Modifier.size(8.dp))
-                Text(
-                    text = stringResource(R.string.page_info_unhandlederror_hint),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.background)
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, detail)
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, null))
+                },
+            )
+            .padding(12.dp)
+            .verticalScroll(rememberScrollState()),
+    ) {
+        Text(
+            text = detail,
+            style = MaterialTheme.typography.bodySmall,
+            fontFamily = FontFamily.Monospace,
+        )
     }
+}
+
+@Composable
+private fun UnhandledErrorHint() {
+    Text(
+        text = stringResource(R.string.page_info_unhandlederror_hint),
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
 }
 
 /** Height reserved at the bottom of [ImportedContent]'s portrait layout so its scrollable content
@@ -431,8 +504,18 @@ private val WideFabClearance = 96.dp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-private fun ImportedContent(uiState: AppUiState, viewModel: QRServViewModel, isWideScreen: Boolean) {
+private fun ImportedContent(
+    uiState: AppUiState,
+    viewModel: QRServViewModel,
+    isWideScreen: Boolean,
+    onOpenHotspot: () -> Unit,
+) {
     val context = LocalContext.current
+    val view = LocalView.current
+    DisposableEffect(view) {
+        view.keepScreenOn = true
+        onDispose { view.keepScreenOn = false }
+    }
     val hostFormatted = remember(uiState.selectedIp) {
         if (uiState.selectedIp.contains(':')) "[${uiState.selectedIp}]" else uiState.selectedIp
     }
@@ -450,40 +533,28 @@ private fun ImportedContent(uiState: AppUiState, viewModel: QRServViewModel, isW
     val clipboardToastMessage = stringResource(R.string.page_imported_share_clipboard)
     val scope = rememberCoroutineScope()
     val urlTooltipState = rememberTooltipState(isPersistent = true)
-    val scrollState = rememberScrollState()
 
     // Wide/short windows -- landscape phones, unfolded foldables, tablets -- put the QR code
     // and details side by side instead of stacked, since height is the scarce dimension there
     // and stacking them can push the details card off-screen. isWideScreen comes from the caller
     // so this agrees with the FABs/app bar's own layout decision instead of measuring separately.
-    if (isWideScreen) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(36.dp, Alignment.CenterHorizontally),
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(vertical = 8.dp)
-                .padding(horizontal = WideFabClearance),
-        ) {
-            QrCodeCard(url, context, clipboard, clipboardToastMessage, scope, urlTooltipState)
-            ImportInfoCard(uiState, viewModel, url, sizeHuman, context)
-        }
-    } else {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(24.dp)
-                .padding(bottom = FabClearance),
-        ) {
-            QrCodeCard(url, context, clipboard, clipboardToastMessage, scope, urlTooltipState)
-            Spacer(Modifier.size(36.dp))
-            ImportInfoCard(uiState, viewModel, url, sizeHuman, context)
-        }
-    }
+    QrDetailsLayout(
+        isWideScreen = isWideScreen,
+        wideSideClearance = WideFabClearance,
+        bottomClearance = FabClearance,
+        gap = 36.dp,
+        qr = { QrCodeCard(url, context, clipboard, clipboardToastMessage, scope, urlTooltipState) },
+        details = {
+            ImportInfoCard(
+                uiState,
+                viewModel,
+                url,
+                sizeHuman,
+                context,
+                onOpenHotspot = onOpenHotspot,
+            )
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -537,6 +608,7 @@ private fun ImportInfoCard(
     url: String,
     sizeHuman: String,
     context: Context,
+    onOpenHotspot: () -> Unit,
 ) {
     Card(
         shape = MaterialTheme.shapes.extraLarge,
@@ -553,11 +625,20 @@ private fun ImportInfoCard(
             var dropdownHeightPx by remember { mutableIntStateOf(0) }
             val density = LocalDensity.current
             Row(verticalAlignment = Alignment.CenterVertically) {
-                InterfaceDropdown(
-                    uiState,
-                    viewModel,
-                    modifier = Modifier.weight(1f).onSizeChanged { dropdownHeightPx = it.height },
-                )
+                val hotspot = uiState.hotspot
+                if (hotspot != null) {
+                    HotspotNetworkButton(
+                        ssid = hotspot.ssid,
+                        onClick = onOpenHotspot,
+                        modifier = Modifier.weight(1f).onSizeChanged { dropdownHeightPx = it.height },
+                    )
+                } else {
+                    InterfaceDropdown(
+                        uiState,
+                        viewModel,
+                        modifier = Modifier.weight(1f).onSizeChanged { dropdownHeightPx = it.height },
+                    )
+                }
                 Spacer(Modifier.size(12.dp))
                 val shareButtonSize = if (dropdownHeightPx > 0) with(density) { dropdownHeightPx.toDp() } else 56.dp
                 Card(
@@ -629,6 +710,31 @@ private fun FileNameRow(uiState: AppUiState) {
 }
 
 @Composable
+private fun HotspotNetworkButton(ssid: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val description = stringResource(R.string.hotspot_open_details)
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = modifier,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                // A filled TextField's height, to match the dropdown.
+                .heightIn(min = 56.dp)
+                .clickable(onClickLabel = description, onClick = onClick)
+                .padding(start = 14.dp, end = 8.dp),
+        ) {
+            Icon(Icons.Filled.WifiLock, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.size(10.dp))
+            MiddleEllipsisText(text = ssid, fontSize = 13.sp, modifier = Modifier.weight(1f))
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
+        }
+    }
+}
+
+@Composable
 private fun InfoRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(text = label, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium)
@@ -655,9 +761,14 @@ private val NoSelectionTextToolbar = object : TextToolbar {
 // character early) rather than risk overflow into/behind the dropdown icon.
 private val InterfaceDropdownChromeWidth = 72.dp
 
+/** Menu margin and padding around the items, with slack; too small scrolls the switch entry away. */
+private val DropdownMenuChrome = 76.dp
+
+private val PinnedListMinHeight = 144.dp
+
 private fun addressGroupLabel(group: AddressGroup): Int = when (group) {
     AddressGroup.ROUTABLE -> R.string.page_imported_iface_group_network
-    AddressGroup.HOSTED -> R.string.page_imported_iface_group_hotspot
+    AddressGroup.HOSTED -> R.string.page_imported_iface_group_tethering
     AddressGroup.LINK_LOCAL -> R.string.page_imported_iface_group_linklocal
     AddressGroup.LOOPBACK -> R.string.page_imported_iface_group_loopback
 }
@@ -681,7 +792,17 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
             }
         }
 
-        ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }, modifier = Modifier.fillMaxWidth()) {
+        var anchorBounds by remember { mutableStateOf<Rect?>(null) }
+        var switchEntryHeightPx by remember { mutableIntStateOf(0) }
+        val windowHeightPx = LocalWindowInfo.current.containerSize.height
+        val barsTopPx = WindowInsets.systemBars.getTop(density)
+        val barsBottomPx = WindowInsets.systemBars.getBottom(density)
+
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            modifier = Modifier.fillMaxWidth().onGloballyPositioned { anchorBounds = it.boundsInWindow() },
+        ) {
             // TextField itself has no elevation/shadow support, unlike Card -- wrap it in one so it
             // reads at the same elevation as the file name row and share button next to it, with the
             // TextField's own container made transparent so the Card's background/shadow show through.
@@ -723,25 +844,63 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
                 onDismissRequest = { expanded = false },
                 containerColor = subtleContainerColor(),
             ) {
-                AddressGroup.entries.forEach { group ->
-                    val addresses = uiState.interfaces.filter { it.group == group }
-                    // A heading with nothing under it says less than no heading at all.
-                    if (addresses.isEmpty()) return@forEach
-                    Text(
-                        text = stringResource(addressGroupLabel(group)),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 2.dp),
-                    )
-                    addresses.forEach { entry ->
-                        DropdownMenuItem(
-                            text = { Text(entry.address, overflow = TextOverflow.Ellipsis, maxLines = 2) },
-                            onClick = {
-                                viewModel.onIpSelected(entry.address)
-                                expanded = false
-                            },
+                // Pinned only while the addresses keep about three rows; otherwise it's the last item in one scroll.
+                val listMaxHeight = anchorBounds?.let { bounds ->
+                    val space = maxOf(bounds.top - barsTopPx, windowHeightPx - barsBottomPx - bounds.bottom)
+                    with(density) { (space - switchEntryHeightPx).toDp() } - DropdownMenuChrome
+                }
+                val pinSwitchEntry = listMaxHeight != null && listMaxHeight >= PinnedListMinHeight
+                Column(
+                    modifier = if (pinSwitchEntry && listMaxHeight != null) {
+                        Modifier.heightIn(max = listMaxHeight).verticalScroll(rememberScrollState())
+                    } else {
+                        Modifier
+                    },
+                ) {
+                    AddressGroup.entries.forEach { group ->
+                        val addresses = uiState.interfaces.filter { it.group == group }
+                        // A heading with nothing under it says less than no heading at all.
+                        if (addresses.isEmpty()) return@forEach
+                        Text(
+                            text = stringResource(addressGroupLabel(group)),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 2.dp),
                         )
+                        addresses.forEach { entry ->
+                            DropdownMenuItem(
+                                text = { Text(entry.address, overflow = TextOverflow.Ellipsis, maxLines = 2) },
+                                onClick = {
+                                    viewModel.onIpSelected(entry.address)
+                                    expanded = false
+                                },
+                            )
+                        }
                     }
+                }
+                val note = hotspotNote(uiState.hotspotAvailability)
+                Column(modifier = Modifier.onSizeChanged { switchEntryHeightPx = it.height }) {
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    DropdownMenuItem(
+                        text = {
+                            Column {
+                                Text(stringResource(R.string.hotspot_switch))
+                                if (note != null) {
+                                    Text(
+                                        note,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
+                        },
+                        leadingIcon = { Icon(Icons.Filled.WifiLock, contentDescription = null) },
+                        enabled = uiState.hotspotAvailability.unavailable == null,
+                        onClick = {
+                            expanded = false
+                            viewModel.onSwitchToHotspotClicked()
+                        },
+                    )
                 }
             }
         }

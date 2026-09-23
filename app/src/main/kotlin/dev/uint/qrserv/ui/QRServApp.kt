@@ -36,6 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.ui.screens.AboutDialog
 import dev.uint.qrserv.ui.screens.DamBrowserScreen
+import dev.uint.qrserv.ui.screens.HotspotPermissionDialog
+import dev.uint.qrserv.ui.screens.HotspotScreen
 import dev.uint.qrserv.ui.screens.MainScreen
 import dev.uint.qrserv.ui.screens.SettingsScreen
 import dev.uint.qrserv.viewmodel.QRServViewModel
@@ -44,7 +46,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-private enum class Screen { MAIN, SETTINGS, DAM_BROWSER }
+private enum class Screen { MAIN, SETTINGS, DAM_BROWSER, HOTSPOT }
 
 // android.view.animation.BackGestureInterpolator's exact curve (PathInterpolator(0.1, 0.1, 0, 1)):
 // a cubic bezier with control points (0.1, 0.1) and (0, 1), same parameterization as Android's
@@ -78,6 +80,10 @@ fun QRServApp(
     viewModel: QRServViewModel,
     onOpenSafPicker: () -> Unit,
     onRequestDamPermission: () -> Unit,
+    onRequestNotificationPermission: () -> Unit,
+    onRequestNearbyPermission: () -> Unit,
+    onLaunchNearbyPrompt: () -> Unit,
+    onOpenAppSettings: () -> Unit,
 ) {
     var screen by rememberSaveable { mutableStateOf(Screen.MAIN) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
@@ -97,6 +103,21 @@ fun QRServApp(
             // be open regardless of `screen` -- so it needs its own guard.
             showAbout = false
         }
+    }
+
+    LaunchedEffect(uiState.notificationPermissionPending) {
+        if (uiState.notificationPermissionPending) {
+            onRequestNotificationPermission()
+            viewModel.onNotificationPermissionRequested()
+        }
+    }
+
+    LaunchedEffect(uiState.hotspot) {
+        if (uiState.hotspot == null && screen == Screen.HOTSPOT) screen = Screen.MAIN
+    }
+
+    LaunchedEffect(uiState.nearbyPermissionRequest) {
+        if (uiState.nearbyPermissionRequest) onRequestNearbyPermission()
     }
 
     LaunchedEffect(viewModel) {
@@ -303,6 +324,11 @@ fun QRServApp(
                 modifier = Modifier.padding(padding).then(if (showPeek) peekBackgroundModifier else Modifier),
                 onOpenSettings = { if (screen == Screen.MAIN) screen = Screen.SETTINGS },
                 onOpenAbout = { if (screen == Screen.MAIN) showAbout = true },
+                onOpenHotspot = { if (screen == Screen.MAIN) screen = Screen.HOTSPOT },
+                onHotspotScreenDue = {
+                    screen = Screen.HOTSPOT
+                    viewModel.onHotspotScreenOpened()
+                },
             )
             if (showPeek) {
                 Box(modifier = Modifier.fillMaxSize().then(peekScrimModifier))
@@ -317,6 +343,11 @@ fun QRServApp(
                             screen = Screen.MAIN
                         }
                     },
+                )
+                Screen.HOTSPOT -> HotspotScreen(
+                    viewModel = viewModel,
+                    modifier = Modifier.padding(padding).then(predictiveBackModifier),
+                    onBack = { playButtonBackTransition { screen = Screen.MAIN } },
                 )
                 Screen.DAM_BROWSER -> DamBrowserScreen(
                     viewModel = viewModel,
@@ -338,6 +369,17 @@ fun QRServApp(
 
             if (showAbout) {
                 AboutDialog(onDismiss = { showAbout = false })
+            }
+            uiState.hotspotDialog?.let { dialog ->
+                HotspotPermissionDialog(
+                    dialog = dialog,
+                    onDismiss = viewModel::onHotspotDialogDismissed,
+                    onContinue = {
+                        viewModel.onHotspotDialogContinue()
+                        onLaunchNearbyPrompt()
+                    },
+                    onOpenSettings = onOpenAppSettings,
+                )
             }
         }
     }

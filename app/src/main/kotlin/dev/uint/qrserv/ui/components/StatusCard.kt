@@ -1,6 +1,7 @@
 package dev.uint.qrserv.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -18,7 +19,13 @@ import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.ui.theme.subtleContainerColor
 
 @Composable
-fun StatusCard(icon: ImageVector, label: String, message: String, modifier: Modifier = Modifier) {
+fun StatusCard(
+    icon: ImageVector,
+    label: String,
+    message: String,
+    modifier: Modifier = Modifier,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
+) {
     Card(
         modifier = modifier.widthIn(max = 320.dp),
         shape = MaterialTheme.shapes.extraLarge,
@@ -26,7 +33,7 @@ fun StatusCard(icon: ImageVector, label: String, message: String, modifier: Modi
         colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
     ) {
         Column(
-            modifier = Modifier.padding(32.dp),
+            modifier = Modifier.padding(if (isShortWindow()) 20.dp else 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(icon, contentDescription = label, modifier = Modifier.size(72.dp))
@@ -36,6 +43,10 @@ fun StatusCard(icon: ImageVector, label: String, message: String, modifier: Modi
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
             )
+            if (footer != null) {
+                androidx.compose.foundation.layout.Spacer(Modifier.size(16.dp))
+                footer()
+            }
         }
     }
 }

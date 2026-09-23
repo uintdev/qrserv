@@ -26,7 +26,7 @@
     <string name="page_imported_port">Porta</string>
     <string name="page_imported_archive_morefiles">+%1$d a mais</string>
     <string name="page_imported_iface_group_network">Rede</string>
-    <string name="page_imported_iface_group_hotspot">Ponto de acesso</string>
+    <string name="page_imported_iface_group_tethering">Tethering</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Loopback</string>
 
@@ -44,6 +44,47 @@
     <string name="server_info_download_started">Descarregar iniciado: %1$s</string>
     <string name="server_info_download_finished">Descarregar terminado: %1$s</string>
     <string name="server_info_gone">Servidor desaparecido: %1$s</string>
+
+    <string name="notification_channel_name">Compartilhamento</string>
+    <string name="notification_sharing_title">Compartilhando %1$s</string>
+    <string name="notification_preparing_title">Preparando para compartilhar…</string>
+    <string name="notification_public_title">Compartilhando um arquivo</string>
+    <string name="notification_action_stop">Parar</string>
+    <string name="notification_starting_hotspot">Iniciando ponto de acesso privado…</string>
+    <string name="notification_hotspot_detail">Ponto de acesso privado · %1$s</string>
+    <string name="hotspot_share_button">Compartilhar via ponto de acesso privado</string>
+    <string name="hotspot_note_disconnects">O Wi-Fi é desconectado durante o compartilhamento</string>
+    <string name="hotspot_unavailable_android">Requer Android 13 ou posterior</string>
+    <string name="hotspot_unavailable_nowifi">Este dispositivo não tem Wi-Fi</string>
+    <string name="hotspot_unavailable_blocked">Pontos de acesso estão bloqueados neste dispositivo</string>
+    <string name="hotspot_failed_label">Não foi possível iniciar o ponto de acesso privado</string>
+    <string name="hotspot_failed_incompatible">Desative outros pontos de acesso e tente novamente</string>
+    <string name="hotspot_failed_nochannel">Nenhum canal Wi-Fi livre no momento</string>
+    <string name="hotspot_failed_generic">Não foi possível iniciar o ponto de acesso privado</string>
+    <string name="hotspot_try_again">Tentar novamente</string>
+    <string name="hotspot_lost_stopped">O ponto de acesso foi desativado e o compartilhamento parou</string>
+    <string name="hotspot_lost_wificontrol">O controle de Wi-Fi foi desativado e o compartilhamento parou</string>
+    <string name="hotspot_lost_nearby">Permissão Dispositivos por perto removida, compartilhamento parou</string>
+    <string name="hotspot_dialog_title">Permissão necessária</string>
+    <string name="hotspot_dialog_nearby">Permita “Dispositivos por perto” para que o QRServ possa criar um ponto de acesso privado.</string>
+    <string name="hotspot_dialog_wificontrol">Permita “Controle de Wi-Fi” para que o QRServ possa criar um ponto de acesso privado.</string>
+    <string name="hotspot_dialog_notnow">Agora não</string>
+    <string name="hotspot_dialog_continue">Continuar</string>
+    <string name="hotspot_dialog_settings">Abrir configurações</string>
+    <string name="hotspot_screen_title">Ponto de acesso privado</string>
+    <string name="hotspot_scan_hint">Escaneie para entrar nesta rede</string>
+    <string name="hotspot_forget_hint">Esqueça-a quando terminar</string>
+    <string name="hotspot_network">Rede</string>
+    <string name="hotspot_password">Senha</string>
+    <string name="hotspot_security">Segurança</string>
+    <string name="hotspot_security_open">Nenhuma</string>
+    <string name="hotspot_password_show">Mostrar senha</string>
+    <string name="hotspot_password_hide">Ocultar senha</string>
+    <string name="hotspot_copy_network">Copiar nome da rede</string>
+    <string name="hotspot_copy_password">Copiar senha</string>
+    <string name="hotspot_stop">Parar ponto de acesso privado</string>
+    <string name="hotspot_switch">Mudar para ponto de acesso privado</string>
+    <string name="hotspot_open_details">Detalhes do ponto de acesso privado</string>
 
     <string name="about_title">Sobre</string>
     <string name="about_releases_title">Versões</string>

@@ -26,7 +26,7 @@
     <string name="page_imported_port">Puerto</string>
     <string name="page_imported_archive_morefiles">+%1$d más</string>
     <string name="page_imported_iface_group_network">Red</string>
-    <string name="page_imported_iface_group_hotspot">Punto de acceso</string>
+    <string name="page_imported_iface_group_tethering">Compartir conexión</string>
     <string name="page_imported_iface_group_linklocal">Enlace local</string>
     <string name="page_imported_iface_group_loopback">Bucle local</string>
 
@@ -44,6 +44,47 @@
     <string name="server_info_download_started">Descarga iniciada: %1$s</string>
     <string name="server_info_download_finished">Descarga finalizada: %1$s</string>
     <string name="server_info_gone">El servidor se ha ido: %1$s</string>
+
+    <string name="notification_channel_name">Compartir</string>
+    <string name="notification_sharing_title">Compartiendo %1$s</string>
+    <string name="notification_preparing_title">Preparando para compartir…</string>
+    <string name="notification_public_title">Compartiendo un archivo</string>
+    <string name="notification_action_stop">Detener</string>
+    <string name="notification_starting_hotspot">Iniciando punto de acceso privado…</string>
+    <string name="notification_hotspot_detail">Punto de acceso privado · %1$s</string>
+    <string name="hotspot_share_button">Compartir con punto de acceso privado</string>
+    <string name="hotspot_note_disconnects">El Wi-Fi se desconecta al compartir</string>
+    <string name="hotspot_unavailable_android">Requiere Android 13 o posterior</string>
+    <string name="hotspot_unavailable_nowifi">Este dispositivo no tiene Wi-Fi</string>
+    <string name="hotspot_unavailable_blocked">Los puntos de acceso están bloqueados en este dispositivo</string>
+    <string name="hotspot_failed_label">No se pudo iniciar el punto de acceso privado</string>
+    <string name="hotspot_failed_incompatible">Desactiva otros puntos de acceso y vuelve a intentarlo</string>
+    <string name="hotspot_failed_nochannel">No hay ningún canal Wi-Fi libre ahora</string>
+    <string name="hotspot_failed_generic">No se pudo iniciar el punto de acceso privado</string>
+    <string name="hotspot_try_again">Reintentar</string>
+    <string name="hotspot_lost_stopped">Se desactivó el punto de acceso, se dejó de compartir</string>
+    <string name="hotspot_lost_wificontrol">Se desactivó el control de Wi-Fi, se dejó de compartir</string>
+    <string name="hotspot_lost_nearby">Se quitó el permiso de dispositivos cercanos, se dejó de compartir</string>
+    <string name="hotspot_dialog_title">Permiso necesario</string>
+    <string name="hotspot_dialog_nearby">Permite «Dispositivos cercanos» para que QRServ pueda crear un punto de acceso privado.</string>
+    <string name="hotspot_dialog_wificontrol">Permite «Control de Wi-Fi» para que QRServ pueda crear un punto de acceso privado.</string>
+    <string name="hotspot_dialog_notnow">Ahora no</string>
+    <string name="hotspot_dialog_continue">Continuar</string>
+    <string name="hotspot_dialog_settings">Abrir ajustes</string>
+    <string name="hotspot_screen_title">Punto de acceso privado</string>
+    <string name="hotspot_scan_hint">Escanea para unirte a esta red</string>
+    <string name="hotspot_forget_hint">Olvídala cuando termines</string>
+    <string name="hotspot_network">Red</string>
+    <string name="hotspot_password">Contraseña</string>
+    <string name="hotspot_security">Seguridad</string>
+    <string name="hotspot_security_open">Ninguna</string>
+    <string name="hotspot_password_show">Mostrar contraseña</string>
+    <string name="hotspot_password_hide">Ocultar contraseña</string>
+    <string name="hotspot_copy_network">Copiar nombre de la red</string>
+    <string name="hotspot_copy_password">Copiar contraseña</string>
+    <string name="hotspot_stop">Detener punto de acceso privado</string>
+    <string name="hotspot_switch">Cambiar a punto de acceso privado</string>
+    <string name="hotspot_open_details">Detalles del punto de acceso privado</string>
 
     <string name="about_title">Acerca de</string>
     <string name="about_releases_title">Lanzamientos</string>

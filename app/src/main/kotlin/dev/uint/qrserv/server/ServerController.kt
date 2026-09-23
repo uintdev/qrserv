@@ -29,9 +29,15 @@ class ServerController(
 
     /** Starts the server on [requestedPort] (0 = OS-assigned ephemeral port). Throws on bind failure. */
     @Throws(IOException::class)
-    fun start(requestedPort: Int, fileInfoProvider: () -> FileInfo?, hasStoragePermission: (String) -> Boolean) {
+    fun start(
+        requestedPort: Int,
+        fileInfoProvider: () -> FileInfo?,
+        hasStoragePermission: (String) -> Boolean,
+        bindAddress: String? = null,
+    ) {
         stop()
-        val instance = FileServer(requestedPort, fileInfoProvider, hasStoragePermission, this)
+        ServingState.resetTransfers()
+        val instance = FileServer(requestedPort, bindAddress, fileInfoProvider, hasStoragePermission, this)
         instance.start()
         server = instance
     }
@@ -42,11 +48,16 @@ class ServerController(
     }
 
     override fun onDownloadStarted(remoteIp: String) {
+        ServingState.transferStarted()
         downloadStartedCallback(remoteIp)
     }
 
     override fun onDownloadFinished(remoteIp: String) {
         downloadFinishedCallback(remoteIp)
+    }
+
+    override fun onTransferEnded() {
+        ServingState.transferEnded()
     }
 
     override fun onServerGone(message: String) {

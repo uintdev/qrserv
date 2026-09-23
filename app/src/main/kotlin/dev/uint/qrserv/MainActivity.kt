@@ -3,6 +3,7 @@ package dev.uint.qrserv
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
+import dev.uint.qrserv.data.HotspotDialog
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
 import dev.uint.qrserv.data.readPersistedThemeMode
@@ -40,6 +42,23 @@ class MainActivity : ComponentActivity() {
     private val legacyStoragePermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             viewModel.onDirectAccessPermissionResult(granted)
+        }
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            viewModel.onNotificationPermissionResult(granted)
+        }
+
+    // No rationale after a denial means it can only be granted in Settings now.
+    private val nearbyPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            when {
+                granted -> viewModel.onNearbyPermissionResult(true)
+                Build.VERSION.SDK_INT >= 33 &&
+                    !shouldShowRequestPermissionRationale(android.Manifest.permission.NEARBY_WIFI_DEVICES) ->
+                    viewModel.showHotspotDialog(HotspotDialog.NEARBY_SETTINGS)
+                else -> viewModel.onNearbyPermissionResult(false)
+            }
         }
 
     private val manageStorageSettingsLauncher =
@@ -94,8 +113,39 @@ class MainActivity : ComponentActivity() {
                     viewModel = viewModel,
                     onOpenSafPicker = { safPickerLauncher.launch(arrayOf("*/*")) },
                     onRequestDamPermission = ::requestDirectAccessPermission,
+                    onRequestNotificationPermission = {
+                        if (Build.VERSION.SDK_INT >= 33) {
+                            notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    },
+                    onRequestNearbyPermission = ::handleNearbyPermissionRequest,
+                    onLaunchNearbyPrompt = {
+                        if (Build.VERSION.SDK_INT >= 33) {
+                            nearbyPermissionLauncher.launch(android.Manifest.permission.NEARBY_WIFI_DEVICES)
+                        }
+                    },
+                    onOpenAppSettings = {
+                        // No public screen for "Wi-Fi control" alone.
+                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()))
+                    },
                 )
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onAppResumed()
+    }
+
+    private fun handleNearbyPermissionRequest() {
+        viewModel.onNearbyPermissionRequestTaken()
+        if (Build.VERSION.SDK_INT < 33) return
+        val permission = android.Manifest.permission.NEARBY_WIFI_DEVICES
+        when {
+            checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED -> viewModel.onNearbyPermissionResult(true)
+            shouldShowRequestPermissionRationale(permission) -> viewModel.showHotspotDialog(HotspotDialog.EXPLAIN_NEARBY)
+            else -> nearbyPermissionLauncher.launch(permission)
         }
     }
 

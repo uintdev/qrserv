@@ -19,6 +19,7 @@ import java.io.IOException
 
 class FileServer(
     private val port: Int,
+    private val bindAddress: String?,
     private val fileInfoProvider: () -> FileInfo?,
     private val hasStoragePermission: (String) -> Boolean,
     private val listener: Listener,
@@ -27,6 +28,9 @@ class FileServer(
     interface Listener {
         fun onDownloadStarted(remoteIp: String)
         fun onDownloadFinished(remoteIp: String)
+
+        /** Paired with every [onDownloadStarted], whether the transfer completed or not. */
+        fun onTransferEnded()
         fun onServerGone(message: String)
         fun onFileMissing()
         fun onPermissionDenied()
@@ -38,7 +42,7 @@ class FileServer(
         private set
 
     fun start() {
-        val embedded = embeddedServer(CIO, port = port) {
+        val embedded = embeddedServer(CIO, port = port, host = bindAddress ?: "0.0.0.0") {
             routing {
                 route("{...}") {
                     handle {
@@ -92,6 +96,7 @@ class FileServer(
                             // been written, but not if it never got as far as asking for the channel at all.
                             // Closing an already-closed FileInputStream is a no-op.
                             runCatching { stream.close() }
+                            listener.onTransferEnded()
                         }
                     }
                 }
