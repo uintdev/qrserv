@@ -89,6 +89,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var hotspotScreenShown = false
 
+    private var notificationPromptOpen = false
+
+    private var pickerAfterNotificationPrompt = false
+
     private val serverController = ServerController(
         downloadStartedCallback = { ip -> postToast(R.string.server_info_download_started, ip) },
         downloadFinishedCallback = { ip ->
@@ -159,7 +163,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             getApplication(),
             android.Manifest.permission.POST_NOTIFICATIONS,
         ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-        if (!granted) _uiState.update { it.copy(notificationPermissionPending = true) }
+        if (!granted) {
+            notificationPromptOpen = true
+            _uiState.update { it.copy(notificationPermissionPending = true) }
+        }
     }
 
     fun onNotificationPermissionRequested() {
@@ -169,7 +176,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onNotificationPermissionResult(granted: Boolean) {
         notificationsGranted = granted
+        notificationPromptOpen = false
         if (granted && ServingState.notice.value != null) ServingService.start(getApplication())
+        if (pickerAfterNotificationPrompt) {
+            pickerAfterNotificationPrompt = false
+            if (_uiState.value.hotspot != null) openPicker()
+        }
     }
 
     private fun areNotificationsGranted(): Boolean = Build.VERSION.SDK_INT < 33 ||
@@ -603,7 +615,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         } else {
             // Not busy while picking, or the picker's result would be refused as a second import.
             setLoading(false)
-            openPicker()
+            if (notificationPromptOpen) pickerAfterNotificationPrompt = true else openPicker()
         }
     }
 
