@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WifiLock
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,11 +31,12 @@ fun hotspotNote(availability: HotspotAvailability): String? = when (availability
 }
 
 @Composable
-fun ColumnScope.HotspotOption(availability: HotspotAvailability, onClick: () -> Unit) {
+fun ColumnScope.HotspotOption(availability: HotspotAvailability, starting: Boolean, onClick: () -> Unit) {
     HotspotButton(
         icon = Icons.Filled.WifiLock,
         text = stringResource(R.string.hotspot_share_button),
         enabled = availability.unavailable == null,
+        loading = starting,
         onClick = onClick,
     )
     val note = hotspotNote(availability)
@@ -51,9 +53,17 @@ fun ColumnScope.HotspotOption(availability: HotspotAvailability, onClick: () -> 
 }
 
 @Composable
-fun HotspotButton(icon: ImageVector, text: String, enabled: Boolean, onClick: () -> Unit) {
-    FilledTonalButton(onClick = onClick, enabled = enabled, modifier = Modifier.fillMaxWidth()) {
-        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
+fun HotspotButton(icon: ImageVector, text: String, enabled: Boolean, loading: Boolean, onClick: () -> Unit) {
+    FilledTonalButton(
+        onClick = { if (!loading) onClick() },
+        enabled = enabled,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        if (loading) {
+            CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+        } else {
+            Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
+        }
         Spacer(Modifier.width(8.dp))
         Text(text, textAlign = TextAlign.Center)
     }

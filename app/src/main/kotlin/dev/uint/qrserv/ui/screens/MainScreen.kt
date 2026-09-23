@@ -276,7 +276,8 @@ fun MainScreen(
                 when {
                     // Held at 100% so the hotspot screen replaces the card without the imported screen flashing up.
                     progressBarPending || (uiState.hotspotScreenPending && operationShowedProgress) ||
-                        (uiState.actionButtonLoading &&
+                        // Starting the hotspot shows on its own button instead, as the import FAB does.
+                        (uiState.actionButtonLoading && !uiState.hotspotStarting &&
                             (uiState.pageType != PageType.IMPORTED || uiState.importProgress != null)) -> {
                         Card(
                             shape = MaterialTheme.shapes.extraLarge,
@@ -284,7 +285,7 @@ fun MainScreen(
                             colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
                         ) {
                             Box(modifier = Modifier.padding(20.dp)) {
-                                val progress = lastProgress
+                                val progress = lastProgress.takeIf { operationShowedProgress }
                                 if (progress != null) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Box(
@@ -347,7 +348,7 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         icon = icon,
         label = stringResource(labelRes),
         message = stringResource(msgRes),
-        footer = { HotspotOption(uiState.hotspotAvailability, onClick = viewModel::onHotspotClicked) },
+        footer = { HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked) },
     )
 }
 
@@ -366,6 +367,7 @@ private fun HotspotFailedContent(uiState: AppUiState, viewModel: QRServViewModel
                     icon = Icons.Filled.Refresh,
                     text = stringResource(R.string.hotspot_try_again),
                     enabled = uiState.hotspotAvailability.unavailable == null,
+                    loading = uiState.hotspotStarting,
                     onClick = viewModel::onHotspotClicked,
                 )
             }
@@ -395,7 +397,7 @@ private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewMode
                     ) {
                         UnhandledErrorHeader()
                         Spacer(Modifier.size(16.dp))
-                        HotspotOption(uiState.hotspotAvailability, onClick = viewModel::onHotspotClicked)
+                        HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked)
                     }
                     Spacer(Modifier.width(24.dp))
                     Column(modifier = Modifier.weight(1.2f)) {
@@ -428,7 +430,7 @@ private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewMode
                     Spacer(Modifier.size(8.dp))
                     UnhandledErrorHint()
                     Spacer(Modifier.size(16.dp))
-                    HotspotOption(uiState.hotspotAvailability, onClick = viewModel::onHotspotClicked)
+                    HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked)
                 }
             }
         }
