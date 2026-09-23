@@ -74,12 +74,11 @@ class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         Preferences.init(newBase)
         val themeMode = readPersistedThemeMode()
-        val configOverride = Configuration(newBase.resources.configuration)
+        val baseUiMode = newBase.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()
+        val configOverride = Configuration()
         when (themeMode) {
-            ThemeMode.DARK -> configOverride.uiMode =
-                (configOverride.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or Configuration.UI_MODE_NIGHT_YES
-            ThemeMode.LIGHT -> configOverride.uiMode =
-                (configOverride.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or Configuration.UI_MODE_NIGHT_NO
+            ThemeMode.DARK -> configOverride.uiMode = baseUiMode or Configuration.UI_MODE_NIGHT_YES
+            ThemeMode.LIGHT -> configOverride.uiMode = baseUiMode or Configuration.UI_MODE_NIGHT_NO
             ThemeMode.SYSTEM -> Unit
         }
         super.attachBaseContext(newBase.createConfigurationContext(configOverride))

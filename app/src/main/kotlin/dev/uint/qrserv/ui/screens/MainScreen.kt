@@ -131,6 +131,7 @@ import dev.uint.qrserv.util.iconForFileName
 import dev.uint.qrserv.viewmodel.QRServViewModel
 import dev.uint.qrserv.viewmodel.hotspotFailureMessageRes
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
@@ -155,6 +156,7 @@ fun MainScreen(
     var progressBarPending by remember { mutableStateOf(false) }
     var lastProgress by remember { mutableStateOf<ImportProgress?>(null) }
     var operationShowedProgress by remember { mutableStateOf(false) }
+    val finishedProgress = remember { uiState.importProgress.takeIf { !uiState.actionButtonLoading } }
     LaunchedEffect(uiState.actionButtonLoading) {
         if (uiState.actionButtonLoading) operationShowedProgress = false
     }
@@ -163,7 +165,7 @@ fun MainScreen(
     // and keying on that value would cancel an in-flight animateTo(1f) at that exact moment,
     // permanently stranding progressBarPending at true before it ever gets to clear itself.
     LaunchedEffect(Unit) {
-        snapshotFlow { uiState.importProgress }.filterNotNull().collect { progress ->
+        snapshotFlow { uiState.importProgress }.filterNotNull().filter { it !== finishedProgress }.collect { progress ->
             lastProgress = progress
             progressBarPending = true
             operationShowedProgress = true

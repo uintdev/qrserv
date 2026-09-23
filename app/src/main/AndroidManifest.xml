@@ -53,7 +53,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTask"
             android:exported="true"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|fontScale|screenLayout|density|uiMode"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|fontScale|screenLayout|density|uiMode|locale|layoutDirection"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.QRServ">
 
