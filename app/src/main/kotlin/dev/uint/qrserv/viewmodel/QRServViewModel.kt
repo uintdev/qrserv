@@ -2,6 +2,11 @@ package dev.uint.qrserv.viewmodel
 
 import android.app.Application
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.LinkProperties
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -43,6 +48,9 @@ import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.ManifestUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -55,6 +63,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.time.Duration.Companion.seconds
 
 sealed interface UiEvent {
     object OpenSafPicker : UiEvent
@@ -63,6 +72,8 @@ sealed interface UiEvent {
     object PortSaved : UiEvent
     data class Toast(val event: ToastEvent) : UiEvent
 }
+
+private val ADDRESS_SETTLE_TIME = 2.seconds
 
 class QRServViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -97,6 +108,29 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private var rebindJob: Job? = null
 
     private var launchCacheHandled = false
+
+    private var followBestAddress = false
+
+    private val addressCheckRequests = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    private val connectivityManager = application.getSystemService(ConnectivityManager::class.java)
+
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            addressCheckRequests.tryEmit(Unit)
+        }
+
+        override fun onLost(network: Network) {
+            addressCheckRequests.tryEmit(Unit)
+        }
+
+        override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
+            addressCheckRequests.tryEmit(Unit)
+        }
+    }
 
     private val serverController = ServerController(
         downloadStartedCallback = { ip -> postToast(R.string.server_info_download_started, ip) },
@@ -149,6 +183,19 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             ServingState.stopRequests.collect { onShutdownClicked() }
         }
+        viewModelScope.launch {
+            addressCheckRequests.collectLatest {
+                delay(ADDRESS_SETTLE_TIME)
+                checkAddresses()
+            }
+        }
+        connectivityManager.registerNetworkCallback(
+            NetworkRequest.Builder()
+                .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                .build(),
+            networkCallback,
+        )
     }
 
     private fun servingNoticeFor(state: AppUiState): ServingNotice? = when {
@@ -319,6 +366,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun startServing(fileInfo: FileInfo) {
         rebindJob?.join()
+        if (!serverController.isRunning) followBestAddress = false
         val hotspot = _uiState.value.hotspot
         if (hotspot != null && hotspotController?.isActive != true) {
             onHotspotLost(HotspotLoss.STOPPED)
@@ -391,6 +439,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onIpSelected(ip: String) {
         val entry = _uiState.value.interfaces.firstOrNull { it.address == ip } ?: return
+        followBestAddress = false
         val bound = serverController.bindAddress
         if (!serverController.isRunning || bound == null || _uiState.value.hotspot != null || bound == entry.bindHost) {
             _uiState.update { it.copy(selectedIp = ip) }
@@ -414,6 +463,45 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 }
             }
         }
+    }
+
+    private suspend fun checkAddresses() {
+        if (!canFollowAddressChanges()) return
+        val listed = NetworkUtils.listInterfaces().getOrNull()?.takeIf { it.isNotEmpty() } ?: return
+        if (!canFollowAddressChanges()) return
+        val state = _uiState.value
+        val best = listed.first()
+        val replacement = when {
+            listed.none { it.address == state.selectedIp } -> best
+            followBestAddress && best.address != state.selectedIp -> best
+            else -> null
+        }
+        if (replacement == null) {
+            if (listed != state.interfaces) _uiState.update { it.copy(interfaces = listed) }
+            return
+        }
+        followBestAddress = true
+        rebindJob = viewModelScope.launch {
+            val port = serverController.port
+            if (serverController.bindAddress != null) {
+                try {
+                    startServer(replacement.bindHost, port)
+                } catch (_: Exception) {
+                    postToast(R.string.info_exception_portinuse)
+                    stopServing()
+                    _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
+                    return@launch
+                }
+            }
+            _uiState.update { it.copy(interfaces = listed, selectedIp = replacement.address) }
+            postToast(R.string.page_imported_iface_address_changed)
+        }
+    }
+
+    private fun canFollowAddressChanges(): Boolean {
+        val state = _uiState.value
+        return state.serverRunning && !state.serverPoweringDown && state.hotspot == null &&
+            !state.actionButtonLoading && rebindJob?.isActive != true
     }
 
     fun toggleAllInterfaces() {
@@ -551,6 +639,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         PackageManager.PERMISSION_GRANTED
 
     fun onAppResumed() {
+        addressCheckRequests.tryEmit(Unit)
         _uiState.update {
             it.copy(
                 hotspotAvailability = computeHotspotAvailability(),
@@ -861,6 +950,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     override fun onCleared() {
+        connectivityManager.unregisterNetworkCallback(networkCallback)
         stopFileObserver()
         serverController.stop()
         hotspotController?.stop()

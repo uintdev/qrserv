@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Boucle locale</string>
     <string name="page_imported_iface_switch_downloading">Impossible de changer l\'adresse IP pendant un téléchargement</string>
     <string name="page_imported_iface_switch_failed">Impossible de passer à cette adresse IP</string>
+    <string name="page_imported_iface_address_changed">L\'adresse IP a changé, le code QR a été mis à jour</string>
     <string name="page_imported_vpn_lockdown">« Bloquer les connexions sans VPN » est activé et peut bloquer d\'autres appareils</string>
 
     <string name="fab_shutdownserver_label">Arrêter le serveur</string>

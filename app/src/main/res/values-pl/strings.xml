@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Pętla zwrotna</string>
     <string name="page_imported_iface_switch_downloading">Nie można zmienić adresu IP podczas pobierania</string>
     <string name="page_imported_iface_switch_failed">Nie udało się przełączyć na ten adres IP</string>
+    <string name="page_imported_iface_address_changed">Adres IP się zmienił, więc kod QR został zaktualizowany</string>
     <string name="page_imported_vpn_lockdown">„Blokuj połączenia bez VPN” jest włączone i może blokować inne urządzenia</string>
 
     <string name="fab_shutdownserver_label">Zamknąć serwer</string>

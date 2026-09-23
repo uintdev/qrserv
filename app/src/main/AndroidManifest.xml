@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- Whether Wi-Fi stays connected while hosting a hotspot -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Following IP address changes while sharing -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Private hotspot (API 33+); never used for location -->
     <uses-permission

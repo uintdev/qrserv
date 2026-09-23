@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Geri döngü</string>
     <string name="page_imported_iface_switch_downloading">İndirme sürerken IP adresi değiştirilemez</string>
     <string name="page_imported_iface_switch_failed">Bu IP adresine geçilemedi</string>
+    <string name="page_imported_iface_address_changed">IP adresi değişti, bu yüzden QR kodu güncellendi</string>
     <string name="page_imported_vpn_lockdown">“VPN\'siz bağlantıları engelle” açık ve diğer cihazları engelleyebilir</string>
 
     <string name="fab_shutdownserver_label">Sunucuyu kapat</string>

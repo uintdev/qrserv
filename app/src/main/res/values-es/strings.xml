@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Bucle local</string>
     <string name="page_imported_iface_switch_downloading">No se puede cambiar la dirección IP durante una descarga</string>
     <string name="page_imported_iface_switch_failed">No se pudo cambiar a esa dirección IP</string>
+    <string name="page_imported_iface_address_changed">La dirección IP cambió, así que se actualizó el código QR</string>
     <string name="page_imported_vpn_lockdown">“Bloquear conexiones sin VPN” está activado y puede bloquear otros dispositivos</string>
 
     <string name="fab_shutdownserver_label">Apagar el servidor</string>
