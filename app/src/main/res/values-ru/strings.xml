@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Петля</string>
     <string name="page_imported_iface_switch_downloading">Нельзя сменить IP-адрес во время загрузки</string>
     <string name="page_imported_iface_switch_failed">Не удалось переключиться на этот IP-адрес</string>
+    <string name="page_imported_vpn_lockdown">«Блокировать соединения без VPN» включено и может блокировать другие устройства</string>
 
     <string name="fab_shutdownserver_label">Выключить сервер</string>
     <string name="fab_selectfile_label">Выберите файл(ы)</string>

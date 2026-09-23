@@ -1,5 +1,7 @@
 package dev.uint.qrserv.net
 
+import android.content.Context
+import android.provider.Settings
 import dev.uint.qrserv.data.AddressGroup
 import dev.uint.qrserv.data.InterfaceAddress
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +99,10 @@ object NetworkUtils {
      */
     private fun sortKey(addr: InetAddress): String =
         addr.address.joinToString("") { "%02x".format(it.toInt() and 0xFF) }
+
+    fun isVpnLockdownEnabled(context: Context): Boolean = runCatching {
+        Settings.Secure.getInt(context.contentResolver, "always_on_vpn_lockdown", 0) == 1
+    }.getOrDefault(false)
 
     suspend fun isPortUsed(port: Int): Boolean = withContext(Dispatchers.IO) {
         if (port <= 0) return@withContext false

@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Visszacsatolás</string>
     <string name="page_imported_iface_switch_downloading">Letöltés közben az IP-cím nem módosítható</string>
     <string name="page_imported_iface_switch_failed">Nem sikerült átváltani erre az IP-címre</string>
+    <string name="page_imported_vpn_lockdown">„Kapcsolatok letiltása VPN nélkül” be van kapcsolva, ami más eszközöket is blokkolhat</string>
 
     <string name="fab_shutdownserver_label">Szerver leállítása</string>
     <string name="fab_selectfile_label">Fájl(ok) kiválasztása</string>

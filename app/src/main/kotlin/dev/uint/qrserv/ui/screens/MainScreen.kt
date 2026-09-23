@@ -48,6 +48,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WifiLock
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Card
@@ -646,6 +647,23 @@ private fun ImportInfoCard(
             InfoRow(stringResource(R.string.page_imported_size), sizeHuman)
             Spacer(Modifier.size(4.dp))
             InfoRow(stringResource(R.string.page_imported_port), uiState.port.toString())
+            if (uiState.vpnLockdown) {
+                Spacer(Modifier.size(12.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Filled.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Spacer(Modifier.size(8.dp))
+                    Text(
+                        stringResource(R.string.page_imported_vpn_lockdown),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
         }
     }
 }

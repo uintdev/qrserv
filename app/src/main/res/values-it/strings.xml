@@ -31,6 +31,7 @@
     <string name="page_imported_iface_group_loopback">Loopback</string>
     <string name="page_imported_iface_switch_downloading">Impossibile cambiare l\'indirizzo IP durante un download</string>
     <string name="page_imported_iface_switch_failed">Impossibile passare a questo indirizzo IP</string>
+    <string name="page_imported_vpn_lockdown">“Blocca connessioni senza VPN” è attivo e potrebbe bloccare altri dispositivi</string>
 
     <string name="fab_shutdownserver_label">Spegni server</string>
     <string name="fab_selectfile_label">Seleziona i(l) file</string>

@@ -35,6 +35,7 @@
     <string name="page_imported_iface_group_loopback">לולאה מקומית</string>
     <string name="page_imported_iface_switch_downloading">לא ניתן לשנות את כתובת ה-IP בזמן הורדה</string>
     <string name="page_imported_iface_switch_failed">לא ניתן לעבור לכתובת IP זו</string>
+    <string name="page_imported_vpn_lockdown">“חסימת חיבורים ללא VPN” מופעלת ועלולה לחסום מכשירים אחרים</string>
 
     <string name="fab_shutdownserver_label">כבה שרת</string>
     <string name="fab_selectfile_label">בחר קובץ(ים)</string>

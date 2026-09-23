@@ -129,6 +129,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 damBuildIneligible = !isDamBuildEligible(),
                 themeMode = themeMode,
                 hotspotAvailability = computeHotspotAvailability(),
+                vpnLockdown = NetworkUtils.isVpnLockdownEnabled(application),
             )
         }
         reportAbruptSessionEnd()
@@ -544,7 +545,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         PackageManager.PERMISSION_GRANTED
 
     fun onAppResumed() {
-        _uiState.update { it.copy(hotspotAvailability = computeHotspotAvailability()) }
+        _uiState.update {
+            it.copy(
+                hotspotAvailability = computeHotspotAvailability(),
+                vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication()),
+            )
+        }
         hotspotController?.recheck()
         val granted = areNotificationsGranted()
         if (granted && !notificationsGranted && ServingState.notice.value != null) ServingService.start(getApplication())
