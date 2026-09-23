@@ -59,6 +59,8 @@ import dev.uint.qrserv.R
 import dev.uint.qrserv.net.HotspotInfo
 import dev.uint.qrserv.net.WifiQr
 import dev.uint.qrserv.ui.components.BackNavigationIcon
+import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
+import dev.uint.qrserv.ui.components.DetailsFieldHeight
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
 import dev.uint.qrserv.ui.components.QrCodeImage
 import dev.uint.qrserv.ui.components.QrDetailsLayout
@@ -160,7 +162,7 @@ private fun HotspotDetailsCard(info: HotspotInfo, rowGap: Dp, onStop: () -> Unit
         shape = MaterialTheme.shapes.extraLarge,
         elevation = CardDefaults.cardElevation(1.dp),
         colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
-        modifier = Modifier.widthIn(max = 320.dp),
+        modifier = Modifier.widthIn(max = DetailsCardMaxWidth),
     ) {
         Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = if (rowGap < 16.dp) 16.dp else 24.dp)) {
             FieldLabel(stringResource(R.string.hotspot_network))
@@ -247,7 +249,7 @@ private fun CopyableField(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = FieldHeight)
+                    .heightIn(min = DetailsFieldHeight)
                     .then(if (onFieldClick != null) Modifier.clickable(onClick = onFieldClick) else Modifier)
                     .padding(start = 14.dp, end = if (trailing != null) 0.dp else 14.dp),
             ) {
@@ -259,16 +261,14 @@ private fun CopyableField(
         Card(
             shape = RoundedCornerShape(10.dp),
             elevation = CardDefaults.cardElevation(2.dp),
-            modifier = Modifier.size(FieldHeight),
+            modifier = Modifier.size(DetailsFieldHeight),
         ) {
-            IconButton(onClick = onCopy, modifier = Modifier.size(FieldHeight)) {
+            IconButton(onClick = onCopy, modifier = Modifier.size(DetailsFieldHeight)) {
                 Icon(Icons.Filled.ContentCopy, contentDescription = copyDescription, modifier = Modifier.size(18.dp))
             }
         }
     }
 }
-
-private val FieldHeight = 48.dp
 
 private fun copyToClipboard(context: Context, text: String, sensitive: Boolean) {
     val clip = ClipData.newPlainText(null, text)

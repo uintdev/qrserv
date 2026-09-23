@@ -64,7 +64,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.TooltipBox
@@ -74,11 +73,8 @@ import androidx.compose.material3.TooltipState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -98,19 +94,12 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.platform.TextToolbar
-import androidx.compose.ui.platform.TextToolbarStatus
-import androidx.compose.foundation.text.selection.LocalTextSelectionColors
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -124,13 +113,14 @@ import dev.uint.qrserv.data.PageType
 import dev.uint.qrserv.net.HotspotFailure
 import dev.uint.qrserv.ui.components.HotspotButton
 import dev.uint.qrserv.ui.components.HotspotOption
+import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
+import dev.uint.qrserv.ui.components.DetailsFieldHeight
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
 import dev.uint.qrserv.ui.components.hotspotNote
 import dev.uint.qrserv.ui.components.QrCodeImage
 import dev.uint.qrserv.ui.components.QrDetailsLayout
 import dev.uint.qrserv.ui.components.StatusCard
 import dev.uint.qrserv.ui.components.rememberIsWideScreen
-import dev.uint.qrserv.ui.components.middleEllipsis
 import dev.uint.qrserv.ui.theme.BrandError
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
 import dev.uint.qrserv.ui.theme.subtleContainerColor
@@ -616,37 +606,23 @@ private fun ImportInfoCard(
         shape = MaterialTheme.shapes.extraLarge,
         elevation = CardDefaults.cardElevation(1.dp),
         colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
-        modifier = Modifier.widthIn(max = 300.dp),
+        modifier = Modifier.widthIn(max = DetailsCardMaxWidth),
     ) {
-        Column(modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp)) {
+        Column(modifier = Modifier.padding(24.dp)) {
             FileNameRow(uiState)
             Spacer(Modifier.size(12.dp))
-            // BoxWithConstraints (used inside InterfaceDropdown) is a SubcomposeLayout under the hood,
-            // which doesn't support the intrinsic-measurement pass IntrinsicSize.Min relies on --
-            // that combination stack-overflows, so mirror the dropdown's measured height via state instead.
-            var dropdownHeightPx by remember { mutableIntStateOf(0) }
-            val density = LocalDensity.current
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val hotspot = uiState.hotspot
                 if (hotspot != null) {
-                    HotspotNetworkButton(
-                        ssid = hotspot.ssid,
-                        onClick = onOpenHotspot,
-                        modifier = Modifier.weight(1f).onSizeChanged { dropdownHeightPx = it.height },
-                    )
+                    HotspotNetworkButton(ssid = hotspot.ssid, onClick = onOpenHotspot, modifier = Modifier.weight(1f))
                 } else {
-                    InterfaceDropdown(
-                        uiState,
-                        viewModel,
-                        modifier = Modifier.weight(1f).onSizeChanged { dropdownHeightPx = it.height },
-                    )
+                    InterfaceDropdown(uiState, viewModel, modifier = Modifier.weight(1f))
                 }
                 Spacer(Modifier.size(12.dp))
-                val shareButtonSize = if (dropdownHeightPx > 0) with(density) { dropdownHeightPx.toDp() } else 56.dp
                 Card(
                     shape = RoundedCornerShape(10.dp),
                     elevation = CardDefaults.cardElevation(2.dp),
-                    modifier = Modifier.size(shareButtonSize),
+                    modifier = Modifier.size(DetailsFieldHeight),
                 ) {
                     IconButton(
                         onClick = {
@@ -700,7 +676,7 @@ private fun FileNameRow(uiState: AppUiState) {
     ) {
         Card(shape = RoundedCornerShape(10.dp), elevation = CardDefaults.cardElevation(2.dp), modifier = Modifier.fillMaxWidth()) {
             Row(
-                modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+                modifier = Modifier.heightIn(min = DetailsFieldHeight).padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(iconForFileName(name), contentDescription = null, modifier = Modifier.size(18.dp))
@@ -723,8 +699,7 @@ private fun HotspotNetworkButton(ssid: String, onClick: () -> Unit, modifier: Mo
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                // A filled TextField's height, to match the dropdown.
-                .heightIn(min = 56.dp)
+                .heightIn(min = DetailsFieldHeight)
                 .clickable(onClickLabel = description, onClick = onClick)
                 .padding(start = 14.dp, end = 8.dp),
         ) {
@@ -744,25 +719,6 @@ private fun InfoRow(label: String, value: String) {
     }
 }
 
-// The IP value is a fixed label, not editable text -- hide the selection toolbar/highlight so
-// long-pressing it doesn't offer to select/copy like real text input would.
-private val NoSelectionTextToolbar = object : TextToolbar {
-    override val status: TextToolbarStatus = TextToolbarStatus.Hidden
-    override fun hide() {}
-    override fun showMenu(
-        rect: Rect,
-        onCopyRequested: (() -> Unit)?,
-        onPasteRequested: (() -> Unit)?,
-        onCutRequested: (() -> Unit)?,
-        onSelectAllRequested: (() -> Unit)?,
-    ) {}
-}
-
-// Approximate horizontal space the filled TextField's own chrome (padding + trailing icon) eats
-// into its width -- no public API gives the exact figure, so this errs generous (truncating a
-// character early) rather than risk overflow into/behind the dropdown icon.
-private val InterfaceDropdownChromeWidth = 72.dp
-
 /** Menu margin and padding around the items, with slack; too small scrolls the switch entry away. */
 private val DropdownMenuChrome = 76.dp
 
@@ -779,131 +735,98 @@ private fun addressGroupLabel(group: AddressGroup): Int = when (group) {
 @Composable
 private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, modifier: Modifier = Modifier) {
     var expanded by remember { mutableStateOf(false) }
-    val textMeasurer = rememberTextMeasurer()
-    val textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontSize = 13.sp)
     val density = LocalDensity.current
+    var anchorBounds by remember { mutableStateOf<Rect?>(null) }
+    var switchEntryHeightPx by remember { mutableIntStateOf(0) }
+    val windowHeightPx = LocalWindowInfo.current.containerSize.height
+    val barsTopPx = WindowInsets.systemBars.getTop(density)
+    val barsBottomPx = WindowInsets.systemBars.getBottom(density)
 
-    BoxWithConstraints(modifier) {
-        val availableTextWidthPx = (constraints.maxWidth - with(density) { InterfaceDropdownChromeWidth.roundToPx() })
-            .coerceAtLeast(0)
-        // Same middle-ellipsis treatment as the file name, so a long IPv6 address truncates the
-        // same way instead of being hard-clipped by the TextField with no visual indicator.
-        val displayedIp = remember(uiState.selectedIp, availableTextWidthPx, textStyle) {
-            middleEllipsis(uiState.selectedIp, availableTextWidthPx) { candidate ->
-                textMeasurer.measure(AnnotatedString(candidate), style = textStyle, maxLines = 1, softWrap = false).size.width
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        modifier = modifier.onGloballyPositioned { anchorBounds = it.boundsInWindow() },
+    ) {
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            elevation = CardDefaults.cardElevation(2.dp),
+            modifier = Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                .fillMaxWidth(),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = DetailsFieldHeight)
+                    .padding(start = 14.dp, end = 8.dp),
+            ) {
+                MiddleEllipsisText(text = uiState.selectedIp, fontSize = 13.sp, modifier = Modifier.weight(1f))
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             }
         }
-
-        var anchorBounds by remember { mutableStateOf<Rect?>(null) }
-        var switchEntryHeightPx by remember { mutableIntStateOf(0) }
-        val windowHeightPx = LocalWindowInfo.current.containerSize.height
-        val barsTopPx = WindowInsets.systemBars.getTop(density)
-        val barsBottomPx = WindowInsets.systemBars.getBottom(density)
-
-        ExposedDropdownMenuBox(
+        ExposedDropdownMenu(
             expanded = expanded,
-            onExpandedChange = { expanded = it },
-            modifier = Modifier.fillMaxWidth().onGloballyPositioned { anchorBounds = it.boundsInWindow() },
+            onDismissRequest = { expanded = false },
+            containerColor = subtleContainerColor(),
         ) {
-            // TextField itself has no elevation/shadow support, unlike Card -- wrap it in one so it
-            // reads at the same elevation as the file name row and share button next to it, with the
-            // TextField's own container made transparent so the Card's background/shadow show through.
-            Card(
-                shape = RoundedCornerShape(10.dp),
-                elevation = CardDefaults.cardElevation(2.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                CompositionLocalProvider(
-                    LocalTextToolbar provides NoSelectionTextToolbar,
-                    LocalTextSelectionColors provides TextSelectionColors(
-                        handleColor = Color.Transparent,
-                        backgroundColor = Color.Transparent,
-                    ),
-                ) {
-                    TextField(
-                        value = displayedIp,
-                        onValueChange = {},
-                        readOnly = true,
-                        singleLine = true,
-                        textStyle = textStyle,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        shape = RoundedCornerShape(10.dp),
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                        ),
-                        modifier = Modifier
-                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                            .fillMaxWidth(),
-                    )
-                }
+            // Pinned only while the addresses keep about three rows; otherwise it's the last item in one scroll.
+            val listMaxHeight = anchorBounds?.let { bounds ->
+                val space = maxOf(bounds.top - barsTopPx, windowHeightPx - barsBottomPx - bounds.bottom)
+                with(density) { (space - switchEntryHeightPx).toDp() } - DropdownMenuChrome
             }
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                containerColor = subtleContainerColor(),
+            val pinSwitchEntry = listMaxHeight != null && listMaxHeight >= PinnedListMinHeight
+            Column(
+                modifier = if (pinSwitchEntry && listMaxHeight != null) {
+                    Modifier.heightIn(max = listMaxHeight).verticalScroll(rememberScrollState())
+                } else {
+                    Modifier
+                },
             ) {
-                // Pinned only while the addresses keep about three rows; otherwise it's the last item in one scroll.
-                val listMaxHeight = anchorBounds?.let { bounds ->
-                    val space = maxOf(bounds.top - barsTopPx, windowHeightPx - barsBottomPx - bounds.bottom)
-                    with(density) { (space - switchEntryHeightPx).toDp() } - DropdownMenuChrome
-                }
-                val pinSwitchEntry = listMaxHeight != null && listMaxHeight >= PinnedListMinHeight
-                Column(
-                    modifier = if (pinSwitchEntry && listMaxHeight != null) {
-                        Modifier.heightIn(max = listMaxHeight).verticalScroll(rememberScrollState())
-                    } else {
-                        Modifier
-                    },
-                ) {
-                    AddressGroup.entries.forEach { group ->
-                        val addresses = uiState.interfaces.filter { it.group == group }
-                        // A heading with nothing under it says less than no heading at all.
-                        if (addresses.isEmpty()) return@forEach
-                        Text(
-                            text = stringResource(addressGroupLabel(group)),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 2.dp),
+                AddressGroup.entries.forEach { group ->
+                    val addresses = uiState.interfaces.filter { it.group == group }
+                    // A heading with nothing under it says less than no heading at all.
+                    if (addresses.isEmpty()) return@forEach
+                    Text(
+                        text = stringResource(addressGroupLabel(group)),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 2.dp),
+                    )
+                    addresses.forEach { entry ->
+                        DropdownMenuItem(
+                            text = { Text(entry.address, overflow = TextOverflow.Ellipsis, maxLines = 2) },
+                            onClick = {
+                                viewModel.onIpSelected(entry.address)
+                                expanded = false
+                            },
                         )
-                        addresses.forEach { entry ->
-                            DropdownMenuItem(
-                                text = { Text(entry.address, overflow = TextOverflow.Ellipsis, maxLines = 2) },
-                                onClick = {
-                                    viewModel.onIpSelected(entry.address)
-                                    expanded = false
-                                },
-                            )
-                        }
                     }
                 }
-                val note = hotspotNote(uiState.hotspotAvailability)
-                Column(modifier = Modifier.onSizeChanged { switchEntryHeightPx = it.height }) {
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    DropdownMenuItem(
-                        text = {
-                            Column {
-                                Text(stringResource(R.string.hotspot_switch))
-                                if (note != null) {
-                                    Text(
-                                        note,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                }
+            }
+            val note = hotspotNote(uiState.hotspotAvailability)
+            Column(modifier = Modifier.onSizeChanged { switchEntryHeightPx = it.height }) {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                DropdownMenuItem(
+                    text = {
+                        Column {
+                            Text(stringResource(R.string.hotspot_switch))
+                            if (note != null) {
+                                Text(
+                                    note,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
                             }
-                        },
-                        leadingIcon = { Icon(Icons.Filled.WifiLock, contentDescription = null) },
-                        enabled = uiState.hotspotAvailability.unavailable == null,
-                        onClick = {
-                            expanded = false
-                            viewModel.onSwitchToHotspotClicked()
-                        },
-                    )
-                }
+                        }
+                    },
+                    leadingIcon = { Icon(Icons.Filled.WifiLock, contentDescription = null) },
+                    enabled = uiState.hotspotAvailability.unavailable == null,
+                    onClick = {
+                        expanded = false
+                        viewModel.onSwitchToHotspotClicked()
+                    },
+                )
             }
         }
     }

@@ -15,6 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+val DetailsCardMaxWidth = 320.dp
+
+val DetailsFieldHeight = 48.dp
+
 @Composable
 fun QrDetailsLayout(
     isWideScreen: Boolean,
