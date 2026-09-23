@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
+import android.content.res.Configuration
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
@@ -55,18 +56,24 @@ class ServingService : Service() {
     private fun observe() {
         scope.launch {
             ServingState.notice.collect { notice ->
-                if (notice == null) {
-                    stopCleanly()
-                } else if (Build.VERSION.SDK_INT < 33 ||
-                    ContextCompat.checkSelfPermission(this@ServingService, Manifest.permission.POST_NOTIFICATIONS) ==
-                    PackageManager.PERMISSION_GRANTED
-                ) {
-                    NotificationManagerCompat.from(this@ServingService).notify(NOTIFICATION_ID, buildNotification(notice))
-                }
+                if (notice == null) stopCleanly() else post(notice)
             }
         }
         scope.launch {
             ServingState.activeTransfers.map { it > 0 }.distinctUntilChanged().collect(::holdWakeLock)
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        ServingState.notice.value?.let(::post)
+    }
+
+    private fun post(notice: ServingNotice) {
+        if (Build.VERSION.SDK_INT < 33 ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, buildNotification(notice))
         }
     }
 
