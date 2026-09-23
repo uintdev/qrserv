@@ -26,7 +26,7 @@ enum class PageType {
 enum class AddressGroup { ROUTABLE, HOSTED, LINK_LOCAL, LOOPBACK }
 
 /** One address this device can be reached at, and the group it is listed under. */
-data class InterfaceAddress(val address: String, val group: AddressGroup)
+data class InterfaceAddress(val address: String, val group: AddressGroup, val bindHost: String = address)
 
 /** One entry inside a multi-file archive. */
 data class ArchivedEntry(val name: String, val size: Long)
@@ -83,6 +83,7 @@ data class AppUiState(
     val damEligible: Boolean = true,
     val damBuildIneligible: Boolean = false,
     val fiuEnabled: Boolean = false,
+    val allInterfacesEnabled: Boolean = false,
     val importProgress: ImportProgress? = null,
     /** Raw exception detail shown (and copyable) on [PageType.UNHANDLED_ERROR]. */
     val errorDetail: String = "",

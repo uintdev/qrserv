@@ -9,6 +9,7 @@ object Preferences {
     private const val PREFS_NAME = "config"
 
     const val PREF_SERVER_PORT = "server_port"
+    const val PREF_SERVER_ALL_INTERFACES = "server_all_interfaces"
     const val PREF_CLIENT_DAM = "client_dam"
     const val PREF_CLIENT_FIU = "client_fiu"
     const val PREF_THEME_MODE = "theme_mode"

@@ -31,7 +31,7 @@ class FileServer(
 
         /** Paired with every [onDownloadStarted], whether the transfer completed or not. */
         fun onTransferEnded()
-        fun onServerGone(message: String)
+        fun onServerGone()
         fun onFileMissing()
         fun onPermissionDenied()
     }
@@ -69,8 +69,8 @@ class FileServer(
                         // Doubles as the readability probe this used to do with a throwaway open.
                         val (stream, length) = try {
                             openWithLength(file)
-                        } catch (error: IOException) {
-                            listener.onServerGone(error.toString())
+                        } catch (_: IOException) {
+                            listener.onServerGone()
                             call.respondText("", status = HttpStatusCode.InternalServerError)
                             return@handle
                         }

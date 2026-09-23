@@ -29,13 +29,15 @@
     <string name="page_imported_iface_group_tethering">Режим модема</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Петля</string>
+    <string name="page_imported_iface_switch_downloading">Нельзя сменить IP-адрес во время загрузки</string>
+    <string name="page_imported_iface_switch_failed">Не удалось переключиться на этот IP-адрес</string>
 
     <string name="fab_shutdownserver_label">Выключить сервер</string>
     <string name="fab_selectfile_label">Выберите файл(ы)</string>
 
     <string name="debug_build_toast">Debug-сборка: производительность может отличаться от релиза.</string>
 
-    <string name="info_exception_portinuse">Ошибка привязки порта: %1$s</string>
+    <string name="info_exception_portinuse">Ошибка привязки порта</string>
     <string name="info_exception_linkopenfailed">Нет приложения для открытия HTTPS-ссылок</string>
     <string name="info_pending_fileprocessing">Идёт обработка выбора файла...</string>
     <string name="info_pending_fileprocessing_shutdown">Сервер нельзя остановить во время обработки файлов.</string>
@@ -43,7 +45,7 @@
 
     <string name="server_info_download_started">загрузка началась: %1$s</string>
     <string name="server_info_download_finished">загрузка завершена: %1$s</string>
-    <string name="server_info_gone">Сервер недоступен: %1$s</string>
+    <string name="server_info_gone">Сервер недоступен</string>
 
     <string name="notification_channel_name">Раздача</string>
     <string name="notification_sharing_title">Раздаётся %1$s</string>
@@ -119,6 +121,8 @@
     <string name="settings_server_port_dialog_submit">Задать порт</string>
     <string name="settings_server_port_dialog_portinuse">Порт уже используется</string>
     <string name="settings_server_port_dialog_saved">Изменения сохранены</string>
+    <string name="settings_server_allinterfaces_list_title">Слушать на всех интерфейсах</string>
+    <string name="settings_server_allinterfaces_list_subtitle">Принимать подключения на любом IP-адресе, а не только на выбранном</string>
     <string name="settings_subheading_client">Клиент</string>
     <string name="settings_client_dam_list_title">Режим прямого доступа</string>
     <string name="settings_client_dam_list_subtitle">Идеально подходит для больших файлов</string>

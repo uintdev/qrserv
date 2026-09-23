@@ -33,12 +33,12 @@ object NetworkUtils {
                     val host = addr.hostAddress ?: continue
                     when (addr) {
                         is Inet4Address ->
-                            candidates.add(Candidate(host, groupOf(addr, selfHosted(addr)), isIpv6 = false, key = sortKey(addr)))
+                            candidates.add(Candidate(host, host, groupOf(addr, selfHosted(addr)), isIpv6 = false, key = sortKey(addr)))
                         is Inet6Address ->
                             // The scope id (e.g. "fe80::1%wlan0") names an interface on this
                             // device and carries no meaning on another one, so it is dropped from
                             // what gets shown and put in the URL.
-                            candidates.add(Candidate(host.substringBefore('%'), groupOf(addr, false), isIpv6 = true, key = sortKey(addr)))
+                            candidates.add(Candidate(host.substringBefore('%'), host, groupOf(addr, false), isIpv6 = true, key = sortKey(addr)))
                         else -> Unit
                     }
                 }
@@ -47,7 +47,7 @@ object NetworkUtils {
             failure = error
         }
 
-        val addresses = candidates.sortedWith(ByReachability).map { InterfaceAddress(it.address, it.group) }
+        val addresses = candidates.sortedWith(ByReachability).map { InterfaceAddress(it.address, it.group, it.bindHost) }
         // Whatever was collected before the failure still stands -- a partial list is a usable one.
         // Only a failure that produced nothing is worth reporting as a failure at all.
         if (addresses.isEmpty() && failure != null) Result.failure(failure) else Result.success(addresses)
@@ -55,6 +55,7 @@ object NetworkUtils {
 
     private class Candidate(
         val address: String,
+        val bindHost: String,
         val group: AddressGroup,
         val isIpv6: Boolean,
         val key: String,

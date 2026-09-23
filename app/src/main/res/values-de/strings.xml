@@ -29,13 +29,15 @@
     <string name="page_imported_iface_group_tethering">Tethering</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Loopback</string>
+    <string name="page_imported_iface_switch_downloading">IP-Adresse kann während eines Downloads nicht geändert werden</string>
+    <string name="page_imported_iface_switch_failed">Wechsel zu dieser IP-Adresse nicht möglich</string>
 
     <string name="fab_shutdownserver_label">Server herunterfahren</string>
     <string name="fab_selectfile_label">Datei(en) auswählen</string>
 
     <string name="debug_build_toast">Debug-Build: Leistung/Verhalten können vom Release abweichen.</string>
 
-    <string name="info_exception_portinuse">Fehler beim Binden des Ports: %1$s</string>
+    <string name="info_exception_portinuse">Fehler beim Binden des Ports</string>
     <string name="info_exception_linkopenfailed">Keine App zum Öffnen von HTTPS-Links verfügbar</string>
     <string name="info_pending_fileprocessing">Datei(en) werden verarbeitet...</string>
     <string name="info_pending_fileprocessing_shutdown">Server kann während Dateiauswahl nicht gestoppt werden.</string>
@@ -43,7 +45,7 @@
 
     <string name="server_info_download_started">Download gestartet: %1$s</string>
     <string name="server_info_download_finished">Download beendet: %1$s</string>
-    <string name="server_info_gone">Server ist weg: %1$s</string>
+    <string name="server_info_gone">Server ist weg</string>
 
     <string name="notification_channel_name">Teilen</string>
     <string name="notification_sharing_title">%1$s wird geteilt</string>
@@ -119,6 +121,8 @@
     <string name="settings_server_port_dialog_submit">Port Einstellen</string>
     <string name="settings_server_port_dialog_portinuse">Port wird bereits verwendet</string>
     <string name="settings_server_port_dialog_saved">Änderungen gespeichert</string>
+    <string name="settings_server_allinterfaces_list_title">Auf allen Schnittstellen lauschen</string>
+    <string name="settings_server_allinterfaces_list_subtitle">Verbindungen über jede IP-Adresse annehmen, nicht nur über die ausgewählte</string>
     <string name="settings_subheading_client">Client</string>
     <string name="settings_client_dam_list_title">Direktzugriffsmodus</string>
     <string name="settings_client_dam_list_subtitle">Ideal für große Dateien</string>

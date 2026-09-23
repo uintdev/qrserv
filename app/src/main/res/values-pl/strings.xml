@@ -29,13 +29,15 @@
     <string name="page_imported_iface_group_tethering">Tethering</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
     <string name="page_imported_iface_group_loopback">Pętla zwrotna</string>
+    <string name="page_imported_iface_switch_downloading">Nie można zmienić adresu IP podczas pobierania</string>
+    <string name="page_imported_iface_switch_failed">Nie udało się przełączyć na ten adres IP</string>
 
     <string name="fab_shutdownserver_label">Zamknąć serwer</string>
     <string name="fab_selectfile_label">Wybierz plik(i)</string>
 
     <string name="debug_build_toast">Build debugowy: wydajność może różnić się od finalnej wersji.</string>
 
-    <string name="info_exception_portinuse">Nie udało się powiązać portu sieciowego: %1$s</string>
+    <string name="info_exception_portinuse">Nie udało się powiązać portu sieciowego</string>
     <string name="info_exception_linkopenfailed">Brak dostępnej aplikacji do otwierania linków HTTPS</string>
     <string name="info_pending_fileprocessing">Wybór pliku jest przetwarzany...</string>
     <string name="info_pending_fileprocessing_shutdown">Nie można zatrzymać serwera podczas przetwarzania plików.</string>
@@ -43,7 +45,7 @@
 
     <string name="server_info_download_started">Pobieranie rozpoczęte: %1$s</string>
     <string name="server_info_download_finished">Pobieranie zakończone: %1$s</string>
-    <string name="server_info_gone">Serwer zaginął: %1$s</string>
+    <string name="server_info_gone">Serwer zaginął</string>
 
     <string name="notification_channel_name">Udostępnianie</string>
     <string name="notification_sharing_title">Udostępnianie: %1$s</string>
@@ -119,6 +121,8 @@
     <string name="settings_server_port_dialog_submit">Ustaw Port</string>
     <string name="settings_server_port_dialog_portinuse">Port jest już w użyciu</string>
     <string name="settings_server_port_dialog_saved">Zmiany zapisano</string>
+    <string name="settings_server_allinterfaces_list_title">Nasłuchuj na wszystkich interfejsach</string>
+    <string name="settings_server_allinterfaces_list_subtitle">Akceptuj połączenia na każdym adresie IP, nie tylko na wybranym</string>
     <string name="settings_subheading_client">Klient</string>
     <string name="settings_client_dam_list_title">Tryb Dostępu Bezpośredniego</string>
     <string name="settings_client_dam_list_subtitle">Idealne dla dużych plików</string>

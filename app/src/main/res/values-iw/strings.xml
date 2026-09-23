@@ -33,13 +33,15 @@
     <string name="page_imported_iface_group_tethering">שיתוף אינטרנט</string>
     <string name="page_imported_iface_group_linklocal">מקומי לקישור</string>
     <string name="page_imported_iface_group_loopback">לולאה מקומית</string>
+    <string name="page_imported_iface_switch_downloading">לא ניתן לשנות את כתובת ה-IP בזמן הורדה</string>
+    <string name="page_imported_iface_switch_failed">לא ניתן לעבור לכתובת IP זו</string>
 
     <string name="fab_shutdownserver_label">כבה שרת</string>
     <string name="fab_selectfile_label">בחר קובץ(ים)</string>
 
     <string name="debug_build_toast">גרסת ניפוי באגים: הביצועים עשויים להיות שונים מהגרסה הסופית.</string>
 
-    <string name="info_exception_portinuse">שגיאה בקישור פורט:%1$s</string>
+    <string name="info_exception_portinuse">שגיאה בקישור פורט</string>
     <string name="info_exception_linkopenfailed">אין אפליקציה זמינה לפתיחת קישורי HTTPS</string>
     <string name="info_pending_fileprocessing">מעבד בחירת קבצים...</string>
     <string name="info_pending_fileprocessing_shutdown">לא ניתן לעצור את השרת בזמן עיבוד בחירת הקבצים.</string>
@@ -47,7 +49,7 @@
 
     <string name="server_info_download_started">ההורדה החלה: %1$s</string>
     <string name="server_info_download_finished">ההורדה הושלמה: %1$s</string>
-    <string name="server_info_gone">השרת נעלם: %1$s</string>
+    <string name="server_info_gone">השרת נעלם</string>
 
     <string name="notification_channel_name">שיתוף</string>
     <string name="notification_sharing_title">משתף את %1$s</string>
@@ -123,6 +125,8 @@
     <string name="settings_server_port_dialog_submit">הגדר פורט</string>
     <string name="settings_server_port_dialog_portinuse">הפורט כבר נמצא בשימוש</string>
     <string name="settings_server_port_dialog_saved">השינויים נשמרו</string>
+    <string name="settings_server_allinterfaces_list_title">האזנה בכל הממשקים</string>
+    <string name="settings_server_allinterfaces_list_subtitle">קבל חיבורים בכל כתובת IP, לא רק בכתובת שנבחרה</string>
     <string name="settings_subheading_client">לקוח</string>
     <string name="settings_client_dam_list_title">מצב גישה ישירה</string>
     <string name="settings_client_dam_list_subtitle">אידיאלי לקבצים גדולים</string>

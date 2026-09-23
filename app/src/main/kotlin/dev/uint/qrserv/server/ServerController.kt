@@ -13,7 +13,7 @@ class ServerController(
     private val downloadFinishedCallback: (String) -> Unit,
     private val fileMissingCallback: () -> Unit,
     private val permissionDeniedCallback: () -> Unit,
-    private val serverGoneCallback: (String) -> Unit,
+    private val serverGoneCallback: () -> Unit,
 ) : FileServer.Listener {
 
     @Volatile
@@ -24,6 +24,9 @@ class ServerController(
 
     val port: Int
         get() = server?.listeningPort ?: 0
+
+    var bindAddress: String? = null
+        private set
 
     fun currentSession(): Any? = server
 
@@ -40,11 +43,13 @@ class ServerController(
         val instance = FileServer(requestedPort, bindAddress, fileInfoProvider, hasStoragePermission, this)
         instance.start()
         server = instance
+        this.bindAddress = bindAddress
     }
 
     fun stop() {
         server?.stop()
         server = null
+        bindAddress = null
     }
 
     override fun onDownloadStarted(remoteIp: String) {
@@ -60,8 +65,8 @@ class ServerController(
         ServingState.transferEnded()
     }
 
-    override fun onServerGone(message: String) {
-        serverGoneCallback(message)
+    override fun onServerGone() {
+        serverGoneCallback()
         stopDeferred()
     }
 

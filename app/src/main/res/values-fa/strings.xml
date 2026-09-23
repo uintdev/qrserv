@@ -29,13 +29,15 @@
     <string name="page_imported_iface_group_tethering">اشتراک‌گذاری اینترنت</string>
     <string name="page_imported_iface_group_linklocal">پیوند محلی</string>
     <string name="page_imported_iface_group_loopback">حلقه بازگشتی</string>
+    <string name="page_imported_iface_switch_downloading">هنگام دانلود نمی‌توان نشانی IP را تغییر داد</string>
+    <string name="page_imported_iface_switch_failed">تغییر به این نشانی IP ممکن نشد</string>
 
     <string name="fab_shutdownserver_label">خاموش کردن سرور</string>
     <string name="fab_selectfile_label">انتخاب پرونده(ها)</string>
 
     <string name="debug_build_toast">نسخه اشکال‌زدایی: عملکرد ممکن است با نسخه نهایی متفاوت باشد.</string>
 
-    <string name="info_exception_portinuse">خطا در تعریف پورت: %1$s</string>
+    <string name="info_exception_portinuse">خطا در تعریف پورت</string>
     <string name="info_exception_linkopenfailed">هیچ برنامه‌ای برای باز کردن پیوندهای HTTPS در دسترس نیست</string>
     <string name="info_pending_fileprocessing">در حال پردازش پرونده های انتخابی...</string>
     <string name="info_pending_fileprocessing_shutdown">سرور در حین پردازش انتخاب پرونده متوقف نمی‌شود.</string>
@@ -43,7 +45,7 @@
 
     <string name="server_info_download_started">دریافت آغاز شد: %1$s</string>
     <string name="server_info_download_finished">دریافت به پایان رسید: %1$s</string>
-    <string name="server_info_gone">سرور از بین رفته است: %1$s</string>
+    <string name="server_info_gone">سرور از بین رفته است</string>
 
     <string name="notification_channel_name">هم‌رسانی</string>
     <string name="notification_sharing_title">در حال هم‌رسانی %1$s</string>
@@ -119,6 +121,8 @@
     <string name="settings_server_port_dialog_submit">تنظیم پورت</string>
     <string name="settings_server_port_dialog_portinuse">پورت در حال استفاده است</string>
     <string name="settings_server_port_dialog_saved">تغییرات ذخیره شد</string>
+    <string name="settings_server_allinterfaces_list_title">گوش دادن روی همه رابط‌ها</string>
+    <string name="settings_server_allinterfaces_list_subtitle">پذیرش اتصال از همه نشانی‌های IP، نه فقط نشانی انتخاب‌شده</string>
     <string name="settings_subheading_client">کلاینت</string>
     <string name="settings_client_dam_list_title">حالت دسترسی مستقیم</string>
     <string name="settings_client_dam_list_subtitle">ایده‌آل برای فایل‌های حجیم</string>

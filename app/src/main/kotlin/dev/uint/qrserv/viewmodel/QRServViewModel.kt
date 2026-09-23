@@ -42,6 +42,7 @@ import dev.uint.qrserv.server.ServingService
 import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.ManifestUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -93,6 +94,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var pickerAfterNotificationPrompt = false
 
+    private var rebindJob: Job? = null
+
     private val serverController = ServerController(
         downloadStartedCallback = { ip -> postToast(R.string.server_info_download_started, ip) },
         downloadFinishedCallback = { ip ->
@@ -103,8 +106,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             postToast(R.string.page_info_permissiondenied_msg)
             onServerStopped()
         },
-        serverGoneCallback = { message ->
-            postToast(R.string.server_info_gone, message)
+        serverGoneCallback = {
+            postToast(R.string.server_info_gone)
             onServerStopped()
         },
     )
@@ -119,6 +122,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 damEnabled = fileRepo.directAccessMode,
                 fiuEnabled = fiu,
+                allInterfacesEnabled = Preferences.readBool(Preferences.PREF_SERVER_ALL_INTERFACES),
                 port = port,
                 savedPort = port,
                 damEligible = isDamEligible(),
@@ -307,6 +311,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private suspend fun startServing(fileInfo: FileInfo) {
+        rebindJob?.join()
         val hotspot = _uiState.value.hotspot
         if (hotspot != null && hotspotController?.isActive != true) {
             onHotspotLost(HotspotLoss.STOPPED)
@@ -329,26 +334,27 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             listed
         }
 
-        if (!serverController.isRunning) {
+        val current = _uiState.value.selectedIp
+        val selected = interfaces.firstOrNull { it.address == current } ?: interfaces.first()
+        val bindAddress = hotspot?.address ?: selected.bindHost.takeUnless { listensOnAllInterfaces() }
+        if (!serverController.isRunning || serverController.bindAddress != bindAddress) {
             try {
-                startServer(bindAddress = hotspot?.address)
-            } catch (e: Exception) {
-                postToast(R.string.info_exception_portinuse, e.toString())
+                startServer(bindAddress, port = serverController.port.takeIf { serverController.isRunning })
+            } catch (_: Exception) {
+                postToast(R.string.info_exception_portinuse)
                 stopHotspotSession()
                 _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
                 return
             }
         }
 
-        val current = _uiState.value.selectedIp
-        val selected = if (interfaces.any { it.address == current }) current else interfaces.first().address
         val openHotspotScreen = hotspot != null && !hotspotScreenShown
         if (openHotspotScreen) hotspotScreenShown = true
 
         _uiState.update {
             it.copy(
                 interfaces = interfaces,
-                selectedIp = selected,
+                selectedIp = selected.address,
                 port = serverController.port,
                 serverRunning = true,
                 pageType = PageType.IMPORTED,
@@ -360,9 +366,16 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         startFileObserver(fileInfo)
     }
 
-    private suspend fun startServer(bindAddress: String?) = withContext(Dispatchers.IO) {
+    private fun listensOnAllInterfaces(): Boolean =
+        if (serverController.isRunning && _uiState.value.hotspot == null) {
+            serverController.bindAddress == null
+        } else {
+            _uiState.value.allInterfacesEnabled
+        }
+
+    private suspend fun startServer(bindAddress: String?, port: Int? = null) = withContext(Dispatchers.IO) {
         serverController.start(
-            Preferences.readInt(Preferences.PREF_SERVER_PORT) ?: 0,
+            port ?: Preferences.readInt(Preferences.PREF_SERVER_PORT) ?: 0,
             fileInfoProvider = { _uiState.value.fileInfo },
             hasStoragePermission = { path -> !fileRepo.directModeDetect(path) || hasDirectAccessPermission() },
             bindAddress = bindAddress,
@@ -370,7 +383,37 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onIpSelected(ip: String) {
-        _uiState.update { it.copy(selectedIp = ip) }
+        val entry = _uiState.value.interfaces.firstOrNull { it.address == ip } ?: return
+        val bound = serverController.bindAddress
+        if (!serverController.isRunning || bound == null || _uiState.value.hotspot != null || bound == entry.bindHost) {
+            _uiState.update { it.copy(selectedIp = ip) }
+            return
+        }
+        if (rebindJob?.isActive == true || rejectIfBusy()) return
+        if (ServingState.activeTransfers.value > 0) {
+            postToast(R.string.page_imported_iface_switch_downloading)
+            return
+        }
+        rebindJob = viewModelScope.launch {
+            val port = serverController.port
+            try {
+                startServer(entry.bindHost, port)
+                _uiState.update { it.copy(selectedIp = ip) }
+            } catch (_: Exception) {
+                postToast(R.string.page_imported_iface_switch_failed)
+                if (runCatching { startServer(bound, port) }.isFailure) {
+                    stopServing()
+                    _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
+                }
+            }
+        }
+    }
+
+    fun toggleAllInterfaces() {
+        val newValue = !_uiState.value.allInterfacesEnabled
+        Preferences.writeBool(Preferences.PREF_SERVER_ALL_INTERFACES, newValue)
+        _uiState.update { it.copy(allInterfacesEnabled = newValue) }
+        if (_uiState.value.serverRunning) postToast(R.string.settings_server_port_dialog_serveractive)
     }
 
     fun onShutdownClicked() {
@@ -384,6 +427,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
         _uiState.update { it.copy(serverPoweringDown = true) }
         viewModelScope.launch {
+            rebindJob?.join()
             withContext(Dispatchers.IO) { serverController.stop() }
             onServerStopped()
         }
@@ -620,10 +664,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private suspend fun switchToHotspot(info: HotspotInfo) {
+        rebindJob?.join()
+        val previousBind = serverController.bindAddress
         if (runCatching { startServer(bindAddress = info.address) }.isFailure) {
             stopHotspotSession()
             postToast(R.string.hotspot_failed_generic)
-            if (runCatching { startServer(bindAddress = null) }.isSuccess) {
+            if (runCatching { startServer(bindAddress = previousBind) }.isSuccess) {
                 _uiState.update { it.copy(port = serverController.port) }
             } else {
                 stopServing()
@@ -754,6 +800,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 damEnabled = false,
                 fiuEnabled = false,
+                allInterfacesEnabled = false,
                 savedPort = 0,
                 damEligible = isDamEligible(),
                 themeMode = ThemeMode.SYSTEM,

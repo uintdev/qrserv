@@ -108,6 +108,19 @@ fun SettingsScreen(
                     colors = groupItemColors,
                     modifier = Modifier.clickable { showPortDialog = true },
                 )
+                GroupDivider()
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_server_allinterfaces_list_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_server_allinterfaces_list_subtitle)) },
+                    trailingContent = {
+                        Switch(
+                            checked = uiState.allInterfacesEnabled,
+                            onCheckedChange = { viewModel.toggleAllInterfaces() },
+                        )
+                    },
+                    colors = groupItemColors,
+                    modifier = Modifier.clickable { viewModel.toggleAllInterfaces() },
+                )
             }
 
             SectionHeader(stringResource(R.string.settings_subheading_client))
