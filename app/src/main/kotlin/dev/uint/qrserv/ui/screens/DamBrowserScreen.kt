@@ -63,6 +63,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -444,7 +445,7 @@ fun DamBrowserScreen(
                                     },
                                     supportingContent = {
                                         if (!isDirectory) {
-                                            val sizeText = FileSizeFormatter.humanReadable(entry.length())
+                                            val sizeText = FileSizeFormatter.humanReadable(entry.length(), LocalConfiguration.current.locales[0])
                                             val modifiedText = formattedModifiedDate(entry)
                                             Text(if (modifiedText != null) "$sizeText · $modifiedText" else sizeText)
                                         }

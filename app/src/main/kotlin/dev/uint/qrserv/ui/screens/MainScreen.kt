@@ -93,6 +93,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -522,7 +523,8 @@ private fun ImportedContent(
         }
         "http://$hostFormatted:${uiState.port}/$filePathSegment"
     }
-    val sizeHuman = remember(uiState.fileInfo) { FileSizeFormatter.humanReadable(uiState.fileInfo.length) }
+    val locale = LocalConfiguration.current.locales[0]
+    val sizeHuman = remember(uiState.fileInfo, locale) { FileSizeFormatter.humanReadable(uiState.fileInfo.length, locale) }
 
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipboardToastMessage = stringResource(R.string.page_imported_share_clipboard)
@@ -675,6 +677,7 @@ private fun ImportInfoCard(
 private fun FileNameRow(uiState: AppUiState) {
     val name = uiState.fileInfo.name
     val archived = uiState.fileInfo.archived
+    val locale = LocalConfiguration.current.locales[0]
     val largestArchivedFiles = remember(archived) { archived.sortedByDescending { it.size }.take(5) }
     val remainingArchivedCount = archived.size - largestArchivedFiles.size
     TooltipBox(
@@ -684,7 +687,7 @@ private fun FileNameRow(uiState: AppUiState) {
                 Column {
                     Text(name)
                     largestArchivedFiles.forEach { entry ->
-                        Text("${entry.name} (${FileSizeFormatter.humanReadable(entry.size)})")
+                        Text("${entry.name} (${FileSizeFormatter.humanReadable(entry.size, locale)})")
                     }
                     if (remainingArchivedCount > 0) {
                         Text(stringResource(R.string.page_imported_archive_morefiles, remainingArchivedCount))
