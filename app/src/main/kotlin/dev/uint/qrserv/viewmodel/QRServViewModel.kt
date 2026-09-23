@@ -96,6 +96,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var rebindJob: Job? = null
 
+    private var launchCacheHandled = false
+
     private val serverController = ServerController(
         downloadStartedCallback = { ip -> postToast(R.string.server_info_download_started, ip) },
         downloadFinishedCallback = { ip ->
@@ -196,6 +198,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private var notificationsGranted = areNotificationsGranted()
 
     fun purgeStaleCacheOnLaunch() {
+        if (launchCacheHandled) return
+        launchCacheHandled = true
         viewModelScope.launch(Dispatchers.IO) {
             CacheManager.deleteCache(fileRepo.pickerDir(ignoreDam = true), directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT)
         }
@@ -268,11 +272,13 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onSharedFilesReceived(uris: List<Uri>) {
+        launchCacheHandled = true
         onFilesPicked(uris)
     }
 
     /** Handles a plain-text share (e.g. a URL) by writing it to a generated .txt file and importing that. */
     fun onSharedTextReceived(text: String) {
+        launchCacheHandled = true
         if (text.isBlank()) return
         if (rejectIfBusy()) return
         setLoading(true)
