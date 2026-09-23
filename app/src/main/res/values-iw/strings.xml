@@ -1,3 +1,7 @@
+<!-- Hebrew. Deliberately values-iw, not values-he: Android's resource lookup still uses the legacy
+     "iw" code, so strings under values-he are silently skipped and English shows instead (the
+     libraries' own Hebrew, shipped as values-iw, still worked, which masked it). locales_config.xml
+     keeps the standard "he" tag. -->
 <resources>
     <string name="app_name">QRServ</string>
 
@@ -26,7 +30,7 @@
     <string name="page_imported_port">פורט</string>
     <string name="page_imported_archive_morefiles">+%1$d נוספים</string>
     <string name="page_imported_iface_group_network">רשת</string>
-    <string name="page_imported_iface_group_hotspot">נקודה חמה</string>
+    <string name="page_imported_iface_group_tethering">שיתוף אינטרנט</string>
     <string name="page_imported_iface_group_linklocal">מקומי לקישור</string>
     <string name="page_imported_iface_group_loopback">לולאה מקומית</string>
 
@@ -44,6 +48,47 @@
     <string name="server_info_download_started">ההורדה החלה: %1$s</string>
     <string name="server_info_download_finished">ההורדה הושלמה: %1$s</string>
     <string name="server_info_gone">השרת נעלם: %1$s</string>
+
+    <string name="notification_channel_name">שיתוף</string>
+    <string name="notification_sharing_title">משתף את %1$s</string>
+    <string name="notification_preparing_title">מתכונן לשיתוף…</string>
+    <string name="notification_public_title">משתף קובץ</string>
+    <string name="notification_action_stop">עצור</string>
+    <string name="notification_starting_hotspot">מפעיל נקודה חמה פרטית…</string>
+    <string name="notification_hotspot_detail">נקודה חמה פרטית · %1$s</string>
+    <string name="hotspot_share_button">שתף דרך נקודה חמה פרטית</string>
+    <string name="hotspot_note_disconnects">ה-Wi-Fi מתנתק בזמן השיתוף</string>
+    <string name="hotspot_unavailable_android">נדרש Android 13 ומעלה</string>
+    <string name="hotspot_unavailable_nowifi">אין Wi-Fi במכשיר זה</string>
+    <string name="hotspot_unavailable_blocked">נקודות חמות חסומות במכשיר זה</string>
+    <string name="hotspot_failed_label">לא ניתן להפעיל את הנקודה החמה הפרטית</string>
+    <string name="hotspot_failed_incompatible">כבה נקודות חמות אחרות ונסה שוב</string>
+    <string name="hotspot_failed_nochannel">אין כרגע ערוץ Wi-Fi פנוי</string>
+    <string name="hotspot_failed_generic">לא ניתן להפעיל את הנקודה החמה הפרטית</string>
+    <string name="hotspot_try_again">נסה שוב</string>
+    <string name="hotspot_lost_stopped">הנקודה החמה כובתה, השיתוף הופסק</string>
+    <string name="hotspot_lost_wificontrol">השליטה ב-Wi-Fi כובתה, השיתוף הופסק</string>
+    <string name="hotspot_lost_nearby">ההרשאה \"מכשירים בקרבת מקום\" הוסרה, השיתוף הופסק</string>
+    <string name="hotspot_dialog_title">נדרשת הרשאה</string>
+    <string name="hotspot_dialog_nearby">אשר את \"מכשירים בקרבת מקום\" כדי ש-QRServ יוכל ליצור נקודה חמה פרטית.</string>
+    <string name="hotspot_dialog_wificontrol">אשר את \"שליטה ב-Wi-Fi\" כדי ש-QRServ יוכל ליצור נקודה חמה פרטית.</string>
+    <string name="hotspot_dialog_notnow">לא עכשיו</string>
+    <string name="hotspot_dialog_continue">המשך</string>
+    <string name="hotspot_dialog_settings">פתח הגדרות</string>
+    <string name="hotspot_screen_title">נקודה חמה פרטית</string>
+    <string name="hotspot_scan_hint">סרוק כדי להצטרף לרשת זו</string>
+    <string name="hotspot_forget_hint">שכח אותה בסיום</string>
+    <string name="hotspot_network">רשת</string>
+    <string name="hotspot_password">סיסמה</string>
+    <string name="hotspot_security">אבטחה</string>
+    <string name="hotspot_security_open">ללא</string>
+    <string name="hotspot_password_show">הצג סיסמה</string>
+    <string name="hotspot_password_hide">הסתר סיסמה</string>
+    <string name="hotspot_copy_network">העתק שם רשת</string>
+    <string name="hotspot_copy_password">העתק סיסמה</string>
+    <string name="hotspot_stop">עצור נקודה חמה פרטית</string>
+    <string name="hotspot_switch">עבור לנקודה חמה פרטית</string>
+    <string name="hotspot_open_details">פרטי נקודה חמה פרטית</string>
 
     <string name="about_title">אודות</string>
     <string name="about_releases_title">מהדורות</string>
