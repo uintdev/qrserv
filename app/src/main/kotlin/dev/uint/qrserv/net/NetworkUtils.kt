@@ -71,7 +71,7 @@ object NetworkUtils {
 
     /**
      * This device's own Wi-Fi hotspot / Wi-Fi Direct group-owner address (e.g. 192.168.43.1,
-     * 192.168.49.1) rather than one handed to it by another network's DHCP server.
+     * 192.168.49.1) rather than one-handed to it by another network's DHCP server.
      */
     private fun selfHosted(addr: Inet4Address): Boolean {
         val raw = addr.address
@@ -99,6 +99,8 @@ object NetworkUtils {
      */
     private fun sortKey(addr: InetAddress): String =
         addr.address.joinToString("") { "%02x".format(it.toInt() and 0xFF) }
+
+    fun urlHost(ip: String): String = if (ip.contains(':')) "[$ip]" else ip
 
     fun isVpnLockdownEnabled(context: Context): Boolean = runCatching {
         Settings.Secure.getInt(context.contentResolver, "always_on_vpn_lockdown", 0) == 1

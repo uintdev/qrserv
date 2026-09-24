@@ -1,12 +1,5 @@
 package dev.uint.qrserv.ui.screens
 
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.ClipboardManager
-import android.content.Context
-import android.os.Build
-import android.os.PersistableBundle
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.PortableWifiOff
@@ -35,7 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -61,9 +51,12 @@ import dev.uint.qrserv.net.WifiQr
 import dev.uint.qrserv.ui.components.BackNavigationIcon
 import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
 import dev.uint.qrserv.ui.components.DetailsFieldHeight
+import dev.uint.qrserv.ui.components.FieldCard
+import dev.uint.qrserv.ui.components.KeepScreenOn
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
 import dev.uint.qrserv.ui.components.QrCodeImage
 import dev.uint.qrserv.ui.components.QrDetailsLayout
+import dev.uint.qrserv.ui.components.copyToClipboard
 import dev.uint.qrserv.ui.components.isShortWindow
 import dev.uint.qrserv.ui.components.rememberIsWideScreen
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
@@ -84,11 +77,7 @@ fun HotspotScreen(
     // QRServApp closes this screen on the same change.
     val info = uiState.hotspot ?: return
 
-    val view = LocalView.current
-    DisposableEffect(view) {
-        view.keepScreenOn = true
-        onDispose { view.keepScreenOn = false }
-    }
+    KeepScreenOn()
 
     val isWideScreen = rememberIsWideScreen()
     val compact = isShortWindow()
@@ -240,11 +229,7 @@ private fun CopyableField(
     content: @Composable () -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            elevation = CardDefaults.cardElevation(2.dp),
-            modifier = Modifier.weight(1f),
-        ) {
+        FieldCard(modifier = Modifier.weight(1f)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -258,29 +243,10 @@ private fun CopyableField(
             }
         }
         Spacer(Modifier.size(12.dp))
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            elevation = CardDefaults.cardElevation(2.dp),
-            modifier = Modifier.size(DetailsFieldHeight),
-        ) {
+        FieldCard(modifier = Modifier.size(DetailsFieldHeight)) {
             IconButton(onClick = onCopy, modifier = Modifier.size(DetailsFieldHeight)) {
                 Icon(Icons.Filled.ContentCopy, contentDescription = copyDescription, modifier = Modifier.size(18.dp))
             }
         }
     }
-}
-
-private fun copyToClipboard(context: Context, text: String, sensitive: Boolean) {
-    val clip = ClipData.newPlainText(null, text)
-    if (sensitive) {
-        // Hides the password from the clipboard preview; ignored before Android 13.
-        clip.description.extras = PersistableBundle().apply {
-            putBoolean(
-                if (Build.VERSION.SDK_INT >= 33) ClipDescription.EXTRA_IS_SENSITIVE else "android.content.extra.IS_SENSITIVE",
-                true,
-            )
-        }
-    }
-    (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
-    Toast.makeText(context, context.getString(R.string.page_imported_share_clipboard), Toast.LENGTH_SHORT).show()
 }

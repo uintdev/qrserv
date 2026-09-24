@@ -200,7 +200,7 @@ fun QRServApp(
             screen = Screen.MAIN
         } catch (_: CancellationException) {
             // Gesture canceled -- springs back rather than snapping. This coroutine is itself being
-            // canceled right now, so the animation must run in a separate scope or it'd never play.
+            // canceled right now, so the animation must run in a separate scope, or it'd never play.
             // commitFadeAnim never left 0 during a cancel, so it needs no reset here.
             scope.launch {
                 backProgressAnim.animateTo(0f, spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow))
@@ -208,7 +208,7 @@ fun QRServApp(
         }
     }
     // Only the 0/nonzero threshold crossing needs to trigger recomposition -- the continuous value
-    // is read directly inside the graphicsLayer blocks instead, so a live drag (touching this dozens
+    // is read directly inside the graphicsLayer blocks instead, so a live drag (touching these dozens
     // of times a second) doesn't recompose the whole app every frame.
     val showPeek by remember { derivedStateOf { screen != Screen.MAIN && backProgressAnim.value > 0f } }
 

@@ -40,6 +40,7 @@ import dev.uint.qrserv.ui.theme.ReducedDialogScrim
 import dev.uint.qrserv.ui.theme.subtleContainerColor
 import dev.uint.qrserv.util.ManifestUtils
 import androidx.core.net.toUri
+import android.widget.Toast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,7 +112,7 @@ private fun LinkRow(icon: ImageVector, label: String, url: String) {
             .clickable {
                 runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri())) }
                     .onFailure {
-                        android.widget.Toast.makeText(context, linkOpenFailedMessage, android.widget.Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, linkOpenFailedMessage, Toast.LENGTH_SHORT).show()
                     }
             }
             .padding(horizontal = 12.dp, vertical = 8.dp),

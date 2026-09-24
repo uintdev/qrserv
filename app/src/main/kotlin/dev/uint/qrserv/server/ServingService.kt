@@ -137,23 +137,30 @@ class ServingService : Service() {
             .setPublicVersion(publicVersion)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
-        if (notice is ServingNotice.Sharing) {
-            val stop = PendingIntent.getService(
-                this,
-                1,
-                Intent(this, ServingService::class.java).setAction(ACTION_STOP),
-                PendingIntent.FLAG_IMMUTABLE,
-            )
-            builder
-                .setContentTitle(getString(R.string.notification_sharing_title, notice.fileName))
-                .setContentText(
-                    notice.hotspotSsid?.let { getString(R.string.notification_hotspot_detail, it) } ?: notice.address,
+        when (notice) {
+            is ServingNotice.Sharing -> {
+                val stop = PendingIntent.getService(
+                    this,
+                    1,
+                    Intent(this, ServingService::class.java).setAction(ACTION_STOP),
+                    PendingIntent.FLAG_IMMUTABLE,
                 )
-                .addAction(0, getString(R.string.notification_action_stop), stop)
-        } else if (notice == ServingNotice.StartingHotspot) {
-            builder.setContentTitle(getString(R.string.notification_starting_hotspot))
-        } else {
-            builder.setContentTitle(getString(R.string.notification_preparing_title))
+                builder
+                    .setContentTitle(getString(R.string.notification_sharing_title, notice.fileName))
+                    .setContentText(
+                        notice.hotspotSsid?.let { getString(R.string.notification_hotspot_detail, it) }
+                            ?: notice.address,
+                    )
+                    .addAction(0, getString(R.string.notification_action_stop), stop)
+            }
+
+            ServingNotice.StartingHotspot -> {
+                builder.setContentTitle(getString(R.string.notification_starting_hotspot))
+            }
+
+            else -> {
+                builder.setContentTitle(getString(R.string.notification_preparing_title))
+            }
         }
         return builder.build()
     }

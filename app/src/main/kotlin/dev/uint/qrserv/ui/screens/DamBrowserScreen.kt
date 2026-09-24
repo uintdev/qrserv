@@ -70,7 +70,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.widget.Toast
 import dev.uint.qrserv.R
+import dev.uint.qrserv.files.FileRepository
 import dev.uint.qrserv.ui.components.BackNavigationIcon
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
 import dev.uint.qrserv.ui.components.StatusCard
@@ -285,7 +287,7 @@ fun DamBrowserScreen(
 ) {
     val context = LocalContext.current
     val repo = viewModel.directoryLister()
-    val root = remember { repo.externalStorageRoot() }
+    val root = FileRepository.DIRECT_ACCESS_ROOT
     // rememberSaveable, not remember -- a locale change (this app isn't declared to handle it in
     // configChanges, so the system recreates the Activity to pick up the new resources) would
     // otherwise silently reset this screen back to the root folder, as if it had just been reopened.
@@ -471,7 +473,7 @@ fun DamBrowserScreen(
                                                 } else {
                                                     R.string.dam_browser_file_gone
                                                 }
-                                                android.widget.Toast.makeText(context, messageRes, android.widget.Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, messageRes, Toast.LENGTH_SHORT).show()
                                             } else if (isDirectory) {
                                                 currentPath = entry.path
                                             } else {

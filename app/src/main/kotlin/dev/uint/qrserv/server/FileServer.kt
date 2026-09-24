@@ -159,7 +159,7 @@ private fun openWithLength(file: File): Pair<FileInputStream, Long> {
 }
 
 private const val Rfc5987AttrChars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#\$&+-.^_`|~"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$&+-.^_`|~"
 
 private fun rfc5987Encode(name: String): String =
     name.toByteArray(Charsets.UTF_8).joinToString("") { byte ->

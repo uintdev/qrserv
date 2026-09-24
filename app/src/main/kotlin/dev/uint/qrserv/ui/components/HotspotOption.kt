@@ -1,6 +1,5 @@
 package dev.uint.qrserv.ui.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -31,7 +30,7 @@ fun hotspotNote(availability: HotspotAvailability): String? = when (availability
 }
 
 @Composable
-fun ColumnScope.HotspotOption(availability: HotspotAvailability, starting: Boolean, onClick: () -> Unit) {
+fun HotspotOption(availability: HotspotAvailability, starting: Boolean, onClick: () -> Unit) {
     HotspotButton(
         icon = Icons.Filled.WifiLock,
         text = stringResource(R.string.hotspot_share_button),

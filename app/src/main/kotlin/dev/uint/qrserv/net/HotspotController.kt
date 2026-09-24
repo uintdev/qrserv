@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.milliseconds
 
 data class HotspotInfo(
     val ssid: String,
@@ -88,8 +89,7 @@ class HotspotController(
 
         val before = withContext(Dispatchers.IO) { ipv4Candidates() }.mapTo(HashSet()) { it.address }
 
-        val started = requestReservation()
-        val newReservation = when (started) {
+        val newReservation = when (val started = requestReservation()) {
             is Requested.Started -> started.reservation
             is Requested.Failed -> return HotspotStartResult.Failed(started.reason)
         }
@@ -142,7 +142,7 @@ class HotspotController(
                 if (continuation.isActive) {
                     continuation.resume(Requested.Started(reservation))
                 } else {
-                    // The caller was cancelled -- nothing else would close it.
+                    // The caller was canceled -- nothing else would close it.
                     reservation.close()
                 }
             }
@@ -179,7 +179,7 @@ class HotspotController(
     private suspend fun awaitAddress(before: Set<String>): String? = withContext(Dispatchers.IO) {
         repeat(ADDRESS_POLL_ATTEMPTS) {
             chooseHotspotAddress(before, ipv4Candidates())?.let { return@withContext it }
-            delay(ADDRESS_POLL_INTERVAL_MS)
+            delay(ADDRESS_POLL_INTERVAL_MS.milliseconds)
         }
         null
     }

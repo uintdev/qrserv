@@ -2,9 +2,11 @@ package dev.uint.qrserv.ui.components
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
@@ -48,3 +50,12 @@ fun rememberIsWideScreen(): Boolean {
 
 @Composable
 fun isShortWindow(): Boolean = LocalWindowInfo.current.containerDpSize.height < 480.dp
+
+@Composable
+fun KeepScreenOn() {
+    val view = LocalView.current
+    DisposableEffect(view) {
+        view.keepScreenOn = true
+        onDispose { view.keepScreenOn = false }
+    }
+}

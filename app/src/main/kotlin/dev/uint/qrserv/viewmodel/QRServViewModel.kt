@@ -1,5 +1,6 @@
 package dev.uint.qrserv.viewmodel
 
+import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -22,8 +23,8 @@ import dev.uint.qrserv.data.AddressGroup
 import dev.uint.qrserv.data.AppUiState
 import dev.uint.qrserv.data.FileInfo
 import dev.uint.qrserv.data.HotspotDialog
-import dev.uint.qrserv.data.InterfaceAddress
 import dev.uint.qrserv.data.ImportProgress
+import dev.uint.qrserv.data.InterfaceAddress
 import dev.uint.qrserv.data.PageType
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
@@ -51,13 +52,13 @@ import dev.uint.qrserv.util.ManifestUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -204,8 +205,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         state.hotspotStarting -> ServingNotice.StartingHotspot
         state.actionButtonLoading -> ServingNotice.Preparing
         state.serverRunning && !state.serverPoweringDown -> {
-            val host = if (state.selectedIp.contains(':')) "[${state.selectedIp}]" else state.selectedIp
-            ServingNotice.Sharing(state.fileInfo.name, "$host:${state.port}", state.hotspot?.ssid)
+            ServingNotice.Sharing(state.fileInfo.name, "${NetworkUtils.urlHost(state.selectedIp)}:${state.port}", state.hotspot?.ssid)
         }
         state.hotspot != null -> ServingNotice.StartingHotspot
         else -> null
@@ -215,11 +215,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private fun maybeRequestNotificationPermission() {
         if (Build.VERSION.SDK_INT < 33) return
         if (Preferences.readBool(Preferences.PREF_NOTIFICATIONS_ASKED)) return
-        val granted = ContextCompat.checkSelfPermission(
-            getApplication(),
-            android.Manifest.permission.POST_NOTIFICATIONS,
-        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-        if (!granted) {
+        if (!isGranted(Manifest.permission.POST_NOTIFICATIONS)) {
             notificationPromptOpen = true
             _uiState.update { it.copy(notificationPermissionPending = true) }
         }
@@ -240,18 +236,18 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun areNotificationsGranted(): Boolean = Build.VERSION.SDK_INT < 33 ||
-        ContextCompat.checkSelfPermission(getApplication(), android.Manifest.permission.POST_NOTIFICATIONS) ==
-        android.content.pm.PackageManager.PERMISSION_GRANTED
+    private fun areNotificationsGranted(): Boolean =
+        Build.VERSION.SDK_INT < 33 || isGranted(Manifest.permission.POST_NOTIFICATIONS)
+
+    private fun isGranted(permission: String): Boolean =
+        ContextCompat.checkSelfPermission(getApplication(), permission) == PackageManager.PERMISSION_GRANTED
 
     private var notificationsGranted = areNotificationsGranted()
 
     fun purgeStaleCacheOnLaunch() {
         if (launchCacheHandled) return
         launchCacheHandled = true
-        viewModelScope.launch(Dispatchers.IO) {
-            CacheManager.deleteCache(fileRepo.pickerDir(ignoreDam = true), directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT)
-        }
+        viewModelScope.launch(Dispatchers.IO) { deletePickerCache() }
     }
 
     fun onImportClicked() {
@@ -378,7 +374,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val interfaces = if (hotspot != null) {
             listOf(InterfaceAddress(hotspot.address, AddressGroup.HOSTED))
         } else {
-            val listed = withContext(Dispatchers.IO) { NetworkUtils.listInterfaces() }.getOrElse {
+            val listed = NetworkUtils.listInterfaces().getOrElse {
                 _uiState.update { it.copy(pageType = PageType.INTERFACE_LOOKUP_ERROR, interfaces = emptyList()) }
                 stopServing()
                 return
@@ -459,10 +455,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 applyManualPick(ip)
             } catch (_: Exception) {
                 postToast(R.string.page_imported_iface_switch_failed)
-                if (runCatching { startServer(bound, port) }.isFailure) {
-                    stopServing()
-                    _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
-                }
+                if (runCatching { startServer(bound, port) }.isFailure) showPortInUse()
             }
         }
     }
@@ -488,8 +481,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     startServer(best.bindHost, port)
                 } catch (_: Exception) {
                     postToast(R.string.info_exception_portinuse)
-                    stopServing()
-                    _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
+                    showPortInUse()
                     return@launch
                 }
             }
@@ -538,12 +530,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         stopHotspotSession()
         clearSessionMarker()
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                CacheManager.deleteCache(
-                    fileRepo.pickerDir(ignoreDam = true),
-                    directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT,
-                )
-            }
+            withContext(Dispatchers.IO) { deletePickerCache() }
             _uiState.update {
                 it.copy(
                     serverRunning = false,
@@ -552,6 +539,15 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 )
             }
         }
+    }
+
+    private suspend fun deletePickerCache() {
+        CacheManager.deleteCache(fileRepo.pickerDir(ignoreDam = true), directAccessRoot = FileRepository.DIRECT_ACCESS_ROOT)
+    }
+
+    private suspend fun showPortInUse() {
+        stopServing()
+        _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
     }
 
     private suspend fun stopServing() {
@@ -639,9 +635,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         return HotspotAvailability(unavailable, disconnectsWifi)
     }
 
-    private fun isNearbyGranted(): Boolean = Build.VERSION.SDK_INT >= 33 &&
-        ContextCompat.checkSelfPermission(getApplication(), android.Manifest.permission.NEARBY_WIFI_DEVICES) ==
-        PackageManager.PERMISSION_GRANTED
+    private fun isNearbyGranted(): Boolean =
+        Build.VERSION.SDK_INT >= 33 && isGranted(Manifest.permission.NEARBY_WIFI_DEVICES)
 
     fun onAppResumed() {
         addressCheckRequests.tryEmit(Unit)
@@ -778,8 +773,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             if (runCatching { startServer(bindAddress = previousBind) }.isSuccess) {
                 _uiState.update { it.copy(port = serverController.port) }
             } else {
-                stopServing()
-                _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
+                showPortInUse()
             }
             setLoading(false)
             return
@@ -919,16 +913,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun isDamEligible(): Boolean = hasDirectAccessPermission() || Build.VERSION.SDK_INT <= 29
 
-    fun hasDirectAccessPermission(): Boolean {
-        val context = getApplication<Application>()
-        return if (Build.VERSION.SDK_INT >= 30) {
-            Environment.isExternalStorageManager()
-        } else {
-            ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-        }
+    fun hasDirectAccessPermission(): Boolean = if (Build.VERSION.SDK_INT >= 30) {
+        Environment.isExternalStorageManager()
+    } else {
+        isGranted(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     fun directoryLister(): FileRepository = fileRepo

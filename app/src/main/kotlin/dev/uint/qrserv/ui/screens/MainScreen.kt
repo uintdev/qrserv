@@ -1,9 +1,7 @@
 package dev.uint.qrserv.ui.screens
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -11,6 +9,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -80,7 +80,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ripple
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -100,7 +99,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.res.pluralStringResource
@@ -122,6 +120,11 @@ import dev.uint.qrserv.data.PageType
 import dev.uint.qrserv.net.HotspotFailure
 import dev.uint.qrserv.ui.components.HotspotButton
 import dev.uint.qrserv.ui.components.HotspotOption
+import dev.uint.qrserv.ui.components.FieldCard
+import dev.uint.qrserv.ui.components.KeepScreenOn
+import dev.uint.qrserv.ui.components.copyToClipboard
+import dev.uint.qrserv.ui.components.shareText
+import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
 import dev.uint.qrserv.ui.components.DetailsFieldHeight
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
@@ -144,8 +147,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.indication
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -232,7 +233,7 @@ fun MainScreen(
                     if (BuildConfig.DEBUG) {
                         FilledIconButton(
                             onClick = {
-                                android.widget.Toast.makeText(context, debugBuildToastMessage, android.widget.Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, debugBuildToastMessage, Toast.LENGTH_LONG).show()
                             },
                             colors = IconButtonDefaults.filledIconButtonColors(containerColor = subtleContainerColor()),
                         ) {
@@ -353,7 +354,11 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         icon = icon,
         label = stringResource(labelRes),
         message = stringResource(msgRes),
-        footer = { HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked) },
+        footer = { HotspotOption(
+            uiState.hotspotAvailability,
+            uiState.hotspotStarting,
+            onClick = viewModel::onHotspotClicked
+        ) },
     )
 }
 
@@ -402,7 +407,11 @@ private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewMode
                     ) {
                         UnhandledErrorHeader()
                         Spacer(Modifier.size(16.dp))
-                        HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked)
+                        HotspotOption(
+                            uiState.hotspotAvailability,
+                            uiState.hotspotStarting,
+                            onClick = viewModel::onHotspotClicked
+                        )
                     }
                     Spacer(Modifier.width(24.dp))
                     Column(modifier = Modifier.weight(1.2f)) {
@@ -435,7 +444,11 @@ private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewMode
                     Spacer(Modifier.size(8.dp))
                     UnhandledErrorHint()
                     Spacer(Modifier.size(16.dp))
-                    HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked)
+                    HotspotOption(
+                        uiState.hotspotAvailability,
+                        uiState.hotspotStarting,
+                        onClick = viewModel::onHotspotClicked
+                    )
                 }
             }
         }
@@ -470,13 +483,7 @@ private fun UnhandledErrorDetail(detail: String, modifier: Modifier) {
             .background(MaterialTheme.colorScheme.background)
             .combinedClickable(
                 onClick = {},
-                onLongClick = {
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, detail)
-                    }
-                    context.startActivity(Intent.createChooser(shareIntent, null))
-                },
+                onLongClick = { shareText(context, detail) },
             )
             .padding(12.dp)
             .verticalScroll(rememberScrollState()),
@@ -518,27 +525,18 @@ private fun ImportedContent(
     onOpenHotspot: () -> Unit,
 ) {
     val context = LocalContext.current
-    val view = LocalView.current
-    DisposableEffect(view) {
-        view.keepScreenOn = true
-        onDispose { view.keepScreenOn = false }
-    }
-    val hostFormatted = remember(uiState.selectedIp) {
-        if (uiState.selectedIp.contains(':')) "[${uiState.selectedIp}]" else uiState.selectedIp
-    }
-    val url = remember(hostFormatted, uiState.port, uiState.fiuEnabled, uiState.fileInfo) {
+    KeepScreenOn()
+    val url = remember(uiState.selectedIp, uiState.port, uiState.fiuEnabled, uiState.fileInfo) {
         val filePathSegment = if (uiState.fiuEnabled) {
             java.net.URLEncoder.encode(uiState.fileInfo.name, "UTF-8").replace("+", "%20")
         } else {
             ""
         }
-        "http://$hostFormatted:${uiState.port}/$filePathSegment"
+        "http://${NetworkUtils.urlHost(uiState.selectedIp)}:${uiState.port}/$filePathSegment"
     }
     val locale = LocalConfiguration.current.locales[0]
     val sizeHuman = remember(uiState.fileInfo, locale) { FileSizeFormatter.humanReadable(uiState.fileInfo.length, locale) }
 
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clipboardToastMessage = stringResource(R.string.page_imported_share_clipboard)
     val scope = rememberCoroutineScope()
     val urlTooltipState = rememberTooltipState(isPersistent = true)
 
@@ -551,7 +549,7 @@ private fun ImportedContent(
         wideSideClearance = WideFabClearance,
         bottomClearance = FabClearance,
         gap = 36.dp,
-        qr = { QrCodeCard(url, context, clipboard, clipboardToastMessage, scope, urlTooltipState) },
+        qr = { QrCodeCard(url, context, scope, urlTooltipState) },
         details = {
             ImportInfoCard(
                 uiState,
@@ -570,8 +568,6 @@ private fun ImportedContent(
 private fun QrCodeCard(
     url: String,
     context: Context,
-    clipboard: ClipboardManager,
-    clipboardToastMessage: String,
     scope: CoroutineScope,
     urlTooltipState: TooltipState,
 ) {
@@ -596,10 +592,7 @@ private fun QrCodeCard(
                     .clip(MaterialTheme.shapes.extraLarge)
                     .combinedClickable(
                         onClick = { scope.launch { urlTooltipState.show() } },
-                        onLongClick = {
-                            clipboard.setPrimaryClip(ClipData.newPlainText("URL", url))
-                            android.widget.Toast.makeText(context, clipboardToastMessage, android.widget.Toast.LENGTH_SHORT).show()
-                        },
+                        onLongClick = { copyToClipboard(context, url, label = "URL") },
                     ),
             ) {
                 QrCodeImage(data = url, size = 176.dp)
@@ -636,19 +629,9 @@ private fun ImportInfoCard(
                     InterfaceDropdown(uiState, viewModel, modifier = Modifier.weight(1f))
                 }
                 Spacer(Modifier.size(12.dp))
-                Card(
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(2.dp),
-                    modifier = Modifier.size(DetailsFieldHeight),
-                ) {
+                FieldCard(modifier = Modifier.size(DetailsFieldHeight)) {
                     IconButton(
-                        onClick = {
-                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                type = "text/plain"
-                                putExtra(Intent.EXTRA_TEXT, url)
-                            }
-                            context.startActivity(Intent.createChooser(shareIntent, null))
-                        },
+                        onClick = { shareText(context, url) },
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         Icon(
@@ -715,7 +698,7 @@ private fun FileNameRow(uiState: AppUiState) {
         },
         state = rememberTooltipState(isPersistent = true),
     ) {
-        Card(shape = RoundedCornerShape(10.dp), elevation = CardDefaults.cardElevation(2.dp), modifier = Modifier.fillMaxWidth()) {
+        FieldCard(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.heightIn(min = DetailsFieldHeight).padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -796,11 +779,7 @@ private fun AddressSuggestion(ip: String, onClick: () -> Unit) {
 @Composable
 private fun HotspotNetworkButton(ssid: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val description = stringResource(R.string.hotspot_open_details)
-    Card(
-        shape = RoundedCornerShape(10.dp),
-        elevation = CardDefaults.cardElevation(2.dp),
-        modifier = modifier,
-    ) {
+    FieldCard(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -853,9 +832,7 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
         onExpandedChange = { expanded = it },
         modifier = modifier.onGloballyPositioned { anchorBounds = it.boundsInWindow() },
     ) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            elevation = CardDefaults.cardElevation(2.dp),
+        FieldCard(
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                 .fillMaxWidth(),
@@ -881,10 +858,10 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
                 val space = maxOf(bounds.top - barsTopPx, windowHeightPx - barsBottomPx - bounds.bottom)
                 with(density) { (space - switchEntryHeightPx).toDp() } - DropdownMenuChrome
             }
-            val pinSwitchEntry = listMaxHeight != null && listMaxHeight >= PinnedListMinHeight
+            val pinnedListHeight = listMaxHeight?.takeIf { it >= PinnedListMinHeight }
             Column(
-                modifier = if (pinSwitchEntry && listMaxHeight != null) {
-                    Modifier.heightIn(max = listMaxHeight).verticalScroll(rememberScrollState())
+                modifier = if (pinnedListHeight != null) {
+                    Modifier.heightIn(max = pinnedListHeight).verticalScroll(rememberScrollState())
                 } else {
                     Modifier
                 },

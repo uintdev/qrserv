@@ -3,7 +3,9 @@ package dev.uint.qrserv.files
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.os.storage.StorageManager
 import android.provider.OpenableColumns
 import dev.uint.qrserv.data.ArchivedEntry
 import dev.uint.qrserv.data.FileInfo
@@ -16,6 +18,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.ZipEntry
@@ -32,9 +35,6 @@ sealed class ImportResult {
      * for any reason other than [FileGone] (e.g. deleted between selection and confirmation). */
     data class SelectionFailed(val message: String) : ImportResult()
 }
-
-/** One picked item before it's copied/zipped. */
-data class PickedFile(val name: String, val directPath: String? = null)
 
 private fun importFailureResult(error: Throwable): ImportResult = when {
     // Ahead of the FileNotFoundException check: opening the destination on a full disk fails with
@@ -61,7 +61,7 @@ private fun isOutOfSpace(error: Throwable): Boolean {
 /**
  * Reduces a provider-supplied name to a bare filename. DISPLAY_NAME is whatever the providing app
  * chose to return -- and a share intent can arrive from any installed app -- so it may carry path
- * separators, or be "." / ".." outright. File(dir, name) joins without normalising and leaves the
+ * separators, or be "." / ".." outright. File(dir, name) joins without normalizing and leaves the
  * OS to resolve the result at open time, which would put the write outside the cache directory
  * entirely. Backslashes go the same way: not separators on Android, but this name also becomes a
  * ZIP entry, read back by extractors on platforms where they are.
@@ -76,7 +76,7 @@ private fun sanitizePickedName(rawName: String): String {
     return if (base.isEmpty() || base == "." || base == "..") "file" else base
 }
 
-/** Last line of defence behind [sanitizePickedName]: the write really does land inside [dir]. */
+/** Last line of defense behind [sanitizePickedName]: the write really does land inside [dir]. */
 private fun isContainedIn(file: File, dir: File): Boolean =
     runCatching { file.canonicalPath.startsWith(dir.canonicalPath + File.separator) }.getOrDefault(false)
 
@@ -105,7 +105,7 @@ class FileRepository(private val context: Context) {
 
     /**
      * Resolves a content:// URI's display name and size via the ContentResolver. The name is
-     * sanitised here rather than at each use site, so nothing downstream -- a cache path, a ZIP
+     * sanitized here rather than at each use site, so nothing downstream -- a cache path, a ZIP
      * entry, a Content-Disposition header -- ever sees the provider's raw string.
      */
     private fun resolveUriMeta(resolver: ContentResolver, uri: Uri): Pair<String, Long> {
@@ -120,6 +120,19 @@ class FileRepository(private val context: Context) {
             }
         }
         return sanitizePickedName(name) to size
+    }
+
+    private fun makeRoomFor(dir: File, bytes: Long): Boolean {
+        if (Build.VERSION.SDK_INT < 26) return dir.usableSpace >= bytes
+        val storage = context.getSystemService(StorageManager::class.java)
+        return try {
+            val volume = storage.getUuidForPath(dir)
+            if (storage.getAllocatableBytes(volume) < bytes) return false
+            storage.allocateBytes(volume, bytes)
+            true
+        } catch (_: IOException) {
+            dir.usableSpace >= bytes
+        }
     }
 
     /**
@@ -158,8 +171,6 @@ class FileRepository(private val context: Context) {
         if (uris.isEmpty()) return@withContext ImportResult.EmptySelection
 
         val dir = File(pickerDir(ignoreDam = true))
-        if (!dir.exists()) dir.mkdirs()
-
         val resolver = context.contentResolver
 
         if (uris.size == 1) {
@@ -170,8 +181,8 @@ class FileRepository(private val context: Context) {
                 return@withContext ImportResult.SelectionFailed("Rejected file name: $rawName")
             }
             // A byte-for-byte copy, so a reported size is exactly what it will occupy -- worth
-            // failing on now rather than after spending minutes filling the last of the disk.
-            if (size > 0 && dir.usableSpace < size) return@withContext ImportResult.InsufficientStorage
+            // failing on now rather than after spending minutes filling the last with the disk.
+            if (size > 0 && !makeRoomFor(dir, size)) return@withContext ImportResult.InsufficientStorage
             val totalBytes = size.coerceAtLeast(1L)
             var finalBytes = 0L
             val copyResult = runCatching {
@@ -190,9 +201,8 @@ class FileRepository(private val context: Context) {
                 return@withContext importFailureResult(error)
             }
             if (size > 0) onProgress(1, 1, finalBytes.coerceAtLeast(totalBytes), totalBytes)
-            val picked = listOf(PickedFile(rawName, directPath = destFile.path))
-            pruneCacheKeeping(dir.path, picked.mapNotNull { it.directPath })
-            return@withContext finalizeSelection(picked, dir.path)
+            pruneCacheKeeping(dir.path, listOf(destFile.path))
+            return@withContext finalizeSelection(rawName, destFile.path, dir.path)
         }
 
         // Multiple files: streams each URI's content straight into the archive rather than
@@ -260,15 +270,12 @@ class FileRepository(private val context: Context) {
         val file = File(path)
         if (!file.exists()) return@withContext ImportResult.DirectAccessPathMissing
 
-        val picked = listOf(PickedFile(file.name, directPath = file.path))
-        finalizeSelection(picked, File(path).parent ?: DIRECT_ACCESS_ROOT)
+        finalizeSelection(file.name, file.path, file.parent ?: DIRECT_ACCESS_ROOT)
     }
 
     /** Writes shared plain text (e.g. a URL shared from another app) to a generated .txt file and imports it. */
     suspend fun importSharedText(text: String): ImportResult = withContext(Dispatchers.IO) {
         val dir = File(pickerDir(ignoreDam = true))
-        if (!dir.exists()) dir.mkdirs()
-
         val fileName = TokenGenerator.generate("1234567890ABCDEF", 8) + ".txt"
         val destFile = File(dir, fileName)
 
@@ -278,9 +285,8 @@ class FileRepository(private val context: Context) {
             return@withContext importFailureResult(e)
         }
 
-        val picked = listOf(PickedFile(fileName, directPath = destFile.path))
-        pruneCacheKeeping(dir.path, picked.mapNotNull { it.directPath })
-        finalizeSelection(picked, dir.path)
+        pruneCacheKeeping(dir.path, listOf(destFile.path))
+        finalizeSelection(fileName, destFile.path, dir.path)
     }
 
     /** Deletes everything in [dirPath] except [keep] and the file currently being served, if any. */
@@ -293,18 +299,13 @@ class FileRepository(private val context: Context) {
     }
 
     /** Finalizes a single-file selection (multi-file selections are archived directly in [importUris]). */
-    private suspend fun finalizeSelection(
-        picked: List<PickedFile>,
-        pickerDirPath: String,
-    ): ImportResult = withContext(Dispatchers.IO) {
-        val single = picked.firstOrNull() ?: return@withContext ImportResult.EmptySelection
+    private fun finalizeSelection(name: String, path: String, pickerDirPath: String): ImportResult {
         archivedLast = ""
-        val path = single.directPath ?: return@withContext ImportResult.EmptySelection
         val f = File(path)
-        if (!f.exists()) return@withContext ImportResult.FileGone
-        ImportResult.Success(
+        if (!f.exists()) return ImportResult.FileGone
+        return ImportResult.Success(
             FileInfo(
-                name = single.name,
+                name = name,
                 path = path,
                 pathPart = f.parent ?: pickerDirPath,
                 length = f.length(),
@@ -313,14 +314,10 @@ class FileRepository(private val context: Context) {
         )
     }
 
-    /** Simple listing helper for the Direct Access Mode file browser UI. */
+    /** Unsorted listing for the Direct Access Mode file browser UI, which applies its own order. */
     fun listDirectory(path: String): List<File> {
         val dir = File(path)
         if (!dir.exists() || !dir.isDirectory) return emptyList()
-        return (dir.listFiles()?.toList() ?: emptyList())
-            .sortedWith(compareBy({ !it.isDirectory }, { it.name.lowercase() }))
+        return dir.listFiles()?.toList() ?: emptyList()
     }
-
-    fun externalStorageRoot(): String =
-        Environment.getExternalStorageDirectory()?.path ?: DIRECT_ACCESS_ROOT
 }
