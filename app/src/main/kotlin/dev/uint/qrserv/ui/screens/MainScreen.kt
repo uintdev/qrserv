@@ -77,6 +77,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.ripple
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -141,6 +143,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.indication
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -654,12 +658,13 @@ private fun ImportInfoCard(
                     }
                 }
             }
-            val suggestedIp = uiState.suggestedIp
-            if (suggestedIp != null && uiState.hotspot == null) {
-                Spacer(Modifier.size(12.dp))
+            val suggestedIp = uiState.suggestedIp?.takeIf { uiState.hotspot == null }
+            if (suggestedIp != null) {
+                Spacer(Modifier.size(12.dp - SuggestionTouchSlack))
                 AddressSuggestion(suggestedIp, onClick = { viewModel.onIpSelected(suggestedIp) })
             }
-            Spacer(Modifier.size(if (compact) 8.dp else 16.dp))
+            val suggestionSlack = if (suggestedIp != null) SuggestionTouchSlack else 0.dp
+            Spacer(Modifier.size((if (compact) 8.dp else 16.dp) - suggestionSlack))
             InfoRow(stringResource(R.string.page_imported_size), sizeHuman)
             Spacer(Modifier.size(4.dp))
             InfoRow(stringResource(R.string.page_imported_port), uiState.port.toString())
@@ -724,51 +729,64 @@ private fun FileNameRow(uiState: AppUiState) {
 
 private const val IP_PLACEHOLDER = "\u0000"
 
+private val SuggestionHeight = 36.dp
+
+private val SuggestionTouchSlack = (48.dp - SuggestionHeight) / 2
+
 @Composable
 private fun AddressSuggestion(ip: String, onClick: () -> Unit) {
-    Card(
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        ),
-        modifier = Modifier.fillMaxWidth(),
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(interactionSource = interactionSource, indication = null, role = Role.Button, onClick = onClick)
+            .minimumInteractiveComponentSize(),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(36.dp)
-                .clickable(role = Role.Button, onClick = onClick)
-                .padding(horizontal = 14.dp),
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            ),
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Icon(Icons.Filled.SwapHoriz, contentDescription = null, modifier = Modifier.size(16.dp))
-            Spacer(Modifier.size(10.dp))
-            BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                val template = stringResource(R.string.page_imported_iface_suggestion, IP_PLACEHOLDER)
-                val textMeasurer = rememberTextMeasurer()
-                val style = LocalTextStyle.current.copy(fontSize = 13.sp)
-                val budget = constraints.maxWidth - with(LocalDensity.current) { 2.dp.roundToPx() }
-                val label = remember(template, ip, budget, style) {
-                    val fitted = middleEllipsis(ip, budget) { candidate ->
-                        textMeasurer.measure(
-                            template.replace(IP_PLACEHOLDER, candidate),
-                            style = style,
-                            maxLines = 1,
-                            softWrap = false,
-                        ).size.width
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SuggestionHeight)
+                    .indication(interactionSource, ripple())
+                    .padding(horizontal = 14.dp),
+            ) {
+                Icon(Icons.Filled.SwapHoriz, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(Modifier.size(10.dp))
+                BoxWithConstraints(modifier = Modifier.weight(1f)) {
+                    val template = stringResource(R.string.page_imported_iface_suggestion, IP_PLACEHOLDER)
+                    val textMeasurer = rememberTextMeasurer()
+                    val style = LocalTextStyle.current.copy(fontSize = 13.sp)
+                    val budget = constraints.maxWidth - with(LocalDensity.current) { 2.dp.roundToPx() }
+                    val label = remember(template, ip, budget, style) {
+                        val fitted = middleEllipsis(ip, budget) { candidate ->
+                            textMeasurer.measure(
+                                template.replace(IP_PLACEHOLDER, candidate),
+                                style = style,
+                                maxLines = 1,
+                                softWrap = false,
+                            ).size.width
+                        }
+                        template.replace(IP_PLACEHOLDER, fitted)
                     }
-                    template.replace(IP_PLACEHOLDER, fitted)
+                    Text(
+                        label,
+                        style = style,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Clip,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
-                Text(
-                    label,
-                    style = style,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Clip,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                )
             }
         }
     }
