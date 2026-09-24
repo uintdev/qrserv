@@ -48,7 +48,7 @@
 
     <string name="server_info_download_started">İndirme başladı: %1$s</string>
     <string name="server_info_download_finished">İndirme bitmiş: %1$s</string>
-    <string name="server_info_gone">Sunucu yok</string>
+    <string name="server_info_gone">Sunucu kayboldu</string>
 
     <string name="notification_channel_name">Paylaşım</string>
     <string name="notification_sharing_title">%1$s paylaşılıyor</string>

@@ -29,7 +29,7 @@
     <string name="page_imported_iface_group_tethering">اشتراک‌گذاری اینترنت</string>
     <string name="page_imported_iface_group_linklocal">پیوند محلی</string>
     <string name="page_imported_iface_group_loopback">حلقه بازگشتی</string>
-    <string name="page_imported_iface_switch_downloading">هنگام دانلود نمی‌توان نشانی IP را تغییر داد</string>
+    <string name="page_imported_iface_switch_downloading">هنگام دریافت نمی‌توان نشانی IP را تغییر داد</string>
     <string name="page_imported_iface_switch_failed">تغییر به این نشانی IP ممکن نشد</string>
     <string name="page_imported_iface_address_changed">نشانی IP تغییر کرد، بنابراین کد QR به‌روز شد</string>
     <string name="page_imported_iface_suggestion">تغییر به %1$s</string>

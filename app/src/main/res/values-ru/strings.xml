@@ -33,7 +33,7 @@
     <string name="page_imported_iface_switch_failed">Не удалось переключиться на этот IP-адрес</string>
     <string name="page_imported_iface_address_changed">IP-адрес изменился, поэтому QR-код обновлён</string>
     <string name="page_imported_iface_suggestion">Переключиться на %1$s</string>
-    <string name="page_imported_vpn_lockdown">«Блокировать соединения без VPN» включено и может блокировать другие устройства</string>
+    <string name="page_imported_vpn_lockdown">«Блокировать соединения без VPN» может мешать другим устройствам</string>
 
     <string name="fab_shutdownserver_label">Выключить сервер</string>
     <string name="fab_selectfile_label">Выберите файл(ы)</string>
@@ -124,7 +124,7 @@
     <string name="settings_server_port_dialog_submit">Задать порт</string>
     <string name="settings_server_port_dialog_portinuse">Порт уже используется</string>
     <string name="settings_server_port_dialog_saved">Изменения сохранены</string>
-    <string name="settings_server_allinterfaces_list_title">Слушать на всех интерфейсах</string>
+    <string name="settings_server_allinterfaces_list_title">Прослушивать все интерфейсы</string>
     <string name="settings_server_allinterfaces_list_subtitle">Принимать подключения на любом IP-адресе, а не только на выбранном</string>
     <string name="settings_subheading_client">Клиент</string>
     <string name="settings_client_dam_list_title">Режим прямого доступа</string>

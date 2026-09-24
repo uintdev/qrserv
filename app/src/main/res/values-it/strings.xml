@@ -40,7 +40,7 @@
 
     <string name="debug_build_toast">Build di debug: prestazioni/comportamento possono differire.</string>
 
-    <string name="info_exception_portinuse">Errore nel binding delle porte</string>
+    <string name="info_exception_portinuse">Errore nel binding della porta</string>
     <string name="info_exception_linkopenfailed">Nessuna app disponibile per aprire link HTTPS</string>
     <string name="info_pending_fileprocessing">Selezione dei file attualmente in elaborazione...</string>
     <string name="info_pending_fileprocessing_shutdown">Impossibile fermare il server durante l\'elaborazione dei file.</string>
