@@ -68,11 +68,11 @@
     <string name="hotspot_failed_generic">Impossibile avviare l\'hotspot privato</string>
     <string name="hotspot_try_again">Riprova</string>
     <string name="hotspot_lost_stopped">L\'hotspot è stato disattivato, condivisione interrotta</string>
-    <string name="hotspot_lost_wificontrol">Il controllo Wi-Fi è stato disattivato, condivisione interrotta</string>
+    <string name="hotspot_lost_wificontrol">Il controllo del Wi-Fi è stato disattivato, condivisione interrotta</string>
     <string name="hotspot_lost_nearby">Permesso Dispositivi nelle vicinanze rimosso, condivisione interrotta</string>
     <string name="hotspot_dialog_title">Autorizzazione necessaria</string>
     <string name="hotspot_dialog_nearby">Consenti “Dispositivi nelle vicinanze” affinché QRServ possa creare un hotspot privato.</string>
-    <string name="hotspot_dialog_wificontrol">Consenti “Controllo Wi-Fi” affinché QRServ possa creare un hotspot privato.</string>
+    <string name="hotspot_dialog_wificontrol">Consenti “Controllo del Wi-Fi” affinché QRServ possa creare un hotspot privato.</string>
     <string name="hotspot_dialog_notnow">Non ora</string>
     <string name="hotspot_dialog_continue">Continua</string>
     <string name="hotspot_dialog_settings">Apri impostazioni</string>

@@ -33,7 +33,7 @@
     <string name="page_imported_iface_switch_failed">Bu IP adresine geçilemedi</string>
     <string name="page_imported_iface_address_changed">IP adresi değişti, bu yüzden QR kodu güncellendi</string>
     <string name="page_imported_iface_suggestion">%1$s adresine geç</string>
-    <string name="page_imported_vpn_lockdown">“VPN\'siz bağlantıları engelle” açık ve diğer cihazları engelleyebilir</string>
+    <string name="page_imported_vpn_lockdown">“VPN\'si olmayan bağlantıları engelle” açık ve diğer cihazları engelleyebilir</string>
 
     <string name="fab_shutdownserver_label">Sunucuyu kapat</string>
     <string name="fab_selectfile_label">Dosya seçin</string>
@@ -68,11 +68,11 @@
     <string name="hotspot_failed_generic">Özel erişim noktası başlatılamadı</string>
     <string name="hotspot_try_again">Tekrar dene</string>
     <string name="hotspot_lost_stopped">Erişim noktası kapatıldı, paylaşım durdu</string>
-    <string name="hotspot_lost_wificontrol">Wi-Fi kontrolü kapatıldı, paylaşım durdu</string>
+    <string name="hotspot_lost_wificontrol">Kablosuz bağlantı denetimi kapatıldı, paylaşım durdu</string>
     <string name="hotspot_lost_nearby">Yakındaki cihazlar izni kaldırıldı, paylaşım durdu</string>
     <string name="hotspot_dialog_title">İzin gerekli</string>
     <string name="hotspot_dialog_nearby">QRServ\'in özel erişim noktası oluşturabilmesi için “Yakındaki cihazlar” iznini verin.</string>
-    <string name="hotspot_dialog_wificontrol">QRServ\'in özel erişim noktası oluşturabilmesi için “Wi-Fi kontrolü” iznini verin.</string>
+    <string name="hotspot_dialog_wificontrol">QRServ\'in özel erişim noktası oluşturabilmesi için “Kablosuz bağlantı denetimi” iznini verin.</string>
     <string name="hotspot_dialog_notnow">Şimdi değil</string>
     <string name="hotspot_dialog_continue">Devam</string>
     <string name="hotspot_dialog_settings">Ayarları aç</string>

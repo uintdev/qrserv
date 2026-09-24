@@ -33,7 +33,7 @@
     <string name="page_imported_iface_switch_failed">Nem sikerült átváltani erre az IP-címre</string>
     <string name="page_imported_iface_address_changed">Az IP-cím megváltozott, ezért a QR-kód frissült</string>
     <string name="page_imported_iface_suggestion">Váltás erre: %1$s</string>
-    <string name="page_imported_vpn_lockdown">„Kapcsolatok letiltása VPN nélkül” be van kapcsolva, ami más eszközöket is blokkolhat</string>
+    <string name="page_imported_vpn_lockdown">„VPN nélküli csatlakozások letiltása” be van kapcsolva, ami más eszközöket is blokkolhat</string>
 
     <string name="fab_shutdownserver_label">Szerver leállítása</string>
     <string name="fab_selectfile_label">Fájl(ok) kiválasztása</string>

@@ -68,11 +68,11 @@
     <string name="hotspot_failed_generic">Не удалось запустить частную точку доступа</string>
     <string name="hotspot_try_again">Повторить</string>
     <string name="hotspot_lost_stopped">Точка доступа выключена, раздача остановлена</string>
-    <string name="hotspot_lost_wificontrol">Управление Wi-Fi отключено, раздача остановлена</string>
+    <string name="hotspot_lost_wificontrol">Управление сетями Wi-Fi отключено, раздача остановлена</string>
     <string name="hotspot_lost_nearby">Разрешение «Устройства поблизости» отозвано, раздача остановлена</string>
     <string name="hotspot_dialog_title">Требуется разрешение</string>
     <string name="hotspot_dialog_nearby">Разрешите «Устройства поблизости», чтобы QRServ мог создать частную точку доступа.</string>
-    <string name="hotspot_dialog_wificontrol">Разрешите «Управление Wi-Fi», чтобы QRServ мог создать частную точку доступа.</string>
+    <string name="hotspot_dialog_wificontrol">Разрешите «Управление сетями Wi-Fi», чтобы QRServ мог создать частную точку доступа.</string>
     <string name="hotspot_dialog_notnow">Не сейчас</string>
     <string name="hotspot_dialog_continue">Продолжить</string>
     <string name="hotspot_dialog_settings">Открыть настройки</string>

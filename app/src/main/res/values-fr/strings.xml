@@ -68,11 +68,11 @@
     <string name="hotspot_failed_generic">Impossible de démarrer le point d\'accès privé</string>
     <string name="hotspot_try_again">Réessayer</string>
     <string name="hotspot_lost_stopped">Le point d\'accès a été désactivé, partage arrêté</string>
-    <string name="hotspot_lost_wificontrol">Le contrôle du Wi-Fi a été désactivé, partage arrêté</string>
+    <string name="hotspot_lost_wificontrol">Le contrôle Wi-Fi a été désactivé, partage arrêté</string>
     <string name="hotspot_lost_nearby">Autorisation « Appareils à proximité » retirée, partage arrêté</string>
     <string name="hotspot_dialog_title">Autorisation requise</string>
     <string name="hotspot_dialog_nearby">Autorisez « Appareils à proximité » pour que QRServ puisse créer un point d\'accès privé.</string>
-    <string name="hotspot_dialog_wificontrol">Autorisez « Contrôle du Wi-Fi » pour que QRServ puisse créer un point d\'accès privé.</string>
+    <string name="hotspot_dialog_wificontrol">Autorisez « Contrôle Wi-Fi » pour que QRServ puisse créer un point d\'accès privé.</string>
     <string name="hotspot_dialog_notnow">Pas maintenant</string>
     <string name="hotspot_dialog_continue">Continuer</string>
     <string name="hotspot_dialog_settings">Ouvrir les paramètres</string>

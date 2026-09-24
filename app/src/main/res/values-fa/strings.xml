@@ -33,7 +33,7 @@
     <string name="page_imported_iface_switch_failed">تغییر به این نشانی IP ممکن نشد</string>
     <string name="page_imported_iface_address_changed">نشانی IP تغییر کرد، بنابراین کد QR به‌روز شد</string>
     <string name="page_imported_iface_suggestion">تغییر به %1$s</string>
-    <string name="page_imported_vpn_lockdown">«مسدود کردن اتصال‌های بدون VPN» روشن است و ممکن است دستگاه‌های دیگر را مسدود کند</string>
+    <string name="page_imported_vpn_lockdown">«اتصالات مسدود‌شده بدون VPN» روشن است و ممکن است دستگاه‌های دیگر را مسدود کند</string>
 
     <string name="fab_shutdownserver_label">خاموش کردن سرور</string>
     <string name="fab_selectfile_label">انتخاب پرونده(ها)</string>
