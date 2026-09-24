@@ -12,6 +12,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileInputStream
@@ -38,11 +42,25 @@ class FileServer(
 
     private var server: EmbeddedServer<*, *>? = null
 
+    private val scope = CoroutineScope(SupervisorJob())
+
+    @Volatile
+    private var running = false
+
+    private val engineFailureHandler = CoroutineExceptionHandler { _, _ ->
+        if (running) listener.onServerGone()
+    }
+
     var listeningPort: Int = 0
         private set
 
     fun start() {
-        val embedded = embeddedServer(CIO, port = port, host = bindAddress ?: "0.0.0.0") {
+        val embedded = scope.embeddedServer(
+            CIO,
+            port = port,
+            host = bindAddress ?: "0.0.0.0",
+            parentCoroutineContext = engineFailureHandler,
+        ) {
             routing {
                 route("{...}") {
                     handle {
@@ -102,14 +120,23 @@ class FileServer(
                 }
             }
         }
-        embedded.start(wait = false)
-        listeningPort = runBlocking { embedded.engine.resolvedConnectors().first().port }
+        try {
+            embedded.start(wait = false)
+            listeningPort = runBlocking { embedded.engine.resolvedConnectors().first().port }
+        } catch (error: Exception) {
+            embedded.stop(gracePeriodMillis = 0, timeoutMillis = 200)
+            scope.cancel()
+            throw error
+        }
         server = embedded
+        running = true
     }
 
     fun stop() {
+        running = false
         server?.stop(gracePeriodMillis = 0, timeoutMillis = 200)
         server = null
+        scope.cancel()
     }
 }
 

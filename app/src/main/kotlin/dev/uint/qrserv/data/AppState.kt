@@ -85,6 +85,7 @@ data class AppUiState(
     val fiuEnabled: Boolean = false,
     val allInterfacesEnabled: Boolean = false,
     val vpnLockdown: Boolean = false,
+    val suggestedIp: String? = null,
     val importProgress: ImportProgress? = null,
     /** Raw exception detail shown (and copyable) on [PageType.UNHANDLED_ERROR]. */
     val errorDetail: String = "",

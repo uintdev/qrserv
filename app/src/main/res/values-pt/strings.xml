@@ -32,6 +32,7 @@
     <string name="page_imported_iface_switch_downloading">Não é possível alterar o endereço IP durante um download</string>
     <string name="page_imported_iface_switch_failed">Não foi possível mudar para esse endereço IP</string>
     <string name="page_imported_iface_address_changed">O endereço IP mudou, então o código QR foi atualizado</string>
+    <string name="page_imported_iface_suggestion">Mudar para %1$s</string>
     <string name="page_imported_vpn_lockdown">“Bloquear conexões sem VPN” está ativado e pode bloquear outros dispositivos</string>
 
     <string name="fab_shutdownserver_label">Desligar servidor</string>

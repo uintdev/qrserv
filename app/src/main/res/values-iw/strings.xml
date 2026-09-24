@@ -36,6 +36,7 @@
     <string name="page_imported_iface_switch_downloading">לא ניתן לשנות את כתובת ה-IP בזמן הורדה</string>
     <string name="page_imported_iface_switch_failed">לא ניתן לעבור לכתובת IP זו</string>
     <string name="page_imported_iface_address_changed">כתובת ה-IP השתנתה, ולכן קוד ה-QR עודכן</string>
+    <string name="page_imported_iface_suggestion">מעבר אל %1$s</string>
     <string name="page_imported_vpn_lockdown">“חסימת חיבורים ללא VPN” מופעלת ועלולה לחסום מכשירים אחרים</string>
 
     <string name="fab_shutdownserver_label">כבה שרת</string>

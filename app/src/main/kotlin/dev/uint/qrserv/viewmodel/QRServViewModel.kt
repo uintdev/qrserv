@@ -109,7 +109,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var launchCacheHandled = false
 
-    private var followBestAddress = false
+    private var addressesAtManualPick = emptySet<String>()
 
     private val addressCheckRequests = MutableSharedFlow<Unit>(
         extraBufferCapacity = 1,
@@ -366,7 +366,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun startServing(fileInfo: FileInfo) {
         rebindJob?.join()
-        if (!serverController.isRunning) followBestAddress = false
+        if (!serverController.isRunning) addressesAtManualPick = emptySet()
         val hotspot = _uiState.value.hotspot
         if (hotspot != null && hotspotController?.isActive != true) {
             onHotspotLost(HotspotLoss.STOPPED)
@@ -410,6 +410,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 interfaces = interfaces,
                 selectedIp = selected.address,
+                suggestedIp = null,
                 port = serverController.port,
                 serverRunning = true,
                 pageType = PageType.IMPORTED,
@@ -439,10 +440,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onIpSelected(ip: String) {
         val entry = _uiState.value.interfaces.firstOrNull { it.address == ip } ?: return
-        followBestAddress = false
         val bound = serverController.bindAddress
         if (!serverController.isRunning || bound == null || _uiState.value.hotspot != null || bound == entry.bindHost) {
-            _uiState.update { it.copy(selectedIp = ip) }
+            applyManualPick(ip)
             return
         }
         if (rebindJob?.isActive == true || rejectIfBusy()) return
@@ -454,7 +454,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             val port = serverController.port
             try {
                 startServer(entry.bindHost, port)
-                _uiState.update { it.copy(selectedIp = ip) }
+                applyManualPick(ip)
             } catch (_: Exception) {
                 postToast(R.string.page_imported_iface_switch_failed)
                 if (runCatching { startServer(bound, port) }.isFailure) {
@@ -466,26 +466,23 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private suspend fun checkAddresses() {
-        if (!canFollowAddressChanges()) return
+        if (!canCheckAddresses()) return
         val listed = NetworkUtils.listInterfaces().getOrNull()?.takeIf { it.isNotEmpty() } ?: return
-        if (!canFollowAddressChanges()) return
+        if (!canCheckAddresses()) return
         val state = _uiState.value
         val best = listed.first()
-        val replacement = when {
-            listed.none { it.address == state.selectedIp } -> best
-            followBestAddress && best.address != state.selectedIp -> best
-            else -> null
-        }
-        if (replacement == null) {
-            if (listed != state.interfaces) _uiState.update { it.copy(interfaces = listed) }
+        if (listed.any { it.address == state.selectedIp }) {
+            val suggestion = best.address.takeIf { it != state.selectedIp && it !in addressesAtManualPick }
+            if (listed != state.interfaces || suggestion != state.suggestedIp) {
+                _uiState.update { it.copy(interfaces = listed, suggestedIp = suggestion) }
+            }
             return
         }
-        followBestAddress = true
         rebindJob = viewModelScope.launch {
             val port = serverController.port
             if (serverController.bindAddress != null) {
                 try {
-                    startServer(replacement.bindHost, port)
+                    startServer(best.bindHost, port)
                 } catch (_: Exception) {
                     postToast(R.string.info_exception_portinuse)
                     stopServing()
@@ -493,15 +490,20 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     return@launch
                 }
             }
-            _uiState.update { it.copy(interfaces = listed, selectedIp = replacement.address) }
+            _uiState.update { it.copy(interfaces = listed, selectedIp = best.address, suggestedIp = null) }
             postToast(R.string.page_imported_iface_address_changed)
         }
     }
 
-    private fun canFollowAddressChanges(): Boolean {
+    private fun canCheckAddresses(): Boolean {
         val state = _uiState.value
         return state.serverRunning && !state.serverPoweringDown && state.hotspot == null &&
             !state.actionButtonLoading && rebindJob?.isActive != true
+    }
+
+    private fun applyManualPick(ip: String) {
+        addressesAtManualPick = _uiState.value.interfaces.mapTo(HashSet()) { it.address }
+        _uiState.update { it.copy(selectedIp = ip, suggestedIp = null) }
     }
 
     fun toggleAllInterfaces() {
@@ -784,6 +786,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 interfaces = listOf(InterfaceAddress(info.address, AddressGroup.HOSTED)),
                 selectedIp = info.address,
+                suggestedIp = null,
                 port = serverController.port,
                 hotspotScreenPending = true,
             )
@@ -861,7 +864,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun trySavePort(port: Int?) {
         viewModelScope.launch {
-            if (port != null && NetworkUtils.isPortUsed(port)) {
+            val ownPort = serverController.isRunning && port == serverController.port
+            if (port != null && !ownPort && NetworkUtils.isPortUsed(port)) {
                 postToast(R.string.settings_server_port_dialog_portinuse)
                 return@launch
             }

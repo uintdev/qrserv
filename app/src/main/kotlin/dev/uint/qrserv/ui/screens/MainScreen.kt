@@ -50,6 +50,7 @@ import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WifiLock
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -75,6 +76,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -104,8 +106,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.Role
 import dev.uint.qrserv.BuildConfig
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.AddressGroup
@@ -118,11 +122,13 @@ import dev.uint.qrserv.ui.components.HotspotOption
 import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
 import dev.uint.qrserv.ui.components.DetailsFieldHeight
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
+import dev.uint.qrserv.ui.components.isShortWindow
 import dev.uint.qrserv.ui.components.hotspotNote
 import dev.uint.qrserv.ui.components.QrCodeImage
 import dev.uint.qrserv.ui.components.QrDetailsLayout
 import dev.uint.qrserv.ui.components.StatusCard
 import dev.uint.qrserv.ui.components.rememberIsWideScreen
+import dev.uint.qrserv.ui.components.middleEllipsis
 import dev.uint.qrserv.ui.theme.BrandError
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
 import dev.uint.qrserv.ui.theme.subtleContainerColor
@@ -613,7 +619,8 @@ private fun ImportInfoCard(
         colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
         modifier = Modifier.widthIn(max = DetailsCardMaxWidth),
     ) {
-        Column(modifier = Modifier.padding(24.dp)) {
+        val compact = isShortWindow()
+        Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = if (compact) 16.dp else 24.dp)) {
             FileNameRow(uiState)
             Spacer(Modifier.size(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -647,12 +654,17 @@ private fun ImportInfoCard(
                     }
                 }
             }
-            Spacer(Modifier.size(16.dp))
+            val suggestedIp = uiState.suggestedIp
+            if (suggestedIp != null && uiState.hotspot == null) {
+                Spacer(Modifier.size(12.dp))
+                AddressSuggestion(suggestedIp, onClick = { viewModel.onIpSelected(suggestedIp) })
+            }
+            Spacer(Modifier.size(if (compact) 8.dp else 16.dp))
             InfoRow(stringResource(R.string.page_imported_size), sizeHuman)
             Spacer(Modifier.size(4.dp))
             InfoRow(stringResource(R.string.page_imported_port), uiState.port.toString())
             if (uiState.vpnLockdown) {
-                Spacer(Modifier.size(12.dp))
+                Spacer(Modifier.size(if (compact) 8.dp else 12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Filled.Warning,
@@ -705,6 +717,58 @@ private fun FileNameRow(uiState: AppUiState) {
                 Icon(iconForFileName(name), contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.size(14.dp))
                 MiddleEllipsisText(text = name, fontSize = 14.sp, modifier = Modifier.weight(1f))
+            }
+        }
+    }
+}
+
+private const val IP_PLACEHOLDER = "\u0000"
+
+@Composable
+private fun AddressSuggestion(ip: String, onClick: () -> Unit) {
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(36.dp)
+                .clickable(role = Role.Button, onClick = onClick)
+                .padding(horizontal = 14.dp),
+        ) {
+            Icon(Icons.Filled.SwapHoriz, contentDescription = null, modifier = Modifier.size(16.dp))
+            Spacer(Modifier.size(10.dp))
+            BoxWithConstraints(modifier = Modifier.weight(1f)) {
+                val template = stringResource(R.string.page_imported_iface_suggestion, IP_PLACEHOLDER)
+                val textMeasurer = rememberTextMeasurer()
+                val style = LocalTextStyle.current.copy(fontSize = 13.sp)
+                val budget = constraints.maxWidth - with(LocalDensity.current) { 2.dp.roundToPx() }
+                val label = remember(template, ip, budget, style) {
+                    val fitted = middleEllipsis(ip, budget) { candidate ->
+                        textMeasurer.measure(
+                            template.replace(IP_PLACEHOLDER, candidate),
+                            style = style,
+                            maxLines = 1,
+                            softWrap = false,
+                        ).size.width
+                    }
+                    template.replace(IP_PLACEHOLDER, fitted)
+                }
+                Text(
+                    label,
+                    style = style,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Clip,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     }
