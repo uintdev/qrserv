@@ -38,6 +38,7 @@
         </intent>
     </queries>
 
+    <!-- UnusedTranslation: values-iw is Hebrew under its legacy code, which lint doesn't match to "he" -->
     <application
         android:name=".QRServApplication"
         android:allowBackup="true"
@@ -49,7 +50,8 @@
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="33"
         android:supportsRtl="true"
-        android:localeConfig="@xml/locales_config">
+        android:localeConfig="@xml/locales_config"
+        tools:ignore="UnusedTranslation">
 
         <activity
             android:name=".MainActivity"
