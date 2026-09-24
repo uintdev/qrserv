@@ -31,6 +31,7 @@ import dev.uint.qrserv.data.readPersistedThemeMode
 import dev.uint.qrserv.files.CacheManager
 import dev.uint.qrserv.files.FileRepository
 import dev.uint.qrserv.files.ImportResult
+import dev.uint.qrserv.net.AddressChange
 import dev.uint.qrserv.net.HotspotAvailability
 import dev.uint.qrserv.net.HotspotController
 import dev.uint.qrserv.net.HotspotFailure
@@ -39,6 +40,7 @@ import dev.uint.qrserv.net.HotspotLoss
 import dev.uint.qrserv.net.HotspotPreflight
 import dev.uint.qrserv.net.HotspotStartResult
 import dev.uint.qrserv.net.NetworkUtils
+import dev.uint.qrserv.net.addressChange
 import dev.uint.qrserv.net.hotspotPreflight
 import dev.uint.qrserv.net.hotspotUnavailableReason
 import dev.uint.qrserv.server.ServerController
@@ -470,13 +472,14 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val listed = NetworkUtils.listInterfaces().getOrNull()?.takeIf { it.isNotEmpty() } ?: return
         if (!canCheckAddresses()) return
         val state = _uiState.value
-        val best = listed.first()
-        if (listed.any { it.address == state.selectedIp }) {
-            val suggestion = best.address.takeIf { it != state.selectedIp && it !in addressesAtManualPick }
-            if (listed != state.interfaces || suggestion != state.suggestedIp) {
-                _uiState.update { it.copy(interfaces = listed, suggestedIp = suggestion) }
+        val best = when (val change = addressChange(listed, state.selectedIp, addressesAtManualPick)) {
+            is AddressChange.MoveTo -> change.address
+            is AddressChange.Stay -> {
+                if (listed != state.interfaces || change.suggestion != state.suggestedIp) {
+                    _uiState.update { it.copy(interfaces = listed, suggestedIp = change.suggestion) }
+                }
+                return
             }
-            return
         }
         rebindJob = viewModelScope.launch {
             val port = serverController.port
