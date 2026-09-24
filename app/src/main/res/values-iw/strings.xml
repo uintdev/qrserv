@@ -28,7 +28,11 @@
     <string name="page_imported_share_clipboard">הועתק</string>
     <string name="page_imported_size">גודל</string>
     <string name="page_imported_port">פורט</string>
-    <string name="page_imported_archive_morefiles">+%1$d נוספים</string>
+    <plurals name="page_imported_archive_morefiles">
+        <item quantity="one">+%1$d נוסף</item>
+        <item quantity="two">+%1$d נוספים</item>
+        <item quantity="other">+%1$d נוספים</item>
+    </plurals>
     <string name="page_imported_iface_group_network">רשת</string>
     <string name="page_imported_iface_group_tethering">שיתוף אינטרנט</string>
     <string name="page_imported_iface_group_linklocal">מקומי לקישור</string>

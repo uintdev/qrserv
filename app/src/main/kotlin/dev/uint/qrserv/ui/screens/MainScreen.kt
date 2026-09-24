@@ -103,6 +103,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -707,7 +708,7 @@ private fun FileNameRow(uiState: AppUiState) {
                         Text("${entry.name} (${FileSizeFormatter.humanReadable(entry.size, locale)})")
                     }
                     if (remainingArchivedCount > 0) {
-                        Text(stringResource(R.string.page_imported_archive_morefiles, remainingArchivedCount))
+                        Text(pluralStringResource(R.plurals.page_imported_archive_morefiles, remainingArchivedCount, remainingArchivedCount))
                     }
                 }
             }

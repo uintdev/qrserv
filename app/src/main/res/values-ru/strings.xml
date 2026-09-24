@@ -24,7 +24,12 @@
     <string name="page_imported_share_clipboard">Скопировано</string>
     <string name="page_imported_size">Размер</string>
     <string name="page_imported_port">Порт</string>
-    <string name="page_imported_archive_morefiles">+%1$d ещё</string>
+    <plurals name="page_imported_archive_morefiles">
+        <item quantity="one">+%1$d ещё</item>
+        <item quantity="few">+%1$d ещё</item>
+        <item quantity="many">+%1$d ещё</item>
+        <item quantity="other">+%1$d ещё</item>
+    </plurals>
     <string name="page_imported_iface_group_network">Сеть</string>
     <string name="page_imported_iface_group_tethering">Режим модема</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>

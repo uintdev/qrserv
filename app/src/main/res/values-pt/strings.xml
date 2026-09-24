@@ -24,7 +24,11 @@
     <string name="page_imported_share_clipboard">Copiado</string>
     <string name="page_imported_size">Tamanho</string>
     <string name="page_imported_port">Porta</string>
-    <string name="page_imported_archive_morefiles">+%1$d mais</string>
+    <plurals name="page_imported_archive_morefiles">
+        <item quantity="one">+%1$d mais</item>
+        <item quantity="many">+%1$d mais</item>
+        <item quantity="other">+%1$d mais</item>
+    </plurals>
     <string name="page_imported_iface_group_network">Rede</string>
     <string name="page_imported_iface_group_tethering">Ligação ponto a ponto</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>

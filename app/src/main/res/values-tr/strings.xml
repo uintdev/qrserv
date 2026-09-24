@@ -24,7 +24,10 @@
     <string name="page_imported_share_clipboard">Kopyalandı</string>
     <string name="page_imported_size">Boyut</string>
     <string name="page_imported_port">Port</string>
-    <string name="page_imported_archive_morefiles">+%1$d daha</string>
+    <plurals name="page_imported_archive_morefiles">
+        <item quantity="one">+%1$d daha</item>
+        <item quantity="other">+%1$d daha</item>
+    </plurals>
     <string name="page_imported_iface_group_network">Ağ</string>
     <string name="page_imported_iface_group_tethering">Tethering</string>
     <string name="page_imported_iface_group_linklocal">Bağlantı-yerel</string>

@@ -24,7 +24,10 @@
     <string name="page_imported_share_clipboard">رونویسی شد</string>
     <string name="page_imported_size">اندازه</string>
     <string name="page_imported_port">پورت</string>
-    <string name="page_imported_archive_morefiles">+%1$d مورد دیگر</string>
+    <plurals name="page_imported_archive_morefiles">
+        <item quantity="one">+%1$d مورد دیگر</item>
+        <item quantity="other">+%1$d مورد دیگر</item>
+    </plurals>
     <string name="page_imported_iface_group_network">شبکه</string>
     <string name="page_imported_iface_group_tethering">اشتراک‌گذاری اینترنت</string>
     <string name="page_imported_iface_group_linklocal">پیوند محلی</string>

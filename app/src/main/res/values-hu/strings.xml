@@ -24,7 +24,10 @@
     <string name="page_imported_share_clipboard">Átmásolva</string>
     <string name="page_imported_size">Méret</string>
     <string name="page_imported_port">Port</string>
-    <string name="page_imported_archive_morefiles">+%1$d további</string>
+    <plurals name="page_imported_archive_morefiles">
+        <item quantity="one">+%1$d további</item>
+        <item quantity="other">+%1$d további</item>
+    </plurals>
     <string name="page_imported_iface_group_network">Hálózat</string>
     <string name="page_imported_iface_group_tethering">Internetmegosztás</string>
     <string name="page_imported_iface_group_linklocal">Link-local</string>
