@@ -143,7 +143,7 @@ dependencies {
 
     implementation(platform("androidx.compose:compose-bom:2026.09.00"))
 
-    implementation("androidx.core:core-ktx:1.19.0")
+    implementation("androidx.core:core-ktx:1.19.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
     implementation("androidx.activity:activity-compose:1.13.0")
@@ -157,8 +157,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     // Embedded HTTP server used to serve the selected file
-    implementation("io.ktor:ktor-server-core:3.5.2")
-    implementation("io.ktor:ktor-server-cio:3.5.2")
+    implementation("io.ktor:ktor-server-core:3.6.0")
+    implementation("io.ktor:ktor-server-cio:3.6.0")
 
     // QR code generation
     implementation("com.google.zxing:core:3.5.4")
