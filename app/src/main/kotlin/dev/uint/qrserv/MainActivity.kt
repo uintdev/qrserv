@@ -141,10 +141,10 @@ class MainActivity : ComponentActivity() {
         viewModel.onNearbyPermissionRequestTaken()
         if (Build.VERSION.SDK_INT < 33) return
         val permission = android.Manifest.permission.NEARBY_WIFI_DEVICES
-        when {
-            checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED -> viewModel.onNearbyPermissionResult(true)
-            shouldShowRequestPermissionRationale(permission) -> viewModel.showHotspotDialog(HotspotDialog.EXPLAIN_NEARBY)
-            else -> nearbyPermissionLauncher.launch(permission)
+        if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+            viewModel.onNearbyPermissionResult(true)
+        } else {
+            viewModel.showHotspotDialog(HotspotDialog.EXPLAIN_NEARBY)
         }
     }
 
