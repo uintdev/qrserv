@@ -14,7 +14,7 @@ Android's document picker and share sheet only hand the app a content URI, not a
 
 It is worth noting that this limitation is not specific to this application. Any app relying on the document picker or share sheet for arbitrary files faces the same constraint.
 
-Despite that, you can use Direct Access Mode to avoid the extra overhead (only one file can be selected at a time). This is the SD card icon at the top of the app. Please note that when using the share sheet to pass the file selection over, it uses the app cache method from the get-go, so DAM cannot be used in that case.
+Despite that, you can use Direct Access Mode to avoid the extra overhead (only one file can be selected at a time). This can be enabled in the app's settings. Please note that when using the share sheet to pass the file selection over, it uses the app cache method from the get-go, so DAM cannot be used in that case.
 <br>
 Due to Google Play restrictions in regard to Manage External Storage permission (required for direct file access on Android 11+), Direct Access Mode is only available for GitHub releases.
 
@@ -32,4 +32,6 @@ The main concern is encouraging users to skip certificate warnings. In general, 
 <br>
 I do not want to encourage such bad practices, nor do I wish to participate in security theater. It is not convenient or clear to the end user. It most certainly would therefore not be a good selling point. The bad outweighs the good. The solution has to be relatively solid.
 
-If concerned about privacy and data integrity, consider using a trusted VPN that allows reachability of other VPN clients, a network that can be trusted, or mobile tethering (mobile data not required-it would offer a LAN, which is what you would need).
+If concerned about privacy and data integrity, use the private hotspot option (Android 13 or later). QRServ creates a Wi-Fi network of its own and serves the file only on it, so the file is only reachable by devices you give that network's details to (a QR code to scan, or the network name and password). The connection itself is still plain HTTP-anyone who has joined that network could in principle observe the traffic-which is why it is called private rather than secure.
+<br>
+Otherwise, consider using a trusted VPN that allows reachability of other VPN clients, a network that can be trusted, or mobile tethering (mobile data not required-it would offer a LAN, which is what you would need).
