@@ -83,7 +83,7 @@
     <string name="notification_dialog_body">QRServ paylaşım sırasında bir bildirim göstererek ne zaman etkin olduğunu bilmenizi sağlar. Reddederseniz daha sonra Ayarlar\'dan açabilirsiniz.</string>
     <string name="hotspot_screen_title">Özel erişim noktası</string>
     <string name="hotspot_scan_hint">Bu ağa katılmak için tarayın</string>
-    <string name="hotspot_forget_hint">İşiniz bitince unutun</string>
+    <string name="hotspot_forget_older_hint">Önce eski %1$s ağlarını unutun</string>
     <string name="hotspot_network">Ağ</string>
     <string name="hotspot_password">Şifre</string>
     <string name="hotspot_security">Güvenlik</string>

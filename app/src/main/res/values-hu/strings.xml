@@ -83,7 +83,7 @@
     <string name="notification_dialog_body">A QRServ értesítést jelenít meg megosztás közben, így tudja, mikor aktív. Ha elutasítja, később bekapcsolhatja a Beállításokban.</string>
     <string name="hotspot_screen_title">Privát hotspot</string>
     <string name="hotspot_scan_hint">Olvassa be a hálózathoz való csatlakozáshoz</string>
-    <string name="hotspot_forget_hint">Ha végzett, felejtse el</string>
+    <string name="hotspot_forget_older_hint">Előbb felejtse el a korábbi %1$s hálózatokat</string>
     <string name="hotspot_network">Hálózat</string>
     <string name="hotspot_password">Jelszó</string>
     <string name="hotspot_security">Biztonság</string>

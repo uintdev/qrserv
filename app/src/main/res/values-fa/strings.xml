@@ -83,7 +83,7 @@
     <string name="notification_dialog_body">QRServ هنگام هم‌رسانی یک اعلان نشان می‌دهد تا بدانید چه زمانی فعال است. اگر رد کنید، می‌توانید بعداً آن را در تنظیمات روشن کنید.</string>
     <string name="hotspot_screen_title">نقطه اتصال خصوصی</string>
     <string name="hotspot_scan_hint">برای پیوستن به این شبکه اسکن کنید</string>
-    <string name="hotspot_forget_hint">پس از پایان، آن را فراموش کنید</string>
+    <string name="hotspot_forget_older_hint">ابتدا شبکه‌های قدیمی‌تر %1$s را فراموش کنید</string>
     <string name="hotspot_network">شبکه</string>
     <string name="hotspot_password">گذرواژه</string>
     <string name="hotspot_security">امنیت</string>

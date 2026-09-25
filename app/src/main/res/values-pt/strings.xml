@@ -84,7 +84,7 @@
     <string name="notification_dialog_body">O QRServ mostra uma notificação enquanto partilha, para saber quando está ativo. Se recusar, pode ativá-la mais tarde nas Definições.</string>
     <string name="hotspot_screen_title">Zona Wi-Fi privada</string>
     <string name="hotspot_scan_hint">Leia o código para aderir a esta rede</string>
-    <string name="hotspot_forget_hint">Esqueça-a quando terminar</string>
+    <string name="hotspot_forget_older_hint">Esqueça primeiro as redes %1$s anteriores</string>
     <string name="hotspot_network">Rede</string>
     <string name="hotspot_password">Palavra-passe</string>
     <string name="hotspot_security">Segurança</string>

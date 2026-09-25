@@ -133,13 +133,20 @@ private fun JoinQr(info: HotspotInfo) {
                 textAlign = TextAlign.Center,
             )
             Text(
-                stringResource(R.string.hotspot_forget_hint),
+                stringResource(R.string.hotspot_forget_older_hint, ssidPrefix(info.ssid)),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
         }
     }
+}
+
+// A client that still has a previous session's network saved may fail to join the new one (seen on iOS).
+private fun ssidPrefix(ssid: String): String {
+    val prefix = ssid.substringBeforeLast('_', "")
+    val suffix = ssid.substringAfterLast('_')
+    return if (prefix.isNotEmpty() && suffix.isNotEmpty() && suffix.all(Char::isDigit)) prefix else ssid
 }
 
 @Composable

@@ -83,7 +83,7 @@
     <string name="notification_dialog_body">QRServ zeigt während des Teilens eine Benachrichtigung an, damit Sie wissen, wann es aktiv ist. Wenn Sie ablehnen, können Sie sie später in den Einstellungen aktivieren.</string>
     <string name="hotspot_screen_title">Privater Hotspot</string>
     <string name="hotspot_scan_hint">Scannen, um diesem Netzwerk beizutreten</string>
-    <string name="hotspot_forget_hint">Entfernen Sie es, wenn Sie fertig sind</string>
+    <string name="hotspot_forget_older_hint">Entfernen Sie zuerst ältere %1$s-Netzwerke</string>
     <string name="hotspot_network">Netzwerk</string>
     <string name="hotspot_password">Passwort</string>
     <string name="hotspot_security">Sicherheit</string>

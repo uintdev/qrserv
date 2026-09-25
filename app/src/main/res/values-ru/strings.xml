@@ -85,7 +85,7 @@
     <string name="notification_dialog_body">Во время раздачи QRServ показывает уведомление, чтобы вы знали, когда он активен. Если откажетесь, его можно включить позже в настройках.</string>
     <string name="hotspot_screen_title">Частная точка доступа</string>
     <string name="hotspot_scan_hint">Отсканируйте, чтобы подключиться к этой сети</string>
-    <string name="hotspot_forget_hint">Удалите её, когда закончите</string>
+    <string name="hotspot_forget_older_hint">Сначала удалите старые сети %1$s</string>
     <string name="hotspot_network">Сеть</string>
     <string name="hotspot_password">Пароль</string>
     <string name="hotspot_security">Защита</string>

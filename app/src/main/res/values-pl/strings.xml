@@ -85,7 +85,7 @@
     <string name="notification_dialog_body">QRServ wyświetla powiadomienie podczas udostępniania, abyś wiedział, kiedy jest aktywny. Jeśli odmówisz, możesz włączyć je później w Ustawieniach.</string>
     <string name="hotspot_screen_title">Prywatny hotspot</string>
     <string name="hotspot_scan_hint">Zeskanuj, aby dołączyć do tej sieci</string>
-    <string name="hotspot_forget_hint">Zapomnij ją, gdy skończysz</string>
+    <string name="hotspot_forget_older_hint">Najpierw zapomnij starsze sieci %1$s</string>
     <string name="hotspot_network">Sieć</string>
     <string name="hotspot_password">Hasło</string>
     <string name="hotspot_security">Zabezpieczenia</string>

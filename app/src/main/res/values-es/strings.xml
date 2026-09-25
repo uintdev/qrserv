@@ -84,7 +84,7 @@
     <string name="notification_dialog_body">QRServ muestra una notificación mientras comparte, para que sepas cuándo está activo. Si la rechazas, puedes activarla más tarde en Ajustes.</string>
     <string name="hotspot_screen_title">Punto de acceso privado</string>
     <string name="hotspot_scan_hint">Escanea para unirte a esta red</string>
-    <string name="hotspot_forget_hint">Olvídala cuando termines</string>
+    <string name="hotspot_forget_older_hint">Olvida primero las redes %1$s anteriores</string>
     <string name="hotspot_network">Red</string>
     <string name="hotspot_password">Contraseña</string>
     <string name="hotspot_security">Seguridad</string>
