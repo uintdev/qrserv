@@ -16,6 +16,14 @@
     <string name="page_info_insufficientstorage_msg">Niewystarczające składowanie</string>
     <string name="page_info_portinuse_label">Błąd</string>
     <string name="page_info_portinuse_msg">Serwer próbował uruchomić z już powiązanym portem sieciowym</string>
+    <string name="page_info_idlestopped_label">Udostępnianie zatrzymane</string>
+    <plurals name="page_info_idlestopped_msg">
+        <item quantity="one">Nic nie pobrano przez %d minutę</item>
+        <item quantity="few">Nic nie pobrano przez %d minuty</item>
+        <item quantity="many">Nic nie pobrano przez %d minut</item>
+        <item quantity="other">Nic nie pobrano przez %d minuty</item>
+    </plurals>
+    <string name="info_idle_stopped">Udostępnianie zatrzymane: od dawna nic nie pobrano</string>
     <string name="page_info_unhandlederror_label">Błąd</string>
     <string name="page_info_unhandlederror_msg">Wystąpił nieoczekiwany błąd</string>
     <string name="page_info_unhandlederror_hint">Naciśnij i przytrzymaj, aby udostępnić szczegóły</string>
@@ -56,6 +64,7 @@
     <string name="server_info_gone">Serwer zaginął</string>
 
     <string name="notification_channel_name">Udostępnianie</string>
+    <string name="notification_channel_idle_name">Udostępnianie zatrzymane</string>
     <string name="notification_sharing_title">Udostępnianie: %1$s</string>
     <string name="notification_preparing_title">Przygotowywanie do udostępnienia…</string>
     <string name="notification_public_title">Udostępnianie pliku</string>
@@ -86,10 +95,27 @@
     <string name="hotspot_screen_title">Prywatny hotspot</string>
     <string name="hotspot_scan_hint">Zeskanuj, aby dołączyć do tej sieci</string>
     <string name="hotspot_forget_older_hint">Najpierw zapomnij starsze sieci %1$s</string>
+    <string name="hotspot_compatible_link">Urządzenie nie widzi sieci?</string>
+    <string name="hotspot_faster_link">Przejdź na szybsze 5 GHz</string>
+    <string name="hotspot_restart_title">Uruchomić ponownie na 2,4 GHz?</string>
+    <string name="hotspot_restart_downloading">Trwa pobieranie. Ponowne uruchomienie je przerwie, a urządzenia będą musiały połączyć się z nową siecią.</string>
+    <string name="hotspot_restart_connected">Urządzenie już otworzyło link. Ponowne uruchomienie je rozłączy i będzie musiało połączyć się z nową siecią.</string>
+    <string name="hotspot_restart_fallback">Urządzenia już połączone z tą siecią zostaną rozłączone i będą musiały połączyć się z nową.</string>
+    <string name="hotspot_restart_confirm">Uruchom ponownie</string>
+    <string name="hotspot_restart_title_sameband">Uruchomić ponownie hotspot?</string>
+    <string name="hotspot_restart_sameband_note">Ta wersja Androida nie może zmienić pasma, więc uruchomi się ponownie na %1$s z nową nazwą i hasłem.</string>
+    <string name="hotspot_restart_sameband_toast">Nie udało się przejść na 2,4 GHz, uruchomiono na %1$s</string>
+    <string name="hotspot_restart_title_faster">Przejść na 5 GHz?</string>
+    <string name="hotspot_restart_faster_note">Urządzenia bez 5 GHz nie zobaczą nowej sieci.</string>
+    <string name="hotspot_restart_faster_failed_toast">Nie udało się przejść na 5 GHz, uruchomiono na 2,4 GHz</string>
     <string name="hotspot_network">Sieć</string>
     <string name="hotspot_password">Hasło</string>
     <string name="hotspot_security">Zabezpieczenia</string>
     <string name="hotspot_security_open">Brak</string>
+    <string name="hotspot_band">Pasmo</string>
+    <string name="hotspot_band_2ghz">2,4 GHz</string>
+    <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_dual">2,4 + 5 GHz</string>
     <string name="hotspot_password_show">Pokaż hasło</string>
     <string name="hotspot_password_hide">Ukryj hasło</string>
     <string name="hotspot_copy_network">Kopiuj nazwę sieci</string>
@@ -133,6 +159,25 @@
     <string name="settings_server_port_dialog_saved">Zmiany zapisano</string>
     <string name="settings_server_allinterfaces_list_title">Nasłuchuj na wszystkich interfejsach</string>
     <string name="settings_server_allinterfaces_list_subtitle">Akceptuj połączenia na każdym adresie IP, nie tylko na wybranym</string>
+    <string name="settings_server_idle_list_title">Zatrzymaj udostępnianie przy bezczynności</string>
+    <string name="settings_server_idle_off">Wyłączone</string>
+    <plurals name="settings_server_idle_option">
+        <item quantity="one">%d minuta</item>
+        <item quantity="few">%d minuty</item>
+        <item quantity="many">%d minut</item>
+        <item quantity="other">%d minuty</item>
+    </plurals>
+    <plurals name="settings_server_idle_subtitle">
+        <item quantity="one">Po %d minucie bez pobierania</item>
+        <item quantity="few">Po %d minutach bez pobierania</item>
+        <item quantity="many">Po %d minutach bez pobierania</item>
+        <item quantity="other">Po %d minuty bez pobierania</item>
+    </plurals>
+    <string name="settings_hotspot_band_list_title">Preferowane pasmo</string>
+    <string name="settings_hotspot_band_needsandroid">Wymaga Androida 16+</string>
+    <string name="settings_hotspot_band_dual_description">Szybkie, a starsze urządzenia nadal mogą się połączyć</string>
+    <string name="settings_hotspot_band_5ghz_description">Najszybsze, ale starsze urządzenia go nie widzą</string>
+    <string name="settings_hotspot_band_2ghz_description">Wolniejsze, ale każde urządzenie może się połączyć</string>
     <string name="settings_subheading_client">Klient</string>
     <string name="settings_client_dam_list_title">Tryb Dostępu Bezpośredniego</string>
     <string name="settings_client_dam_list_subtitle">Idealne dla dużych plików</string>

@@ -1,6 +1,7 @@
 package dev.uint.qrserv.data
 
 import dev.uint.qrserv.net.HotspotAvailability
+import dev.uint.qrserv.net.HotspotBand
 import dev.uint.qrserv.net.HotspotFailure
 import dev.uint.qrserv.net.HotspotInfo
 
@@ -16,6 +17,9 @@ enum class PageType {
     UNHANDLED_ERROR,
 
     HOTSPOT_FAILED,
+
+    /** Sharing stopped by the idle timeout; see [AppUiState.idleStoppedMinutes]. */
+    IDLE_STOPPED,
 }
 
 /**
@@ -30,6 +34,20 @@ data class InterfaceAddress(val address: String, val group: AddressGroup, val bi
 
 /** One entry inside a multi-file archive. */
 data class ArchivedEntry(val name: String, val size: Long)
+
+/** Choices for the idle timeout, in minutes; 0 is off. */
+val IdleStopOptions = listOf(0, 5, 10, 30, 60)
+
+const val DEFAULT_IDLE_STOP_MINUTES = 10
+
+enum class CompatibleBandWarning {
+    DOWNLOAD_ACTIVE,
+
+    CLIENT_SEEN,
+
+    /** Nothing seen, but a device may have joined without opening the link. */
+    NONE_SEEN,
+}
 
 enum class HotspotDialog {
     EXPLAIN_NEARBY,
@@ -98,4 +116,17 @@ data class AppUiState(
     val hotspotDialog: HotspotDialog? = null,
     val nearbyPermissionRequest: Boolean = false,
     val hotspotScreenPending: Boolean = false,
+    /** The preferred private hotspot band; null for the fastest the device supports. */
+    val hotspotBand: HotspotBand? = null,
+    /** Bands the preference can be set to, fastest first; empty where the band can't be requested. */
+    val hotspotBandOptions: List<HotspotBand> = emptyList(),
+    /** The preference is shown disabled: 5 GHz is there, but only 36+ lets apps request it. */
+    val hotspotBandNeedsNewerAndroid: Boolean = false,
+    /** Minutes without downloads before sharing stops; 0 is off. */
+    val idleStopMinutes: Int = DEFAULT_IDLE_STOP_MINUTES,
+    /** The timeout that ended the last share, for [PageType.IDLE_STOPPED]. */
+    val idleStoppedMinutes: Int = 0,
+    val compatibleBandWarning: CompatibleBandWarning? = null,
+    /** Whether the warned-about restart is the switch to the faster bands rather than to 2.4 GHz. */
+    val hotspotRestartFaster: Boolean = false,
 )

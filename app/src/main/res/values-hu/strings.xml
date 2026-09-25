@@ -16,6 +16,12 @@
     <string name="page_info_insufficientstorage_msg">Elégtelen tárolás</string>
     <string name="page_info_portinuse_label">Hiba</string>
     <string name="page_info_portinuse_msg">Egy már használt porton próbált indulni a szerver</string>
+    <string name="page_info_idlestopped_label">Megosztás leállítva</string>
+    <plurals name="page_info_idlestopped_msg">
+        <item quantity="one">%d percig nem volt letöltés</item>
+        <item quantity="other">%d percig nem volt letöltés</item>
+    </plurals>
+    <string name="info_idle_stopped">Megosztás leállítva: egy ideje nem volt letöltés</string>
     <string name="page_info_unhandlederror_label">Hiba</string>
     <string name="page_info_unhandlederror_msg">Váratlan hiba történt</string>
     <string name="page_info_unhandlederror_hint">Tartsa lenyomva a részletek megosztásához</string>
@@ -54,6 +60,7 @@
     <string name="server_info_gone">A szerver eltűnt</string>
 
     <string name="notification_channel_name">Megosztás</string>
+    <string name="notification_channel_idle_name">Megosztás leállítva</string>
     <string name="notification_sharing_title">Megosztás: %1$s</string>
     <string name="notification_preparing_title">Megosztás előkészítése…</string>
     <string name="notification_public_title">Fájl megosztása</string>
@@ -84,10 +91,27 @@
     <string name="hotspot_screen_title">Privát hotspot</string>
     <string name="hotspot_scan_hint">Olvassa be a hálózathoz való csatlakozáshoz</string>
     <string name="hotspot_forget_older_hint">Előbb felejtse el a korábbi %1$s hálózatokat</string>
+    <string name="hotspot_compatible_link">Az eszköz nem találja a hálózatot?</string>
+    <string name="hotspot_faster_link">Váltás a gyorsabb 5 GHz-re</string>
+    <string name="hotspot_restart_title">Újraindítás 2,4 GHz-en?</string>
+    <string name="hotspot_restart_downloading">Letöltés van folyamatban. Az újraindítás megszakítja, és az eszközöknek csatlakozniuk kell az új hálózathoz.</string>
+    <string name="hotspot_restart_connected">Egy eszköz már megnyitotta a linket. Az újraindítás bontja a kapcsolatát, és csatlakoznia kell az új hálózathoz.</string>
+    <string name="hotspot_restart_fallback">A hálózathoz már csatlakozott eszközök kapcsolata megszakad, és csatlakozniuk kell az újhoz.</string>
+    <string name="hotspot_restart_confirm">Újraindítás</string>
+    <string name="hotspot_restart_title_sameband">Újraindítja a hotspotot?</string>
+    <string name="hotspot_restart_sameband_note">Ez az Android-verzió nem tud sávot váltani, ezért %1$s sávon indul újra, új névvel és jelszóval.</string>
+    <string name="hotspot_restart_sameband_toast">Nem sikerült 2,4 GHz-re váltani, újraindult ezen: %1$s</string>
+    <string name="hotspot_restart_title_faster">Vált 5 GHz-re?</string>
+    <string name="hotspot_restart_faster_note">Az 5 GHz nélküli eszközök nem látják az új hálózatot.</string>
+    <string name="hotspot_restart_faster_failed_toast">Nem sikerült 5 GHz-re váltani, újraindult 2,4 GHz-en</string>
     <string name="hotspot_network">Hálózat</string>
     <string name="hotspot_password">Jelszó</string>
     <string name="hotspot_security">Biztonság</string>
     <string name="hotspot_security_open">Nincs</string>
+    <string name="hotspot_band">Sáv</string>
+    <string name="hotspot_band_2ghz">2,4 GHz</string>
+    <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_dual">2,4 + 5 GHz</string>
     <string name="hotspot_password_show">Jelszó megjelenítése</string>
     <string name="hotspot_password_hide">Jelszó elrejtése</string>
     <string name="hotspot_copy_network">Hálózatnév másolása</string>
@@ -131,6 +155,21 @@
     <string name="settings_server_port_dialog_saved">Módosítások mentve</string>
     <string name="settings_server_allinterfaces_list_title">Figyelés minden interfészen</string>
     <string name="settings_server_allinterfaces_list_subtitle">Kapcsolatok fogadása minden IP-címen, nem csak a kiválasztotton</string>
+    <string name="settings_server_idle_list_title">Megosztás leállítása tétlenség esetén</string>
+    <string name="settings_server_idle_off">Ki</string>
+    <plurals name="settings_server_idle_option">
+        <item quantity="one">%d perc</item>
+        <item quantity="other">%d perc</item>
+    </plurals>
+    <plurals name="settings_server_idle_subtitle">
+        <item quantity="one">%d perc letöltés nélküli idő után</item>
+        <item quantity="other">%d perc letöltés nélküli idő után</item>
+    </plurals>
+    <string name="settings_hotspot_band_list_title">Előnyben részesített sáv</string>
+    <string name="settings_hotspot_band_needsandroid">Android 16+ szükséges</string>
+    <string name="settings_hotspot_band_dual_description">Gyors, és a régebbi eszközök is csatlakozhatnak</string>
+    <string name="settings_hotspot_band_5ghz_description">A leggyorsabb, de a régebbi eszközök nem látják</string>
+    <string name="settings_hotspot_band_2ghz_description">Lassabb, de minden eszköz csatlakozhat</string>
     <string name="settings_subheading_client">Kliens</string>
     <string name="settings_client_dam_list_title">Közvetlen Hozzáférési Mód</string>
     <string name="settings_client_dam_list_subtitle">Nagy méretű fájlokhoz ideális</string>

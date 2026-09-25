@@ -20,6 +20,13 @@
     <string name="page_info_insufficientstorage_msg">אין מספיק מקום אחסון</string>
     <string name="page_info_portinuse_label">שגיאה</string>
     <string name="page_info_portinuse_msg">השרת ניסה לפעול על פורט שכבר נמצא בשימוש</string>
+    <string name="page_info_idlestopped_label">השיתוף הופסק</string>
+    <plurals name="page_info_idlestopped_msg">
+        <item quantity="one">לא היו הורדות במשך %d דקה</item>
+        <item quantity="two">לא היו הורדות במשך %d דקות</item>
+        <item quantity="other">לא היו הורדות במשך %d דקות</item>
+    </plurals>
+    <string name="info_idle_stopped">השיתוף הופסק: לא היו הורדות זמן מה</string>
     <string name="page_info_unhandlederror_label">שגיאה</string>
     <string name="page_info_unhandlederror_msg">אירעה שגיאה בלתי צפויה</string>
     <string name="page_info_unhandlederror_hint">לחץ והחזק כדי לשתף את הפרטים</string>
@@ -59,6 +66,7 @@
     <string name="server_info_gone">השרת נעלם</string>
 
     <string name="notification_channel_name">שיתוף</string>
+    <string name="notification_channel_idle_name">השיתוף הופסק</string>
     <string name="notification_sharing_title">משתף את %1$s</string>
     <string name="notification_preparing_title">מתכונן לשיתוף…</string>
     <string name="notification_public_title">משתף קובץ</string>
@@ -89,10 +97,27 @@
     <string name="hotspot_screen_title">נקודה חמה פרטית</string>
     <string name="hotspot_scan_hint">סרוק כדי להצטרף לרשת זו</string>
     <string name="hotspot_forget_older_hint">שכח קודם רשתות %1$s ישנות</string>
+    <string name="hotspot_compatible_link">המכשיר לא מוצא את הרשת?</string>
+    <string name="hotspot_faster_link">מעבר ל-5 GHz מהיר יותר</string>
+    <string name="hotspot_restart_title">להפעיל מחדש ב-2.4 GHz?</string>
+    <string name="hotspot_restart_downloading">הורדה מתבצעת כעת. הפעלה מחדש תעצור אותה, ומכשירים יצטרכו להתחבר לרשת החדשה.</string>
+    <string name="hotspot_restart_connected">מכשיר כבר פתח את הקישור. הפעלה מחדש תנתק אותו, והוא יצטרך להתחבר לרשת החדשה.</string>
+    <string name="hotspot_restart_fallback">כל מכשיר שכבר מחובר לרשת הזו ינותק ויצטרך להתחבר לרשת החדשה.</string>
+    <string name="hotspot_restart_confirm">הפעל מחדש</string>
+    <string name="hotspot_restart_title_sameband">להפעיל מחדש את הנקודה החמה?</string>
+    <string name="hotspot_restart_sameband_note">גרסת Android זו לא יכולה להחליף תדר, לכן היא תופעל מחדש ב-%1$s עם שם וסיסמה חדשים.</string>
+    <string name="hotspot_restart_sameband_toast">לא ניתן לעבור ל-2.4 GHz, הופעלה מחדש ב-%1$s</string>
+    <string name="hotspot_restart_title_faster">לעבור ל-5 GHz?</string>
+    <string name="hotspot_restart_faster_note">מכשירים ללא 5 GHz לא יראו את הרשת החדשה.</string>
+    <string name="hotspot_restart_faster_failed_toast">לא ניתן לעבור ל-5 GHz, הופעלה מחדש ב-2.4 GHz</string>
     <string name="hotspot_network">רשת</string>
     <string name="hotspot_password">סיסמה</string>
     <string name="hotspot_security">אבטחה</string>
     <string name="hotspot_security_open">ללא</string>
+    <string name="hotspot_band">תדר</string>
+    <string name="hotspot_band_2ghz">2.4 GHz</string>
+    <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_dual">2.4 + 5 GHz</string>
     <string name="hotspot_password_show">הצג סיסמה</string>
     <string name="hotspot_password_hide">הסתר סיסמה</string>
     <string name="hotspot_copy_network">העתק שם רשת</string>
@@ -136,6 +161,23 @@
     <string name="settings_server_port_dialog_saved">השינויים נשמרו</string>
     <string name="settings_server_allinterfaces_list_title">האזנה בכל הממשקים</string>
     <string name="settings_server_allinterfaces_list_subtitle">קבל חיבורים בכל כתובת IP, לא רק בכתובת שנבחרה</string>
+    <string name="settings_server_idle_list_title">הפסקת שיתוף כשאין פעילות</string>
+    <string name="settings_server_idle_off">כבוי</string>
+    <plurals name="settings_server_idle_option">
+        <item quantity="one">%d דקה</item>
+        <item quantity="two">%d דקות</item>
+        <item quantity="other">%d דקות</item>
+    </plurals>
+    <plurals name="settings_server_idle_subtitle">
+        <item quantity="one">אחרי %d דקה ללא הורדות</item>
+        <item quantity="two">אחרי %d דקות ללא הורדות</item>
+        <item quantity="other">אחרי %d דקות ללא הורדות</item>
+    </plurals>
+    <string name="settings_hotspot_band_list_title">תדר מועדף</string>
+    <string name="settings_hotspot_band_needsandroid">דורש Android 16+</string>
+    <string name="settings_hotspot_band_dual_description">מהיר, ומכשירים ישנים יותר עדיין יכולים להתחבר</string>
+    <string name="settings_hotspot_band_5ghz_description">המהיר ביותר, אבל מכשירים ישנים יותר לא רואים אותו</string>
+    <string name="settings_hotspot_band_2ghz_description">איטי יותר, אבל כל מכשיר יכול להתחבר</string>
     <string name="settings_subheading_client">לקוח</string>
     <string name="settings_client_dam_list_title">מצב גישה ישירה</string>
     <string name="settings_client_dam_list_subtitle">אידיאלי לקבצים גדולים</string>

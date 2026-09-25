@@ -16,6 +16,12 @@
     <string name="page_info_insufficientstorage_msg">حافظه ناکافی</string>
     <string name="page_info_portinuse_label">خطا</string>
     <string name="page_info_portinuse_msg">سرور تلاش میکرد با پورتی متصل شود که از پیش استفاده شده بود</string>
+    <string name="page_info_idlestopped_label">هم‌رسانی متوقف شد</string>
+    <plurals name="page_info_idlestopped_msg">
+        <item quantity="one">%d دقیقه چیزی دریافت نشد</item>
+        <item quantity="other">%d دقیقه چیزی دریافت نشد</item>
+    </plurals>
+    <string name="info_idle_stopped">هم‌رسانی متوقف شد: مدتی چیزی دریافت نشد</string>
     <string name="page_info_unhandlederror_label">خطا</string>
     <string name="page_info_unhandlederror_msg">خطای غیرمنتظره‌ای رخ داد</string>
     <string name="page_info_unhandlederror_hint">برای هم‌رسانی جزئیات، لمس کرده و نگه دارید</string>
@@ -54,6 +60,7 @@
     <string name="server_info_gone">سرور از بین رفته است</string>
 
     <string name="notification_channel_name">هم‌رسانی</string>
+    <string name="notification_channel_idle_name">هم‌رسانی متوقف شد</string>
     <string name="notification_sharing_title">در حال هم‌رسانی %1$s</string>
     <string name="notification_preparing_title">آماده‌سازی برای هم‌رسانی…</string>
     <string name="notification_public_title">در حال هم‌رسانی یک پرونده</string>
@@ -84,10 +91,27 @@
     <string name="hotspot_screen_title">نقطه اتصال خصوصی</string>
     <string name="hotspot_scan_hint">برای پیوستن به این شبکه اسکن کنید</string>
     <string name="hotspot_forget_older_hint">ابتدا شبکه‌های قدیمی‌تر %1$s را فراموش کنید</string>
+    <string name="hotspot_compatible_link">دستگاه شبکه را پیدا نمی‌کند؟</string>
+    <string name="hotspot_faster_link">تغییر به ۵ گیگاهرتز سریع‌تر</string>
+    <string name="hotspot_restart_title">راه‌اندازی مجدد با ۲٫۴ گیگاهرتز؟</string>
+    <string name="hotspot_restart_downloading">یک دریافت در حال انجام است. راه‌اندازی مجدد آن را متوقف می‌کند و دستگاه‌ها باید به شبکهٔ جدید متصل شوند.</string>
+    <string name="hotspot_restart_connected">یک دستگاه قبلاً پیوند را باز کرده است. راه‌اندازی مجدد اتصال آن را قطع می‌کند و باید به شبکهٔ جدید متصل شود.</string>
+    <string name="hotspot_restart_fallback">هر دستگاهی که اکنون به این شبکه متصل است قطع می‌شود و باید به شبکهٔ جدید متصل شود.</string>
+    <string name="hotspot_restart_confirm">راه‌اندازی مجدد</string>
+    <string name="hotspot_restart_title_sameband">نقطه اتصال دوباره راه‌اندازی شود؟</string>
+    <string name="hotspot_restart_sameband_note">این نسخه از اندروید نمی‌تواند باند را تغییر دهد، پس با %1$s و نام و گذرواژهٔ جدید دوباره راه‌اندازی می‌شود.</string>
+    <string name="hotspot_restart_sameband_toast">تغییر به ۲٫۴ گیگاهرتز ممکن نشد، با %1$s راه‌اندازی شد</string>
+    <string name="hotspot_restart_title_faster">تغییر به ۵ گیگاهرتز؟</string>
+    <string name="hotspot_restart_faster_note">دستگاه‌های بدون ۵ گیگاهرتز شبکهٔ جدید را نمی‌بینند.</string>
+    <string name="hotspot_restart_faster_failed_toast">تغییر به ۵ گیگاهرتز ممکن نشد، با ۲٫۴ گیگاهرتز راه‌اندازی شد</string>
     <string name="hotspot_network">شبکه</string>
     <string name="hotspot_password">گذرواژه</string>
     <string name="hotspot_security">امنیت</string>
     <string name="hotspot_security_open">هیچ</string>
+    <string name="hotspot_band">باند</string>
+    <string name="hotspot_band_2ghz">۲٫۴ گیگاهرتز</string>
+    <string name="hotspot_band_5ghz">۵ گیگاهرتز</string>
+    <string name="hotspot_band_dual">۲٫۴ + ۵ گیگاهرتز</string>
     <string name="hotspot_password_show">نمایش گذرواژه</string>
     <string name="hotspot_password_hide">پنهان کردن گذرواژه</string>
     <string name="hotspot_copy_network">رونویسی نام شبکه</string>
@@ -131,6 +155,21 @@
     <string name="settings_server_port_dialog_saved">تغییرات ذخیره شد</string>
     <string name="settings_server_allinterfaces_list_title">گوش دادن روی همه رابط‌ها</string>
     <string name="settings_server_allinterfaces_list_subtitle">پذیرش اتصال از همه نشانی‌های IP، نه فقط نشانی انتخاب‌شده</string>
+    <string name="settings_server_idle_list_title">توقف هم‌رسانی هنگام بی‌کاری</string>
+    <string name="settings_server_idle_off">خاموش</string>
+    <plurals name="settings_server_idle_option">
+        <item quantity="one">%d دقیقه</item>
+        <item quantity="other">%d دقیقه</item>
+    </plurals>
+    <plurals name="settings_server_idle_subtitle">
+        <item quantity="one">پس از %d دقیقه بدون دریافت</item>
+        <item quantity="other">پس از %d دقیقه بدون دریافت</item>
+    </plurals>
+    <string name="settings_hotspot_band_list_title">باند ترجیحی</string>
+    <string name="settings_hotspot_band_needsandroid">به اندروید ۱۶ یا بالاتر نیاز دارد</string>
+    <string name="settings_hotspot_band_dual_description">سریع، و دستگاه‌های قدیمی‌تر هم می‌توانند متصل شوند</string>
+    <string name="settings_hotspot_band_5ghz_description">سریع‌ترین، اما دستگاه‌های قدیمی‌تر آن را نمی‌بینند</string>
+    <string name="settings_hotspot_band_2ghz_description">کندتر، اما همهٔ دستگاه‌ها می‌توانند متصل شوند</string>
     <string name="settings_subheading_client">کلاینت</string>
     <string name="settings_client_dam_list_title">حالت دسترسی مستقیم</string>
     <string name="settings_client_dam_list_subtitle">ایده‌آل برای فایل‌های حجیم</string>

@@ -48,6 +48,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.TimerOff
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WifiLock
 import androidx.compose.material.icons.filled.SwapHoriz
@@ -118,23 +119,24 @@ import dev.uint.qrserv.data.AppUiState
 import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.data.PageType
 import dev.uint.qrserv.net.HotspotFailure
-import dev.uint.qrserv.ui.components.HotspotButton
-import dev.uint.qrserv.ui.components.HotspotOption
-import dev.uint.qrserv.ui.components.FieldCard
-import dev.uint.qrserv.ui.components.KeepScreenOn
-import dev.uint.qrserv.ui.components.copyToClipboard
-import dev.uint.qrserv.ui.components.shareText
-import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
 import dev.uint.qrserv.ui.components.DetailsFieldHeight
+import dev.uint.qrserv.ui.components.FieldCard
+import dev.uint.qrserv.ui.components.HotspotButton
+import dev.uint.qrserv.ui.components.HotspotOption
+import dev.uint.qrserv.ui.components.InfoRow
+import dev.uint.qrserv.ui.components.KeepScreenOn
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
-import dev.uint.qrserv.ui.components.isShortWindow
-import dev.uint.qrserv.ui.components.hotspotNote
 import dev.uint.qrserv.ui.components.QrCodeImage
 import dev.uint.qrserv.ui.components.QrDetailsLayout
 import dev.uint.qrserv.ui.components.StatusCard
-import dev.uint.qrserv.ui.components.rememberIsWideScreen
+import dev.uint.qrserv.ui.components.copyToClipboard
+import dev.uint.qrserv.ui.components.hotspotNote
+import dev.uint.qrserv.ui.components.isShortWindow
 import dev.uint.qrserv.ui.components.middleEllipsis
+import dev.uint.qrserv.ui.components.rememberIsWideScreen
+import dev.uint.qrserv.ui.components.shareText
+import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.ui.theme.BrandError
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
 import dev.uint.qrserv.ui.theme.subtleContainerColor
@@ -339,6 +341,15 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         HotspotFailedContent(uiState, viewModel)
         return
     }
+    if (uiState.pageType == PageType.IDLE_STOPPED) {
+        StatusCard(
+            icon = Icons.Filled.TimerOff,
+            label = stringResource(R.string.page_info_idlestopped_label),
+            message = pluralStringResource(R.plurals.page_info_idlestopped_msg, uiState.idleStoppedMinutes, uiState.idleStoppedMinutes),
+            footer = { HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked) },
+        )
+        return
+    }
     val (icon, labelRes, msgRes) = when (uiState.pageType) {
         PageType.LANDING -> Triple(Icons.AutoMirrored.Filled.InsertDriveFile, R.string.page_landing_label, R.string.page_landing_msg)
         PageType.NO_CONNECTION -> Triple(Icons.Filled.SignalWifiOff, R.string.page_info_noconnection_label, R.string.page_info_noconnection_msg)
@@ -347,7 +358,7 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         PageType.FILE_MODIFIED -> Triple(Icons.Filled.Edit, R.string.page_info_filemodified_label, R.string.page_info_filemodified_msg)
         PageType.INSUFFICIENT_STORAGE -> Triple(Icons.Filled.Storage, R.string.page_info_insufficientstorage_label, R.string.page_info_insufficientstorage_msg)
         PageType.PORT_IN_USE -> Triple(Icons.Filled.Error, R.string.page_info_portinuse_label, R.string.page_info_portinuse_msg)
-        PageType.IMPORTED, PageType.UNHANDLED_ERROR, PageType.HOTSPOT_FAILED ->
+        PageType.IMPORTED, PageType.UNHANDLED_ERROR, PageType.HOTSPOT_FAILED, PageType.IDLE_STOPPED ->
             Triple(Icons.Filled.Error, R.string.page_info_unhandlederror_label, R.string.page_info_unhandlederror_msg)
     }
     StatusCard(
@@ -793,14 +804,6 @@ private fun HotspotNetworkButton(ssid: String, onClick: () -> Unit, modifier: Mo
             MiddleEllipsisText(text = ssid, fontSize = 13.sp, modifier = Modifier.weight(1f))
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
         }
-    }
-}
-
-@Composable
-private fun InfoRow(label: String, value: String) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = label, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium)
-        Text(text = value, style = MaterialTheme.typography.bodyMedium)
     }
 }
 

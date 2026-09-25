@@ -1,7 +1,7 @@
 package dev.uint.qrserv.ui.screens
 
+import android.os.Build
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,12 +47,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.uint.qrserv.R
+import dev.uint.qrserv.net.HotspotBand
 import dev.uint.qrserv.net.HotspotInfo
+import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.net.WifiQr
 import dev.uint.qrserv.ui.components.BackNavigationIcon
 import dev.uint.qrserv.ui.components.DetailsCardMaxWidth
 import dev.uint.qrserv.ui.components.DetailsFieldHeight
 import dev.uint.qrserv.ui.components.FieldCard
+import dev.uint.qrserv.ui.components.InfoRow
 import dev.uint.qrserv.ui.components.KeepScreenOn
 import dev.uint.qrserv.ui.components.MiddleEllipsisText
 import dev.uint.qrserv.ui.components.QrCodeImage
@@ -79,6 +83,19 @@ fun HotspotScreen(
 
     KeepScreenOn()
 
+    uiState.compatibleBandWarning?.let { warning ->
+        CompatibleBandWarningDialog(
+            warning = warning,
+            // Before 36 the band can't be requested, so the restart comes back on the same one.
+            sameBand = stringResource(info.band.labelRes).takeIf { Build.VERSION.SDK_INT < 36 },
+            faster = uiState.hotspotRestartFaster,
+            // A dual-band hotspot still carries 2.4 GHz.
+            fasterDropsTwoGhz = info.fasterBand == HotspotBand.FIVE_GHZ,
+            onDismiss = viewModel::onCompatibleBandWarningDismissed,
+            onRestart = viewModel::onCompatibleBandWarningConfirmed,
+        )
+    }
+
     val isWideScreen = rememberIsWideScreen()
     val compact = isShortWindow()
 
@@ -97,12 +114,29 @@ fun HotspotScreen(
         },
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
+            val bandLink = when {
+                info.band != HotspotBand.TWO_GHZ ->
+                    BandLink(stringResource(R.string.hotspot_compatible_link), viewModel::onUseCompatibleBandClicked)
+                info.fasterBand != null ->
+                    BandLink(stringResource(R.string.hotspot_faster_link), viewModel::onUseFasterBandClicked)
+                else -> null
+            }
             QrDetailsLayout(
                 isWideScreen = isWideScreen,
                 wideSideClearance = 16.dp,
                 bottomClearance = 0.dp,
-                gap = if (isWideScreen) 36.dp else 24.dp,
-                qr = { JoinQr(info) },
+                // The link's touch target already pads it below.
+                gap = when {
+                    isWideScreen -> 36.dp
+                    bandLink != null -> 8.dp
+                    else -> 24.dp
+                },
+                qr = {
+                    JoinQr(
+                        info = info,
+                        bandLink = bandLink,
+                    )
+                },
                 details = {
                     HotspotDetailsCard(
                         info = info,
@@ -116,7 +150,7 @@ fun HotspotScreen(
 }
 
 @Composable
-private fun JoinQr(info: HotspotInfo) {
+private fun JoinQr(info: HotspotInfo, bandLink: BandLink?) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Card(
             shape = MaterialTheme.shapes.extraLarge,
@@ -138,9 +172,18 @@ private fun JoinQr(info: HotspotInfo) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
+            if (bandLink != null) {
+                TextButton(onClick = bandLink.onClick) {
+                    Text(bandLink.label, textAlign = TextAlign.Center)
+                }
+            }
         }
     }
 }
+
+// 5 GHz-only hotspots are invisible to 2.4 GHz-only clients, and a dual-band one may drop its idle
+// 2.4 GHz half without telling apps.
+private class BandLink(val label: String, val onClick: () -> Unit)
 
 // A client that still has a previous session's network saved may fail to join the new one (seen on iOS).
 private fun ssidPrefix(ssid: String): String {
@@ -160,7 +203,17 @@ private fun HotspotDetailsCard(info: HotspotInfo, rowGap: Dp, onStop: () -> Unit
         colors = CardDefaults.cardColors(containerColor = subtleContainerColor()),
         modifier = Modifier.widthIn(max = DetailsCardMaxWidth),
     ) {
-        Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = if (rowGap < 16.dp) 16.dp else 24.dp)) {
+        // Short landscape windows need every row of the card to fit without scrolling.
+        val compact = rowGap < 16.dp
+        // The stop button's touch target already pads below its outline.
+        Column(
+            modifier = Modifier.padding(
+                start = 24.dp,
+                end = 24.dp,
+                top = if (compact) 10.dp else 24.dp,
+                bottom = if (compact) 6.dp else 24.dp,
+            ),
+        ) {
             FieldLabel(stringResource(R.string.hotspot_network))
             CopyableField(
                 copyDescription = stringResource(R.string.hotspot_copy_network),
@@ -202,10 +255,19 @@ private fun HotspotDetailsCard(info: HotspotInfo, rowGap: Dp, onStop: () -> Unit
             }
 
             Spacer(Modifier.size(rowGap))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(stringResource(R.string.hotspot_security), fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium)
-                Text(info.securityName ?: stringResource(R.string.hotspot_security_open), style = MaterialTheme.typography.bodyMedium)
-            }
+            // Tighter lines in compact windows keep the card clear of the bottom edge.
+            val infoRowStyle = MaterialTheme.typography.bodyMedium.let { if (compact) it.copy(lineHeight = 16.sp) else it }
+            InfoRow(
+                stringResource(R.string.hotspot_security),
+                info.securityName ?: stringResource(R.string.hotspot_security_open),
+                style = infoRowStyle,
+            )
+            Spacer(Modifier.size(if (compact) 0.dp else 4.dp))
+            InfoRow(
+                stringResource(R.string.hotspot_band),
+                stringResource(info.band.labelRes),
+                style = infoRowStyle,
+            )
 
             Spacer(Modifier.size(rowGap))
             OutlinedButton(onClick = onStop, modifier = Modifier.fillMaxWidth()) {

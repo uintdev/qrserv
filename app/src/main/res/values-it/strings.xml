@@ -16,6 +16,13 @@
     <string name="page_info_insufficientstorage_msg">Stoccaggio insufficiente</string>
     <string name="page_info_portinuse_label">Errore</string>
     <string name="page_info_portinuse_msg">Il server ha cercato di usare una porta già in utilizzo</string>
+    <string name="page_info_idlestopped_label">Condivisione interrotta</string>
+    <plurals name="page_info_idlestopped_msg">
+        <item quantity="one">Nessun download per %d minuto</item>
+        <item quantity="many">Nessun download per %d di minuti</item>
+        <item quantity="other">Nessun download per %d minuti</item>
+    </plurals>
+    <string name="info_idle_stopped">Condivisione interrotta: nessun download da un po\'</string>
     <string name="page_info_unhandlederror_label">Errore</string>
     <string name="page_info_unhandlederror_msg">Si è verificato un errore imprevisto</string>
     <string name="page_info_unhandlederror_hint">Tieni premuto per condividere i dettagli</string>
@@ -55,6 +62,7 @@
     <string name="server_info_gone">Il server è sparito</string>
 
     <string name="notification_channel_name">Condivisione</string>
+    <string name="notification_channel_idle_name">Condivisione interrotta</string>
     <string name="notification_sharing_title">Condivisione di %1$s</string>
     <string name="notification_preparing_title">Preparazione della condivisione…</string>
     <string name="notification_public_title">Condivisione di un file</string>
@@ -85,10 +93,27 @@
     <string name="hotspot_screen_title">Hotspot privato</string>
     <string name="hotspot_scan_hint">Scansiona per unirti a questa rete</string>
     <string name="hotspot_forget_older_hint">Dimentica prima le reti %1$s precedenti</string>
+    <string name="hotspot_compatible_link">Il dispositivo non trova la rete?</string>
+    <string name="hotspot_faster_link">Passa ai 5 GHz, più veloci</string>
+    <string name="hotspot_restart_title">Riavviare a 2,4 GHz?</string>
+    <string name="hotspot_restart_downloading">È in corso un download. Il riavvio lo interromperà e i dispositivi dovranno connettersi alla nuova rete.</string>
+    <string name="hotspot_restart_connected">Un dispositivo ha già aperto il link. Il riavvio lo disconnetterà e dovrà connettersi alla nuova rete.</string>
+    <string name="hotspot_restart_fallback">Qualsiasi dispositivo già connesso a questa rete verrà disconnesso e dovrà connettersi a quella nuova.</string>
+    <string name="hotspot_restart_confirm">Riavvia</string>
+    <string name="hotspot_restart_title_sameband">Riavviare l\'hotspot?</string>
+    <string name="hotspot_restart_sameband_note">Questa versione di Android non può cambiare banda, quindi si riavvierà a %1$s con un nuovo nome e password.</string>
+    <string name="hotspot_restart_sameband_toast">Impossibile passare a 2,4 GHz, riavviato a %1$s</string>
+    <string name="hotspot_restart_title_faster">Passare a 5 GHz?</string>
+    <string name="hotspot_restart_faster_note">I dispositivi senza 5 GHz non vedranno la nuova rete.</string>
+    <string name="hotspot_restart_faster_failed_toast">Impossibile passare a 5 GHz, riavviato a 2,4 GHz</string>
     <string name="hotspot_network">Rete</string>
     <string name="hotspot_password">Password</string>
     <string name="hotspot_security">Sicurezza</string>
     <string name="hotspot_security_open">Nessuna</string>
+    <string name="hotspot_band">Banda</string>
+    <string name="hotspot_band_2ghz">2,4 GHz</string>
+    <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_dual">2,4 + 5 GHz</string>
     <string name="hotspot_password_show">Mostra password</string>
     <string name="hotspot_password_hide">Nascondi password</string>
     <string name="hotspot_copy_network">Copia nome rete</string>
@@ -132,6 +157,23 @@
     <string name="settings_server_port_dialog_saved">Modifiche salvate</string>
     <string name="settings_server_allinterfaces_list_title">Ascolta su tutte le interfacce</string>
     <string name="settings_server_allinterfaces_list_subtitle">Accetta connessioni su ogni indirizzo IP, non solo su quello selezionato</string>
+    <string name="settings_server_idle_list_title">Interrompi la condivisione se inattiva</string>
+    <string name="settings_server_idle_off">Disattivato</string>
+    <plurals name="settings_server_idle_option">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d di minuti</item>
+        <item quantity="other">%d minuti</item>
+    </plurals>
+    <plurals name="settings_server_idle_subtitle">
+        <item quantity="one">Dopo %d minuto senza download</item>
+        <item quantity="many">Dopo %d di minuti senza download</item>
+        <item quantity="other">Dopo %d minuti senza download</item>
+    </plurals>
+    <string name="settings_hotspot_band_list_title">Banda preferita</string>
+    <string name="settings_hotspot_band_needsandroid">Richiede Android 16+</string>
+    <string name="settings_hotspot_band_dual_description">Veloce, e i dispositivi meno recenti possono comunque connettersi</string>
+    <string name="settings_hotspot_band_5ghz_description">La più veloce, ma i dispositivi meno recenti non la vedono</string>
+    <string name="settings_hotspot_band_2ghz_description">Più lenta, ma tutti i dispositivi possono connettersi</string>
     <string name="settings_subheading_client">Client</string>
     <string name="settings_client_dam_list_title">Modalità di Accesso Diretto</string>
     <string name="settings_client_dam_list_subtitle">Ideale per file di grandi dimensioni</string>

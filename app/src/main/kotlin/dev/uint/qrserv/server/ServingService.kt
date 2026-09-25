@@ -165,24 +165,69 @@ class ServingService : Service() {
         return builder.build()
     }
 
-    private fun ensureChannel() {
-        NotificationManagerCompat.from(this).createNotificationChannel(
-            NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_LOW)
-                .setName(getString(R.string.notification_channel_name))
-                .setShowBadge(false)
-                .build(),
-        )
-    }
+    private fun ensureChannel() = ensureChannel(this)
 
     companion object {
         private const val CHANNEL_ID = "sharing"
+        private const val IDLE_STOPPED_CHANNEL_ID = "sharing_stopped"
         private const val NOTIFICATION_ID = 1
+        private const val IDLE_STOPPED_NOTIFICATION_ID = 2
         private const val ACTION_STOP = "dev.uint.qrserv.action.STOP_SHARING"
 
         // Safety net against a lost release.
         private const val WAKE_LOCK_TIMEOUT_MS = 60 * 60 * 1000L
 
+        private fun ensureChannel(context: Context) {
+            NotificationManagerCompat.from(context).createNotificationChannel(
+                NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_LOW)
+                    .setName(context.getString(R.string.notification_channel_name))
+                    .setShowBadge(false)
+                    .build(),
+            )
+        }
+
+        /** Posts a dismissable "sharing stopped" notice; false if notifications aren't allowed. */
+        fun notifyIdleStopped(context: Context, minutes: Int): Boolean {
+            val manager = NotificationManagerCompat.from(context)
+            if (!manager.areNotificationsEnabled()) return false
+            if (Build.VERSION.SDK_INT >= 33 &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+            // Its own channel, so it can pop up without making the ongoing sharing notification do the
+            // same, and so it can be turned down on its own. No sound or vibration either way.
+            manager.createNotificationChannel(
+                NotificationChannelCompat.Builder(IDLE_STOPPED_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                    .setName(context.getString(R.string.notification_channel_idle_name))
+                    .setSound(null, null)
+                    .setVibrationEnabled(false)
+                    .setShowBadge(false)
+                    .build(),
+            )
+            val openApp = PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, MainActivity::class.java),
+                PendingIntent.FLAG_IMMUTABLE,
+            )
+            val notification = NotificationCompat.Builder(context, IDLE_STOPPED_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(context.getString(R.string.page_info_idlestopped_label))
+                .setContentText(context.resources.getQuantityString(R.plurals.page_info_idlestopped_msg, minutes, minutes))
+                .setContentIntent(openApp)
+                .setAutoCancel(true)
+                .setCategory(NotificationCompat.CATEGORY_STATUS)
+                // Before 26 there are no channels; this is what makes it pop up there.
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build()
+            manager.notify(IDLE_STOPPED_NOTIFICATION_ID, notification)
+            return true
+        }
+
         fun start(context: Context) {
+            // A new share makes the last one's "stopped" notice stale.
+            NotificationManagerCompat.from(context).cancel(IDLE_STOPPED_NOTIFICATION_ID)
             try {
                 ContextCompat.startForegroundService(context, Intent(context, ServingService::class.java))
             } catch (_: IllegalStateException) {

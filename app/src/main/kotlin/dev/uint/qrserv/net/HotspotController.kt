@@ -10,8 +10,10 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.Process
+import android.util.SparseIntArray
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import dev.uint.qrserv.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -27,7 +29,27 @@ data class HotspotInfo(
     val security: HotspotSecurity,
     val securityName: String?,
     val address: String,
+    val band: HotspotBand,
+    /** What a restart on the fast bands would get; null where the band can't be requested. */
+    val fasterBand: HotspotBand?,
 )
+
+enum class HotspotBand {
+    /** 2.4 and 5 GHz at once, under one network. */
+    DUAL,
+
+    FIVE_GHZ,
+
+    /** Also the answer when the band can't be told. */
+    TWO_GHZ,
+}
+
+val HotspotBand.labelRes: Int
+    get() = when (this) {
+        HotspotBand.DUAL -> R.string.hotspot_band_dual
+        HotspotBand.FIVE_GHZ -> R.string.hotspot_band_5ghz
+        HotspotBand.TWO_GHZ -> R.string.hotspot_band_2ghz
+    }
 
 enum class HotspotFailure {
     PERMISSION_DENIED,
@@ -74,8 +96,23 @@ class HotspotController(
     val isActive: Boolean
         get() = reservation != null
 
-    /** Must be called while QRServ is in the foreground; the system refuses otherwise. */
-    suspend fun start(): HotspotStartResult {
+    /** Bands the hotspot can be asked for, fastest first; empty where the band can't be requested. */
+    val selectableBands: List<HotspotBand>
+        get() = when {
+            Build.VERSION.SDK_INT < 36 || !wifiManager.is5GHzBandSupported -> emptyList()
+            wifiManager.isBridgedApConcurrencySupported -> listOf(HotspotBand.DUAL, HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
+            else -> listOf(HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
+        }
+
+    /** True where [selectableBands] is empty only because this Android version can't request a band. */
+    val bandChoiceNeedsNewerAndroid: Boolean
+        get() = Build.VERSION.SDK_INT < 36 && wifiManager.is5GHzBandSupported
+
+    /**
+     * Must be called while QRServ is in the foreground; the system refuses otherwise.
+     * [band] null asks for the fastest one available.
+     */
+    suspend fun start(band: HotspotBand? = null): HotspotStartResult {
         info?.let { if (reservation != null) return HotspotStartResult.Started(it) }
         if (Build.VERSION.SDK_INT < 33) return HotspotStartResult.Failed(HotspotFailure.GENERIC)
 
@@ -89,7 +126,7 @@ class HotspotController(
 
         val before = withContext(Dispatchers.IO) { ipv4Candidates() }.mapTo(HashSet()) { it.address }
 
-        val newReservation = when (val started = requestReservation()) {
+        val newReservation = when (val started = requestReservationFor(band ?: selectableBands.firstOrNull())) {
             is Requested.Started -> started.reservation
             is Requested.Failed -> return HotspotStartResult.Failed(started.reason)
         }
@@ -108,6 +145,8 @@ class HotspotController(
             security = securityOf(config.securityType),
             securityName = securityNameOf(config.securityType),
             address = address,
+            band = bandOf(config),
+            fasterBand = selectableBands.firstOrNull(),
         )
         info = newInfo
         watchWifiControl()
@@ -135,8 +174,65 @@ class HotspotController(
         data class Failed(val reason: HotspotFailure) : Requested
     }
 
+    // The default local-only hotspot is 2.4 GHz at 20 MHz. From 36, apps may pick the band, and 5 GHz is
+    // several times faster -- but 2.4 GHz-only clients can't see it, and it can be refused (no usable
+    // channel, regulatory, a concurrent Wi-Fi connection). So: both bands where the device can run them
+    // together, else 5 GHz, else the default. A preferred band that's refused falls back the same way.
     @RequiresApi(33)
-    private suspend fun requestReservation(): Requested = suspendCancellableCoroutine { continuation ->
+    private suspend fun requestReservationFor(band: HotspotBand?): Requested {
+        if (Build.VERSION.SDK_INT >= 36 && band != null && band in selectableBands) {
+            val attempts = when (band) {
+                HotspotBand.DUAL -> listOf(
+                    bands(SoftApConfiguration.BAND_2GHZ, SoftApConfiguration.BAND_5GHZ),
+                    bands(SoftApConfiguration.BAND_5GHZ),
+                )
+                HotspotBand.FIVE_GHZ -> listOf(bands(SoftApConfiguration.BAND_5GHZ))
+                HotspotBand.TWO_GHZ -> listOf(bands(SoftApConfiguration.BAND_2GHZ))
+            }
+            for (channels in attempts) {
+                requestConfigured(channels)?.let { return it }
+            }
+        }
+        return requestReservation { cb -> wifiManager.startLocalOnlyHotspot(cb, mainHandler) }
+    }
+
+    @RequiresApi(36)
+    private suspend fun requestConfigured(channels: SparseIntArray): Requested.Started? {
+        val config = SoftApConfiguration.Builder().setChannels(channels).build()
+        val started = requestReservation { cb ->
+            wifiManager.startLocalOnlyHotspotWithConfiguration(config, context.mainExecutor, cb)
+        } as? Requested.Started ?: return null
+        // Apps can't set a passphrase before 37, so make sure the framework still generated one.
+        if (isPassphraseProtected(started.reservation.softApConfiguration)) return started
+        callback = null
+        started.reservation.close()
+        return null
+    }
+
+    // Channel 0 lets the framework pick within each band.
+    private fun bands(vararg bands: Int) = SparseIntArray().apply { bands.forEach { put(it, 0) } }
+
+    @RequiresApi(33)
+    private fun bandOf(config: SoftApConfiguration): HotspotBand {
+        val channels = config.channels
+        val keys = (0 until channels.size()).map(channels::keyAt)
+        val has5 = keys.any { it and SoftApConfiguration.BAND_5GHZ != 0 }
+        val has2 = keys.any { it and SoftApConfiguration.BAND_2GHZ != 0 }
+        return when {
+            has5 && has2 && keys.size > 1 -> HotspotBand.DUAL
+            has5 && !has2 -> HotspotBand.FIVE_GHZ
+            else -> HotspotBand.TWO_GHZ
+        }
+    }
+
+    @RequiresApi(33)
+    private fun isPassphraseProtected(config: SoftApConfiguration): Boolean =
+        !config.passphrase.isNullOrEmpty() && securityOf(config.securityType) != HotspotSecurity.OPEN
+
+    @RequiresApi(33)
+    private suspend fun requestReservation(
+        start: (WifiManager.LocalOnlyHotspotCallback) -> Unit,
+    ): Requested = suspendCancellableCoroutine { continuation ->
         val cb = object : WifiManager.LocalOnlyHotspotCallback() {
             override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation) {
                 if (continuation.isActive) {
@@ -165,7 +261,7 @@ class HotspotController(
         }
         callback = cb
         try {
-            wifiManager.startLocalOnlyHotspot(cb, mainHandler)
+            start(cb)
         } catch (_: SecurityException) {
             callback = null
             continuation.resume(Requested.Failed(HotspotFailure.PERMISSION_DENIED))

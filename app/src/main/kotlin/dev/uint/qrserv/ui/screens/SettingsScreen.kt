@@ -45,6 +45,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextRange
@@ -52,7 +53,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.R
+import dev.uint.qrserv.data.IdleStopOptions
 import dev.uint.qrserv.data.ThemeMode
+import dev.uint.qrserv.net.HotspotBand
+import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.ui.components.BackNavigationIcon
 import dev.uint.qrserv.ui.theme.ReducedDialogScrim
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
@@ -71,6 +75,8 @@ fun SettingsScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showPortDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
+    var showBandDialog by remember { mutableStateOf(false) }
+    var showIdleDialog by remember { mutableStateOf(false) }
     var showRestoreConfirm by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel) {
@@ -80,6 +86,11 @@ fun SettingsScreen(
     }
 
     val groupItemColors = ListItemDefaults.colors(containerColor = Color.Transparent)
+    val disabledItemColors = ListItemDefaults.colors(
+        containerColor = Color.Transparent,
+        headlineColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+        supportingColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
+    )
 
     Scaffold(
         modifier = modifier,
@@ -121,6 +132,45 @@ fun SettingsScreen(
                     colors = groupItemColors,
                     modifier = Modifier.clickable { viewModel.toggleAllInterfaces() },
                 )
+                GroupDivider()
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_server_idle_list_title)) },
+                    supportingContent = {
+                        Text(
+                            if (uiState.idleStopMinutes <= 0) {
+                                stringResource(R.string.settings_server_idle_off)
+                            } else {
+                                pluralStringResource(R.plurals.settings_server_idle_subtitle, uiState.idleStopMinutes, uiState.idleStopMinutes)
+                            },
+                        )
+                    },
+                    colors = groupItemColors,
+                    modifier = Modifier.clickable { showIdleDialog = true },
+                )
+            }
+
+            // Empty before 36, or without 5 GHz: the hotspot then always uses the system default. It's still
+            // shown, disabled, where 5 GHz exists but Android is too old, since an update would unlock it.
+            val bandOptions = uiState.hotspotBandOptions
+            val bandEnabled = bandOptions.isNotEmpty()
+            if (bandEnabled || uiState.hotspotBandNeedsNewerAndroid) {
+                SectionHeader(stringResource(R.string.hotspot_screen_title))
+                SettingsGroup {
+                    ListItem(
+                        headlineContent = { Text(stringResource(R.string.settings_hotspot_band_list_title)) },
+                        supportingContent = {
+                            Text(
+                                if (bandEnabled) {
+                                    stringResource((uiState.hotspotBand ?: bandOptions.first()).labelRes)
+                                } else {
+                                    stringResource(R.string.settings_hotspot_band_needsandroid)
+                                },
+                            )
+                        },
+                        colors = if (bandEnabled) groupItemColors else disabledItemColors,
+                        modifier = Modifier.clickable(enabled = bandEnabled) { showBandDialog = true },
+                    )
+                }
             }
 
             SectionHeader(stringResource(R.string.settings_subheading_client))
@@ -148,11 +198,7 @@ fun SettingsScreen(
                         )
                     },
                     colors = if (uiState.damBuildIneligible) {
-                        ListItemDefaults.colors(
-                            containerColor = Color.Transparent,
-                            headlineColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
-                        )
+                        disabledItemColors
                     } else {
                         groupItemColors
                     },
@@ -201,10 +247,42 @@ fun SettingsScreen(
     }
 
     if (showThemeDialog) {
-        ThemeDialog(
-            currentMode = uiState.themeMode,
+        ChoiceDialog(
+            title = stringResource(R.string.settings_general_theme_list_title),
+            options = ThemeMode.entries,
+            current = uiState.themeMode,
+            label = { themeModeLabel(it) },
             onDismiss = { showThemeDialog = false },
             onSelect = { mode -> viewModel.setThemeMode(mode) },
+        )
+    }
+
+    if (showBandDialog) {
+        ChoiceDialog(
+            title = stringResource(R.string.settings_hotspot_band_list_title),
+            options = uiState.hotspotBandOptions,
+            current = uiState.hotspotBand ?: uiState.hotspotBandOptions.firstOrNull(),
+            label = { stringResource(it.labelRes) },
+            description = { stringResource(bandDescriptionRes(it)) },
+            onDismiss = { showBandDialog = false },
+            onSelect = { band -> viewModel.setHotspotBand(band) },
+        )
+    }
+
+    if (showIdleDialog) {
+        ChoiceDialog(
+            title = stringResource(R.string.settings_server_idle_list_title),
+            options = IdleStopOptions,
+            current = uiState.idleStopMinutes,
+            label = { minutes ->
+                if (minutes <= 0) {
+                    stringResource(R.string.settings_server_idle_off)
+                } else {
+                    pluralStringResource(R.plurals.settings_server_idle_option, minutes, minutes)
+                }
+            },
+            onDismiss = { showIdleDialog = false },
+            onSelect = { minutes -> viewModel.setIdleStopMinutes(minutes) },
         )
     }
 
@@ -348,12 +426,22 @@ private fun themeModeLabel(mode: ThemeMode): String = when (mode) {
     ThemeMode.LIGHT -> stringResource(R.string.settings_general_theme_option_light)
 }
 
+private fun bandDescriptionRes(band: HotspotBand): Int = when (band) {
+    HotspotBand.DUAL -> R.string.settings_hotspot_band_dual_description
+    HotspotBand.FIVE_GHZ -> R.string.settings_hotspot_band_5ghz_description
+    HotspotBand.TWO_GHZ -> R.string.settings_hotspot_band_2ghz_description
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ThemeDialog(
-    currentMode: ThemeMode,
+private fun <T> ChoiceDialog(
+    title: String,
+    options: List<T>,
+    current: T?,
+    label: @Composable (T) -> String,
     onDismiss: () -> Unit,
-    onSelect: (ThemeMode) -> Unit,
+    onSelect: (T) -> Unit,
+    description: (@Composable (T) -> String)? = null,
 ) {
     BasicAlertDialog(onDismissRequest = onDismiss) {
         ReducedDialogScrim()
@@ -363,28 +451,37 @@ private fun ThemeDialog(
             tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
             Column(modifier = Modifier.padding(24.dp).selectableGroup()) {
-                Text(stringResource(R.string.settings_general_theme_list_title), style = MaterialTheme.typography.headlineSmall)
+                Text(title, style = MaterialTheme.typography.headlineSmall)
                 Spacer(Modifier.height(16.dp))
-                ThemeMode.entries.forEach { mode ->
+                options.forEach { option ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
                             .selectable(
-                                selected = mode == currentMode,
+                                selected = option == current,
                                 role = Role.RadioButton,
                                 onClick = {
-                                    if (mode != currentMode) {
-                                        onSelect(mode)
+                                    if (option != current) {
+                                        onSelect(option)
                                         onDismiss()
                                     }
                                 },
                             )
                             .padding(vertical = 10.dp),
                     ) {
-                        RadioButton(selected = mode == currentMode, onClick = null)
+                        RadioButton(selected = option == current, onClick = null)
                         Spacer(Modifier.width(12.dp))
-                        Text(themeModeLabel(mode))
+                        Column {
+                            Text(label(option))
+                            if (description != null) {
+                                Text(
+                                    description(option),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
                     }
                 }
             }

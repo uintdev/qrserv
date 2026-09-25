@@ -21,8 +21,11 @@ import androidx.lifecycle.viewModelScope
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.AddressGroup
 import dev.uint.qrserv.data.AppUiState
+import dev.uint.qrserv.data.DEFAULT_IDLE_STOP_MINUTES
+import dev.uint.qrserv.data.CompatibleBandWarning
 import dev.uint.qrserv.data.FileInfo
 import dev.uint.qrserv.data.HotspotDialog
+import dev.uint.qrserv.data.IdleStopOptions
 import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.data.InterfaceAddress
 import dev.uint.qrserv.data.PageType
@@ -34,6 +37,7 @@ import dev.uint.qrserv.files.FileRepository
 import dev.uint.qrserv.files.ImportResult
 import dev.uint.qrserv.net.AddressChange
 import dev.uint.qrserv.net.HotspotAvailability
+import dev.uint.qrserv.net.HotspotBand
 import dev.uint.qrserv.net.HotspotController
 import dev.uint.qrserv.net.HotspotFailure
 import dev.uint.qrserv.net.HotspotInfo
@@ -44,6 +48,7 @@ import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.net.addressChange
 import dev.uint.qrserv.net.hotspotPreflight
 import dev.uint.qrserv.net.hotspotUnavailableReason
+import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.server.ServerController
 import dev.uint.qrserv.server.ServingNotice
 import dev.uint.qrserv.server.ServingService
@@ -59,6 +64,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -66,6 +72,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 sealed interface UiEvent {
@@ -77,6 +85,14 @@ sealed interface UiEvent {
 }
 
 private val ADDRESS_SETTLE_TIME = 2.seconds
+
+private data class IdleTimerKey(
+    val sharing: Boolean,
+    val network: String?,
+    val minutes: Int,
+    val downloading: Boolean = false,
+    val requests: Int = 0,
+)
 
 class QRServViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -103,6 +119,23 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private var hotspotReuseFile: FileInfo? = null
 
     private var hotspotScreenShown = false
+
+    // A one-off band from the hotspot screen's links, overriding the preference; kept through Try again.
+    private var bandOnce: HotspotBand? = null
+
+    // Tearing the hotspot down destroys sockets bound to its address, and the next one can reuse it.
+    private var rebindAfterHotspotRestart = false
+
+    // Devices that requested the file on this hotspot; the system doesn't let apps list its clients.
+    // Written from Ktor's threads.
+    private val hotspotClients: MutableSet<String> = ConcurrentHashMap.newKeySet()
+
+    // Bumped on every request, so the idle timer restarts even for a download too quick to show up in
+    // activeTransfers (a StateFlow can skip its brief 1).
+    private val serverRequests = MutableStateFlow(0)
+
+    // Where onServerStopped() leaves the imported page; set for a stop that has something to explain.
+    private var pageAfterStop = PageType.LANDING
 
     private var notificationPromptOpen = false
 
@@ -136,7 +169,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private val serverController = ServerController(
-        downloadStartedCallback = { ip -> postToast(R.string.server_info_download_started, ip) },
+        downloadStartedCallback = { ip ->
+            serverRequests.update { it + 1 }
+            // The phone itself can reach the hotspot address too; that's not a client.
+            _uiState.value.hotspot?.takeIf { it.address != ip }?.let { hotspotClients.add(ip) }
+            postToast(R.string.server_info_download_started, ip)
+        },
         downloadFinishedCallback = { ip ->
             postToast(R.string.server_info_download_finished, ip)
         },
@@ -157,11 +195,18 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val fiu = Preferences.readBool(Preferences.PREF_CLIENT_FIU)
         val port = Preferences.readInt(Preferences.PREF_SERVER_PORT) ?: 0
         val themeMode = readPersistedThemeMode()
+        val bandOptions = hotspotController?.selectableBands.orEmpty()
         _uiState.update {
             it.copy(
                 damEnabled = fileRepo.directAccessMode,
                 fiuEnabled = fiu,
                 allInterfacesEnabled = Preferences.readBool(Preferences.PREF_SERVER_ALL_INTERFACES),
+                hotspotBand = readHotspotBand(bandOptions),
+                hotspotBandOptions = bandOptions,
+                hotspotBandNeedsNewerAndroid = hotspotController?.bandChoiceNeedsNewerAndroid
+                    ?: (hotspotCapableBeforeAndroid13() && isFiveGhzSupported()),
+                idleStopMinutes = Preferences.readInt(Preferences.PREF_SERVER_IDLE_MINUTES)?.takeIf { it in IdleStopOptions }
+                    ?: DEFAULT_IDLE_STOP_MINUTES,
                 port = port,
                 savedPort = port,
                 damEligible = isDamEligible(),
@@ -185,6 +230,28 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
         viewModelScope.launch {
             ServingState.stopRequests.collect { onShutdownClicked() }
+        }
+        // A forgotten share -- and a private hotspot, which Android never times out -- would otherwise keep
+        // the file available long after it's needed. Any change -- a share starting or switching network, a
+        // request, a download ending, the setting -- restarts the timer.
+        viewModelScope.launch {
+            combine(
+                uiState.map { state ->
+                    IdleTimerKey(
+                        sharing = state.serverRunning && !state.serverPoweringDown,
+                        network = state.hotspot?.ssid,
+                        minutes = state.idleStopMinutes,
+                    )
+                },
+                ServingState.activeTransfers,
+                serverRequests,
+            ) { key, transfers, requests -> key.copy(downloading = transfers > 0, requests = requests) }
+                .distinctUntilChanged()
+                .collectLatest { key ->
+                    if (!key.sharing || key.minutes <= 0 || key.downloading) return@collectLatest
+                    delay(key.minutes.minutes)
+                    if (!_uiState.value.actionButtonLoading) stopForIdle(key.minutes)
+                }
         }
         viewModelScope.launch {
             addressCheckRequests.collectLatest {
@@ -395,7 +462,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val current = _uiState.value.selectedIp
         val selected = interfaces.firstOrNull { it.address == current } ?: interfaces.first()
         val bindAddress = hotspot?.address ?: selected.bindHost.takeUnless { listensOnAllInterfaces() }
-        if (!serverController.isRunning || serverController.bindAddress != bindAddress) {
+        val rebindRequired = rebindAfterHotspotRestart
+        rebindAfterHotspotRestart = false
+        if (!serverController.isRunning || serverController.bindAddress != bindAddress || rebindRequired) {
             try {
                 startServer(bindAddress, port = serverController.port.takeIf { serverController.isRunning })
             } catch (_: Exception) {
@@ -534,13 +603,15 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         stopFileObserver()
         stopHotspotSession()
         clearSessionMarker()
+        val stoppedPage = pageAfterStop
+        pageAfterStop = PageType.LANDING
         viewModelScope.launch {
             withContext(Dispatchers.IO) { deletePickerCache() }
             _uiState.update {
                 it.copy(
                     serverRunning = false,
                     serverPoweringDown = false,
-                    pageType = if (it.pageType == PageType.IMPORTED) PageType.LANDING else it.pageType,
+                    pageType = if (it.pageType == PageType.IMPORTED) stoppedPage else it.pageType,
                 )
             }
         }
@@ -667,6 +738,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onHotspotClicked() {
+        if (_uiState.value.pageType != PageType.HOTSPOT_FAILED) bandOnce = null
         hotspotReuseFile = when (_uiState.value.pageType) {
             in ReusableFilePages -> _uiState.value.fileInfo.takeIf { it.path.isNotEmpty() }
             PageType.HOTSPOT_FAILED -> hotspotReuseFile
@@ -724,7 +796,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         setLoading(true)
         _uiState.update { it.copy(hotspotStarting = true) }
         viewModelScope.launch {
-            val result = controller.start()
+            val requested = bandOnce ?: _uiState.value.hotspotBand ?: controller.selectableBands.firstOrNull()
+            // Only the links' restarts report a band that didn't take; elsewhere the Band row shows it.
+            val compatibleRequested = bandOnce == HotspotBand.TWO_GHZ
+            val fasterRequested = bandOnce == HotspotBand.DUAL || bandOnce == HotspotBand.FIVE_GHZ
+            val result = controller.start(band = requested)
             _uiState.update { it.copy(hotspotStarting = false) }
             when (result) {
                 is HotspotStartResult.Failed -> {
@@ -732,6 +808,16 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     onHotspotStartFailed(result.reason, intent)
                 }
                 is HotspotStartResult.Started -> {
+                    bandOnce = null
+                    // Before 36, or when 2.4 GHz was refused, the default can come back on another band.
+                    if (compatibleRequested && result.info.band != HotspotBand.TWO_GHZ) {
+                        postToast(
+                            R.string.hotspot_restart_sameband_toast,
+                            getApplication<Application>().getString(result.info.band.labelRes),
+                        )
+                    } else if (fasterRequested && result.info.band == HotspotBand.TWO_GHZ) {
+                        postToast(R.string.hotspot_restart_faster_failed_toast)
+                    }
                     _uiState.update { it.copy(hotspot = result.info, hotspotFailure = null) }
                     if (intent == HotspotIntent.SWITCH) switchToHotspot(result.info) else continueFromIdle()
                 }
@@ -751,7 +837,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 _uiState.update { it.copy(hotspotDialog = HotspotDialog.WIFI_CONTROL_SETTINGS) }
             }
             intent == HotspotIntent.SWITCH -> postToast(hotspotFailureMessageRes(reason))
-            else -> _uiState.update { it.copy(pageType = PageType.HOTSPOT_FAILED, hotspotFailure = reason) }
+            else -> {
+                // Only the compatible-band restart gets here with the server still up.
+                if (serverController.isRunning) viewModelScope.launch { stopServing() }
+                _uiState.update { it.copy(pageType = PageType.HOTSPOT_FAILED, hotspotFailure = reason) }
+            }
         }
     }
 
@@ -809,13 +899,89 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    /** Restarts the hotspot on 2.4 GHz for clients that can't see a 5 GHz-only one, keeping the file shared. */
+    fun onUseCompatibleBandClicked() = requestBandRestart(faster = false)
+
+    fun onUseFasterBandClicked() = requestBandRestart(faster = true)
+
+    private fun requestBandRestart(faster: Boolean) {
+        if (rejectIfBusy()) return
+        if (_uiState.value.hotspot == null || !_uiState.value.serverRunning) return
+        val warning = when {
+            ServingState.activeTransfers.value > 0 -> CompatibleBandWarning.DOWNLOAD_ACTIVE
+            hotspotClients.isNotEmpty() -> CompatibleBandWarning.CLIENT_SEEN
+            else -> CompatibleBandWarning.NONE_SEEN
+        }
+        _uiState.update { it.copy(compatibleBandWarning = warning, hotspotRestartFaster = faster) }
+    }
+
+    fun onCompatibleBandWarningConfirmed() {
+        _uiState.update { it.copy(compatibleBandWarning = null) }
+        if (rejectIfBusy()) return
+        if (_uiState.value.hotspot == null || !_uiState.value.serverRunning) return
+        restartOnBand(faster = _uiState.value.hotspotRestartFaster)
+    }
+
+    fun onCompatibleBandWarningDismissed() {
+        _uiState.update { it.copy(compatibleBandWarning = null) }
+    }
+
+    private fun restartOnBand(faster: Boolean) {
+        bandOnce = if (faster) _uiState.value.hotspot?.fasterBand else HotspotBand.TWO_GHZ
+        rebindAfterHotspotRestart = true
+        hotspotReuseFile = _uiState.value.fileInfo
+        // The server stays up so the port is kept; startServing() rebinds it to the new address.
+        stopHotspotSession()
+        requestHotspot(HotspotIntent.FROM_IDLE)
+    }
+
+    // A band restored from another device's backup may not be supported here; treat it as unset.
+    private fun readHotspotBand(options: List<HotspotBand>): HotspotBand? =
+        Preferences.readString(Preferences.PREF_HOTSPOT_BAND)
+            ?.let { name -> HotspotBand.entries.firstOrNull { it.name == name } }
+            ?.takeIf { it in options }
+
+    fun setIdleStopMinutes(minutes: Int) {
+        // Off is stored as 0, not cleared, or it would read back as the default.
+        Preferences.writeInt(Preferences.PREF_SERVER_IDLE_MINUTES, minutes)
+        _uiState.update { it.copy(idleStopMinutes = minutes) }
+    }
+
+    private fun stopForIdle(minutes: Int) {
+        if (!_uiState.value.serverRunning || _uiState.value.serverPoweringDown) return
+        // A notification reaches someone who isn't looking at the app; otherwise a toast will have to do.
+        if (!ServingService.notifyIdleStopped(getApplication(), minutes)) postToast(R.string.info_idle_stopped)
+        _uiState.update { it.copy(idleStoppedMinutes = minutes) }
+        pageAfterStop = PageType.IDLE_STOPPED
+        onShutdownClicked()
+    }
+
+    private fun isFiveGhzSupported(): Boolean =
+        getApplication<Application>().getSystemService(WifiManager::class.java)?.is5GHzBandSupported == true
+
+    // Private hotspot mode needs 33; below that, only offer what an update would unlock.
+    private fun hotspotCapableBeforeAndroid13(): Boolean {
+        if (Build.VERSION.SDK_INT >= 33) return false
+        val app = getApplication<Application>()
+        return app.packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI) &&
+            !app.getSystemService(UserManager::class.java).hasUserRestriction(UserManager.DISALLOW_CONFIG_TETHERING)
+    }
+
+    fun setHotspotBand(band: HotspotBand) {
+        Preferences.writeString(Preferences.PREF_HOTSPOT_BAND, band.name)
+        _uiState.update { it.copy(hotspotBand = band) }
+    }
+
     fun onHotspotScreenOpened() {
         _uiState.update { it.copy(hotspotScreenPending = false) }
     }
 
     private fun stopHotspotSession() {
         hotspotScreenShown = false
-        _uiState.update { it.copy(hotspot = null, hotspotStarting = false, hotspotScreenPending = false) }
+        hotspotClients.clear()
+        _uiState.update {
+            it.copy(hotspot = null, hotspotStarting = false, hotspotScreenPending = false, compatibleBandWarning = null)
+        }
         // Called from Ktor's threads; the controller is only touched on main.
         viewModelScope.launch(Dispatchers.Main.immediate) { hotspotController?.stop() }
     }
@@ -908,6 +1074,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 damEnabled = false,
                 fiuEnabled = false,
                 allInterfacesEnabled = false,
+                hotspotBand = null,
+                idleStopMinutes = DEFAULT_IDLE_STOP_MINUTES,
                 savedPort = 0,
                 damEligible = isDamEligible(),
                 themeMode = ThemeMode.SYSTEM,
