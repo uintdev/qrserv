@@ -76,9 +76,11 @@
     <string name="hotspot_dialog_title">İzin gerekli</string>
     <string name="hotspot_dialog_nearby">QRServ\'in özel erişim noktası oluşturabilmesi için “Yakındaki cihazlar” iznini verin.</string>
     <string name="hotspot_dialog_wificontrol">QRServ\'in özel erişim noktası oluşturabilmesi için “Kablosuz bağlantı denetimi” iznini verin.</string>
-    <string name="hotspot_dialog_notnow">Şimdi değil</string>
-    <string name="hotspot_dialog_continue">Devam</string>
+    <string name="permission_dialog_notnow">Şimdi değil</string>
+    <string name="permission_dialog_continue">Devam</string>
     <string name="hotspot_dialog_settings">Ayarları aç</string>
+    <string name="notification_dialog_title">Bildirimlere izin verilsin mi?</string>
+    <string name="notification_dialog_body">QRServ paylaşım sırasında bir bildirim göstererek ne zaman etkin olduğunu bilmenizi sağlar. Reddederseniz daha sonra Ayarlar\'dan açabilirsiniz.</string>
     <string name="hotspot_screen_title">Özel erişim noktası</string>
     <string name="hotspot_scan_hint">Bu ağa katılmak için tarayın</string>
     <string name="hotspot_forget_hint">İşiniz bitince unutun</string>

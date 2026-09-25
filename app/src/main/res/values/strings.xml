@@ -77,9 +77,11 @@
     <string name="hotspot_dialog_title">Permission needed</string>
     <string name="hotspot_dialog_nearby">Allow Nearby devices so QRServ can create a private hotspot.</string>
     <string name="hotspot_dialog_wificontrol">Allow Wi-Fi control so QRServ can create a private hotspot.</string>
-    <string name="hotspot_dialog_notnow">Not now</string>
-    <string name="hotspot_dialog_continue">Continue</string>
+    <string name="permission_dialog_notnow">Not now</string>
+    <string name="permission_dialog_continue">Continue</string>
     <string name="hotspot_dialog_settings">Open settings</string>
+    <string name="notification_dialog_title">Allow notifications?</string>
+    <string name="notification_dialog_body">QRServ shows a notification while it\'s sharing, so you know when it\'s active. If you decline, you can turn it on later in Settings.</string>
     <string name="hotspot_screen_title">Private hotspot</string>
     <string name="hotspot_scan_hint">Scan to join this network</string>
     <string name="hotspot_forget_hint">Forget it once you\'re done</string>

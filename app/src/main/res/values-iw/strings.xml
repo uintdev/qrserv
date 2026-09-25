@@ -81,9 +81,11 @@
     <string name="hotspot_dialog_title">נדרשת הרשאה</string>
     <string name="hotspot_dialog_nearby">אשר את \"מכשירים בקרבת מקום\" כדי ש-QRServ יוכל ליצור נקודה חמה פרטית.</string>
     <string name="hotspot_dialog_wificontrol">אשר את \"שליטה ב-Wi-Fi\" כדי ש-QRServ יוכל ליצור נקודה חמה פרטית.</string>
-    <string name="hotspot_dialog_notnow">לא עכשיו</string>
-    <string name="hotspot_dialog_continue">המשך</string>
+    <string name="permission_dialog_notnow">לא עכשיו</string>
+    <string name="permission_dialog_continue">המשך</string>
     <string name="hotspot_dialog_settings">פתח הגדרות</string>
+    <string name="notification_dialog_title">לאפשר התראות?</string>
+    <string name="notification_dialog_body">QRServ מציג התראה בזמן שיתוף, כדי שתדע מתי הוא פעיל. אם תסרב, תוכל להפעיל אותה מאוחר יותר בהגדרות.</string>
     <string name="hotspot_screen_title">נקודה חמה פרטית</string>
     <string name="hotspot_scan_hint">סרוק כדי להצטרף לרשת זו</string>
     <string name="hotspot_forget_hint">שכח אותה בסיום</string>

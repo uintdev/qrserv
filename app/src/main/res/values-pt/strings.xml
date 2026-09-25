@@ -77,9 +77,11 @@
     <string name="hotspot_dialog_title">Permissão necessária</string>
     <string name="hotspot_dialog_nearby">Permita “Dispositivos próximos” para que o QRServ possa criar uma zona Wi-Fi privada.</string>
     <string name="hotspot_dialog_wificontrol">Permita “Controlo do Wi-Fi” para que o QRServ possa criar uma zona Wi-Fi privada.</string>
-    <string name="hotspot_dialog_notnow">Agora não</string>
-    <string name="hotspot_dialog_continue">Continuar</string>
+    <string name="permission_dialog_notnow">Agora não</string>
+    <string name="permission_dialog_continue">Continuar</string>
     <string name="hotspot_dialog_settings">Abrir definições</string>
+    <string name="notification_dialog_title">Permitir notificações?</string>
+    <string name="notification_dialog_body">O QRServ mostra uma notificação enquanto partilha, para saber quando está ativo. Se recusar, pode ativá-la mais tarde nas Definições.</string>
     <string name="hotspot_screen_title">Zona Wi-Fi privada</string>
     <string name="hotspot_scan_hint">Leia o código para aderir a esta rede</string>
     <string name="hotspot_forget_hint">Esqueça-a quando terminar</string>

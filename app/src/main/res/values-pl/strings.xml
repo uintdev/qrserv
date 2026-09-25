@@ -78,9 +78,11 @@
     <string name="hotspot_dialog_title">Wymagane uprawnienie</string>
     <string name="hotspot_dialog_nearby">Zezwól na „Urządzenia w pobliżu”, aby QRServ mógł utworzyć prywatny hotspot.</string>
     <string name="hotspot_dialog_wificontrol">Zezwól na „Sterowanie Wi-Fi”, aby QRServ mógł utworzyć prywatny hotspot.</string>
-    <string name="hotspot_dialog_notnow">Nie teraz</string>
-    <string name="hotspot_dialog_continue">Dalej</string>
+    <string name="permission_dialog_notnow">Nie teraz</string>
+    <string name="permission_dialog_continue">Dalej</string>
     <string name="hotspot_dialog_settings">Otwórz ustawienia</string>
+    <string name="notification_dialog_title">Zezwolić na powiadomienia?</string>
+    <string name="notification_dialog_body">QRServ wyświetla powiadomienie podczas udostępniania, abyś wiedział, kiedy jest aktywny. Jeśli odmówisz, możesz włączyć je później w Ustawieniach.</string>
     <string name="hotspot_screen_title">Prywatny hotspot</string>
     <string name="hotspot_scan_hint">Zeskanuj, aby dołączyć do tej sieci</string>
     <string name="hotspot_forget_hint">Zapomnij ją, gdy skończysz</string>

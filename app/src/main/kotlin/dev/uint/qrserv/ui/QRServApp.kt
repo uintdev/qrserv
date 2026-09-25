@@ -39,6 +39,7 @@ import dev.uint.qrserv.ui.screens.DamBrowserScreen
 import dev.uint.qrserv.ui.screens.HotspotPermissionDialog
 import dev.uint.qrserv.ui.screens.HotspotScreen
 import dev.uint.qrserv.ui.screens.MainScreen
+import dev.uint.qrserv.ui.screens.NotificationPermissionDialog
 import dev.uint.qrserv.ui.screens.SettingsScreen
 import dev.uint.qrserv.viewmodel.QRServViewModel
 import dev.uint.qrserv.viewmodel.UiEvent
@@ -102,13 +103,6 @@ fun QRServApp(
             // Same reasoning as above, but the About dialog isn't part of the screen enum -- it can
             // be open regardless of `screen` -- so it needs its own guard.
             showAbout = false
-        }
-    }
-
-    LaunchedEffect(uiState.notificationPermissionPending) {
-        if (uiState.notificationPermissionPending) {
-            onRequestNotificationPermission()
-            viewModel.onNotificationPermissionRequested()
         }
     }
 
@@ -379,6 +373,15 @@ fun QRServApp(
                         onLaunchNearbyPrompt()
                     },
                     onOpenSettings = onOpenAppSettings,
+                )
+            }
+            if (uiState.notificationPermissionPending) {
+                NotificationPermissionDialog(
+                    onDismiss = viewModel::onNotificationDialogDismissed,
+                    onContinue = {
+                        viewModel.onNotificationPermissionRequested()
+                        onRequestNotificationPermission()
+                    },
                 )
             }
         }

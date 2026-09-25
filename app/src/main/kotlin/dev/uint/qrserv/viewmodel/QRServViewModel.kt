@@ -226,6 +226,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         _uiState.update { it.copy(notificationPermissionPending = false) }
     }
 
+    fun onNotificationDialogDismissed() {
+        onNotificationPermissionRequested()
+        onNotificationPermissionResult(false)
+    }
+
     fun onNotificationPermissionResult(granted: Boolean) {
         notificationsGranted = granted
         notificationPromptOpen = false

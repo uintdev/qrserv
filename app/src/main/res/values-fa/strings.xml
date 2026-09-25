@@ -76,9 +76,11 @@
     <string name="hotspot_dialog_title">مجوز لازم است</string>
     <string name="hotspot_dialog_nearby">به «دستگاه‌های اطراف» اجازه دهید تا QRServ بتواند نقطه اتصال خصوصی بسازد.</string>
     <string name="hotspot_dialog_wificontrol">به «کنترل Wi-Fi» اجازه دهید تا QRServ بتواند نقطه اتصال خصوصی بسازد.</string>
-    <string name="hotspot_dialog_notnow">اکنون نه</string>
-    <string name="hotspot_dialog_continue">ادامه</string>
+    <string name="permission_dialog_notnow">اکنون نه</string>
+    <string name="permission_dialog_continue">ادامه</string>
     <string name="hotspot_dialog_settings">باز کردن تنظیمات</string>
+    <string name="notification_dialog_title">اجازهٔ اعلان‌ها؟</string>
+    <string name="notification_dialog_body">QRServ هنگام هم‌رسانی یک اعلان نشان می‌دهد تا بدانید چه زمانی فعال است. اگر رد کنید، می‌توانید بعداً آن را در تنظیمات روشن کنید.</string>
     <string name="hotspot_screen_title">نقطه اتصال خصوصی</string>
     <string name="hotspot_scan_hint">برای پیوستن به این شبکه اسکن کنید</string>
     <string name="hotspot_forget_hint">پس از پایان، آن را فراموش کنید</string>

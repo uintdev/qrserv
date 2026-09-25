@@ -77,9 +77,11 @@
     <string name="hotspot_dialog_title">Autorisation requise</string>
     <string name="hotspot_dialog_nearby">Autorisez « Appareils à proximité » pour que QRServ puisse créer un point d\'accès privé.</string>
     <string name="hotspot_dialog_wificontrol">Autorisez « Contrôle Wi-Fi » pour que QRServ puisse créer un point d\'accès privé.</string>
-    <string name="hotspot_dialog_notnow">Pas maintenant</string>
-    <string name="hotspot_dialog_continue">Continuer</string>
+    <string name="permission_dialog_notnow">Pas maintenant</string>
+    <string name="permission_dialog_continue">Continuer</string>
     <string name="hotspot_dialog_settings">Ouvrir les paramètres</string>
+    <string name="notification_dialog_title">Autoriser les notifications ?</string>
+    <string name="notification_dialog_body">QRServ affiche une notification pendant le partage, pour que vous sachiez quand il est actif. Si vous refusez, vous pourrez l\'activer plus tard dans les paramètres.</string>
     <string name="hotspot_screen_title">Point d\'accès privé</string>
     <string name="hotspot_scan_hint">Scannez pour rejoindre ce réseau</string>
     <string name="hotspot_forget_hint">Oubliez-le une fois terminé</string>
