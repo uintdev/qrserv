@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -139,7 +140,7 @@ fun MiddleEllipsisText(
     textAlign: TextAlign = TextAlign.Center,
 ) {
     val textMeasurer = rememberTextMeasurer()
-    val style = LocalTextStyle.current.copy(fontSize = fontSize)
+    val style = LocalTextStyle.current.merge(TextStyle(fontSize = fontSize))
 
     // Measured via onSizeChanged (the real, final laid-out width), not a BoxWithConstraints read of
     // incoming constraints -- inside some parents (e.g. Material3's ListItem) that bound doesn't
@@ -153,57 +154,63 @@ fun MiddleEllipsisText(
     // nothing at another (a rotation, or a row recycled into a different column).
     var overflowCorrectionPx by remember(text, maxWidthPx) { mutableIntStateOf(0) }
     var corrections by remember(text, maxWidthPx) { mutableIntStateOf(0) }
+    var gaveUp by remember(text, maxWidthPx) { mutableStateOf(false) }
     // Nothing is painted until the string has stopped changing. The width isn't known on the first
     // pass and a correction can take another, so painting eagerly meant the name appeared at one
     // length and then visibly re-truncated itself. Read from the graphicsLayer block, i.e. in the
     // draw phase -- so flipping it costs a repaint, not a recomposition, and a value settled during
     // the layout phase is picked up by the very same frame rather than the next one.
-    var settled by remember(text, maxWidthPx) { mutableStateOf(false) }
+    var layoutFits by remember(text) { mutableStateOf(false) }
 
-    val displayText = remember(text, maxWidthPx, overflowCorrectionPx, style) {
-        val budget = maxWidthPx - overflowCorrectionPx
-        if (budget <= 0) {
-            text
-        } else {
-            middleEllipsisFilename(text, budget) { candidate ->
-                textMeasurer.measure(AnnotatedString(candidate), style = style, maxLines = 1, softWrap = false).size.width
-            }
+    fun fitted(correctionPx: Int): String {
+        val budget = maxWidthPx - correctionPx
+        if (budget <= 0) return text
+        return middleEllipsisFilename(text, budget) { candidate ->
+            textMeasurer.measure(AnnotatedString(candidate), style = style, maxLines = 1, softWrap = false).size.width
         }
     }
+
+    val displayText = remember(text, maxWidthPx, overflowCorrectionPx, style) { fitted(overflowCorrectionPx) }
     Text(
         text = displayText,
-        fontSize = fontSize,
+        style = style,
         maxLines = 1,
         softWrap = false,
         overflow = TextOverflow.Clip,
         textAlign = textAlign,
         onTextLayout = { result ->
-            if (maxWidthPx > 0) {
-                when {
-                    !result.didOverflowWidth -> settled = true
-                    // Never leave it invisible because the two measurements can't be reconciled:
-                    // a hair of clipping beats a name that never appears.
-                    corrections >= MaxOverflowCorrections -> settled = true
-                    else -> {
-                        // Correct by however much it actually overflowed, rather than by a blind
-                        // fraction of the width -- a one-pixel disagreement between TextMeasurer
-                        // and real layout used to cost an 8% cut, which is what made the
-                        // adjustment big enough to notice. The trailing term guarantees progress
-                        // even if the overflow can't be read off the layout.
-                        val overflowPx = if (result.lineCount > 0) {
-                            (result.getLineRight(0) - maxWidthPx).toInt().coerceAtLeast(0)
-                        } else {
-                            0
-                        }
-                        overflowCorrectionPx += overflowPx + 1 + corrections
-                        corrections++
+            layoutFits = !result.didOverflowWidth
+            if (maxWidthPx > 0 && result.didOverflowWidth && !gaveUp) {
+                // Never leave it invisible because the two measurements can't be reconciled:
+                // a hair of clipping beats a name that never appears.
+                if (corrections >= MaxOverflowCorrections) {
+                    gaveUp = true
+                } else {
+                    // Correct by however much it actually overflowed, rather than by a blind
+                    // fraction of the width -- a one-pixel disagreement between TextMeasurer
+                    // and real layout used to cost an 8% cut, which is what made the
+                    // adjustment big enough to notice. The trailing term guarantees progress
+                    // even if the overflow can't be read off the layout.
+                    val overflowPx = if (result.lineCount > 0) {
+                        (result.getLineRight(0) - maxWidthPx).toInt().coerceAtLeast(0)
+                    } else {
+                        0
                     }
+                    var correctionPx = overflowCorrectionPx
+                    var rounds = corrections
+                    do {
+                        correctionPx += overflowPx + 1 + rounds
+                        rounds++
+                    } while (rounds < MaxOverflowCorrections && fitted(correctionPx) == displayText)
+                    if (fitted(correctionPx) == displayText) gaveUp = true
+                    overflowCorrectionPx = correctionPx
+                    corrections = rounds
                 }
             }
         },
         modifier = modifier
             .fillMaxWidth()
-            .graphicsLayer { alpha = if (settled) 1f else 0f }
+            .graphicsLayer { alpha = if (maxWidthPx > 0 && (layoutFits || gaveUp)) 1f else 0f }
             .onSizeChanged { maxWidthPx = it.width },
     )
 }
