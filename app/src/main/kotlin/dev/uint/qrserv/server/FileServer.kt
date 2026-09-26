@@ -4,12 +4,14 @@ import dev.uint.qrserv.data.FileInfo
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.decodeURLPart
 import io.ktor.http.content.OutgoingContent
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.plugins.origin
+import io.ktor.server.request.path
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.ByteReadChannel
@@ -91,6 +93,10 @@ class FileServer(
         val remoteIp = call.request.origin.remoteHost
 
         val info = fileInfoProvider()
+        if (info != null && !pathMatchesFile(call.request.path(), info.name)) {
+            call.respondText("", status = HttpStatusCode.NotFound)
+            return
+        }
         val file = info?.path?.takeIf { it.isNotEmpty() }?.let { File(it) }
 
         // Checked before file.exists(): on scoped storage, losing MANAGE_EXTERNAL_STORAGE
@@ -232,6 +238,12 @@ private fun rfc5987Encode(name: String): String =
 private fun sanitizeFileName(name: String): String {
     val flattened = name.map { if (it == '/' || it == '\\') '_' else it }.joinToString("")
     return if (flattened.isBlank() || flattened == "." || flattened == "..") "download" else flattened
+}
+
+internal fun pathMatchesFile(rawPath: String, fileName: String): Boolean {
+    if (rawPath.isEmpty() || rawPath == "/") return true
+    val requested = runCatching { rawPath.removePrefix("/").decodeURLPart() }.getOrNull()
+    return requested == fileName
 }
 
 internal fun contentDispositionHeader(rawName: String): String {

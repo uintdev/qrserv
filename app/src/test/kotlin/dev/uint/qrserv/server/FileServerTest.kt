@@ -163,6 +163,19 @@ class FileServerTest {
     }
 
     @Test
+    fun rootSendsTheFile() {
+        assertEquals(200, open("GET", "/").responseCode)
+    }
+
+    @Test
+    fun anotherFileNameIsNotFound() {
+        val connection = open("GET", "/older-report.pdf")
+        assertEquals(404, connection.responseCode)
+        assertEquals(404, open("HEAD", "/older-report.pdf").responseCode)
+        assertEquals(0, downloadsStarted.get())
+    }
+
+    @Test
     fun otherMethodsAreRefused() {
         val connection = open("POST").apply {
             doOutput = true
