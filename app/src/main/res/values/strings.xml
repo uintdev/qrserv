@@ -42,6 +42,7 @@
     <string name="page_imported_iface_switch_failed">Couldn\'t switch to that IP address</string>
     <string name="page_imported_iface_address_changed">IP address changed, so the QR code was updated</string>
     <string name="page_imported_iface_address_gone">That IP address is no longer available</string>
+    <string name="page_imported_port_changed">Port %1$s was in use, so the port changed to %2$s</string>
     <string name="page_imported_iface_suggestion">Switch to %1$s</string>
     <string name="page_imported_vpn_lockdown">“Block connections without VPN” is on, which may block other devices</string>
 

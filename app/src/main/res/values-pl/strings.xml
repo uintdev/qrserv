@@ -46,6 +46,7 @@
     <string name="page_imported_iface_switch_failed">Nie udało się przełączyć na ten adres IP</string>
     <string name="page_imported_iface_address_changed">Adres IP zmienił się, więc kod QR został zaktualizowany</string>
     <string name="page_imported_iface_address_gone">Ten adres IP nie jest już dostępny</string>
+    <string name="page_imported_port_changed">Port %1$s był już w użyciu, więc zmieniono go na %2$s</string>
     <string name="page_imported_iface_suggestion">Przełącz na %1$s</string>
     <string name="page_imported_vpn_lockdown">„Blokuj połączenia bez VPN” jest włączone i może blokować inne urządzenia</string>
 

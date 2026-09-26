@@ -42,6 +42,7 @@
     <string name="page_imported_iface_switch_failed">Nem sikerült átváltani erre az IP-címre</string>
     <string name="page_imported_iface_address_changed">Az IP-cím megváltozott, ezért a QR-kód frissült</string>
     <string name="page_imported_iface_address_gone">Ez az IP-cím már nem érhető el</string>
+    <string name="page_imported_port_changed">A(z) %1$s port már használatban volt, ezért a port %2$s lett</string>
     <string name="page_imported_iface_suggestion">Váltás erre: %1$s</string>
     <string name="page_imported_vpn_lockdown">„VPN nélküli csatlakozások letiltása” be van kapcsolva, ami más eszközöket is blokkolhat</string>
 

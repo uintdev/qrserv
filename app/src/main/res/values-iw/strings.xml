@@ -48,6 +48,7 @@
     <string name="page_imported_iface_switch_failed">לא ניתן לעבור לכתובת IP זו</string>
     <string name="page_imported_iface_address_changed">כתובת ה-IP השתנתה, ולכן קוד ה-QR עודכן</string>
     <string name="page_imported_iface_address_gone">כתובת IP זו כבר לא זמינה</string>
+    <string name="page_imported_port_changed">הפורט %1$s היה בשימוש, ולכן הפורט שונה ל-%2$s</string>
     <string name="page_imported_iface_suggestion">עבור אל %1$s</string>
     <string name="page_imported_vpn_lockdown">\"חסימת חיבורים ללא VPN\" מופעלת ועלולה לחסום מכשירים אחרים</string>
 
