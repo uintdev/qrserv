@@ -333,7 +333,14 @@ class HotspotController(
             for (addr in networkInterface.inetAddresses) {
                 if (addr !is Inet4Address) continue
                 val host = addr.hostAddress ?: continue
-                add(Ipv4Candidate(host, isPrivate = addr.isSiteLocalAddress, endsInOne = addr.address[3].toInt() == 1))
+                add(
+                    Ipv4Candidate(
+                        host,
+                        isPrivate = addr.isSiteLocalAddress,
+                        endsInOne = addr.address[3].toInt() == 1,
+                        interfaceName = networkInterface.name.orEmpty(),
+                    ),
+                )
             }
         }
     }
