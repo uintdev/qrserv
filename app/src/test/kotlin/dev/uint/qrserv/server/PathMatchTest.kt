@@ -1,5 +1,6 @@
 package dev.uint.qrserv.server
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -40,5 +41,29 @@ class PathMatchTest {
     @Test
     fun malformedEncodingDoesNotMatch() {
         assertFalse(pathMatchesFile("/bad%zz", "bad%zz"))
+    }
+
+    @Test
+    fun theAppsOwnLinksMatch() {
+        listOf(
+            "report.pdf",
+            "my file (1).txt",
+            "a+b.txt",
+            "50%.txt",
+            "what?#.txt",
+            "semi;colon&amp=1.txt",
+            "tilde~'quote'!.txt",
+            "中文 ✓.txt",
+            "emoji 😀.png",
+        ).forEach { name ->
+            val path = java.net.URI(shareUrl("192.168.2.25", 8080, name)).rawPath
+            assertTrue(name, pathMatchesFile(path, name))
+        }
+    }
+
+    @Test
+    fun linkWithoutNameIsTheRoot() {
+        assertEquals("http://192.168.2.25:8080/", shareUrl("192.168.2.25", 8080, null))
+        assertEquals("http://[2a0e::1]:8080/", shareUrl("2a0e::1", 8080, null))
     }
 }

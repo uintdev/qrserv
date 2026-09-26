@@ -4,7 +4,6 @@ import dev.uint.qrserv.data.FileInfo
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.decodeURLPart
 import io.ktor.http.content.OutgoingContent
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.cio.CIO
@@ -238,12 +237,6 @@ private fun rfc5987Encode(name: String): String =
 private fun sanitizeFileName(name: String): String {
     val flattened = name.map { if (it == '/' || it == '\\') '_' else it }.joinToString("")
     return if (flattened.isBlank() || flattened == "." || flattened == "..") "download" else flattened
-}
-
-internal fun pathMatchesFile(rawPath: String, fileName: String): Boolean {
-    if (rawPath.isEmpty() || rawPath == "/") return true
-    val requested = runCatching { rawPath.removePrefix("/").decodeURLPart() }.getOrNull()
-    return requested == fileName
 }
 
 internal fun contentDispositionHeader(rawName: String): String {

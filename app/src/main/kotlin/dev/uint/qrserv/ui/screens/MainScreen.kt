@@ -137,7 +137,7 @@ import dev.uint.qrserv.ui.components.isShortWindow
 import dev.uint.qrserv.ui.components.middleEllipsis
 import dev.uint.qrserv.ui.components.rememberIsWideScreen
 import dev.uint.qrserv.ui.components.shareText
-import dev.uint.qrserv.net.NetworkUtils
+import dev.uint.qrserv.server.shareUrl
 import dev.uint.qrserv.ui.theme.BrandError
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
 import dev.uint.qrserv.ui.theme.subtleContainerColor
@@ -543,12 +543,7 @@ private fun ImportedContent(
     val context = LocalContext.current
     KeepScreenOn()
     val url = remember(uiState.selectedIp, uiState.port, uiState.fiuEnabled, uiState.fileInfo) {
-        val filePathSegment = if (uiState.fiuEnabled) {
-            java.net.URLEncoder.encode(uiState.fileInfo.name, "UTF-8").replace("+", "%20")
-        } else {
-            ""
-        }
-        "http://${NetworkUtils.urlHost(uiState.selectedIp)}:${uiState.port}/$filePathSegment"
+        shareUrl(uiState.selectedIp, uiState.port, uiState.fileInfo.name.takeIf { uiState.fiuEnabled })
     }
     val locale = LocalConfiguration.current.locales[0]
     val sizeHuman = remember(uiState.fileInfo, locale) { FileSizeFormatter.humanReadable(uiState.fileInfo.length, locale) }
