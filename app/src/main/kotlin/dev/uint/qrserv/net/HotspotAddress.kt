@@ -7,7 +7,6 @@ data class Ipv4Candidate(
     val interfaceName: String = "",
 )
 
-// VPN tunnels, Wi-Fi Direct groups, mobile data and loopback; the hotspot's own name varies by device.
 private val NonHotspotInterfacePrefixes = listOf("tun", "ppp", "ipsec", "p2p", "rmnet", "ccmni", "v4-", "lo")
 
 private fun Ipv4Candidate.couldBeHotspot(): Boolean =

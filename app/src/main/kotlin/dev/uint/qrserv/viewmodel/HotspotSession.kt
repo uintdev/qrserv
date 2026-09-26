@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-/** The private hotspot's side of [QRServViewModel]; the serving it needs goes through [Host]. */
 class HotspotSession internal constructor(
     private val app: Application,
     private val scope: CoroutineScope,

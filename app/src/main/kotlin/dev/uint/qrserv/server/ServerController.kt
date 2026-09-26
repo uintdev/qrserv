@@ -29,7 +29,6 @@ class ServerController(
     var bindAddress: String? = null
         private set
 
-    /** Changes whenever the server starts or stops. */
     @Volatile
     var sessionId = 0L
         private set

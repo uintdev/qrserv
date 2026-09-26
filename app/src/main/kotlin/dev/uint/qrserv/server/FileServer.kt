@@ -32,10 +32,7 @@ class FileServer(
 ) {
 
     interface Listener {
-        /** [resumed] when the request picks up part-way through the file. */
         fun onDownloadStarted(remoteIp: String, resumed: Boolean)
-
-        /** Only for a request that reached the end of the file. */
         fun onDownloadFinished(remoteIp: String)
 
         /** Paired with every [onDownloadStarted], whether the transfer completed or not. */

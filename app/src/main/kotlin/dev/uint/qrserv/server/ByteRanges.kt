@@ -11,15 +11,9 @@ internal sealed interface ByteRange {
 
     data object Unsatisfiable : ByteRange
 
-    /** [start] through [end], inclusive. */
     data class Partial(val start: Long, val end: Long) : ByteRange
 }
 
-/**
- * Reads a single-range `Range: bytes=...` header against a body of [length] bytes. Anything it
- * doesn't handle -- several ranges, another unit, a malformed value -- is answered with the whole
- * file, which RFC 9110 allows for any Range request.
- */
 internal fun byteRange(header: String?, length: Long): ByteRange {
     val spec = header?.trim()
         ?.takeIf { it.startsWith("bytes=", ignoreCase = true) }
@@ -57,7 +51,6 @@ internal fun ifMatchMatches(header: String?, entityTag: String): Boolean =
 
 private val entityTagSalt = ByteArray(16).also { SecureRandom().nextBytes(it) }
 
-/** Changes whenever the file does, without giving away its path or modification time. */
 internal fun entityTag(file: File, length: Long): String {
     val digest = MessageDigest.getInstance("SHA-256")
     digest.update(entityTagSalt)

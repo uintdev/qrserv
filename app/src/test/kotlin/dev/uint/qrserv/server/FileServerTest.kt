@@ -61,7 +61,6 @@ class FileServerTest {
 
     private fun HttpURLConnection.body(): ByteArray = inputStream.use { it.readBytes() }
 
-    // The server reports a finished transfer after the client may already have read it all.
     private fun awaitFinished(): Int {
         val deadline = System.currentTimeMillis() + 1000
         while (downloadsFinished.get() == 0 && System.currentTimeMillis() < deadline) Thread.sleep(10)
