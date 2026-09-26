@@ -111,6 +111,7 @@ data class AppUiState(
     val notificationPermissionPending: Boolean = false,
     val hotspot: HotspotInfo? = null,
     val hotspotStarting: Boolean = false,
+    val hotspotStopping: Boolean = false,
     val hotspotAvailability: HotspotAvailability = HotspotAvailability(),
     val hotspotFailure: HotspotFailure? = null,
     val hotspotDialog: HotspotDialog? = null,

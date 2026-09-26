@@ -420,10 +420,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         stopServing()
     }
 
-    private suspend fun startServing(fileInfo: FileInfo) {
+    private suspend fun startServing(fileInfo: FileInfo, leavingHotspot: Boolean = false) {
         rebindJob?.join()
         if (!serverController.isRunning) addressesAtManualPick = emptySet()
-        val hotspot = _uiState.value.hotspot
+        val hotspot = _uiState.value.hotspot.takeUnless { leavingHotspot }
+        val closingAddress = _uiState.value.hotspot?.address.takeIf { leavingHotspot }
         if (hotspot != null && !this.hotspot.isActive) {
             this.hotspot.onLost(HotspotLoss.STOPPED)
             return
@@ -432,7 +433,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val interfaces = if (hotspot != null) {
             listOf(InterfaceAddress(hotspot.address, AddressGroup.HOSTED))
         } else {
-            val listed = NetworkUtils.listInterfaces().getOrElse {
+            val listed = NetworkUtils.listInterfaces().map { all -> all.filter { it.address != closingAddress } }.getOrElse {
                 _uiState.update { it.copy(pageType = PageType.INTERFACE_LOOKUP_ERROR, interfaces = emptyList()) }
                 stopServing()
                 return
@@ -463,7 +464,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val openHotspotScreen = hotspot != null && this.hotspot.claimScreenOpening()
 
         _uiState.update {
-            it.copy(
+            (if (leavingHotspot) this.hotspot.withoutHotspot(it) else it).copy(
                 interfaces = interfaces,
                 selectedIp = selected.address,
                 suggestedIp = null,
@@ -708,6 +709,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         hotspot.markScreenShown()
         _uiState.update {
             it.copy(
+                hotspot = info,
                 interfaces = listOf(InterfaceAddress(info.address, AddressGroup.HOSTED)),
                 selectedIp = info.address,
                 suggestedIp = null,
@@ -722,11 +724,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     fun onStopHotspotClicked() {
         if (rejectIfBusy()) return
         if (_uiState.value.hotspot == null || !_uiState.value.serverRunning) return
+        _uiState.update { it.copy(hotspotStopping = true) }
         setLoading(true)
         viewModelScope.launch {
-            hotspot.stopSession()
             withContext(Dispatchers.IO) { serverController.stop() }
-            startServing(_uiState.value.fileInfo)
+            hotspot.stopHotspot()
+            startServing(_uiState.value.fileInfo, leavingHotspot = true)
             setLoading(false)
         }
     }

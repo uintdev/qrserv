@@ -99,9 +99,9 @@ fun QRServApp(
     // either screen) would be suppressed too, stuck showing MAIN until the import finished.
     LaunchedEffect(uiState.actionButtonLoading) {
         if (uiState.actionButtonLoading) {
-            // A band restart is shown on the hotspot screen.
-            val bandRestart = screen == Screen.HOTSPOT && uiState.hotspotStarting
-            if (screen != Screen.MAIN && !bandRestart) screen = Screen.MAIN
+            // A band restart or stop is shown on the hotspot screen.
+            val onHotspotScreen = screen == Screen.HOTSPOT && (uiState.hotspotStarting || uiState.hotspotStopping)
+            if (screen != Screen.MAIN && !onHotspotScreen) screen = Screen.MAIN
             // Same reasoning as above, but the About dialog isn't part of the screen enum -- it can
             // be open regardless of `screen` -- so it needs its own guard.
             showAbout = false

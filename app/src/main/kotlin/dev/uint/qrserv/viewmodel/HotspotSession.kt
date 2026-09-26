@@ -230,8 +230,13 @@ class HotspotSession internal constructor(
                     } else if (fasterRequested && band == HotspotBand.TWO_GHZ) {
                         host.postToast(R.string.hotspot_restart_faster_failed_toast)
                     }
-                    uiState.update { it.copy(hotspot = result.info, hotspotStarting = false, hotspotFailure = null) }
-                    if (intent == Intent.SWITCH) host.switchToHotspot(result.info) else continueFromIdle()
+                    if (intent == Intent.SWITCH) {
+                        uiState.update { it.copy(hotspotStarting = false, hotspotFailure = null) }
+                        host.switchToHotspot(result.info)
+                    } else {
+                        uiState.update { it.copy(hotspot = result.info, hotspotStarting = false, hotspotFailure = null) }
+                        continueFromIdle()
+                    }
                 }
             }
         }
@@ -330,14 +335,25 @@ class HotspotSession internal constructor(
     }
 
     internal fun stopSession() {
+        uiState.update(::withoutHotspot)
+        stopHotspot()
+    }
+
+    internal fun stopHotspot() {
         screenShown = false
         clients.clear()
-        uiState.update {
-            it.copy(hotspot = null, hotspotStarting = false, hotspotScreenPending = false, compatibleBandWarning = null)
-        }
         // Called from Ktor's threads; the controller is only touched on main.
         scope.launch(Dispatchers.Main.immediate) { controller?.stop() }
     }
+
+    internal fun withoutHotspot(state: AppUiState): AppUiState =
+        state.copy(
+            hotspot = null,
+            hotspotStarting = false,
+            hotspotStopping = false,
+            hotspotScreenPending = false,
+            compatibleBandWarning = null,
+        )
 
     internal fun abandonIdle() {
         if (uiState.value.hotspot != null && !uiState.value.serverRunning) stopSession()

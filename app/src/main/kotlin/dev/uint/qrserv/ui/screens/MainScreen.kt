@@ -82,6 +82,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -209,6 +210,9 @@ fun MainScreen(
             onHotspotScreenDue()
         }
     }
+    val settledState = remember { arrayOf(uiState) }
+    SideEffect { if (!uiState.hotspotScreenPending) settledState[0] = uiState }
+    val shownState = if (uiState.hotspotScreenPending) settledState[0] else uiState
 
     var menuExpanded by remember { mutableStateOf(false) }
     val isWideScreen = rememberIsWideScreen()
@@ -285,8 +289,8 @@ fun MainScreen(
                     // Held at 100% so the hotspot screen replaces the card without the imported screen flashing up.
                     progressBarPending || (uiState.hotspotScreenPending && operationShowedProgress) ||
                         // Starting the hotspot shows on its own button instead, as the import FAB does.
-                        (uiState.actionButtonLoading && !uiState.hotspotStarting &&
-                            (uiState.pageType != PageType.IMPORTED || uiState.importProgress != null)) -> {
+                        (shownState.actionButtonLoading && !shownState.hotspotStarting &&
+                            (shownState.pageType != PageType.IMPORTED || shownState.importProgress != null)) -> {
                         Card(
                             shape = MaterialTheme.shapes.extraLarge,
                             elevation = CardDefaults.cardElevation(1.dp),
@@ -325,12 +329,12 @@ fun MainScreen(
                             }
                         }
                     }
-                    uiState.pageType == PageType.IMPORTED -> ImportedContent(uiState, viewModel, isWideScreen, onOpenHotspot)
-                    uiState.pageType == PageType.UNHANDLED_ERROR -> UnhandledErrorContent(uiState, viewModel, isWideScreen)
-                    else -> MessageForPageType(uiState, viewModel)
+                    shownState.pageType == PageType.IMPORTED -> ImportedContent(shownState, viewModel, isWideScreen, onOpenHotspot)
+                    shownState.pageType == PageType.UNHANDLED_ERROR -> UnhandledErrorContent(shownState, viewModel, isWideScreen)
+                    else -> MessageForPageType(shownState, viewModel)
                 }
             }
-            FabRow(uiState = uiState, viewModel = viewModel, isWideScreen = isWideScreen, modifier = Modifier.fillMaxSize())
+            FabRow(uiState = shownState, viewModel = viewModel, isWideScreen = isWideScreen, modifier = Modifier.fillMaxSize())
         }
     }
 }
