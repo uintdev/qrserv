@@ -553,8 +553,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         rebindJob = viewModelScope.launch {
             val port = serverController.port
             try {
-                startServer(entry.bindHost, port)
+                startServerKeepingPort(entry.bindHost, port)
                 applyManualPick(ip)
+                _uiState.update { it.copy(port = serverController.port) }
             } catch (_: Exception) {
                 postToast(R.string.page_imported_iface_switch_failed)
                 if (runCatching { startServerKeepingPort(bound, port) }.isSuccess) {
