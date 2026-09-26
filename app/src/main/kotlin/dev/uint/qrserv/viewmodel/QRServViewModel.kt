@@ -586,11 +586,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private fun onServerStopped(page: PageType? = null) {
         viewModelScope.launch(Dispatchers.Main.immediate) {
             stopFileObserver()
-            hotspot.stopSession()
             clearSessionMarker()
             val stoppedPage = page ?: pageAfterStop
             pageAfterStop = PageType.LANDING
             withContext(Dispatchers.IO) { deletePickerCache() }
+            hotspot.stopSession()
             _uiState.update {
                 it.copy(
                     serverRunning = false,
