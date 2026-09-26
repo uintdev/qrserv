@@ -154,10 +154,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     val hotspot: HotspotSession = HotspotSession(application, viewModelScope, _uiState, hotspotHost)
 
     private val serverController = ServerController(
-        downloadStartedCallback = { ip ->
+        downloadStartedCallback = { ip, resumed ->
             serverRequests.update { it + 1 }
             hotspot.recordClient(ip)
-            postToast(R.string.server_info_download_started, ip)
+            if (!resumed) postToast(R.string.server_info_download_started, ip)
         },
         downloadFinishedCallback = { ip ->
             postToast(R.string.server_info_download_finished, ip)

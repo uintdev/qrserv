@@ -9,7 +9,7 @@ import java.io.IOException
 import kotlin.time.Duration.Companion.milliseconds
 
 class ServerController(
-    private val downloadStartedCallback: (String) -> Unit,
+    private val downloadStartedCallback: (String, Boolean) -> Unit,
     private val downloadFinishedCallback: (String) -> Unit,
     private val fileMissingCallback: () -> Unit,
     private val fileUnreadableCallback: (String) -> Unit,
@@ -60,9 +60,9 @@ class ServerController(
         sessionId++
     }
 
-    override fun onDownloadStarted(remoteIp: String) {
+    override fun onDownloadStarted(remoteIp: String, resumed: Boolean) {
         ServingState.transferStarted()
-        downloadStartedCallback(remoteIp)
+        downloadStartedCallback(remoteIp, resumed)
     }
 
     override fun onDownloadFinished(remoteIp: String) {

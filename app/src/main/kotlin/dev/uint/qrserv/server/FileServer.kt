@@ -32,7 +32,10 @@ class FileServer(
 ) {
 
     interface Listener {
-        fun onDownloadStarted(remoteIp: String)
+        /** [resumed] when the request picks up part-way through the file. */
+        fun onDownloadStarted(remoteIp: String, resumed: Boolean)
+
+        /** Only for a request that reached the end of the file. */
         fun onDownloadFinished(remoteIp: String)
 
         /** Paired with every [onDownloadStarted], whether the transfer completed or not. */
@@ -117,8 +120,17 @@ class FileServer(
             return
         }
 
+        val entityTag = entityTag(file, length)
         call.response.header("Content-Disposition", contentDispositionHeader(info.name))
         call.response.header("X-Content-Type-Options", "nosniff")
+        call.response.header(HttpHeaders.AcceptRanges, "bytes")
+        call.response.header(HttpHeaders.ETag, entityTag)
+
+        if (!ifMatchMatches(call.request.headers[HttpHeaders.IfMatch], entityTag)) {
+            stream.close()
+            call.respondText("", status = HttpStatusCode.PreconditionFailed)
+            return
+        }
 
         if (headOnly) {
             stream.close()
@@ -129,19 +141,47 @@ class FileServer(
             return
         }
 
-        listener.onDownloadStarted(remoteIp)
+        val requested = call.request.headers[HttpHeaders.Range]?.takeIf {
+            rangeValidated(call.request.headers[HttpHeaders.IfRange], call.request.headers[HttpHeaders.IfMatch], entityTag)
+        }
+        val range = when (val parsed = byteRange(requested, length)) {
+            ByteRange.Full -> null
+            is ByteRange.Partial -> parsed
+            ByteRange.Unsatisfiable -> {
+                stream.close()
+                call.response.header(HttpHeaders.ContentRange, "bytes */$length")
+                call.respondText("", status = HttpStatusCode.RequestedRangeNotSatisfiable)
+                return
+            }
+        }
+        val start = range?.start ?: 0L
+        val end = range?.end ?: (length - 1)
+        if (range != null) {
+            call.response.header(HttpHeaders.ContentRange, "bytes $start-$end/$length")
+            try {
+                stream.channel.position(start)
+            } catch (error: IOException) {
+                stream.close()
+                listener.onFileUnreadable(error)
+                call.respondText("", status = HttpStatusCode.InternalServerError)
+                return
+            }
+        }
+
+        listener.onDownloadStarted(remoteIp, resumed = start > 0)
         try {
             call.respond(object : OutgoingContent.ReadChannelContent() {
+                override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
                 override val contentType = ContentType.Application.OctetStream
-                override val contentLength = length
-                override fun readFrom(): ByteReadChannel = stream.toByteReadChannel()
+                override val contentLength = end - start + 1
+                override fun readFrom(): ByteReadChannel = LimitedInputStream(stream, end - start + 1).toByteReadChannel()
             })
             // Deliberately not in the finally below: respond() throws if the client
             // disconnects part-way, if the write fails, or if Ktor's own
             // Content-Length check rejects the body -- and announcing a finished
             // download for a transfer the other end never received is worse than
             // saying nothing at all.
-            listener.onDownloadFinished(remoteIp)
+            if (end == length - 1) listener.onDownloadFinished(remoteIp)
         } finally {
             // Ktor cancels the channel -- closing the stream with it -- once the body has
             // been written, but not if it never got as far as asking for the channel at all.
