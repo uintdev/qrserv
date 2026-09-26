@@ -13,6 +13,7 @@ import android.os.Process
 import android.util.SparseIntArray
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.util.size
 import dev.uint.qrserv.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -29,7 +30,7 @@ data class HotspotInfo(
     val security: HotspotSecurity,
     val securityName: String?,
     val address: String,
-    val band: HotspotBand,
+    val band: HotspotBand?,
     /** What a restart on the fast bands would get; null where the band can't be requested. */
     val fasterBand: HotspotBand?,
 )
@@ -40,8 +41,11 @@ enum class HotspotBand {
 
     FIVE_GHZ,
 
-    /** Also the answer when the band can't be told. */
+    /** Also the answer when the channels name no known band. */
     TWO_GHZ,
+
+    /** Only ever reported, from a device's own default; never requested or offered. */
+    SIX_GHZ,
 }
 
 val HotspotBand.labelRes: Int
@@ -49,6 +53,7 @@ val HotspotBand.labelRes: Int
         HotspotBand.DUAL -> R.string.hotspot_band_dual
         HotspotBand.FIVE_GHZ -> R.string.hotspot_band_5ghz
         HotspotBand.TWO_GHZ -> R.string.hotspot_band_2ghz
+        HotspotBand.SIX_GHZ -> R.string.hotspot_band_6ghz
     }
 
 enum class HotspotFailure {
@@ -97,16 +102,18 @@ class HotspotController(
         get() = reservation != null
 
     /** Bands the hotspot can be asked for, fastest first; empty where the band can't be requested. */
-    val selectableBands: List<HotspotBand>
-        get() = when {
+    val selectableBands: List<HotspotBand> by lazy {
+        when {
             Build.VERSION.SDK_INT < 36 || !wifiManager.is5GHzBandSupported -> emptyList()
             wifiManager.isBridgedApConcurrencySupported -> listOf(HotspotBand.DUAL, HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
             else -> listOf(HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
         }
+    }
 
     /** True where [selectableBands] is empty only because this Android version can't request a band. */
-    val bandChoiceNeedsNewerAndroid: Boolean
-        get() = Build.VERSION.SDK_INT < 36 && wifiManager.is5GHzBandSupported
+    val bandChoiceNeedsNewerAndroid: Boolean by lazy { Build.VERSION.SDK_INT < 36 && wifiManager.is5GHzBandSupported }
+
+    private var closingAddress: String? = null
 
     /**
      * Must be called while QRServ is in the foreground; the system refuses otherwise.
@@ -124,6 +131,9 @@ class HotspotController(
         // Checked up front: the system would only report it as ERROR_GENERIC.
         if (!isWifiControlAllowed()) return HotspotStartResult.Failed(HotspotFailure.WIFI_CONTROL_DENIED)
 
+        // After a restart, the old hotspot's address can linger -- and the new one often reuses it.
+        closingAddress?.let { awaitAddressGone(it) }
+        closingAddress = null
         val before = withContext(Dispatchers.IO) { ipv4Candidates() }.mapTo(HashSet()) { it.address }
 
         val newReservation = when (val started = requestReservationFor(band ?: selectableBands.firstOrNull())) {
@@ -133,6 +143,7 @@ class HotspotController(
         reservation = newReservation
 
         val address = awaitAddress(before)
+        if (reservation !== newReservation) return HotspotStartResult.Failed(HotspotFailure.GENERIC)
         if (address == null) {
             stop()
             return HotspotStartResult.Failed(HotspotFailure.NO_ADDRESS)
@@ -145,7 +156,7 @@ class HotspotController(
             security = securityOf(config.securityType),
             securityName = securityNameOf(config.securityType),
             address = address,
-            band = bandOf(config),
+            band = if (Build.VERSION.SDK_INT >= 36) bandOf(config) else null,
             fasterBand = selectableBands.firstOrNull(),
         )
         info = newInfo
@@ -160,6 +171,7 @@ class HotspotController(
         val closing = reservation
         reservation = null
         callback = null
+        info?.let { closingAddress = it.address }
         info = null
         // Only ever non-null on 33+; the check is for lint.
         if (Build.VERSION.SDK_INT >= 26) closing?.close()
@@ -188,20 +200,19 @@ class HotspotController(
                 )
                 HotspotBand.FIVE_GHZ -> listOf(bands(SoftApConfiguration.BAND_5GHZ))
                 HotspotBand.TWO_GHZ -> listOf(bands(SoftApConfiguration.BAND_2GHZ))
+                HotspotBand.SIX_GHZ -> emptyList()
             }
             for (channels in attempts) {
                 requestConfigured(channels)?.let { return it }
             }
         }
-        return requestReservation { cb -> wifiManager.startLocalOnlyHotspot(cb, mainHandler) }
+        return requestReservation()
     }
 
     @RequiresApi(36)
     private suspend fun requestConfigured(channels: SparseIntArray): Requested.Started? {
         val config = SoftApConfiguration.Builder().setChannels(channels).build()
-        val started = requestReservation { cb ->
-            wifiManager.startLocalOnlyHotspotWithConfiguration(config, context.mainExecutor, cb)
-        } as? Requested.Started ?: return null
+        val started = requestReservation(config) as? Requested.Started ?: return null
         // Apps can't set a passphrase before 37, so make sure the framework still generated one.
         if (isPassphraseProtected(started.reservation.softApConfiguration)) return started
         callback = null
@@ -212,15 +223,16 @@ class HotspotController(
     // Channel 0 lets the framework pick within each band.
     private fun bands(vararg bands: Int) = SparseIntArray().apply { bands.forEach { put(it, 0) } }
 
-    @RequiresApi(33)
+    // Each key is one AP; a key allowing several bands leaves the choice to the framework, which isn't visible.
+    @RequiresApi(36)
     private fun bandOf(config: SoftApConfiguration): HotspotBand {
         val channels = config.channels
-        val keys = (0 until channels.size()).map(channels::keyAt)
-        val has5 = keys.any { it and SoftApConfiguration.BAND_5GHZ != 0 }
-        val has2 = keys.any { it and SoftApConfiguration.BAND_2GHZ != 0 }
+        val keys = (0 until channels.size).map(channels::keyAt)
+        fun allows(band: Int) = keys.any { it and band != 0 }
         return when {
-            has5 && has2 && keys.size > 1 -> HotspotBand.DUAL
-            has5 && !has2 -> HotspotBand.FIVE_GHZ
+            keys.size > 1 && allows(SoftApConfiguration.BAND_2GHZ) -> HotspotBand.DUAL
+            allows(SoftApConfiguration.BAND_5GHZ) -> HotspotBand.FIVE_GHZ
+            allows(SoftApConfiguration.BAND_6GHZ) -> HotspotBand.SIX_GHZ
             else -> HotspotBand.TWO_GHZ
         }
     }
@@ -231,7 +243,7 @@ class HotspotController(
 
     @RequiresApi(33)
     private suspend fun requestReservation(
-        start: (WifiManager.LocalOnlyHotspotCallback) -> Unit,
+        config: SoftApConfiguration? = null,
     ): Requested = suspendCancellableCoroutine { continuation ->
         val cb = object : WifiManager.LocalOnlyHotspotCallback() {
             override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation) {
@@ -261,13 +273,24 @@ class HotspotController(
         }
         callback = cb
         try {
-            start(cb)
+            if (config != null && Build.VERSION.SDK_INT >= 36) {
+                wifiManager.startLocalOnlyHotspotWithConfiguration(config, context.mainExecutor, cb)
+            } else {
+                wifiManager.startLocalOnlyHotspot(cb, mainHandler)
+            }
         } catch (_: SecurityException) {
             callback = null
             continuation.resume(Requested.Failed(HotspotFailure.PERMISSION_DENIED))
         } catch (_: IllegalStateException) {
             callback = null
             continuation.resume(Requested.Failed(HotspotFailure.GENERIC))
+        }
+    }
+
+    private suspend fun awaitAddressGone(address: String) = withContext(Dispatchers.IO) {
+        repeat(ADDRESS_POLL_ATTEMPTS) {
+            if (ipv4Candidates().none { it.address == address }) return@withContext
+            delay(ADDRESS_POLL_INTERVAL_MS.milliseconds)
         }
     }
 
@@ -299,8 +322,9 @@ class HotspotController(
 
     private fun loseTo(loss: HotspotLoss) {
         if (reservation == null) return
+        val started = info != null
         stop()
-        onLost(loss)
+        if (started) onLost(loss)
     }
 
     private fun ipv4Candidates(): List<Ipv4Candidate> = buildList {

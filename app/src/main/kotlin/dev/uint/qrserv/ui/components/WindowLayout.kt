@@ -1,5 +1,6 @@
 package dev.uint.qrserv.ui.components
 
+import android.view.View
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -14,6 +15,7 @@ import androidx.window.core.layout.computeWindowSizeClass
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import kotlinx.coroutines.flow.map
+import java.util.WeakHashMap
 
 @Composable
 fun rememberIsWideScreen(): Boolean {
@@ -51,11 +53,22 @@ fun rememberIsWideScreen(): Boolean {
 @Composable
 fun isShortWindow(): Boolean = LocalWindowInfo.current.containerDpSize.height < 480.dp
 
+private val keepScreenOnHolders = WeakHashMap<View, Int>()
+
 @Composable
 fun KeepScreenOn() {
     val view = LocalView.current
     DisposableEffect(view) {
+        keepScreenOnHolders[view] = (keepScreenOnHolders[view] ?: 0) + 1
         view.keepScreenOn = true
-        onDispose { view.keepScreenOn = false }
+        onDispose {
+            val remaining = (keepScreenOnHolders[view] ?: 1) - 1
+            if (remaining > 0) {
+                keepScreenOnHolders[view] = remaining
+            } else {
+                keepScreenOnHolders.remove(view)
+                view.keepScreenOn = false
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@ private val imageExt = setOf(
 )
 private val videoExt = setOf("3gp", "avi", "mkv", "mov", "mp4", "mpeg", "mpg", "webm", "wmv")
 private val audioExt = setOf(
-    "aac", "aiff", "flac", "m3a", "mp4", "mid", "midi", "mka", "mp3", "ogg", "wav", "weba", "wma"
+    "aac", "aiff", "flac", "m4a", "mid", "midi", "mka", "mp3", "ogg", "wav", "weba", "wma"
 )
 
 fun iconForFileName(fileName: String): ImageVector {

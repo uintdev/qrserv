@@ -15,15 +15,44 @@ object Preferences {
     const val PREF_CLIENT_DAM = "client_dam"
     const val PREF_CLIENT_FIU = "client_fiu"
     const val PREF_THEME_MODE = "theme_mode"
-    const val PREF_NOTIFICATIONS_ASKED = "notifications_asked"
+    const val PREF_NOTIFICATIONS_ASKED = "notifications_asked_install"
+    const val PREF_NEARBY_ASKED = "nearby_asked_install"
+
+    private val LegacyAskedKeys = mapOf(
+        "notifications_asked" to PREF_NOTIFICATIONS_ASKED,
+        "nearby_asked" to PREF_NEARBY_ASKED,
+    )
 
     const val PREF_SESSION_ACTIVE = "session_active"
     const val PREF_SESSION_HOTSPOT = "session_hotspot"
 
     private lateinit var prefs: SharedPreferences
 
+    private var installTime = 0L
+
     fun init(context: Context) {
-        prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val app = context.applicationContext
+        prefs = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        installTime = app.packageManager.getPackageInfo(app.packageName, 0).firstInstallTime
+        migrateAskedFlags()
+    }
+
+    private fun migrateAskedFlags() {
+        val legacy = LegacyAskedKeys.keys.filter(prefs::contains)
+        if (legacy.isEmpty()) return
+        prefs.edit {
+            legacy.forEach { old ->
+                if (prefs.getBoolean(old, false)) putLong(LegacyAskedKeys.getValue(old), installTime)
+                remove(old)
+            }
+        }
+    }
+
+    fun wasAskedOnThisInstall(key: String): Boolean =
+        prefs.getLong(key, 0L).let { it != 0L && it == installTime }
+
+    fun markAskedOnThisInstall(key: String) {
+        prefs.edit { putLong(key, installTime) }
     }
 
     fun readInt(key: String): Int? =

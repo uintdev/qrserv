@@ -2,7 +2,7 @@
     <string name="app_name">QRServ</string>
 
     <string name="page_landing_label">Selecione o(s) ficheiro(s)</string>
-    <string name="page_landing_msg">Selecione ficheiros para partilhar...</string>
+    <string name="page_landing_msg">Selecione ficheiros para partilhar…</string>
     <string name="page_info_noconnection_label">Sem ligação de rede</string>
     <string name="page_info_noconnection_msg">Ligue-se a uma rede e tente novamente</string>
     <string name="page_info_interfacelookuperror_label">Erro</string>
@@ -51,11 +51,13 @@
 
     <string name="debug_build_toast">Versão de depuração: o desempenho pode diferir da versão final.</string>
 
+    <string name="menu_more_options">Mais opções</string>
+
     <string name="info_exception_portinuse">Erro ao associar a porta</string>
     <string name="info_exception_linkopenfailed">Nenhuma aplicação disponível para abrir ligações HTTPS</string>
-    <string name="info_pending_fileprocessing">A processar a seleção de ficheiros...</string>
+    <string name="info_pending_fileprocessing">A processar a seleção de ficheiros…</string>
     <string name="info_pending_fileprocessing_shutdown">Não é possível parar o servidor durante o processamento de ficheiros.</string>
-    <string name="info_pending_servershutdown">Encerramento do servidor pendente...</string>
+    <string name="info_pending_servershutdown">Encerramento do servidor pendente…</string>
 
     <string name="server_info_download_started">Transferência iniciada: %1$s</string>
     <string name="server_info_download_finished">Transferência concluída: %1$s</string>
@@ -101,7 +103,7 @@
     <string name="hotspot_restart_fallback">Qualquer dispositivo já ligado a esta rede será desligado e terá de se ligar à nova.</string>
     <string name="hotspot_restart_confirm">Reiniciar</string>
     <string name="hotspot_restart_title_sameband">Reiniciar a zona Wi-Fi?</string>
-    <string name="hotspot_restart_sameband_note">Esta versão do Android não consegue mudar de banda, por isso irá reiniciar em %1$s com um novo nome e palavra-passe.</string>
+    <string name="hotspot_restart_sameband_note">Esta versão do Android não consegue mudar de banda, por isso irá reiniciar na mesma banda com um novo nome e palavra-passe.</string>
     <string name="hotspot_restart_sameband_toast">Não foi possível mudar para 2,4 GHz, reiniciou em %1$s</string>
     <string name="hotspot_restart_title_faster">Mudar para 5 GHz?</string>
     <string name="hotspot_restart_faster_note">Os dispositivos sem 5 GHz não verão a nova rede.</string>
@@ -113,6 +115,7 @@
     <string name="hotspot_band">Banda</string>
     <string name="hotspot_band_2ghz">2,4 GHz</string>
     <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_6ghz">6 GHz</string>
     <string name="hotspot_band_dual">2,4 + 5 GHz</string>
     <string name="hotspot_password_show">Mostrar palavra-passe</string>
     <string name="hotspot_password_hide">Ocultar palavra-passe</string>
@@ -178,7 +181,7 @@
     <string name="settings_client_dam_list_title">Modo de Acesso Direto</string>
     <string name="settings_client_dam_list_subtitle">Ideal para ficheiros grandes</string>
     <string name="settings_client_dam_ineligiblebuild">O Android 11+ requer a versão do GitHub</string>
-    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Nome do ficheiro no URL</string>
     <string name="settings_client_fiu_list_subtitle">Incluir o nome do ficheiro no URL</string>
     <string name="settings_subheading_general">Geral</string>

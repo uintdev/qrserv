@@ -2,7 +2,7 @@
     <string name="app_name">QRServ</string>
 
     <string name="page_landing_label">Выберите файл(ы)</string>
-    <string name="page_landing_msg">Выберите файлы для обмена...</string>
+    <string name="page_landing_msg">Выберите файлы для обмена…</string>
     <string name="page_info_noconnection_label">Нет подключения к сети</string>
     <string name="page_info_noconnection_msg">Подключитесь к сети и повторите попытку</string>
     <string name="page_info_interfacelookuperror_label">Ошибка</string>
@@ -53,11 +53,13 @@
 
     <string name="debug_build_toast">Debug-сборка: производительность может отличаться от релиза.</string>
 
+    <string name="menu_more_options">Другие параметры</string>
+
     <string name="info_exception_portinuse">Ошибка привязки порта</string>
     <string name="info_exception_linkopenfailed">Нет приложения для открытия HTTPS-ссылок</string>
-    <string name="info_pending_fileprocessing">Идёт обработка выбора файла...</string>
+    <string name="info_pending_fileprocessing">Идёт обработка выбора файла…</string>
     <string name="info_pending_fileprocessing_shutdown">Сервер нельзя остановить во время обработки файлов.</string>
-    <string name="info_pending_servershutdown">Ожидание отключения сервера...</string>
+    <string name="info_pending_servershutdown">Ожидание отключения сервера…</string>
 
     <string name="server_info_download_started">загрузка началась: %1$s</string>
     <string name="server_info_download_finished">загрузка завершена: %1$s</string>
@@ -103,7 +105,7 @@
     <string name="hotspot_restart_fallback">Устройства, уже подключённые к этой сети, будут отключены, и им придётся подключиться к новой.</string>
     <string name="hotspot_restart_confirm">Перезапустить</string>
     <string name="hotspot_restart_title_sameband">Перезапустить точку доступа?</string>
-    <string name="hotspot_restart_sameband_note">Эта версия Android не может сменить диапазон, поэтому точка доступа перезапустится на %1$s с новым именем и паролем.</string>
+    <string name="hotspot_restart_sameband_note">Эта версия Android не может сменить диапазон, поэтому точка доступа перезапустится на том же диапазоне с новым именем и паролем.</string>
     <string name="hotspot_restart_sameband_toast">Не удалось перейти на 2,4 ГГц, перезапуск на %1$s</string>
     <string name="hotspot_restart_title_faster">Перейти на 5 ГГц?</string>
     <string name="hotspot_restart_faster_note">Устройства без 5 ГГц не увидят новую сеть.</string>
@@ -115,6 +117,7 @@
     <string name="hotspot_band">Диапазон</string>
     <string name="hotspot_band_2ghz">2,4 ГГц</string>
     <string name="hotspot_band_5ghz">5 ГГц</string>
+    <string name="hotspot_band_6ghz">6 ГГц</string>
     <string name="hotspot_band_dual">2,4 + 5 ГГц</string>
     <string name="hotspot_password_show">Показать пароль</string>
     <string name="hotspot_password_hide">Скрыть пароль</string>
@@ -182,7 +185,7 @@
     <string name="settings_client_dam_list_title">Режим прямого доступа</string>
     <string name="settings_client_dam_list_subtitle">Идеально подходит для больших файлов</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ требует версии с GitHub</string>
-    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Имя файла в URL</string>
     <string name="settings_client_fiu_list_subtitle">Включать имя файла в URL-адрес</string>
     <string name="settings_subheading_general">Общие</string>

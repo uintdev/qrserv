@@ -2,9 +2,11 @@ package dev.uint.qrserv.ui.screens
 
 import android.os.Build
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -78,21 +81,22 @@ fun HotspotScreen(
     onBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    // QRServApp closes this screen on the same change.
-    val info = uiState.hotspot ?: return
+    // QRServApp closes this screen on the same change, except during a band restart.
+    val info = uiState.hotspot
+    if (info == null && !uiState.hotspotStarting) return
 
     KeepScreenOn()
 
-    uiState.compatibleBandWarning?.let { warning ->
+    if (info != null) uiState.compatibleBandWarning?.let { warning ->
         CompatibleBandWarningDialog(
             warning = warning,
             // Before 36 the band can't be requested, so the restart comes back on the same one.
-            sameBand = stringResource(info.band.labelRes).takeIf { Build.VERSION.SDK_INT < 36 },
+            sameBand = Build.VERSION.SDK_INT < 36,
             faster = uiState.hotspotRestartFaster,
             // A dual-band hotspot still carries 2.4 GHz.
             fasterDropsTwoGhz = info.fasterBand == HotspotBand.FIVE_GHZ,
-            onDismiss = viewModel::onCompatibleBandWarningDismissed,
-            onRestart = viewModel::onCompatibleBandWarningConfirmed,
+            onDismiss = viewModel.hotspot::onCompatibleBandWarningDismissed,
+            onRestart = viewModel.hotspot::onCompatibleBandWarningConfirmed,
         )
     }
 
@@ -113,12 +117,18 @@ fun HotspotScreen(
             )
         },
     ) { padding ->
+        if (info == null) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(padding).fillMaxSize()) {
+                CircularProgressIndicator()
+            }
+            return@Scaffold
+        }
         Column(modifier = Modifier.padding(padding)) {
             val bandLink = when {
                 info.band != HotspotBand.TWO_GHZ ->
-                    BandLink(stringResource(R.string.hotspot_compatible_link), viewModel::onUseCompatibleBandClicked)
+                    BandLink(stringResource(R.string.hotspot_compatible_link), viewModel.hotspot::onUseCompatibleBandClicked)
                 info.fasterBand != null ->
-                    BandLink(stringResource(R.string.hotspot_faster_link), viewModel::onUseFasterBandClicked)
+                    BandLink(stringResource(R.string.hotspot_faster_link), viewModel.hotspot::onUseFasterBandClicked)
                 else -> null
             }
             QrDetailsLayout(
@@ -263,11 +273,13 @@ private fun HotspotDetailsCard(info: HotspotInfo, rowGap: Dp, onStop: () -> Unit
                 style = infoRowStyle,
             )
             Spacer(Modifier.size(if (compact) 0.dp else 4.dp))
-            InfoRow(
-                stringResource(R.string.hotspot_band),
-                stringResource(info.band.labelRes),
-                style = infoRowStyle,
-            )
+            info.band?.let { band ->
+                InfoRow(
+                    stringResource(R.string.hotspot_band),
+                    stringResource(band.labelRes),
+                    style = infoRowStyle,
+                )
+            }
 
             Spacer(Modifier.size(rowGap))
             OutlinedButton(onClick = onStop, modifier = Modifier.fillMaxWidth()) {

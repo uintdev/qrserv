@@ -66,7 +66,7 @@ private fun isOutOfSpace(error: Throwable): Boolean {
  * entirely. Backslashes go the same way: not separators on Android, but this name also becomes a
  * ZIP entry, read back by extractors on platforms where they are.
  */
-private fun sanitizePickedName(rawName: String): String {
+internal fun sanitizePickedName(rawName: String): String {
     val base = rawName
         .substringAfterLast('/')
         .substringAfterLast('\\')
@@ -77,29 +77,16 @@ private fun sanitizePickedName(rawName: String): String {
 }
 
 /** Last line of defense behind [sanitizePickedName]: the write really does land inside [dir]. */
-private fun isContainedIn(file: File, dir: File): Boolean =
+internal fun isContainedIn(file: File, dir: File): Boolean =
     runCatching { file.canonicalPath.startsWith(dir.canonicalPath + File.separator) }.getOrDefault(false)
 
 class FileRepository(private val context: Context) {
-
-    /** Whether Direct Access Mode (browsing the full shared storage tree) is active. */
-    var directAccessMode: Boolean = false
-
-    /** Last archive created for a multi-file selection, kept so it survives the next cache sweep. */
-    var archivedLast: String = ""
-        private set
 
     companion object {
         val DIRECT_ACCESS_ROOT: String = Environment.getExternalStorageDirectory()?.path ?: "/storage/emulated/0"
     }
 
-    fun pickerDir(ignoreDam: Boolean = false): String {
-        return if (!ignoreDam && directAccessMode) {
-            DIRECT_ACCESS_ROOT
-        } else {
-            File(context.cacheDir, "file_picker").apply { mkdirs() }.path
-        }
-    }
+    fun pickerDir(): String = File(context.cacheDir, "file_picker").apply { mkdirs() }.path
 
     fun directModeDetect(path: String): Boolean = path.startsWith(DIRECT_ACCESS_ROOT)
 
@@ -170,12 +157,13 @@ class FileRepository(private val context: Context) {
     ): ImportResult = withContext(Dispatchers.IO) {
         if (uris.isEmpty()) return@withContext ImportResult.EmptySelection
 
-        val dir = File(pickerDir(ignoreDam = true))
+        val dir = File(pickerDir())
         val resolver = context.contentResolver
 
         if (uris.size == 1) {
             val uri = uris.first()
-            val (rawName, size) = resolveUriMeta(resolver, uri)
+            val (rawName, size) = runCatching { resolveUriMeta(resolver, uri) }
+                .getOrElse { return@withContext importFailureResult(it) }
             val destFile = File(dir, rawName)
             if (!isContainedIn(destFile, dir)) {
                 return@withContext ImportResult.SelectionFailed("Rejected file name: $rawName")
@@ -185,9 +173,10 @@ class FileRepository(private val context: Context) {
             if (size > 0 && !makeRoomFor(dir, size)) return@withContext ImportResult.InsufficientStorage
             val totalBytes = size.coerceAtLeast(1L)
             var finalBytes = 0L
+            val partFile = File(dir, ".${TokenGenerator.generate("0123456789ABCDEF", 8)}.part")
             val copyResult = runCatching {
                 resolver.openInputStream(uri)?.use { input ->
-                    FileOutputStream(destFile).use { output ->
+                    FileOutputStream(partFile).use { output ->
                         finalBytes = copyWithProgress(input, output) { copied ->
                             // A real size wasn't available from the content provider -- fall
                             // back to the plain spinner rather than a meaningless bar/percentage.
@@ -195,13 +184,13 @@ class FileRepository(private val context: Context) {
                         }
                     }
                 } ?: throw FileNotFoundException(rawName)
+                if (!partFile.renameTo(destFile)) throw IOException("Couldn't move $rawName into place")
             }
             copyResult.onFailure { error ->
-                destFile.delete()
+                partFile.delete()
                 return@withContext importFailureResult(error)
             }
             if (size > 0) onProgress(1, 1, finalBytes.coerceAtLeast(totalBytes), totalBytes)
-            pruneCacheKeeping(dir.path, listOf(destFile.path))
             return@withContext finalizeSelection(rawName, destFile.path, dir.path)
         }
 
@@ -216,10 +205,16 @@ class FileRepository(private val context: Context) {
         // Resolve names/sizes up front so progress reports bytes copied rather than files completed --
         // otherwise a "1 of 3 done" count sits idle for the biggest file then blows through the rest.
         // Each metadata query runs concurrently as an independent content-provider round trip.
-        val metas = coroutineScope {
-            uris.map { uri -> async { uri to resolveUriMeta(resolver, uri) } }.awaitAll()
+        val metas = try {
+            coroutineScope {
+                uris.map { uri -> async { uri to resolveUriMeta(resolver, uri) } }.awaitAll()
+            }
+        } catch (e: Exception) {
+            return@withContext importFailureResult(e)
         }
-        val totalBytes = metas.sumOf { (_, meta) -> meta.second }.coerceAtLeast(1L)
+        val reportedBytes = metas.sumOf { (_, meta) -> meta.second }
+        if (reportedBytes > 0 && !makeRoomFor(dir, reportedBytes)) return@withContext ImportResult.InsufficientStorage
+        val totalBytes = reportedBytes.coerceAtLeast(1L)
         var bytesCopiedSoFar = 0L
 
         try {
@@ -249,11 +244,6 @@ class FileRepository(private val context: Context) {
             return@withContext importFailureResult(e)
         }
 
-        // Purge any stale files left over from a previous session/selection, keeping the file
-        // currently being served (if any) until it's replaced by this new archive below.
-        pruneCacheKeeping(dir.path, listOf(archiveFile.path))
-        archivedLast = archiveFile.path
-
         ImportResult.Success(
             FileInfo(
                 name = archiveName,
@@ -275,7 +265,7 @@ class FileRepository(private val context: Context) {
 
     /** Writes shared plain text (e.g. a URL shared from another app) to a generated .txt file and imports it. */
     suspend fun importSharedText(text: String): ImportResult = withContext(Dispatchers.IO) {
-        val dir = File(pickerDir(ignoreDam = true))
+        val dir = File(pickerDir())
         val fileName = TokenGenerator.generate("1234567890ABCDEF", 8) + ".txt"
         val destFile = File(dir, fileName)
 
@@ -285,22 +275,15 @@ class FileRepository(private val context: Context) {
             return@withContext importFailureResult(e)
         }
 
-        pruneCacheKeeping(dir.path, listOf(destFile.path))
         finalizeSelection(fileName, destFile.path, dir.path)
     }
 
-    /** Deletes everything in [dirPath] except [keep] and the file currently being served, if any. */
-    private suspend fun pruneCacheKeeping(dirPath: String, keep: List<String>) {
-        CacheManager.deleteCache(
-            dirPath,
-            keep + listOfNotNull(archivedLast.takeIf { it.isNotEmpty() }),
-            exclude = true,
-        )
+    suspend fun pruneCacheKeeping(keep: String) {
+        CacheManager.deleteCache(pickerDir(), keep)
     }
 
     /** Finalizes a single-file selection (multi-file selections are archived directly in [importUris]). */
     private fun finalizeSelection(name: String, path: String, pickerDirPath: String): ImportResult {
-        archivedLast = ""
         val f = File(path)
         if (!f.exists()) return ImportResult.FileGone
         return ImportResult.Success(

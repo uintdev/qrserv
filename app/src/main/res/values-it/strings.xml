@@ -2,7 +2,7 @@
     <string name="app_name">QRServ</string>
 
     <string name="page_landing_label">Seleziona i(l) file</string>
-    <string name="page_landing_msg">Seleziona i file da condividere...</string>
+    <string name="page_landing_msg">Seleziona i file da condividere…</string>
     <string name="page_info_noconnection_label">Nessuna connessione di rete</string>
     <string name="page_info_noconnection_msg">Connettiti ad una rete e prova di nuovo</string>
     <string name="page_info_interfacelookuperror_label">Errore</string>
@@ -51,11 +51,13 @@
 
     <string name="debug_build_toast">Build di debug: prestazioni/comportamento possono differire.</string>
 
+    <string name="menu_more_options">Altre opzioni</string>
+
     <string name="info_exception_portinuse">Errore nel binding della porta</string>
     <string name="info_exception_linkopenfailed">Nessuna app disponibile per aprire link HTTPS</string>
-    <string name="info_pending_fileprocessing">Selezione dei file attualmente in elaborazione...</string>
+    <string name="info_pending_fileprocessing">Selezione dei file attualmente in elaborazione…</string>
     <string name="info_pending_fileprocessing_shutdown">Impossibile fermare il server durante l\'elaborazione dei file.</string>
-    <string name="info_pending_servershutdown">Spegnimento del server in corso...</string>
+    <string name="info_pending_servershutdown">Spegnimento del server in corso…</string>
 
     <string name="server_info_download_started">Download avviato: %1$s</string>
     <string name="server_info_download_finished">Download finito: %1$s</string>
@@ -101,7 +103,7 @@
     <string name="hotspot_restart_fallback">Qualsiasi dispositivo già connesso a questa rete verrà disconnesso e dovrà connettersi a quella nuova.</string>
     <string name="hotspot_restart_confirm">Riavvia</string>
     <string name="hotspot_restart_title_sameband">Riavviare l\'hotspot?</string>
-    <string name="hotspot_restart_sameband_note">Questa versione di Android non può cambiare banda, quindi si riavvierà a %1$s con un nuovo nome e password.</string>
+    <string name="hotspot_restart_sameband_note">Questa versione di Android non può cambiare banda, quindi si riavvierà sulla stessa banda con un nuovo nome e password.</string>
     <string name="hotspot_restart_sameband_toast">Impossibile passare a 2,4 GHz, riavviato a %1$s</string>
     <string name="hotspot_restart_title_faster">Passare a 5 GHz?</string>
     <string name="hotspot_restart_faster_note">I dispositivi senza 5 GHz non vedranno la nuova rete.</string>
@@ -113,6 +115,7 @@
     <string name="hotspot_band">Banda</string>
     <string name="hotspot_band_2ghz">2,4 GHz</string>
     <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_6ghz">6 GHz</string>
     <string name="hotspot_band_dual">2,4 + 5 GHz</string>
     <string name="hotspot_password_show">Mostra password</string>
     <string name="hotspot_password_hide">Nascondi password</string>
@@ -178,7 +181,7 @@
     <string name="settings_client_dam_list_title">Modalità di Accesso Diretto</string>
     <string name="settings_client_dam_list_subtitle">Ideale per file di grandi dimensioni</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ richiede la versione GitHub</string>
-    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Nome del file nell\'URL</string>
     <string name="settings_client_fiu_list_subtitle">Includi il nome del file nell\'URL</string>
     <string name="settings_subheading_general">Generale</string>

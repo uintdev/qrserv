@@ -12,6 +12,7 @@ class ServerController(
     private val downloadStartedCallback: (String) -> Unit,
     private val downloadFinishedCallback: (String) -> Unit,
     private val fileMissingCallback: () -> Unit,
+    private val fileUnreadableCallback: (String) -> Unit,
     private val permissionDeniedCallback: () -> Unit,
     private val serverGoneCallback: () -> Unit,
 ) : FileServer.Listener {
@@ -28,9 +29,13 @@ class ServerController(
     var bindAddress: String? = null
         private set
 
-    fun currentSession(): Any? = server
+    /** Changes whenever the server starts or stops. */
+    @Volatile
+    var sessionId = 0L
+        private set
 
     /** Starts the server on [requestedPort] (0 = OS-assigned ephemeral port). Throws on bind failure. */
+    @Synchronized
     @Throws(IOException::class)
     fun start(
         requestedPort: Int,
@@ -44,12 +49,15 @@ class ServerController(
         instance.start()
         server = instance
         this.bindAddress = bindAddress
+        sessionId++
     }
 
+    @Synchronized
     fun stop() {
         server?.stop()
         server = null
         bindAddress = null
+        sessionId++
     }
 
     override fun onDownloadStarted(remoteIp: String) {
@@ -75,6 +83,11 @@ class ServerController(
         stopDeferred()
     }
 
+    override fun onFileUnreadable(error: IOException) {
+        fileUnreadableCallback(error.toString())
+        stopDeferred()
+    }
+
     override fun onPermissionDenied() {
         permissionDeniedCallback()
         stopDeferred()
@@ -88,7 +101,9 @@ class ServerController(
         val stale = server
         CoroutineScope(Dispatchers.IO).launch {
             delay(200.milliseconds)
-            if (server === stale) stop()
+            synchronized(this@ServerController) {
+                if (server === stale) stop()
+            }
         }
     }
 }

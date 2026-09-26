@@ -116,10 +116,17 @@ private fun createdTimeMillis(file: File): Long = try {
     file.lastModified()
 }
 
+private class DamEntry(val file: File) {
+    val name: String = file.name
+    val isDirectory: Boolean = file.isDirectory
+    val length: Long = file.length()
+    val lastModified: Long = file.lastModified()
+    val createdMillis: Long = createdTimeMillis(file)
+}
+
 /** Null when the filesystem couldn't report a modified time at all (lastModified() returns 0L
  * in that case), rather than showing a misleading 1970/01/01. */
-private fun formattedModifiedDate(file: File): String? {
-    val modified = file.lastModified()
+private fun formattedModifiedDate(modified: Long): String? {
     if (modified <= 0L) return null
     val date = Instant.ofEpochMilli(modified).atZone(ZoneId.systemDefault()).toLocalDate()
     return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()))
@@ -127,16 +134,16 @@ private fun formattedModifiedDate(file: File): String? {
 
 /** Folders always sort before files, regardless of the chosen field/order -- only the ordering
  * within each of those two groups responds to [sortField]/[sortOrder]. */
-private fun sortedDamEntries(entries: List<File>, sortField: DamSortField, sortOrder: DamSortOrder): List<File> {
-    val fieldComparator: Comparator<File> = when (sortField) {
+private fun sortedDamEntries(entries: List<DamEntry>, sortField: DamSortField, sortOrder: DamSortOrder): List<DamEntry> {
+    val fieldComparator: Comparator<DamEntry> = when (sortField) {
         DamSortField.NAME -> compareBy { it.name.lowercase() }
-        DamSortField.SIZE -> compareBy { it.length() }
-        DamSortField.TYPE -> compareBy { it.extension.lowercase() }
-        DamSortField.CREATED -> compareBy { createdTimeMillis(it) }
-        DamSortField.MODIFIED -> compareBy { it.lastModified() }
+        DamSortField.SIZE -> compareBy { it.length }
+        DamSortField.TYPE -> compareBy { it.file.extension.lowercase() }
+        DamSortField.CREATED -> compareBy { it.createdMillis }
+        DamSortField.MODIFIED -> compareBy { it.lastModified }
     }
     val orderedFieldComparator = if (sortOrder == DamSortOrder.DESCENDING) fieldComparator.reversed() else fieldComparator
-    return entries.sortedWith(compareBy<File> { !it.isDirectory }.then(orderedFieldComparator))
+    return entries.sortedWith(compareBy<DamEntry> { !it.isDirectory }.then(orderedFieldComparator))
 }
 
 /** A compact pill matching the height/shape of the buttons it temporarily replaces in
@@ -288,17 +295,17 @@ fun DamBrowserScreen(
     val context = LocalContext.current
     val repo = viewModel.directoryLister()
     val root = FileRepository.DIRECT_ACCESS_ROOT
-    // rememberSaveable, not remember -- a locale change (this app isn't declared to handle it in
-    // configChanges, so the system recreates the Activity to pick up the new resources) would
-    // otherwise silently reset this screen back to the root folder, as if it had just been reopened.
+    // rememberSaveable, not remember -- if the Activity is recreated anyway (a configuration change
+    // not listed in configChanges, or process death), this screen would otherwise silently reset
+    // back to the root folder, as if it had just been reopened.
     var currentPath by rememberSaveable { mutableStateOf(root) }
 
-    var entries by remember { mutableStateOf<List<File>?>(null) }
+    var entries by remember { mutableStateOf<List<DamEntry>?>(null) }
     var showLoadingSpinner by remember { mutableStateOf(false) }
     // Bumped by the refresh button to force LaunchedEffect below to re-run for the same path.
     var refreshTrigger by remember { mutableIntStateOf(0) }
     // Hoisted above currentPath so sort/search persists across folder navigation within this
-    // screen's lifetime but resets next time it's opened. Saveable for the same locale-recreate
+    // screen's lifetime but resets next time it's opened. Saveable for the same recreation
     // reason as currentPath above.
     var sortField by rememberSaveable { mutableStateOf(DamSortField.MODIFIED) }
     var sortOrder by rememberSaveable { mutableStateOf(DamSortOrder.DESCENDING) }
@@ -332,7 +339,7 @@ fun DamBrowserScreen(
             delay(150.milliseconds)
             showLoadingSpinner = true
         }
-        entries = withContext(Dispatchers.IO) { repo.listDirectory(currentPath) }
+        entries = withContext(Dispatchers.IO) { repo.listDirectory(currentPath).map(::DamEntry) }
         spinnerDelay.cancel()
     }
 
@@ -429,7 +436,7 @@ fun DamBrowserScreen(
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            itemsIndexed(filteredSortedEntries, key = { _, entry -> entry.path }) { index, entry ->
+                            itemsIndexed(filteredSortedEntries, key = { _, entry -> entry.file.path }) { index, entry ->
                                 if (index > 0) {
                                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                                 }
@@ -447,8 +454,8 @@ fun DamBrowserScreen(
                                     },
                                     supportingContent = {
                                         if (!isDirectory) {
-                                            val sizeText = FileSizeFormatter.humanReadable(entry.length(), LocalConfiguration.current.locales[0])
-                                            val modifiedText = formattedModifiedDate(entry)
+                                            val sizeText = FileSizeFormatter.humanReadable(entry.length, LocalConfiguration.current.locales[0])
+                                            val modifiedText = formattedModifiedDate(entry.lastModified)
                                             Text(if (modifiedText != null) "$sizeText · $modifiedText" else sizeText)
                                         }
                                     },
@@ -467,7 +474,7 @@ fun DamBrowserScreen(
                                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                     modifier = Modifier.clickable {
                                         if (!cancelIfPermissionRevoked()) {
-                                            if (!entry.exists()) {
+                                            if (!entry.file.exists()) {
                                                 val messageRes = if (isDirectory) {
                                                     R.string.dam_browser_folder_gone
                                                 } else {
@@ -475,9 +482,9 @@ fun DamBrowserScreen(
                                                 }
                                                 Toast.makeText(context, messageRes, Toast.LENGTH_SHORT).show()
                                             } else if (isDirectory) {
-                                                currentPath = entry.path
+                                                currentPath = entry.file.path
                                             } else {
-                                                onFileChosen(entry.path)
+                                                onFileChosen(entry.file.path)
                                             }
                                         }
                                     },

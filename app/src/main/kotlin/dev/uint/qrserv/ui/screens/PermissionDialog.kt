@@ -77,8 +77,8 @@ fun NotificationPermissionDialog(onDismiss: () -> Unit, onContinue: () -> Unit) 
 @Composable
 fun CompatibleBandWarningDialog(
     warning: CompatibleBandWarning,
-    /** The band the hotspot will restart on, when it can't be switched; null when it can. */
-    sameBand: String?,
+    /** The band can't be switched, so the restart comes back on the same one. */
+    sameBand: Boolean,
     faster: Boolean,
     fasterDropsTwoGhz: Boolean,
     onDismiss: () -> Unit,
@@ -94,14 +94,14 @@ fun CompatibleBandWarningDialog(
     val note = when {
         faster && fasterDropsTwoGhz -> stringResource(R.string.hotspot_restart_faster_note)
         faster -> null
-        sameBand != null -> stringResource(R.string.hotspot_restart_sameband_note, sameBand)
+        sameBand -> stringResource(R.string.hotspot_restart_sameband_note)
         else -> null
     }
     PermissionDialog(
         title = stringResource(
             when {
                 faster -> R.string.hotspot_restart_title_faster
-                sameBand != null -> R.string.hotspot_restart_title_sameband
+                sameBand -> R.string.hotspot_restart_title_sameband
                 else -> R.string.hotspot_restart_title
             },
         ),

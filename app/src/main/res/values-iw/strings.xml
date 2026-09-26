@@ -6,7 +6,7 @@
     <string name="app_name">QRServ</string>
 
     <string name="page_landing_label">בחר קובץ(ים)</string>
-    <string name="page_landing_msg">בחר קבצים לשיתוף...</string>
+    <string name="page_landing_msg">בחר קבצים לשיתוף…</string>
     <string name="page_info_noconnection_label">אין חיבור לרשת</string>
     <string name="page_info_noconnection_msg">התחבר לרשת ונסה שוב</string>
     <string name="page_info_interfacelookuperror_label">שגיאה</string>
@@ -55,11 +55,13 @@
 
     <string name="debug_build_toast">גרסת ניפוי באגים: הביצועים עשויים להיות שונים מהגרסה הסופית.</string>
 
+    <string name="menu_more_options">אפשרויות נוספות</string>
+
     <string name="info_exception_portinuse">שגיאה בקישור פורט</string>
     <string name="info_exception_linkopenfailed">אין אפליקציה זמינה לפתיחת קישורי HTTPS</string>
-    <string name="info_pending_fileprocessing">מעבד בחירת קבצים...</string>
+    <string name="info_pending_fileprocessing">מעבד בחירת קבצים…</string>
     <string name="info_pending_fileprocessing_shutdown">לא ניתן לעצור את השרת בזמן עיבוד בחירת הקבצים.</string>
-    <string name="info_pending_servershutdown">כיבוי שרת ממתין...</string>
+    <string name="info_pending_servershutdown">כיבוי שרת ממתין…</string>
 
     <string name="server_info_download_started">ההורדה החלה: %1$s</string>
     <string name="server_info_download_finished">ההורדה הושלמה: %1$s</string>
@@ -105,7 +107,7 @@
     <string name="hotspot_restart_fallback">כל מכשיר שכבר מחובר לרשת הזו ינותק ויצטרך להתחבר לרשת החדשה.</string>
     <string name="hotspot_restart_confirm">הפעל מחדש</string>
     <string name="hotspot_restart_title_sameband">להפעיל מחדש את הנקודה החמה?</string>
-    <string name="hotspot_restart_sameband_note">גרסת Android זו לא יכולה להחליף תדר, לכן היא תופעל מחדש ב-%1$s עם שם וסיסמה חדשים.</string>
+    <string name="hotspot_restart_sameband_note">גרסת Android זו לא יכולה להחליף תדר, לכן היא תופעל מחדש באותו תדר עם שם וסיסמה חדשים.</string>
     <string name="hotspot_restart_sameband_toast">לא ניתן לעבור ל-2.4 GHz, הופעלה מחדש ב-%1$s</string>
     <string name="hotspot_restart_title_faster">לעבור ל-5 GHz?</string>
     <string name="hotspot_restart_faster_note">מכשירים ללא 5 GHz לא יראו את הרשת החדשה.</string>
@@ -117,6 +119,7 @@
     <string name="hotspot_band">תדר</string>
     <string name="hotspot_band_2ghz">2.4 GHz</string>
     <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_6ghz">6 GHz</string>
     <string name="hotspot_band_dual">2.4 + 5 GHz</string>
     <string name="hotspot_password_show">הצג סיסמה</string>
     <string name="hotspot_password_hide">הסתר סיסמה</string>
@@ -182,7 +185,7 @@
     <string name="settings_client_dam_list_title">מצב גישה ישירה</string>
     <string name="settings_client_dam_list_subtitle">אידיאלי לקבצים גדולים</string>
     <string name="settings_client_dam_ineligiblebuild">אנדרואיד 11 ומעלה דורש את גרסת ה-GitHub</string>
-    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">שם קובץ בכתובת URL</string>
     <string name="settings_client_fiu_list_subtitle">כלול את שם הקובץ בכתובת ה-URL</string>
     <string name="settings_subheading_general">כללי</string>

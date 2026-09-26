@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +47,7 @@ import android.widget.Toast
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
+    val hasManageExternalStorage = remember { ManifestUtils.hasManageExternalStorageInManifest(context) }
     BasicAlertDialog(onDismissRequest = onDismiss) {
         ReducedDialogScrim()
         Surface(
@@ -66,7 +68,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                         append(if (BuildConfig.DEBUG) "Debug" else "Release")
                         append(", ")
                         append(
-                            if (ManifestUtils.hasManageExternalStorageInManifest(context)) {
+                            if (hasManageExternalStorage) {
                                 "GitHub"
                             } else {
                                 "Google Play"

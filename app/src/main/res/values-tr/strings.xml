@@ -2,7 +2,7 @@
     <string name="app_name">QRServ</string>
 
     <string name="page_landing_label">Dosya seç</string>
-    <string name="page_landing_msg">Paylaşılacak dosyaları seçin...</string>
+    <string name="page_landing_msg">Paylaşılacak dosyaları seçin…</string>
     <string name="page_info_noconnection_label">Ağ bağlantısı yok</string>
     <string name="page_info_noconnection_msg">Bir ağa bağlanın ve tekrar deneyin</string>
     <string name="page_info_interfacelookuperror_label">Hata</string>
@@ -49,11 +49,13 @@
 
     <string name="debug_build_toast">Hata ayıklama sürümü: performans sürümden farklı olabilir.</string>
 
+    <string name="menu_more_options">Diğer seçenekler</string>
+
     <string name="info_exception_portinuse">Bağlantı noktası bağlanırken hata oluştu</string>
     <string name="info_exception_linkopenfailed">HTTPS bağlantılarını açacak uygulama yok</string>
-    <string name="info_pending_fileprocessing">Şu anda dosya seçimi işleniyor...</string>
+    <string name="info_pending_fileprocessing">Şu anda dosya seçimi işleniyor…</string>
     <string name="info_pending_fileprocessing_shutdown">Dosya seçimi işlenirken sunucu durdurulamaz.</string>
-    <string name="info_pending_servershutdown">Sunucu kapatılması bekleniyor...</string>
+    <string name="info_pending_servershutdown">Sunucu kapatılması bekleniyor…</string>
 
     <string name="server_info_download_started">İndirme başladı: %1$s</string>
     <string name="server_info_download_finished">İndirme bitmiş: %1$s</string>
@@ -99,7 +101,7 @@
     <string name="hotspot_restart_fallback">Bu ağa zaten bağlı olan cihazların bağlantısı kesilir ve yeni ağa katılmaları gerekir.</string>
     <string name="hotspot_restart_confirm">Yeniden başlat</string>
     <string name="hotspot_restart_title_sameband">Erişim noktası yeniden başlatılsın mı?</string>
-    <string name="hotspot_restart_sameband_note">Bu Android sürümü bant değiştiremez, bu yüzden yeni ad ve şifreyle %1$s üzerinde yeniden başlar.</string>
+    <string name="hotspot_restart_sameband_note">Bu Android sürümü bant değiştiremez, bu yüzden yeni ad ve şifreyle aynı bantta yeniden başlar.</string>
     <string name="hotspot_restart_sameband_toast">2,4 GHz\'e geçilemedi, %1$s üzerinde yeniden başlatıldı</string>
     <string name="hotspot_restart_title_faster">5 GHz\'e geçilsin mi?</string>
     <string name="hotspot_restart_faster_note">5 GHz desteği olmayan cihazlar yeni ağı görmez.</string>
@@ -111,6 +113,7 @@
     <string name="hotspot_band">Bant</string>
     <string name="hotspot_band_2ghz">2,4 GHz</string>
     <string name="hotspot_band_5ghz">5 GHz</string>
+    <string name="hotspot_band_6ghz">6 GHz</string>
     <string name="hotspot_band_dual">2,4 + 5 GHz</string>
     <string name="hotspot_password_show">Şifreyi göster</string>
     <string name="hotspot_password_hide">Şifreyi gizle</string>
@@ -174,7 +177,7 @@
     <string name="settings_client_dam_list_title">Doğrudan Erişim Modu</string>
     <string name="settings_client_dam_list_subtitle">Büyük dosyalar için idealdir</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ GitHub sürümünü gerektirir</string>
-    <string name="settings_client_dam_subtitle_combined">%1$s -- %2$s</string>
+    <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">URL\'deki Dosya Adı</string>
     <string name="settings_client_fiu_list_subtitle">Dosya adını URL\'ye dahil et</string>
     <string name="settings_subheading_general">Genel</string>

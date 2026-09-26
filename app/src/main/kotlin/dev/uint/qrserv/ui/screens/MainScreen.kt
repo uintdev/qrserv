@@ -239,7 +239,7 @@ fun MainScreen(
                             },
                             colors = IconButtonDefaults.filledIconButtonColors(containerColor = subtleContainerColor()),
                         ) {
-                            Icon(Icons.Filled.BugReport, contentDescription = "Debug build")
+                            Icon(Icons.Filled.BugReport, contentDescription = debugBuildToastMessage)
                         }
                         Spacer(Modifier.width(4.dp))
                     }
@@ -248,7 +248,7 @@ fun MainScreen(
                             onClick = { menuExpanded = true },
                             colors = IconButtonDefaults.filledIconButtonColors(containerColor = subtleContainerColor()),
                         ) {
-                            Icon(Icons.Filled.MoreVert, contentDescription = "Menu")
+                            Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.menu_more_options))
                         }
                         DropdownMenu(
                             expanded = menuExpanded,
@@ -346,7 +346,7 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
             icon = Icons.Filled.TimerOff,
             label = stringResource(R.string.page_info_idlestopped_label),
             message = pluralStringResource(R.plurals.page_info_idlestopped_msg, uiState.idleStoppedMinutes, uiState.idleStoppedMinutes),
-            footer = { HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel::onHotspotClicked) },
+            footer = { HotspotOption(uiState.hotspotAvailability, uiState.hotspotStarting, onClick = viewModel.hotspot::onHotspotClicked) },
         )
         return
     }
@@ -368,7 +368,7 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         footer = { HotspotOption(
             uiState.hotspotAvailability,
             uiState.hotspotStarting,
-            onClick = viewModel::onHotspotClicked
+            onClick = viewModel.hotspot::onHotspotClicked
         ) },
     )
 }
@@ -389,7 +389,7 @@ private fun HotspotFailedContent(uiState: AppUiState, viewModel: QRServViewModel
                     text = stringResource(R.string.hotspot_try_again),
                     enabled = uiState.hotspotAvailability.unavailable == null,
                     loading = uiState.hotspotStarting,
-                    onClick = viewModel::onHotspotClicked,
+                    onClick = viewModel.hotspot::onHotspotClicked,
                 )
             }
         },
@@ -421,7 +421,7 @@ private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewMode
                         HotspotOption(
                             uiState.hotspotAvailability,
                             uiState.hotspotStarting,
-                            onClick = viewModel::onHotspotClicked
+                            onClick = viewModel.hotspot::onHotspotClicked
                         )
                     }
                     Spacer(Modifier.width(24.dp))
@@ -458,7 +458,7 @@ private fun UnhandledErrorContent(uiState: AppUiState, viewModel: QRServViewMode
                     HotspotOption(
                         uiState.hotspotAvailability,
                         uiState.hotspotStarting,
-                        onClick = viewModel::onHotspotClicked
+                        onClick = viewModel.hotspot::onHotspotClicked
                     )
                 }
             }
@@ -910,7 +910,7 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
                     enabled = uiState.hotspotAvailability.unavailable == null,
                     onClick = {
                         expanded = false
-                        viewModel.onSwitchToHotspotClicked()
+                        viewModel.hotspot.onSwitchToHotspotClicked()
                     },
                 )
             }

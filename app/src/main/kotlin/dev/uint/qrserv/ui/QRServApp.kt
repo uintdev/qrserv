@@ -99,15 +99,17 @@ fun QRServApp(
     // either screen) would be suppressed too, stuck showing MAIN until the import finished.
     LaunchedEffect(uiState.actionButtonLoading) {
         if (uiState.actionButtonLoading) {
-            if (screen != Screen.MAIN) screen = Screen.MAIN
+            // A band restart is shown on the hotspot screen.
+            val bandRestart = screen == Screen.HOTSPOT && uiState.hotspotStarting
+            if (screen != Screen.MAIN && !bandRestart) screen = Screen.MAIN
             // Same reasoning as above, but the About dialog isn't part of the screen enum -- it can
             // be open regardless of `screen` -- so it needs its own guard.
             showAbout = false
         }
     }
 
-    LaunchedEffect(uiState.hotspot) {
-        if (uiState.hotspot == null && screen == Screen.HOTSPOT) screen = Screen.MAIN
+    LaunchedEffect(uiState.hotspot, uiState.hotspotStarting) {
+        if (uiState.hotspot == null && !uiState.hotspotStarting && screen == Screen.HOTSPOT) screen = Screen.MAIN
     }
 
     LaunchedEffect(uiState.nearbyPermissionRequest) {
@@ -321,7 +323,7 @@ fun QRServApp(
                 onOpenHotspot = { if (screen == Screen.MAIN) screen = Screen.HOTSPOT },
                 onHotspotScreenDue = {
                     screen = Screen.HOTSPOT
-                    viewModel.onHotspotScreenOpened()
+                    viewModel.hotspot.onHotspotScreenOpened()
                 },
             )
             if (showPeek) {
@@ -367,9 +369,9 @@ fun QRServApp(
             uiState.hotspotDialog?.let { dialog ->
                 HotspotPermissionDialog(
                     dialog = dialog,
-                    onDismiss = viewModel::onHotspotDialogDismissed,
+                    onDismiss = viewModel.hotspot::onHotspotDialogDismissed,
                     onContinue = {
-                        viewModel.onHotspotDialogContinue()
+                        viewModel.hotspot.onHotspotDialogContinue()
                         onLaunchNearbyPrompt()
                     },
                     onOpenSettings = onOpenAppSettings,

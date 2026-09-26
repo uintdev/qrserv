@@ -23,6 +23,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -60,7 +62,13 @@ class ServingService : Service() {
             }
         }
         scope.launch {
-            ServingState.activeTransfers.map { it > 0 }.distinctUntilChanged().collect(::holdWakeLock)
+            ServingState.activeTransfers.map { it > 0 }.distinctUntilChanged().collectLatest { active ->
+                holdWakeLock(active)
+                while (active) {
+                    delay(WAKE_LOCK_RENEW_MS)
+                    holdWakeLock(true)
+                }
+            }
         }
     }
 
@@ -176,6 +184,7 @@ class ServingService : Service() {
 
         // Safety net against a lost release.
         private const val WAKE_LOCK_TIMEOUT_MS = 60 * 60 * 1000L
+        private const val WAKE_LOCK_RENEW_MS = WAKE_LOCK_TIMEOUT_MS / 2
 
         private fun ensureChannel(context: Context) {
             NotificationManagerCompat.from(context).createNotificationChannel(

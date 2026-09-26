@@ -2,8 +2,10 @@ package dev.uint.qrserv.server
 
 import dev.uint.qrserv.data.FileInfo
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.OutgoingContent
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
@@ -37,6 +39,7 @@ class FileServer(
         fun onTransferEnded()
         fun onServerGone()
         fun onFileMissing()
+        fun onFileUnreadable(error: IOException)
         fun onPermissionDenied()
     }
 
@@ -63,59 +66,11 @@ class FileServer(
         ) {
             routing {
                 route("{...}") {
+                    get { serve(call, headOnly = false) }
+                    head { serve(call, headOnly = true) }
                     handle {
-                        val remoteIp = call.request.origin.remoteHost
-
-                        val info = fileInfoProvider()
-                        val file = info?.path?.takeIf { it.isNotEmpty() }?.let { File(it) }
-
-                        // Checked before file.exists(): on scoped storage, losing MANAGE_EXTERNAL_STORAGE
-                        // makes exists() report false too, which would otherwise be indistinguishable from
-                        // the file genuinely being gone and fall through to the wrong (silent) NOT_FOUND path.
-                        if (info != null && file != null && !hasStoragePermission(info.path)) {
-                            listener.onPermissionDenied()
-                            call.respondText("", status = HttpStatusCode.Forbidden)
-                            return@handle
-                        }
-
-                        if (info == null || file == null || !file.exists()) {
-                            listener.onFileMissing()
-                            call.respondText("", status = HttpStatusCode.NotFound)
-                            return@handle
-                        }
-
-                        // Doubles as the readability probe this used to do with a throwaway open.
-                        val (stream, length) = try {
-                            openWithLength(file)
-                        } catch (_: IOException) {
-                            listener.onServerGone()
-                            call.respondText("", status = HttpStatusCode.InternalServerError)
-                            return@handle
-                        }
-
-                        call.response.header("Content-Disposition", contentDispositionHeader(info.name))
-                        call.response.header("X-Content-Type-Options", "nosniff")
-
-                        listener.onDownloadStarted(remoteIp)
-                        try {
-                            call.respond(object : OutgoingContent.ReadChannelContent() {
-                                override val contentType = ContentType.Application.OctetStream
-                                override val contentLength = length
-                                override fun readFrom(): ByteReadChannel = stream.toByteReadChannel()
-                            })
-                            // Deliberately not in the finally below: respond() throws if the client
-                            // disconnects part-way, if the write fails, or if Ktor's own
-                            // Content-Length check rejects the body -- and announcing a finished
-                            // download for a transfer the other end never received is worse than
-                            // saying nothing at all.
-                            listener.onDownloadFinished(remoteIp)
-                        } finally {
-                            // Ktor cancels the channel -- closing the stream with it -- once the body has
-                            // been written, but not if it never got as far as asking for the channel at all.
-                            // Closing an already-closed FileInputStream is a no-op.
-                            runCatching { stream.close() }
-                            listener.onTransferEnded()
-                        }
+                        call.response.header(HttpHeaders.Allow, "GET, HEAD")
+                        call.respondText("", status = HttpStatusCode.MethodNotAllowed)
                     }
                 }
             }
@@ -130,6 +85,70 @@ class FileServer(
         }
         server = embedded
         running = true
+    }
+
+    private suspend fun serve(call: ApplicationCall, headOnly: Boolean) {
+        val remoteIp = call.request.origin.remoteHost
+
+        val info = fileInfoProvider()
+        val file = info?.path?.takeIf { it.isNotEmpty() }?.let { File(it) }
+
+        // Checked before file.exists(): on scoped storage, losing MANAGE_EXTERNAL_STORAGE
+        // makes exists() report false too, which would otherwise be indistinguishable from
+        // the file genuinely being gone and fall through to the wrong (silent) NOT_FOUND path.
+        if (info != null && file != null && !hasStoragePermission(info.path)) {
+            listener.onPermissionDenied()
+            call.respondText("", status = HttpStatusCode.Forbidden)
+            return
+        }
+
+        if (info == null || file == null || !file.exists()) {
+            listener.onFileMissing()
+            call.respondText("", status = HttpStatusCode.NotFound)
+            return
+        }
+
+        // Doubles as the readability probe this used to do with a throwaway open.
+        val (stream, length) = try {
+            openWithLength(file)
+        } catch (error: IOException) {
+            listener.onFileUnreadable(error)
+            call.respondText("", status = HttpStatusCode.InternalServerError)
+            return
+        }
+
+        call.response.header("Content-Disposition", contentDispositionHeader(info.name))
+        call.response.header("X-Content-Type-Options", "nosniff")
+
+        if (headOnly) {
+            stream.close()
+            call.respond(object : OutgoingContent.NoContent() {
+                override val contentType = ContentType.Application.OctetStream
+                override val contentLength: Long = length
+            })
+            return
+        }
+
+        listener.onDownloadStarted(remoteIp)
+        try {
+            call.respond(object : OutgoingContent.ReadChannelContent() {
+                override val contentType = ContentType.Application.OctetStream
+                override val contentLength = length
+                override fun readFrom(): ByteReadChannel = stream.toByteReadChannel()
+            })
+            // Deliberately not in the finally below: respond() throws if the client
+            // disconnects part-way, if the write fails, or if Ktor's own
+            // Content-Length check rejects the body -- and announcing a finished
+            // download for a transfer the other end never received is worse than
+            // saying nothing at all.
+            listener.onDownloadFinished(remoteIp)
+        } finally {
+            // Ktor cancels the channel -- closing the stream with it -- once the body has
+            // been written, but not if it never got as far as asking for the channel at all.
+            // Closing an already-closed FileInputStream is a no-op.
+            runCatching { stream.close() }
+            listener.onTransferEnded()
+        }
     }
 
     fun stop() {
@@ -178,7 +197,7 @@ private fun sanitizeFileName(name: String): String {
     return if (flattened.isBlank() || flattened == "." || flattened == "..") "download" else flattened
 }
 
-private fun contentDispositionHeader(rawName: String): String {
+internal fun contentDispositionHeader(rawName: String): String {
     val name = sanitizeFileName(rawName)
     // Anything outside printable ASCII -- a header-injecting CR/LF included -- can't go in the
     // plain filename parameter; filename* below carries the real name for clients that read it.

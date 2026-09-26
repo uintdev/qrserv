@@ -265,7 +265,7 @@ fun SettingsScreen(
             label = { stringResource(it.labelRes) },
             description = { stringResource(bandDescriptionRes(it)) },
             onDismiss = { showBandDialog = false },
-            onSelect = { band -> viewModel.setHotspotBand(band) },
+            onSelect = { band -> viewModel.hotspot.setHotspotBand(band) },
         )
     }
 
@@ -298,10 +298,10 @@ fun SettingsScreen(
                 TextButton(onClick = {
                     viewModel.restoreDefaults()
                     showRestoreConfirm = false
-                }) { Text("OK") }
+                }) { Text(stringResource(android.R.string.ok)) }
             },
             dismissButton = {
-                TextButton(onClick = { showRestoreConfirm = false }) { Text("Cancel") }
+                TextButton(onClick = { showRestoreConfirm = false }) { Text(stringResource(android.R.string.cancel)) }
             },
         )
     }
@@ -414,7 +414,7 @@ private fun PortDialog(
             ) { Text(stringResource(R.string.settings_server_port_dialog_submit)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.cancel)) }
         },
     )
 }
@@ -430,6 +430,8 @@ private fun bandDescriptionRes(band: HotspotBand): Int = when (band) {
     HotspotBand.DUAL -> R.string.settings_hotspot_band_dual_description
     HotspotBand.FIVE_GHZ -> R.string.settings_hotspot_band_5ghz_description
     HotspotBand.TWO_GHZ -> R.string.settings_hotspot_band_2ghz_description
+    // Never offered; see HotspotBand.SIX_GHZ.
+    HotspotBand.SIX_GHZ -> R.string.settings_hotspot_band_5ghz_description
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

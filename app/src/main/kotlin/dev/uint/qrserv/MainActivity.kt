@@ -53,11 +53,11 @@ class MainActivity : ComponentActivity() {
     private val nearbyPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             when {
-                granted -> viewModel.onNearbyPermissionResult(true)
+                granted -> viewModel.hotspot.onNearbyPermissionResult(true)
                 Build.VERSION.SDK_INT >= 33 &&
                     !shouldShowRequestPermissionRationale(android.Manifest.permission.NEARBY_WIFI_DEVICES) ->
-                    viewModel.showHotspotDialog(HotspotDialog.NEARBY_SETTINGS)
-                else -> viewModel.onNearbyPermissionResult(false)
+                    viewModel.hotspot.showHotspotDialog(HotspotDialog.NEARBY_SETTINGS)
+                else -> viewModel.hotspot.onNearbyPermissionResult(false)
             }
         }
 
@@ -72,7 +72,6 @@ class MainActivity : ComponentActivity() {
     // light/dark split) matches the in-app theme preference instead of the system setting --
     // otherwise a Dark-mode user on a light system would see a light flash before Compose corrects it.
     override fun attachBaseContext(newBase: Context) {
-        Preferences.init(newBase)
         val themeMode = readPersistedThemeMode()
         val baseUiMode = newBase.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()
         val configOverride = Configuration()
@@ -88,7 +87,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        if (!handleShareIntent(intent)) {
+        val relaunched = savedInstanceState != null ||
+            intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0
+        if (relaunched || !handleShareIntent(intent)) {
             viewModel.purgeStaleCacheOnLaunch()
         }
 
@@ -118,11 +119,7 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     onRequestNearbyPermission = ::handleNearbyPermissionRequest,
-                    onLaunchNearbyPrompt = {
-                        if (Build.VERSION.SDK_INT >= 33) {
-                            nearbyPermissionLauncher.launch(android.Manifest.permission.NEARBY_WIFI_DEVICES)
-                        }
-                    },
+                    onLaunchNearbyPrompt = ::launchNearbyPrompt,
                     onOpenAppSettings = {
                         // No public screen for "Wi-Fi control" alone.
                         startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()))
@@ -138,14 +135,22 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleNearbyPermissionRequest() {
-        viewModel.onNearbyPermissionRequestTaken()
+        viewModel.hotspot.onNearbyPermissionRequestTaken()
         if (Build.VERSION.SDK_INT < 33) return
         val permission = android.Manifest.permission.NEARBY_WIFI_DEVICES
-        if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
-            viewModel.onNearbyPermissionResult(true)
-        } else {
-            viewModel.showHotspotDialog(HotspotDialog.EXPLAIN_NEARBY)
+        when {
+            checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED -> viewModel.hotspot.onNearbyPermissionResult(true)
+            // Permanently denied: the prompt returns at once and leads to the settings dialog.
+            Preferences.wasAskedOnThisInstall(Preferences.PREF_NEARBY_ASKED) && !shouldShowRequestPermissionRationale(permission) ->
+                launchNearbyPrompt()
+            else -> viewModel.hotspot.showHotspotDialog(HotspotDialog.EXPLAIN_NEARBY)
         }
+    }
+
+    private fun launchNearbyPrompt() {
+        if (Build.VERSION.SDK_INT < 33) return
+        Preferences.markAskedOnThisInstall(Preferences.PREF_NEARBY_ASKED)
+        nearbyPermissionLauncher.launch(android.Manifest.permission.NEARBY_WIFI_DEVICES)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -191,7 +196,7 @@ class MainActivity : ComponentActivity() {
 
         if (uris.isNotEmpty()) {
             viewModel.onSharedFilesReceived(uris)
-            // Clear the action so rotation / process restarts don't re-import the same share.
+            // Clear the action so a recreation within this process doesn't re-import the same share.
             intent.action = null
             return true
         }
