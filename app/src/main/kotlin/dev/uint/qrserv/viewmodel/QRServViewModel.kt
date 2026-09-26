@@ -74,7 +74,6 @@ sealed interface UiEvent {
 
 private val ADDRESS_SETTLE_TIME = 2.seconds
 
-// A reconnecting network's IPv6 address can arrive well before DHCP hands out its IPv4 one.
 private val BETTER_IPV6_ADDRESS_SETTLE_TIME = 13.seconds
 
 private data class IdleTimerKey(
@@ -174,7 +173,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         downloadStartedCallback = { ip, resumed ->
             serverRequests.update { it + 1 }
             hotspot.recordClient(ip)
-            // Bound to one address, a download proves someone can reach it, so it's kept like a manual pick.
             if (serverController.bindAddress != null) movedAutomatically = false
             if (!resumed) postToast(R.string.server_info_download_started, ip)
         },
@@ -446,6 +444,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun startServing(fileInfo: FileInfo, leavingHotspot: Boolean = false) {
         rebindJob?.join()
+        val keepsSelection = serverController.isRunning || !movedAutomatically
         if (!serverController.isRunning) {
             addressesAtManualPick = emptySet()
             movedAutomatically = false
@@ -473,7 +472,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             listed
         }
 
-        val current = _uiState.value.selectedIp
+        val current = _uiState.value.selectedIp.takeIf { keepsSelection }
         val selected = interfaces.firstOrNull { it.address == current } ?: interfaces.first()
         val bindAddress = hotspot?.address ?: selected.bindHost.takeUnless { listensOnAllInterfaces() }
         val rebindRequired = this.hotspot.consumeRebindRequired()
@@ -580,6 +579,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
         rebindJob = viewModelScope.launch {
             val port = serverController.port
+            movedAutomatically = true
             if (serverController.bindAddress != null) {
                 try {
                     startServer(best.bindHost, port)
@@ -589,7 +589,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     return@launch
                 }
             }
-            movedAutomatically = true
             _uiState.update { it.copy(interfaces = listed, selectedIp = best.address, suggestedIp = null) }
             postToast(R.string.page_imported_iface_address_changed)
         }.also { it.invokeOnCompletion { retrySkippedAddressCheck() } }

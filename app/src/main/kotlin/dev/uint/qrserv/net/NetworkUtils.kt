@@ -17,7 +17,6 @@ enum class LinkKind { LOCAL, VPN, CELLULAR }
 private val VpnInterfacePrefixes = listOf("tun", "ppp", "ipsec", "wg")
 private val CellularInterfacePrefixes = listOf("rmnet", "ccmni", "wwan", "pdp")
 
-/** A "v4-" interface is the IPv4 translation stacked on another interface, so it takes that one's kind. */
 fun linkKindOf(interfaceName: String, reported: Map<String, LinkKind>): LinkKind {
     val base = interfaceName.removePrefix("v4-")
     return reported[base] ?: when {

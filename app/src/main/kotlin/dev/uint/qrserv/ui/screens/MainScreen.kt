@@ -182,6 +182,7 @@ fun MainScreen(
     // permanently stranding progressBarPending at true before it ever gets to clear itself.
     LaunchedEffect(Unit) {
         snapshotFlow { uiState.importProgress }.filterNotNull().filter { it !== finishedProgress }.collect { progress ->
+            if (!operationShowedProgress) progressAnim.snapTo(0f)
             lastProgress = progress
             progressBarPending = true
             operationShowedProgress = true
