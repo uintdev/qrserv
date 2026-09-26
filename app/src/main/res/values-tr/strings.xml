@@ -41,6 +41,7 @@
     <string name="page_imported_iface_switch_downloading">İndirme sürerken IP adresi değiştirilemez</string>
     <string name="page_imported_iface_switch_failed">Bu IP adresine geçilemedi</string>
     <string name="page_imported_iface_address_changed">IP adresi değişti, bu yüzden QR kodu güncellendi</string>
+    <string name="page_imported_iface_address_gone">Bu IP adresi artık kullanılamıyor</string>
     <string name="page_imported_iface_suggestion">%1$s adresine geç</string>
     <string name="page_imported_vpn_lockdown">“VPN\'si olmayan bağlantıları engelle” açık ve diğer cihazları engelleyebilir</string>
 

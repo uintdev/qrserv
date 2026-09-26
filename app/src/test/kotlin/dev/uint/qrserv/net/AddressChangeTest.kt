@@ -46,6 +46,16 @@ class AddressChangeTest {
     }
 
     @Test
+    fun movesToABetterAddressAfterAnAutomaticMove() {
+        assertEquals(AddressChange.MoveTo(wifi), addressChange(listOf(wifi, vpn), vpn.address, emptySet(), movedAutomatically = true))
+    }
+
+    @Test
+    fun staysOnTheBestAddressAfterAnAutomaticMove() {
+        assertEquals(AddressChange.Stay(null), addressChange(listOf(wifi, vpn), wifi.address, emptySet(), movedAutomatically = true))
+    }
+
+    @Test
     fun emptyListChangesNothing() {
         assertEquals(AddressChange.Stay(null), addressChange(emptyList(), wifi.address, emptySet()))
     }

@@ -45,6 +45,7 @@
     <string name="page_imported_iface_switch_downloading">Нельзя сменить IP-адрес во время загрузки</string>
     <string name="page_imported_iface_switch_failed">Не удалось переключиться на этот IP-адрес</string>
     <string name="page_imported_iface_address_changed">IP-адрес изменился, поэтому QR-код обновлён</string>
+    <string name="page_imported_iface_address_gone">Этот IP-адрес больше недоступен</string>
     <string name="page_imported_iface_suggestion">Переключиться на %1$s</string>
     <string name="page_imported_vpn_lockdown">«Блокировать соединения без VPN» может мешать другим устройствам</string>
 

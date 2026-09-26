@@ -834,6 +834,8 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
     val barsTopPx = WindowInsets.systemBars.getTop(density)
     val barsBottomPx = WindowInsets.systemBars.getBottom(density)
 
+    val shownInterfaces = remember(expanded) { uiState.interfaces }
+
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
@@ -874,7 +876,7 @@ private fun InterfaceDropdown(uiState: AppUiState, viewModel: QRServViewModel, m
                 },
             ) {
                 AddressGroup.entries.forEach { group ->
-                    val addresses = uiState.interfaces.filter { it.group == group }
+                    val addresses = shownInterfaces.filter { it.group == group }
                     // A heading with nothing under it says less than no heading at all.
                     if (addresses.isEmpty()) return@forEach
                     Text(

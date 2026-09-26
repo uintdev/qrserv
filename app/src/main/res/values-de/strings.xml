@@ -41,6 +41,7 @@
     <string name="page_imported_iface_switch_downloading">IP-Adresse kann während eines Downloads nicht geändert werden</string>
     <string name="page_imported_iface_switch_failed">Wechsel zu dieser IP-Adresse nicht möglich</string>
     <string name="page_imported_iface_address_changed">IP-Adresse hat sich geändert, der QR-Code wurde aktualisiert</string>
+    <string name="page_imported_iface_address_gone">Diese IP-Adresse ist nicht mehr verfügbar</string>
     <string name="page_imported_iface_suggestion">Zu %1$s wechseln</string>
     <string name="page_imported_vpn_lockdown">„Verbindungen ohne VPN blockieren“ ist aktiv und kann andere Geräte blockieren</string>
 

@@ -34,6 +34,7 @@ import dev.uint.qrserv.files.ImportResult
 import dev.uint.qrserv.net.AddressChange
 import dev.uint.qrserv.net.HotspotInfo
 import dev.uint.qrserv.net.HotspotLoss
+import dev.uint.qrserv.net.LinkKinds
 import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.net.addressChange
 import dev.uint.qrserv.server.ServerController
@@ -73,6 +74,9 @@ sealed interface UiEvent {
 
 private val ADDRESS_SETTLE_TIME = 2.seconds
 
+// A reconnecting network's IPv6 address can arrive well before DHCP hands out its IPv4 one.
+private val BETTER_IPV6_ADDRESS_SETTLE_TIME = 13.seconds
+
 private data class IdleTimerKey(
     val sharing: Boolean,
     val network: String?,
@@ -111,6 +115,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var addressesAtManualPick = emptySet<String>()
 
+    @Volatile
+    private var movedAutomatically = false
+
+    private var addressCheckSkipped = false
+
     private val addressCheckRequests = MutableSharedFlow<Unit>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -118,16 +127,24 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private val connectivityManager = application.getSystemService(ConnectivityManager::class.java)
 
+    private val linkKinds = LinkKinds()
+
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             addressCheckRequests.tryEmit(Unit)
         }
 
         override fun onLost(network: Network) {
+            linkKinds.remove(network)
             addressCheckRequests.tryEmit(Unit)
         }
 
+        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+            linkKinds.update(network, networkCapabilities)
+        }
+
         override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
+            linkKinds.update(network, linkProperties)
             addressCheckRequests.tryEmit(Unit)
         }
     }
@@ -153,10 +170,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     val hotspot: HotspotSession = HotspotSession(application, viewModelScope, _uiState, hotspotHost)
 
-    private val serverController = ServerController(
+    private val serverController: ServerController = ServerController(
         downloadStartedCallback = { ip, resumed ->
             serverRequests.update { it + 1 }
             hotspot.recordClient(ip)
+            // Bound to one address, a download proves someone can reach it, so it's kept like a manual pick.
+            if (serverController.bindAddress != null) movedAutomatically = false
             if (!resumed) postToast(R.string.server_info_download_started, ip)
         },
         downloadFinishedCallback = { ip ->
@@ -237,8 +256,13 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             addressCheckRequests.collectLatest {
                 delay(ADDRESS_SETTLE_TIME)
-                checkAddresses()
+                checkAddresses(settled = false) ?: return@collectLatest
+                delay(BETTER_IPV6_ADDRESS_SETTLE_TIME)
+                checkAddresses(settled = true)
             }
+        }
+        viewModelScope.launch {
+            ServingState.activeTransfers.collect { if (it == 0 && movedAutomatically) addressCheckRequests.tryEmit(Unit) }
         }
         connectivityManager.registerNetworkCallback(
             NetworkRequest.Builder()
@@ -422,7 +446,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun startServing(fileInfo: FileInfo, leavingHotspot: Boolean = false) {
         rebindJob?.join()
-        if (!serverController.isRunning) addressesAtManualPick = emptySet()
+        if (!serverController.isRunning) {
+            addressesAtManualPick = emptySet()
+            movedAutomatically = false
+        }
         val hotspot = _uiState.value.hotspot.takeUnless { leavingHotspot }
         val closingAddress = _uiState.value.hotspot?.address.takeIf { leavingHotspot }
         if (hotspot != null && !this.hotspot.isActive) {
@@ -433,7 +460,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val interfaces = if (hotspot != null) {
             listOf(InterfaceAddress(hotspot.address, AddressGroup.HOSTED))
         } else {
-            val listed = NetworkUtils.listInterfaces().map { all -> all.filter { it.address != closingAddress } }.getOrElse {
+            val listed = NetworkUtils.listInterfaces(linkKinds.byInterface()).map { all -> all.filter { it.address != closingAddress } }.getOrElse {
                 _uiState.update { it.copy(pageType = PageType.INTERFACE_LOOKUP_ERROR, interfaces = emptyList()) }
                 stopServing()
                 return
@@ -496,7 +523,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onIpSelected(ip: String) {
-        val entry = _uiState.value.interfaces.firstOrNull { it.address == ip } ?: return
+        val entry = _uiState.value.interfaces.firstOrNull { it.address == ip } ?: run {
+            postToast(R.string.page_imported_iface_address_gone)
+            return
+        }
         val bound = serverController.bindAddress
         if (!serverController.isRunning || bound == null || _uiState.value.hotspot != null || bound == entry.bindHost) {
             applyManualPick(ip)
@@ -516,21 +546,36 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 postToast(R.string.page_imported_iface_switch_failed)
                 if (runCatching { startServer(bound, port) }.isFailure) showPortInUse()
             }
-        }
+        }.also { it.invokeOnCompletion { retrySkippedAddressCheck() } }
     }
 
-    private suspend fun checkAddresses() {
-        if (!canCheckAddresses()) return
-        val listed = NetworkUtils.listInterfaces().getOrNull()?.takeIf { it.isNotEmpty() } ?: return
-        if (!canCheckAddresses()) return
+    private suspend fun checkAddresses(settled: Boolean): InterfaceAddress? {
+        if (!canCheckAddresses()) {
+            addressCheckSkipped = _uiState.value.serverRunning
+            return null
+        }
+        val listed = NetworkUtils.listInterfaces(linkKinds.byInterface()).getOrNull()?.takeIf { it.isNotEmpty() } ?: return null
+        if (!canCheckAddresses()) {
+            addressCheckSkipped = _uiState.value.serverRunning
+            return null
+        }
         val state = _uiState.value
-        val best = when (val change = addressChange(listed, state.selectedIp, addressesAtManualPick)) {
-            is AddressChange.MoveTo -> change.address
-            is AddressChange.Stay -> {
-                if (listed != state.interfaces || change.suggestion != state.suggestedIp) {
-                    _uiState.update { it.copy(interfaces = listed, suggestedIp = change.suggestion) }
+        val takeBetter = movedAutomatically && ServingState.activeTransfers.value == 0
+        val best = when (val change = addressChange(listed, state.selectedIp, addressesAtManualPick, takeBetter)) {
+            is AddressChange.MoveTo -> {
+                if (!settled && change.address.address.contains(':') && listed.any { it.address == state.selectedIp }) {
+                    return change.address
                 }
-                return
+                change.address
+            }
+            is AddressChange.Stay -> {
+                val suggestion = change.suggestion
+                val holdSuggestion = !settled && suggestion != null && suggestion.contains(':') && suggestion != state.suggestedIp
+                val shown = if (holdSuggestion) state.suggestedIp?.takeIf { ip -> listed.any { it.address == ip } } else suggestion
+                if (listed != state.interfaces || shown != state.suggestedIp) {
+                    _uiState.update { it.copy(interfaces = listed, suggestedIp = shown) }
+                }
+                return if (holdSuggestion) listed.first { it.address == suggestion } else null
             }
         }
         rebindJob = viewModelScope.launch {
@@ -544,9 +589,17 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     return@launch
                 }
             }
+            movedAutomatically = true
             _uiState.update { it.copy(interfaces = listed, selectedIp = best.address, suggestedIp = null) }
             postToast(R.string.page_imported_iface_address_changed)
-        }
+        }.also { it.invokeOnCompletion { retrySkippedAddressCheck() } }
+        return null
+    }
+
+    private fun retrySkippedAddressCheck() {
+        if (!addressCheckSkipped) return
+        addressCheckSkipped = false
+        addressCheckRequests.tryEmit(Unit)
     }
 
     private fun canCheckAddresses(): Boolean {
@@ -556,6 +609,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun applyManualPick(ip: String) {
+        movedAutomatically = false
         addressesAtManualPick = _uiState.value.interfaces.mapTo(HashSet()) { it.address }
         _uiState.update { it.copy(selectedIp = ip, suggestedIp = null) }
     }
@@ -695,7 +749,13 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private suspend fun switchToHotspot(info: HotspotInfo) {
         rebindJob?.join()
         val previousBind = serverController.bindAddress
-        if (runCatching { startServer(bindAddress = info.address) }.isFailure) {
+        val started = runCatching { startServer(bindAddress = info.address) }.isSuccess
+        if (!hotspot.isActive) {
+            withContext(Dispatchers.IO) { serverController.stop() }
+            setLoading(false)
+            return
+        }
+        if (!started) {
             hotspot.stopSession()
             postToast(R.string.hotspot_failed_generic)
             if (runCatching { startServer(bindAddress = previousBind) }.isSuccess) {
@@ -845,6 +905,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         _uiState.update {
             it.copy(actionButtonLoading = loading, importProgress = if (loading) null else it.importProgress)
         }
+        if (!loading) retrySkippedAddressCheck()
     }
 
     /** True (after toasting) if an import/action is already in progress and this call should bail. */

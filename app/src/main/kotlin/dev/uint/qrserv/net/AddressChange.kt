@@ -9,8 +9,14 @@ sealed interface AddressChange {
 }
 
 /** [listed] is in reachability order, so its first entry is the best address. */
-fun addressChange(listed: List<InterfaceAddress>, selectedIp: String, addressesAtManualPick: Set<String>): AddressChange {
+fun addressChange(
+    listed: List<InterfaceAddress>,
+    selectedIp: String,
+    addressesAtManualPick: Set<String>,
+    movedAutomatically: Boolean = false,
+): AddressChange {
     val best = listed.firstOrNull() ?: return AddressChange.Stay(suggestion = null)
     if (listed.none { it.address == selectedIp }) return AddressChange.MoveTo(best)
+    if (movedAutomatically && best.address != selectedIp) return AddressChange.MoveTo(best)
     return AddressChange.Stay(best.address.takeIf { it != selectedIp && it !in addressesAtManualPick })
 }
