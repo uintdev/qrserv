@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.2.0
+
+- Added private hotspot sharing (Android 13 or later)
+- Sharing continues in the background, with a notification
+- Resumes interrupted downloads in supported software
+- Stops sharing when idle, after 10 minutes without downloads by default (adjustable in settings)
+- Server only listens on the selected IP address, unless set to listen on all interfaces
+- Warns when "Block connections without VPN" may block other devices
+- Switches IP address if it disappears, and suggests better ones
+- Links with a different file name now return 404
+- Changing the language no longer clears the file selection
+- Fixed Hebrew language
+- Fixed handling of a port that's already in use
+- Refined import screen UI
+
 ## 4.1.0
 
 - IP addresses in the interface list are now grouped

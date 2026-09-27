@@ -26,10 +26,11 @@
     <p align="center">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Screenshot of app on the main screen" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Screenshot of app after selecting a file" height="380">
-        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Screenshot of app after opening IP address list" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Screenshot of app after opening the IP address list" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Screenshot of app when press and holding or hovering over file name -- tooltip is shown with full file name" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Screenshot of app when press and holding or hovering over file name -- tooltip is shown with original file names sizes of those included in the resulting file archive" height="380">
         <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Screenshot of app showing that a 10 Gigabit file was selected -- this shows the ability to work with large files" height="380">
+        <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="Screenshot of app on the private hotspot details screen" height="380">
     </p>
 </details>
 <br>
@@ -56,31 +57,30 @@ The app is a native Android app written in Kotlin with Jetpack Compose. Prior to
 - Direct Access Mode -- serves the file directly from storage instead of copying it into app cache first, ideal for large files
   - Single file selection only
   - Always available on the GitHub release; Play Store builds only support it on Android 10 or earlier (see [Play Store and GitHub version differences](#play-store-and-github-version-differences))
-  - Toggleable in settings
+  - Toggle-able in settings
 - Detects if the selected file is removed while being served, or modified (Direct Access Mode only)
 - Show or hide the filename in the download URL
 - Notifies when a client requests or finishes downloading the file, including their IP address
-- Choose which network interface's IP address to serve from
+- Resumes interrupted downloads in supported software
+- Choose which network interface's IP address to serve from -- the server only listens on that address unless listening on all interfaces is enabled in settings
+- Switches to another IP address if the selected one disappears, and suggests better ones as they appear
+- Private hotspot (Android 13 or later) -- shares over a Wi-Fi network the app creates, reachable only by devices you let join
+  - Scan a Wi-Fi QR code to join, or enter the network name and password by hand
+  - Switch an ongoing share to or from the private hotspot without selecting the file again
+  - Chooses 5 GHz for faster transfers on Android 16 or later, or 2.4 and 5 GHz at once on devices that can run both; the preferred band can be changed in settings
+  - If a device can't find the network, the hotspot screen can restart it on 2.4 GHz, which every device supports
+  - On Android 13 to 15 the band can't be chosen, so the device's default is used (usually 2.4 GHz). Some devices can't host a 5 GHz hotspot at all
+- Keeps sharing while the app is in the background, with a notification to stop sharing
+- Stops sharing after a set time without downloads (10 minutes by default, or off), with a notification saying why
 - HTTP server binds to a random free port by default, or a user-configured one
 - In-app theme selection
-- Supports various languages:
-  - English
-  - French (Français)
-  - German (Deutsch)
-  - Hungarian (Magyar)
-  - Italian (Italiano)
-  - Polish (Polski)
-  - Portuguese (Português)
-  - Spanish (Español)
-  - Russian (Русский)
-  - Turkish (Türkçe)
-  - Persian (فارسی)
-  - Hebrew (עברית)
+- Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
 
 ## System Requirements
 
 - **System:** Android
 - **Minimum version:** 7.0
+- **Private hotspot:** Android 13 or later (choosing the band, including 5 GHz: Android 16 or later, on supported devices)
 
 ## Releases
 

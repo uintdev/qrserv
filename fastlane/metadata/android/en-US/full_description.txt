@@ -17,11 +17,19 @@ Features:
 - Direct Access Mode -- serves the file directly from storage instead of copying it into app cache first, ideal for large files
 -- Single file selection only
 -- Always available on the GitHub release; Play Store builds only support it on Android 10 or earlier (due to Manage External Storage restrictions)
--- Toggleable in settings
+-- Toggle-able in settings
 - Detects if the selected file is removed while being served, or modified (Direct Access Mode only)
 - Show or hide the filename in the download URL
 - Notifies when a client requests or finishes downloading the file, including their IP address
-- Choose which network interface's IP address to serve from
+- Resumes interrupted downloads in supported software
+- Choose which network interface's IP address to serve from -- the server only listens there unless set to listen on all interfaces
+- Switches to another IP address if the selected one disappears, and suggests better ones as they appear
+- Private hotspot (Android 13 or later) -- shares over a Wi-Fi network the app creates, reachable only by devices you let join
+-- Scan a Wi-Fi QR code to join, or enter the network name and password by hand
+-- Switch an ongoing share to or from the private hotspot without selecting the file again
+-- Chooses 5 GHz for faster transfers on Android 16 or later (not all devices support 5 GHz or choosing the band)
+- Keeps sharing while the app is in the background, with a notification to stop sharing
+- Stops sharing when idle (10 minutes by default, adjustable)
 - HTTP server binds to a random free port by default, or a user-configured one
 - In-app theme selection
 - Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
@@ -30,6 +38,13 @@ Permission usage:
 
 - android.permission.INTERNET -- Collection of available network interfaces and port binding for the HTTP server
 - android.permission.READ_EXTERNAL_STORAGE -- Read-only access to emulated, physical SD card(s) and USB mass storage
+- android.permission.FOREGROUND_SERVICE and android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE -- Keeping the HTTP server (and private hotspot) running while the app is in the background
+- android.permission.POST_NOTIFICATIONS -- The ongoing notification shown while a file is being shared, with the option to stop sharing
+- android.permission.WAKE_LOCK -- Keeping the device awake while a download is in progress, so it isn't stalled by the screen turning off
+- android.permission.CHANGE_WIFI_STATE -- Creating and stopping the private hotspot
+- android.permission.NEARBY_WIFI_DEVICES -- Creating the private hotspot (Android 13 or later). Not used to find or locate devices
+- android.permission.ACCESS_WIFI_STATE -- Checking whether the device can host a hotspot while staying connected to Wi-Fi
+- android.permission.ACCESS_NETWORK_STATE -- Noticing IP address changes while sharing, so the QR code can follow
 - android.permission.MANAGE_EXTERNAL_STORAGE -- Direct access to select files on internal storage rather than what gets cached first (only available outside Google Play)
 
 QRServ is open source.

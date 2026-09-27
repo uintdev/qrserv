@@ -1,0 +1,13 @@
+- Added private hotspot sharing (Android 13+)
+- Keeps sharing in the background, with a notification
+- Interrupted downloads can be resumed
+- Stops sharing when idle (default 10 min)
+- Server only listens on the selected IP by default
+- Warns when an always-on VPN may block other devices
+- Switches or suggests IPs as they change
+- Changing language keeps the file selection
+- Fixed Hebrew language
+- Fixed handling of a port already in use
+- Refined import screen UI
+
+See GitHub for more changes.
