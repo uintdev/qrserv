@@ -290,7 +290,7 @@ class HotspotController(
     private suspend fun awaitAddressGone(address: String) = withContext(Dispatchers.IO) {
         repeat(ADDRESS_POLL_ATTEMPTS) {
             if (ipv4Candidates().none { it.address == address }) return@withContext
-            delay(ADDRESS_POLL_INTERVAL_MS.milliseconds)
+            delay(ADDRESS_POLL_INTERVAL)
         }
     }
 
@@ -298,7 +298,7 @@ class HotspotController(
     private suspend fun awaitAddress(before: Set<String>): String? = withContext(Dispatchers.IO) {
         repeat(ADDRESS_POLL_ATTEMPTS) {
             chooseHotspotAddress(before, ipv4Candidates())?.let { return@withContext it }
-            delay(ADDRESS_POLL_INTERVAL_MS.milliseconds)
+            delay(ADDRESS_POLL_INTERVAL)
         }
         null
     }
@@ -384,6 +384,6 @@ class HotspotController(
         /** "Wi-Fi control"; not a public constant. */
         const val OP_CHANGE_WIFI_STATE = "android:change_wifi_state"
         const val ADDRESS_POLL_ATTEMPTS = 25
-        const val ADDRESS_POLL_INTERVAL_MS = 200L
+        val ADDRESS_POLL_INTERVAL = 200.milliseconds
     }
 }

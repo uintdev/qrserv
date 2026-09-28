@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.hours
 
 class ServingService : Service() {
 
@@ -65,7 +66,7 @@ class ServingService : Service() {
             ServingState.activeTransfers.map { it > 0 }.distinctUntilChanged().collectLatest { active ->
                 holdWakeLock(active)
                 while (active) {
-                    delay(WAKE_LOCK_RENEW_MS)
+                    delay(WAKE_LOCK_RENEW)
                     holdWakeLock(true)
                 }
             }
@@ -114,7 +115,7 @@ class ServingService : Service() {
                     it.setReferenceCounted(false)
                     wakeLock = it
                 }
-            lock.acquire(WAKE_LOCK_TIMEOUT_MS)
+            lock.acquire(WAKE_LOCK_TIMEOUT.inWholeMilliseconds)
         } else {
             wakeLock?.takeIf { it.isHeld }?.release()
         }
@@ -183,8 +184,8 @@ class ServingService : Service() {
         private const val ACTION_STOP = "dev.uint.qrserv.action.STOP_SHARING"
 
         // Safety net against a lost release.
-        private const val WAKE_LOCK_TIMEOUT_MS = 60 * 60 * 1000L
-        private const val WAKE_LOCK_RENEW_MS = WAKE_LOCK_TIMEOUT_MS / 2
+        private val WAKE_LOCK_TIMEOUT = 1.hours
+        private val WAKE_LOCK_RENEW = WAKE_LOCK_TIMEOUT / 2
 
         private fun ensureChannel(context: Context) {
             NotificationManagerCompat.from(context).createNotificationChannel(
