@@ -18,6 +18,8 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
@@ -27,12 +29,15 @@ import dev.uint.qrserv.data.ThemeMode
 import dev.uint.qrserv.data.readPersistedThemeMode
 import dev.uint.qrserv.ui.QRServApp
 import dev.uint.qrserv.ui.theme.QRServTheme
+import dev.uint.qrserv.ui.theme.isSystemActuallyInDarkTheme
 import dev.uint.qrserv.ui.theme.resolveIsDark
 import dev.uint.qrserv.viewmodel.QRServViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel: QRServViewModel by viewModels()
+
+    private var systemInDarkTheme by mutableStateOf(isSystemActuallyInDarkTheme())
 
     private val safPickerLauncher =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
@@ -99,7 +104,7 @@ class MainActivity : ComponentActivity() {
             // attachBaseContext's override permanently forced one way if the stored preference was
             // DARK/LIGHT at launch. resolveIsDark() checks the real device setting instead, so
             // switching back to System mid-session takes effect immediately.
-            val darkTheme = uiState.themeMode.resolveIsDark()
+            val darkTheme = uiState.themeMode.resolveIsDark(systemInDarkTheme)
             // windowLightStatusBar/windowLightNavigationBar in themes.xml are static, resolved once
             // at window creation -- they never react to a mid-session theme switch, so this keeps them live.
             val view = LocalView.current
@@ -127,6 +132,14 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    // uiMode is in configChanges, so a system theme switch arrives here instead of recreating the
+    // Activity. Compose can't observe Resources.getSystem(), and LocalConfiguration's uiMode stays
+    // pinned by attachBaseContext's override, so this state is what makes the SYSTEM theme live.
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        systemInDarkTheme = isSystemActuallyInDarkTheme()
     }
 
     override fun onResume() {

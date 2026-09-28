@@ -194,8 +194,8 @@ fun isSystemActuallyInDarkTheme(): Boolean {
 }
 
 /** Resolves this preference to an actual dark/light boolean, e.g. for [QRServTheme]'s `darkTheme`. */
-fun ThemeMode.resolveIsDark(): Boolean = when (this) {
-    ThemeMode.SYSTEM -> isSystemActuallyInDarkTheme()
+fun ThemeMode.resolveIsDark(systemInDarkTheme: Boolean): Boolean = when (this) {
+    ThemeMode.SYSTEM -> systemInDarkTheme
     ThemeMode.DARK -> true
     ThemeMode.LIGHT -> false
 }
