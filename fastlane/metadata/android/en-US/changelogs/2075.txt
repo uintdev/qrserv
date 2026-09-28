@@ -1,0 +1,2 @@
+- System theme changes are now automatically detected and applied accordingly
+- General internal clean up

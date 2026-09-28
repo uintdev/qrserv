@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.1
+
+- System theme changes are now automatically detected and applied accordingly
+- General internal clean up
+
 ## 4.2.0
 
 - Added private hotspot sharing (Android 13 or later)
