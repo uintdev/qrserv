@@ -17,9 +17,12 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -98,9 +101,7 @@ class FileServer(
         }
         val file = info?.path?.takeIf { it.isNotEmpty() }?.let { File(it) }
 
-        // Checked before file.exists(): on scoped storage, losing MANAGE_EXTERNAL_STORAGE
-        // makes exists() report false too, which would otherwise be indistinguishable from
-        // the file genuinely being gone and fall through to the wrong (silent) NOT_FOUND path.
+        // Before exists(): without MANAGE_EXTERNAL_STORAGE, exists() is false too.
         if (info != null && file != null && !hasStoragePermission(info.path)) {
             listener.onPermissionDenied()
             call.respondText("", status = HttpStatusCode.Forbidden)
@@ -113,83 +114,76 @@ class FileServer(
             return
         }
 
-        // Doubles as the readability probe this used to do with a throwaway open.
+        // Doubles as the readability probe.
         val (stream, length) = try {
-            openWithLength(file)
+            withContext(Dispatchers.IO) { openWithLength(file) }
         } catch (error: IOException) {
             listener.onFileUnreadable(error)
             call.respondText("", status = HttpStatusCode.InternalServerError)
             return
         }
 
-        val entityTag = entityTag(file, length)
-        call.response.header("Content-Disposition", contentDispositionHeader(info.name))
-        call.response.header("X-Content-Type-Options", "nosniff")
-        call.response.header(HttpHeaders.AcceptRanges, "bytes")
-        call.response.header(HttpHeaders.ETag, entityTag)
-
-        if (!ifMatchMatches(call.request.headers[HttpHeaders.IfMatch], entityTag)) {
-            stream.close()
-            call.respondText("", status = HttpStatusCode.PreconditionFailed)
-            return
-        }
-
-        if (headOnly) {
-            stream.close()
-            call.respond(object : OutgoingContent.NoContent() {
-                override val contentType = ContentType.Application.OctetStream
-                override val contentLength: Long = length
-            })
-            return
-        }
-
-        val requested = call.request.headers[HttpHeaders.Range]?.takeIf {
-            rangeValidated(call.request.headers[HttpHeaders.IfRange], call.request.headers[HttpHeaders.IfMatch], entityTag)
-        }
-        val range = when (val parsed = byteRange(requested, length)) {
-            ByteRange.Full -> null
-            is ByteRange.Partial -> parsed
-            ByteRange.Unsatisfiable -> {
-                stream.close()
-                call.response.header(HttpHeaders.ContentRange, "bytes */$length")
-                call.respondText("", status = HttpStatusCode.RequestedRangeNotSatisfiable)
-                return
-            }
-        }
-        val start = range?.start ?: 0L
-        val end = range?.end ?: (length - 1)
-        if (range != null) {
-            call.response.header(HttpHeaders.ContentRange, "bytes $start-$end/$length")
-            try {
-                stream.channel.position(start)
-            } catch (error: IOException) {
-                stream.close()
-                listener.onFileUnreadable(error)
-                call.respondText("", status = HttpStatusCode.InternalServerError)
-                return
-            }
-        }
-
-        listener.onDownloadStarted(remoteIp, resumed = start > 0)
         try {
-            call.respond(object : OutgoingContent.ReadChannelContent() {
-                override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
-                override val contentType = ContentType.Application.OctetStream
-                override val contentLength = end - start + 1
-                override fun readFrom(): ByteReadChannel = LimitedInputStream(stream, end - start + 1).toByteReadChannel()
-            })
-            // Deliberately not in the finally below: respond() throws if the client
-            // disconnects part-way, if the write fails, or if Ktor's own
-            // Content-Length check rejects the body -- and announcing a finished
-            // download for a transfer the other end never received is worse than
-            // saying nothing at all.
-            if (end == length - 1) listener.onDownloadFinished(remoteIp)
+            val entityTag = entityTag(file, length)
+            call.response.header("Content-Disposition", contentDispositionHeader(info.name))
+            call.response.header("X-Content-Type-Options", "nosniff")
+            call.response.header(HttpHeaders.AcceptRanges, "bytes")
+            call.response.header(HttpHeaders.ETag, entityTag)
+
+            if (!ifMatchMatches(call.request.headers[HttpHeaders.IfMatch], entityTag)) {
+                call.respondText("", status = HttpStatusCode.PreconditionFailed)
+                return
+            }
+
+            if (headOnly) {
+                call.respond(object : OutgoingContent.NoContent() {
+                    override val contentType = ContentType.Application.OctetStream
+                    override val contentLength: Long = length
+                })
+                return
+            }
+
+            val requested = call.request.headers[HttpHeaders.Range]?.takeIf {
+                rangeValidated(call.request.headers[HttpHeaders.IfRange], call.request.headers[HttpHeaders.IfMatch], entityTag)
+            }
+            val range = when (val parsed = byteRange(requested, length)) {
+                ByteRange.Full -> null
+                is ByteRange.Partial -> parsed
+                ByteRange.Unsatisfiable -> {
+                    call.response.header(HttpHeaders.ContentRange, "bytes */$length")
+                    call.respondText("", status = HttpStatusCode.RequestedRangeNotSatisfiable)
+                    return
+                }
+            }
+            val start = range?.start ?: 0L
+            val end = range?.end ?: (length - 1)
+            if (range != null) {
+                call.response.header(HttpHeaders.ContentRange, "bytes $start-$end/$length")
+                try {
+                    withContext(Dispatchers.IO) { stream.channel.position(start) }
+                } catch (error: IOException) {
+                    listener.onFileUnreadable(error)
+                    call.respondText("", status = HttpStatusCode.InternalServerError)
+                    return
+                }
+            }
+
+            listener.onDownloadStarted(remoteIp, resumed = start > 0)
+            try {
+                call.respond(object : OutgoingContent.ReadChannelContent() {
+                    override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
+                    override val contentType = ContentType.Application.OctetStream
+                    override val contentLength = end - start + 1
+                    override fun readFrom(): ByteReadChannel = LimitedInputStream(stream, end - start + 1).toByteReadChannel()
+                })
+                // Not in the finally: respond() throws on an incomplete transfer.
+                if (end == length - 1) listener.onDownloadFinished(remoteIp)
+            } finally {
+                listener.onTransferEnded()
+            }
         } finally {
-            // Ktor cancels the channel -- closing the stream with it -- once the body has
-            // been written, but not if it never got as far as asking for the channel at all.
-            // Closing an already-closed FileInputStream is a no-op.
-            runCatching { stream.close() }
-            listener.onTransferEnded()
+            // Ktor closes the stream only if it asked for the channel; a second close is a no-op.
+            withContext(NonCancellable + Dispatchers.IO) { runCatching { stream.close() } }
         }
     }
 
@@ -202,12 +196,8 @@ class FileServer(
 }
 
 /**
- * Opens [file] and measures it through that same descriptor, so the advertised Content-Length and
- * the bytes actually sent can't disagree. Taking the length from the path instead (File.length(),
- * as Ktor's own File.readChannel() also does internally) stats it separately from the open that
- * streams it -- and Ktor doesn't call readFrom() until after the response object is built, leaving
- * a window in which the file can be replaced or resized. Ktor then copies exactly Content-Length
- * bytes and rejects the mismatch, failing the transfer partway through.
+ * Opens [file] and measures it through the same descriptor, so Content-Length can't disagree with
+ * the bytes sent if the file is replaced or resized in between (unlike File.length()).
  */
 private fun openWithLength(file: File): Pair<FileInputStream, Long> {
     val stream = FileInputStream(file)
@@ -228,12 +218,7 @@ private fun rfc5987Encode(name: String): String =
         if (char.code < 128 && Rfc5987AttrChars.contains(char)) char.toString() else "%%%02X".format(byte.toInt() and 0xFF)
     }
 
-/**
- * Drops anything a client could read as a path rather than a name. RFC 6266 leaves it to the
- * recipient to ignore path information and browsers do, but separators (or a bare "..") are never
- * legitimate in a name we're handing out, so they shouldn't reach a downloader that takes the
- * header literally -- including one on Windows, where a backslash separates paths too.
- */
+/** Drops anything a client could read as a path (including Windows backslashes) rather than a name. */
 private fun sanitizeFileName(name: String): String {
     val flattened = name.map { if (it == '/' || it == '\\') '_' else it }.joinToString("")
     return if (flattened.isBlank() || flattened == "." || flattened == "..") "download" else flattened
@@ -241,8 +226,7 @@ private fun sanitizeFileName(name: String): String {
 
 internal fun contentDispositionHeader(rawName: String): String {
     val name = sanitizeFileName(rawName)
-    // Anything outside printable ASCII -- a header-injecting CR/LF included -- can't go in the
-    // plain filename parameter; filename* below carries the real name for clients that read it.
+    // Non-printable-ASCII (CR/LF included) can't go in filename; filename* carries the real name.
     val asciiFallback = name
         .map { if (it.code in 0x20..0x7E) it else '_' }
         .joinToString("")
