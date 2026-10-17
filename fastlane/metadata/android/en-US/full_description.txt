@@ -36,16 +36,16 @@ Features:
 
 Permission usage:
 
-- android.permission.INTERNET -- Collection of available network interfaces and port binding for the HTTP server
-- android.permission.READ_EXTERNAL_STORAGE -- Read-only access to emulated, physical SD card(s) and USB mass storage
-- android.permission.FOREGROUND_SERVICE and android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE -- Keeping the HTTP server (and private hotspot) running while the app is in the background
-- android.permission.POST_NOTIFICATIONS -- The ongoing notification shown while a file is being shared, with the option to stop sharing
-- android.permission.WAKE_LOCK -- Keeping the device awake while a download is in progress, so it isn't stalled by the screen turning off
-- android.permission.CHANGE_WIFI_STATE -- Creating and stopping the private hotspot
-- android.permission.NEARBY_WIFI_DEVICES -- Creating the private hotspot (Android 13 or later). Not used to find or locate devices
-- android.permission.ACCESS_WIFI_STATE -- Checking whether the device can host a hotspot while staying connected to Wi-Fi
-- android.permission.ACCESS_NETWORK_STATE -- Noticing IP address changes while sharing, so the QR code can follow
-- android.permission.MANAGE_EXTERNAL_STORAGE -- Direct access to select files on internal storage rather than what gets cached first (only available outside Google Play)
+- INTERNET -- Listing network interfaces and binding the HTTP server's port
+- READ_EXTERNAL_STORAGE -- Read-only access to internal storage, SD cards and USB drives
+- FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Keeping the server (and private hotspot) running in the background
+- POST_NOTIFICATIONS -- The ongoing sharing notification, with the option to stop sharing
+- WAKE_LOCK -- Keeping the device awake while on the file sharing screen
+- CHANGE_WIFI_STATE -- Starting and stopping the private hotspot
+- NEARBY_WIFI_DEVICES -- Creating the private hotspot (Android 13 or later). Not used to locate devices
+- ACCESS_WIFI_STATE -- Checking if the device can host a hotspot while staying on Wi-Fi
+- ACCESS_NETWORK_STATE -- Noticing IP address changes while sharing, so the QR code can follow
+- MANAGE_EXTERNAL_STORAGE -- Direct access to selected files on internal storage instead of caching them first (only outside Google Play)
 
 QRServ is open source.
 https://github.com/uintdev/qrserv
