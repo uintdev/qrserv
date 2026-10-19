@@ -19,7 +19,6 @@ import dev.uint.qrserv.net.HotspotInfo
 import dev.uint.qrserv.net.HotspotLoss
 import dev.uint.qrserv.net.HotspotPreflight
 import dev.uint.qrserv.net.HotspotStartResult
-import dev.uint.qrserv.net.HotspotUnavailable
 import dev.uint.qrserv.net.hotspotPreflight
 import dev.uint.qrserv.net.hotspotUnavailableOn
 import dev.uint.qrserv.net.labelRes

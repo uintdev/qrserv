@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -363,7 +362,7 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         PageType.FILE_MODIFIED -> Triple(Icons.Filled.Edit, R.string.page_info_filemodified_label, R.string.page_info_filemodified_msg)
         PageType.INSUFFICIENT_STORAGE -> Triple(Icons.Filled.Storage, R.string.page_info_insufficientstorage_label, R.string.page_info_insufficientstorage_msg)
         PageType.PORT_IN_USE -> Triple(Icons.Filled.Error, R.string.page_info_portinuse_label, R.string.page_info_portinuse_msg)
-        PageType.IMPORTED, PageType.UNHANDLED_ERROR, PageType.HOTSPOT_FAILED, PageType.IDLE_STOPPED ->
+        PageType.IMPORTED, PageType.UNHANDLED_ERROR ->
             Triple(Icons.Filled.Error, R.string.page_info_unhandlederror_label, R.string.page_info_unhandlederror_msg)
     }
     StatusCard(
@@ -488,7 +487,6 @@ private fun UnhandledErrorHeader() {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun UnhandledErrorDetail(detail: String, modifier: Modifier) {
     val context = LocalContext.current
@@ -532,7 +530,7 @@ private val FabClearance = 104.dp
  *  the leading edge. */
 private val WideFabClearance = 96.dp
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImportedContent(
     uiState: AppUiState,
@@ -574,7 +572,7 @@ private fun ImportedContent(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun QrCodeCard(
     url: String,
@@ -612,7 +610,6 @@ private fun QrCodeCard(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImportInfoCard(
     uiState: AppUiState,
