@@ -23,6 +23,8 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeSource
 
 sealed class ImportResult {
     data class Success(val fileInfo: FileInfo) : ImportResult()
@@ -80,6 +82,8 @@ internal fun sanitizePickedName(rawName: String): String {
 internal fun isContainedIn(file: File, dir: File): Boolean =
     runCatching { file.canonicalPath.startsWith(dir.canonicalPath + File.separator) }.getOrDefault(false)
 
+private val PROGRESS_REPORT_INTERVAL = 100.milliseconds
+
 class FileRepository(private val context: Context) {
 
     companion object {
@@ -134,16 +138,15 @@ class FileRepository(private val context: Context) {
     ): Long {
         val buffer = ByteArray(64 * 1024)
         var copied = 0L
-        var lastReportAt = 0L
+        var lastReport: TimeSource.Monotonic.ValueTimeMark? = null
         while (true) {
             val read = input.read(buffer)
             if (read == -1) break
             output.write(buffer, 0, read)
             copied += read
-            val now = System.currentTimeMillis()
-            if (now - lastReportAt >= 100) {
+            if (lastReport == null || lastReport.elapsedNow() >= PROGRESS_REPORT_INTERVAL) {
                 onBytesCopied(copied)
-                lastReportAt = now
+                lastReport = TimeSource.Monotonic.markNow()
             }
         }
         return copied
