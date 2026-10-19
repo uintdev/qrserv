@@ -1,5 +1,9 @@
 package dev.uint.qrserv.ui.screens
 
+import android.os.Build
+import android.system.ErrnoException
+import android.system.Os
+import android.system.OsConstants
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -104,24 +108,45 @@ private enum class DamSortField(val labelRes: Int) {
 
 private enum class DamSortOrder { ASCENDING, DESCENDING }
 
-/**
- * ext4 (and Android generally) doesn't expose a true file-creation time through [File] --
- * st_ctime is the closest stand-in available without the API 26+ java.nio.file APIs this app's
- * minSdk doesn't support, even though it technically tracks inode metadata-change time rather
- * than creation specifically.
- */
-private fun createdTimeMillis(file: File): Long = try {
-    android.system.Os.stat(file.absolutePath).st_ctime * 1000L
-} catch (_: Exception) {
-    file.lastModified()
-}
-
 private class DamEntry(val file: File) {
     val name: String = file.name
-    val isDirectory: Boolean = file.isDirectory
-    val length: Long = file.length()
-    val lastModified: Long = file.lastModified()
-    val createdMillis: Long = createdTimeMillis(file)
+    val isDirectory: Boolean
+    val length: Long
+    val lastModified: Long
+
+    /**
+     * ext4 (and Android generally) doesn't expose a true file-creation time through [File] --
+     * st_ctime is the closest stand-in available without the API 26+ java.nio.file APIs this app's
+     * minSdk doesn't support, even though it technically tracks inode metadata-change time rather
+     * than creation specifically.
+     */
+    val createdMillis: Long
+
+    init {
+        // One stat for all four rather than one per File getter: on shared storage each goes
+        // through FUSE, which adds up in a large folder.
+        val stat = try {
+            Os.stat(file.absolutePath)
+        } catch (_: ErrnoException) {
+            null
+        }
+        if (stat != null) {
+            isDirectory = OsConstants.S_ISDIR(stat.st_mode)
+            length = stat.st_size
+            // Millisecond precision where available, as File.lastModified() gives.
+            lastModified = if (Build.VERSION.SDK_INT >= 27) {
+                stat.st_mtim.tv_sec * 1000L + stat.st_mtim.tv_nsec / 1_000_000
+            } else {
+                stat.st_mtime * 1000L
+            }
+            createdMillis = stat.st_ctime * 1000L
+        } else {
+            isDirectory = file.isDirectory
+            length = file.length()
+            lastModified = file.lastModified()
+            createdMillis = lastModified
+        }
+    }
 }
 
 /** Null when the filesystem couldn't report a modified time at all (lastModified() returns 0L
@@ -312,11 +337,14 @@ fun DamBrowserScreen(
     var isSearchVisible by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
     // Filters purely over what's already been listed -- typing a query never re-reads the
-    // folder, same as changing the sort never does.
-    val filteredSortedEntries = remember(entries, sortField, sortOrder, searchQuery) {
-        entries?.let { list ->
-            val filtered = if (searchQuery.isBlank()) list else list.filter { it.name.contains(searchQuery, ignoreCase = true) }
-            sortedDamEntries(filtered, sortField, sortOrder)
+    // folder, same as changing the sort never does. Sorted separately so a keystroke only
+    // re-filters; filtering keeps the order.
+    val sortedEntries = remember(entries, sortField, sortOrder) {
+        entries?.let { sortedDamEntries(it, sortField, sortOrder) }
+    }
+    val filteredSortedEntries = remember(sortedEntries, searchQuery) {
+        sortedEntries?.let { list ->
+            if (searchQuery.isBlank()) list else list.filter { it.name.contains(searchQuery, ignoreCase = true) }
         }
     }
 
