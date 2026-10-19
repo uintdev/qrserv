@@ -17,9 +17,11 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -166,7 +168,9 @@ class FileServer(
             if (range != null) {
                 call.response.header(HttpHeaders.ContentRange, "bytes $start-$end/$length")
                 try {
-                    stream.channel.position(start)
+                    // Already on Dispatchers.IO under CIO, so this costs nothing, but it says so. Unlike the
+                    // open above, it's safe to wrap: the stream is already inside the try that closes it.
+                    withContext(Dispatchers.IO) { stream.channel.position(start) }
                 } catch (error: IOException) {
                     listener.onFileUnreadable(error)
                     call.respondText("", status = HttpStatusCode.InternalServerError)
