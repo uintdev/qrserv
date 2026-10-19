@@ -21,6 +21,9 @@ class FileServerTest {
     private val downloadsResumed = AtomicInteger()
     private val downloadsFinished = AtomicInteger()
 
+    @Volatile
+    private var lastRemoteIp: String? = null
+
     @Before
     fun setUp() {
         file = File.createTempFile("qrserv", ".bin").apply { writeBytes(ByteArray(1234) { it.toByte() }) }
@@ -32,6 +35,7 @@ class FileServerTest {
             hasStoragePermission = { true },
             listener = object : FileServer.Listener {
                 override fun onDownloadStarted(remoteIp: String, resumed: Boolean) {
+                    lastRemoteIp = remoteIp
                     (if (resumed) downloadsResumed else downloadsStarted).incrementAndGet()
                 }
                 override fun onDownloadFinished(remoteIp: String) {
@@ -160,6 +164,12 @@ class FileServerTest {
         assertEquals(416, connection.responseCode)
         assertEquals("bytes */1234", connection.getHeaderField("Content-Range"))
         assertEquals(0, downloadsStarted.get() + downloadsResumed.get())
+    }
+
+    @Test
+    fun clientIsReportedByAddressNotHostName() {
+        open("GET", "/report.pdf").body()
+        assertEquals("127.0.0.1", lastRemoteIp)
     }
 
     @Test

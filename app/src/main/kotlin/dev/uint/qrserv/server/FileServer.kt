@@ -89,7 +89,8 @@ class FileServer(
     }
 
     private suspend fun serve(call: ApplicationCall, headOnly: Boolean) {
-        val remoteIp = call.request.origin.remoteHost
+        // Not remoteHost: that resolves the client's name with a blocking reverse DNS lookup.
+        val remoteIp = call.request.origin.remoteAddress
 
         val info = fileInfoProvider()
         if (info != null && !pathMatchesFile(call.request.path(), info.name)) {
