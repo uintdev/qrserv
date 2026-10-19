@@ -207,7 +207,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     ?: DEFAULT_IDLE_STOP_MINUTES,
                 port = port,
                 savedPort = port,
-                damEligible = isDamEligible(),
                 damBuildIneligible = !isDamBuildEligible(),
                 themeMode = themeMode,
                 vpnLockdown = NetworkUtils.isVpnLockdownEnabled(application),
@@ -366,7 +365,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onDirectAccessPermissionResult(granted: Boolean) {
-        _uiState.update { it.copy(damEligible = isDamEligible()) }
         if (granted) {
             _events.tryEmit(UiEvent.OpenDamBrowser)
         } else {
@@ -871,7 +869,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     fun toggleDam() {
         val enabled = !_uiState.value.damEnabled
         Preferences.writeBool(Preferences.PREF_CLIENT_DAM, enabled)
-        _uiState.update { it.copy(damEnabled = enabled, damEligible = isDamEligible()) }
+        _uiState.update { it.copy(damEnabled = enabled) }
     }
 
     private fun isDamBuildEligible(): Boolean =
@@ -898,14 +896,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 hotspotBand = null,
                 idleStopMinutes = DEFAULT_IDLE_STOP_MINUTES,
                 savedPort = 0,
-                damEligible = isDamEligible(),
                 themeMode = ThemeMode.SYSTEM,
             )
         }
         postToast(R.string.settings_general_defaults_success)
     }
-
-    fun isDamEligible(): Boolean = hasDirectAccessPermission() || Build.VERSION.SDK_INT <= 29
 
     fun hasDirectAccessPermission(): Boolean = if (Build.VERSION.SDK_INT >= 30) {
         Environment.isExternalStorageManager()

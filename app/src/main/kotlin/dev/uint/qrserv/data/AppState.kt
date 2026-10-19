@@ -98,7 +98,6 @@ data class AppUiState(
     val port: Int = 0,
     val savedPort: Int = 0,
     val damEnabled: Boolean = false,
-    val damEligible: Boolean = true,
     val damBuildIneligible: Boolean = false,
     val fiuEnabled: Boolean = false,
     val allInterfacesEnabled: Boolean = false,
