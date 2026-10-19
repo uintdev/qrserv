@@ -167,8 +167,7 @@ class HotspotController(
         callback = null
         info?.let { closingAddress = it.address }
         info = null
-        // Only ever non-null on 33+; the check is for lint.
-        if (Build.VERSION.SDK_INT >= 26) closing?.close()
+        closing?.close()
     }
 
     fun recheck() {

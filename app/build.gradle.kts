@@ -55,7 +55,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.uint.qrserv"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 37
         versionCode = 2075
         versionName = "4.2.1"
@@ -89,8 +89,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-        // minSdk 24 predates java.time (API 26); desugaring backports it.
-        isCoreLibraryDesugaringEnabled = true
     }
 
     dependenciesInfo {
@@ -140,8 +138,6 @@ androidComponents {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-
     implementation(platform("androidx.compose:compose-bom:2026.09.00"))
 
     implementation("androidx.core:core-ktx:1.19.1")

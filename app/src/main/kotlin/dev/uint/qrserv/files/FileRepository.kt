@@ -3,7 +3,6 @@ package dev.uint.qrserv.files
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
 import android.provider.OpenableColumns
@@ -114,7 +113,6 @@ class FileRepository(private val context: Context) {
     }
 
     private fun makeRoomFor(dir: File, bytes: Long): Boolean {
-        if (Build.VERSION.SDK_INT < 26) return dir.usableSpace >= bytes
         val storage = context.getSystemService(StorageManager::class.java)
         return try {
             val volume = storage.getUuidForPath(dir)

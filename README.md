@@ -79,7 +79,7 @@ The app is a native Android app written in Kotlin with Jetpack Compose. Prior to
 ## System Requirements
 
 - **System:** Android
-- **Minimum version:** 7.0
+- **Minimum version:** 8.0
 - **Private hotspot:** Android 13 or later (choosing the band, including 5 GHz: Android 16 or later, on supported devices)
 
 ## Releases

@@ -220,8 +220,6 @@ class ServingService : Service() {
                 .setContentIntent(openApp)
                 .setAutoCancel(true)
                 .setCategory(NotificationCompat.CATEGORY_STATUS)
-                // Before 26 there are no channels; this is what makes it pop up there.
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build()
             manager.notify(IDLE_STOPPED_NOTIFICATION_ID, notification)
             return true

@@ -115,10 +115,9 @@ private class DamEntry(val file: File) {
     val lastModified: Long
 
     /**
-     * ext4 (and Android generally) doesn't expose a true file-creation time through [File] --
-     * st_ctime is the closest stand-in available without the API 26+ java.nio.file APIs this app's
-     * minSdk doesn't support, even though it technically tracks inode metadata-change time rather
-     * than creation specifically.
+     * ext4 (and Android generally) doesn't expose a true file-creation time: java.nio.file's
+     * creationTime() just returns the modified time on Android, so st_ctime is the closest stand-in,
+     * even though it technically tracks inode metadata-change time rather than creation specifically.
      */
     val createdMillis: Long
 
