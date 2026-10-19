@@ -103,8 +103,8 @@ class MainActivity : ComponentActivity() {
             val uiState by viewModel.uiState.collectAsState()
             // Not isSystemInDarkTheme() for the SYSTEM case -- that reads LocalConfiguration, which
             // attachBaseContext's override permanently forced one way if the stored preference was
-            // DARK/LIGHT at launch. resolveIsDark() checks the real device setting instead, so
-            // switching back to System mid-session takes effect immediately.
+            // DARK/LIGHT at launch. systemInDarkTheme follows the real device setting instead (see
+            // onConfigurationChanged), so switching back to System mid-session takes effect immediately.
             val darkTheme = uiState.themeMode.resolveIsDark(systemInDarkTheme)
             // windowLightStatusBar/windowLightNavigationBar in themes.xml are static, resolved once
             // at window creation -- they never react to a mid-session theme switch, so this keeps them live.
