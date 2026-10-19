@@ -1,5 +1,6 @@
 package dev.uint.qrserv
 
+import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -174,11 +175,19 @@ class MainActivity : ComponentActivity() {
 
     private fun requestDirectAccessPermission() {
         if (Build.VERSION.SDK_INT >= 30) {
-            val intent = Intent(
-                Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                "package:$packageName".toUri(),
-            )
-            manageStorageSettingsLauncher.launch(intent)
+            // Some builds (TV, Go, some OEMs) lack the per-app screen, or All files access entirely.
+            val launched = listOf(
+                Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, "package:$packageName".toUri()),
+                Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
+            ).any { intent ->
+                try {
+                    manageStorageSettingsLauncher.launch(intent)
+                    true
+                } catch (_: ActivityNotFoundException) {
+                    false
+                }
+            }
+            if (!launched) viewModel.onDirectAccessPermissionResult(false)
         } else {
             legacyStoragePermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
