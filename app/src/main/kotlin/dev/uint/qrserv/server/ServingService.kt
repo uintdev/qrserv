@@ -1,12 +1,10 @@
 package dev.uint.qrserv.server
 
-import android.Manifest
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.content.res.Configuration
 import android.os.Build
@@ -19,6 +17,7 @@ import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import dev.uint.qrserv.MainActivity
 import dev.uint.qrserv.R
+import dev.uint.qrserv.util.canPostNotifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -79,9 +78,7 @@ class ServingService : Service() {
     }
 
     private fun post(notice: ServingNotice) {
-        if (Build.VERSION.SDK_INT < 33 ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (canPostNotifications()) {
             NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, buildNotification(notice))
         }
     }
@@ -199,12 +196,7 @@ class ServingService : Service() {
         /** Posts a dismissable "sharing stopped" notice; false if notifications aren't allowed. */
         fun notifyIdleStopped(context: Context, minutes: Int): Boolean {
             val manager = NotificationManagerCompat.from(context)
-            if (!manager.areNotificationsEnabled()) return false
-            if (Build.VERSION.SDK_INT >= 33 &&
-                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return false
-            }
+            if (!manager.areNotificationsEnabled() || !context.canPostNotifications()) return false
             // Its own channel, so it can pop up without making the ongoing sharing notification do the
             // same, and so it can be turned down on its own. No sound or vibration either way.
             manager.createNotificationChannel(

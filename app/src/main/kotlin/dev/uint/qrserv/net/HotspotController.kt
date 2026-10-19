@@ -1,9 +1,7 @@
 package dev.uint.qrserv.net
 
-import android.Manifest
 import android.app.AppOpsManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.wifi.SoftApConfiguration
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -12,9 +10,9 @@ import android.os.Looper
 import android.os.Process
 import android.util.SparseIntArray
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.core.util.size
 import dev.uint.qrserv.R
+import dev.uint.qrserv.util.isNearbyWifiGranted
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -123,11 +121,7 @@ class HotspotController(
         info?.let { if (reservation != null) return HotspotStartResult.Started(it) }
         if (Build.VERSION.SDK_INT < 33) return HotspotStartResult.Failed(HotspotFailure.GENERIC)
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.NEARBY_WIFI_DEVICES) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            return HotspotStartResult.Failed(HotspotFailure.PERMISSION_DENIED)
-        }
+        if (!context.isNearbyWifiGranted()) return HotspotStartResult.Failed(HotspotFailure.PERMISSION_DENIED)
         // Checked up front: the system would only report it as ERROR_GENERIC.
         if (!isWifiControlAllowed()) return HotspotStartResult.Failed(HotspotFailure.WIFI_CONTROL_DENIED)
 

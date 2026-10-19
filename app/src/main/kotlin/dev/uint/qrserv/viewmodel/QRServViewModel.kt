@@ -1,8 +1,6 @@
 package dev.uint.qrserv.viewmodel
 
-import android.Manifest
 import android.app.Application
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
@@ -10,10 +8,8 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.FileObserver
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dev.uint.qrserv.R
@@ -42,6 +38,8 @@ import dev.uint.qrserv.server.ServingNotice
 import dev.uint.qrserv.server.ServingService
 import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.ManifestUtils
+import dev.uint.qrserv.util.canPostNotifications
+import dev.uint.qrserv.util.hasDirectAccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -284,7 +282,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private fun maybeRequestNotificationPermission() {
         if (Build.VERSION.SDK_INT < 33) return
         if (Preferences.wasAskedOnThisInstall(Preferences.PREF_NOTIFICATIONS_ASKED)) return
-        if (!isGranted(Manifest.permission.POST_NOTIFICATIONS)) {
+        if (!getApplication<Application>().canPostNotifications()) {
             notificationPromptOpen = true
             _uiState.update { it.copy(notificationPermissionPending = true) }
         }
@@ -310,13 +308,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun areNotificationsGranted(): Boolean =
-        Build.VERSION.SDK_INT < 33 || isGranted(Manifest.permission.POST_NOTIFICATIONS)
-
-    private fun isGranted(permission: String): Boolean =
-        ContextCompat.checkSelfPermission(getApplication(), permission) == PackageManager.PERMISSION_GRANTED
-
-    private var notificationsGranted = areNotificationsGranted()
+    private var notificationsGranted = getApplication<Application>().canPostNotifications()
 
     fun purgeStaleCacheOnLaunch() {
         if (launchCacheHandled) return
@@ -759,7 +751,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         addressCheckRequests.tryEmit(Unit)
         _uiState.update { it.copy(vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication())) }
         hotspot.onAppResumed()
-        val granted = areNotificationsGranted()
+        val granted = getApplication<Application>().canPostNotifications()
         if (granted && !notificationsGranted && ServingState.notice.value != null) ServingService.start(getApplication())
         notificationsGranted = granted
     }
@@ -902,11 +894,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         postToast(R.string.settings_general_defaults_success)
     }
 
-    fun hasDirectAccessPermission(): Boolean = if (Build.VERSION.SDK_INT >= 30) {
-        Environment.isExternalStorageManager()
-    } else {
-        isGranted(Manifest.permission.READ_EXTERNAL_STORAGE)
-    }
+    fun hasDirectAccessPermission(): Boolean = getApplication<Application>().hasDirectAccess()
 
     fun directoryLister(): FileRepository = fileRepo
 

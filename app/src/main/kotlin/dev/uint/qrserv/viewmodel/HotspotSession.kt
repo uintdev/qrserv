@@ -1,13 +1,11 @@
 package dev.uint.qrserv.viewmodel
 
-import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.UserManager
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.AppUiState
 import dev.uint.qrserv.data.CompatibleBandWarning
@@ -28,6 +26,7 @@ import dev.uint.qrserv.net.hotspotPreflight
 import dev.uint.qrserv.net.hotspotUnavailableReason
 import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.server.ServingState
+import dev.uint.qrserv.util.isNearbyWifiGranted
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -138,9 +137,7 @@ class HotspotSession internal constructor(
         return HotspotAvailability(unavailable, disconnectsWifi)
     }
 
-    internal fun isNearbyGranted(): Boolean =
-        Build.VERSION.SDK_INT >= 33 &&
-            ContextCompat.checkSelfPermission(app, Manifest.permission.NEARBY_WIFI_DEVICES) == PackageManager.PERMISSION_GRANTED
+    internal fun isNearbyGranted(): Boolean = app.isNearbyWifiGranted()
 
     fun onHotspotClicked() {
         val state = uiState.value

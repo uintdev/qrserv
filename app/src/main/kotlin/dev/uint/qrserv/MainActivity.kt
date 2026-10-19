@@ -9,7 +9,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -69,9 +68,7 @@ class MainActivity : ComponentActivity() {
 
     private val manageStorageSettingsLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                viewModel.onDirectAccessPermissionResult(Environment.isExternalStorageManager())
-            }
+            viewModel.onDirectAccessPermissionResult(viewModel.hasDirectAccessPermission())
         }
 
     // Runs before the window/theme is created, so the cold-start windowBackground (themes.xml's
