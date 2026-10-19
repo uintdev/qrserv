@@ -21,23 +21,24 @@ abstract class StripPermissionTask : DefaultTask() {
 
     @TaskAction
     fun stripPermission() {
-        val manifestFile = mergedManifest.get().asFile
-        if (manifestFile.exists()) {
-            val content = manifestFile.readText()
-            // Tolerant of whitespace/newlines anywhere in the tag, and of other attributes
-            // (e.g. tools:ignore="ScopedStorage", present in the source manifest -- attribute
-            // order and count can vary between the source manifest and however the merger
-            // ultimately formats it) appearing before or after android:name.
-            val attr = """\s+[\w:.-]+\s*=\s*"[^"]*""""
-            val updated = content.replace(
-                Regex(
-                    """<uses-permission\b($attr)*?\s+android:name\s*=\s*"android\.permission\.MANAGE_EXTERNAL_STORAGE"($attr)*\s*/>""",
-                    RegexOption.DOT_MATCHES_ALL
-                ),
-                ""
-            )
-            updatedManifest.get().asFile.writeText(updated)
+        val content = mergedManifest.get().asFile.readText()
+        // Tolerant of whitespace/newlines anywhere in the tag, and of other attributes
+        // (e.g. tools:ignore="ScopedStorage", present in the source manifest -- attribute
+        // order and count can vary between the source manifest and however the merger
+        // ultimately formats it) appearing before or after android:name.
+        val attr = """\s+[\w:.-]+\s*=\s*"[^"]*""""
+        val updated = content.replace(
+            Regex(
+                """<uses-permission\b($attr)*?\s+android:name\s*=\s*"android\.permission\.MANAGE_EXTERNAL_STORAGE"($attr)*\s*/>""",
+                RegexOption.DOT_MATCHES_ALL
+            ),
+            ""
+        )
+        // Otherwise a format change the pattern misses would only surface as a rejected Play upload.
+        if ("android.permission.MANAGE_EXTERNAL_STORAGE" in updated) {
+            throw GradleException("MANAGE_EXTERNAL_STORAGE is still in the merged manifest; update StripPermissionTask's pattern.")
         }
+        updatedManifest.get().asFile.writeText(updated)
     }
 }
 
