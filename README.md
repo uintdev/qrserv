@@ -98,8 +98,9 @@ As you may be aware, there are two different Android builds of this application.
   - In short, Google Play became far stricter about the usage of such sensitive permissions in June 2024.
   - The MediaStore API has its own limitations for this use case that would require a substantial amount of custom implementation to work around.
 
-#### GitHub
+#### GitHub and IzzyOnDroid
 
+- IzzyOnDroid distributes the same APK as the GitHub releases.
 - Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 11 or later.
 
 #### Changing build types
