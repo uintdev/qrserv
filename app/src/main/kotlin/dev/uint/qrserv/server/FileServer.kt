@@ -51,6 +51,12 @@ class FileServer(
     @Volatile
     private var running = false
 
+    // Per client: a multi-connection downloader can finish the segment ending the file before the
+    // rest, so "finished" waits until that client's last transfer in flight is done.
+    private class ClientTransfers(var active: Int = 0, var reachedEnd: Boolean = false)
+
+    private val clientTransfers = HashMap<String, ClientTransfers>()
+
     private val engineFailureHandler = CoroutineExceptionHandler { _, _ ->
         if (running) listener.onServerGone()
     }
@@ -168,6 +174,8 @@ class FileServer(
             }
 
             listener.onDownloadStarted(remoteIp, resumed = start > 0)
+            synchronized(clientTransfers) { clientTransfers.getOrPut(remoteIp, ::ClientTransfers).active++ }
+            var sent = false
             try {
                 call.respond(object : OutgoingContent.ReadChannelContent() {
                     override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
@@ -175,9 +183,12 @@ class FileServer(
                     override val contentLength = end - start + 1
                     override fun readFrom(): ByteReadChannel = LimitedInputStream(stream, end - start + 1).toByteReadChannel()
                 })
-                // Not in the finally: respond() throws on an incomplete transfer.
-                if (end == length - 1) listener.onDownloadFinished(remoteIp)
+                // respond() throws on an incomplete transfer.
+                sent = true
             } finally {
+                if (clientTransferEnded(remoteIp, sent, reachedEnd = sent && end == length - 1)) {
+                    listener.onDownloadFinished(remoteIp)
+                }
                 listener.onTransferEnded()
             }
         } finally {
@@ -185,6 +196,16 @@ class FileServer(
             runCatching { stream.close() }
         }
     }
+
+    /** True if this was [remoteIp]'s last transfer in flight, it was sent in full, and one of them reached the end. */
+    private fun clientTransferEnded(remoteIp: String, sent: Boolean, reachedEnd: Boolean): Boolean =
+        synchronized(clientTransfers) {
+            val client = clientTransfers.getValue(remoteIp)
+            client.reachedEnd = client.reachedEnd || reachedEnd
+            if (--client.active > 0) return false
+            clientTransfers.remove(remoteIp)
+            sent && client.reachedEnd
+        }
 
     fun stop() {
         running = false

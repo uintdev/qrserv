@@ -115,6 +115,21 @@ class FileServerTest {
     }
 
     @Test
+    fun segmentEndingTheFileWaitsForTheOthersBeforeFinishing() {
+        // Big enough that the first segment can't fit in the socket buffers and stays in flight until read.
+        file.writeBytes(ByteArray(64 * 1024 * 1024))
+        val entityTag = entityTag()
+        val head = open("GET", headers = mapOf("Range" to "bytes=0-33554431", "If-Range" to entityTag))
+        assertEquals(206, head.responseCode)
+        val tail = open("GET", headers = mapOf("Range" to "bytes=33554432-", "If-Range" to entityTag))
+        assertEquals(206, tail.responseCode)
+        tail.body()
+        assertEquals(0, awaitFinished())
+        head.body()
+        assertEquals(1, awaitFinished())
+    }
+
+    @Test
     fun matchingIfRangeHonorsTheRange() {
         val connection = open("GET", headers = mapOf("Range" to "bytes=-4", "If-Range" to entityTag()))
         assertEquals(206, connection.responseCode)
