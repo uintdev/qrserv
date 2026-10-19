@@ -17,12 +17,9 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -114,9 +111,10 @@ class FileServer(
             return
         }
 
-        // Doubles as the readability probe.
+        // Doubles as the readability probe. Called directly: CIO already runs handlers on Dispatchers.IO,
+        // and a withContext here could drop the opened stream unclosed if cancelled as it returns.
         val (stream, length) = try {
-            withContext(Dispatchers.IO) { openWithLength(file) }
+            openWithLength(file)
         } catch (error: IOException) {
             listener.onFileUnreadable(error)
             call.respondText("", status = HttpStatusCode.InternalServerError)
@@ -160,7 +158,7 @@ class FileServer(
             if (range != null) {
                 call.response.header(HttpHeaders.ContentRange, "bytes $start-$end/$length")
                 try {
-                    withContext(Dispatchers.IO) { stream.channel.position(start) }
+                    stream.channel.position(start)
                 } catch (error: IOException) {
                     listener.onFileUnreadable(error)
                     call.respondText("", status = HttpStatusCode.InternalServerError)
@@ -183,7 +181,7 @@ class FileServer(
             }
         } finally {
             // Ktor closes the stream only if it asked for the channel; a second close is a no-op.
-            withContext(NonCancellable + Dispatchers.IO) { runCatching { stream.close() } }
+            runCatching { stream.close() }
         }
     }
 
