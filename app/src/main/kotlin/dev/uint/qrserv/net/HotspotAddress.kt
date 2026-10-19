@@ -7,10 +7,12 @@ data class Ipv4Candidate(
     val interfaceName: String = "",
 )
 
-private val NonHotspotInterfacePrefixes = listOf("tun", "ppp", "ipsec", "p2p", "rmnet", "ccmni", "v4-", "lo")
+// On top of what linkKindOf counts as a VPN or mobile data: Wi-Fi Direct, 464XLAT and loopback.
+private val NonHotspotInterfacePrefixes = listOf("p2p", "v4-", "lo")
 
 private fun Ipv4Candidate.couldBeHotspot(): Boolean =
-    isPrivate && NonHotspotInterfacePrefixes.none { interfaceName.startsWith(it) }
+    isPrivate && linkKindOf(interfaceName, emptyMap()) == LinkKind.LOCAL &&
+        NonHotspotInterfacePrefixes.none { interfaceName.startsWith(it) }
 
 /**
  * The public API doesn't report the hotspot's own address, so this compares addresses before and

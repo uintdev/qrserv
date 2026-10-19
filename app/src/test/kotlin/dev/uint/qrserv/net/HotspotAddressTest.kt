@@ -49,6 +49,12 @@ class HotspotAddressTest {
     }
 
     @Test
+    fun wireGuardIsNotTheHotspot() {
+        val before = setOf(wifi.address)
+        assertNull(chooseHotspotAddress(before, listOf(wifi, ip("10.66.66.2", interfaceName = "wg0"))))
+    }
+
+    @Test
     fun wifiDirectGroupIsNotTheHotspot() {
         val direct = ip("192.168.49.1", interfaceName = "p2p-wlan0-0")
         assertNull(chooseHotspotAddress(setOf(wifi.address, direct.address), listOf(wifi, direct)))
@@ -60,6 +66,7 @@ class HotspotAddressTest {
         val before = setOf(wifi.address)
         val now = listOf(wifi, ip("10.54.3.1", interfaceName = "rmnet_data0"), ip("192.0.0.4", interfaceName = "v4-rmnet_data0"))
         assertNull(chooseHotspotAddress(before, now))
+        assertNull(chooseHotspotAddress(before, listOf(wifi, ip("10.71.4.9", interfaceName = "wwan0"), ip("10.12.0.5", interfaceName = "pdp0"))))
     }
 
     @Test
