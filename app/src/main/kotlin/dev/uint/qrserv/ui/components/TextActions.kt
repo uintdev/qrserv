@@ -8,7 +8,14 @@ import android.content.Intent
 import android.os.Build
 import android.os.PersistableBundle
 import android.widget.Toast
+import androidx.core.net.toUri
 import dev.uint.qrserv.R
+
+/** Opens [url] in whichever app handles it, or says so when none can. */
+fun openLink(context: Context, url: String) {
+    runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri())) }
+        .onFailure { Toast.makeText(context, R.string.info_exception_linkopenfailed, Toast.LENGTH_SHORT).show() }
+}
 
 fun shareText(context: Context, text: String) {
     val shareIntent = Intent(Intent.ACTION_SEND).apply {

@@ -200,4 +200,13 @@
     <string name="settings_general_theme_option_light">Jasny</string>
     <string name="settings_general_defaults_list_title">Przywróć ustawienia domyślne</string>
     <string name="settings_general_defaults_success">Przywrócono ustawienia domyślne</string>
+    <string name="settings_update_version">Wersja %1$s</string>
+    <string name="settings_update_check_title">Sprawdź aktualizacje</string>
+    <string name="settings_update_dialog_title">Aktualizacje</string>
+    <string name="settings_update_available">Dostępna jest wersja %1$s</string>
+    <string name="settings_update_latest">Zainstalowana jest najnowsza wersja</string>
+    <string name="settings_update_newer">Ta wersja jest nowsza niż najnowsze wydanie (%1$s)</string>
+    <string name="settings_update_failed">Nie udało się sprawdzić aktualizacji</string>
+    <string name="settings_update_view_release">Zobacz wydanie</string>
+    <string name="settings_update_open_releases">Zobacz wydania</string>
 </resources>

@@ -196,4 +196,13 @@
     <string name="settings_general_theme_option_light">Chiaro</string>
     <string name="settings_general_defaults_list_title">Ripristina impostazioni predefinite</string>
     <string name="settings_general_defaults_success">Impostazioni predefinite ripristinate</string>
+    <string name="settings_update_version">Versione %1$s</string>
+    <string name="settings_update_check_title">Controlla aggiornamenti</string>
+    <string name="settings_update_dialog_title">Aggiornamenti</string>
+    <string name="settings_update_available">È disponibile la versione %1$s</string>
+    <string name="settings_update_latest">È installata la versione più recente</string>
+    <string name="settings_update_newer">Questa versione è più recente dell\'ultimo rilascio (%1$s)</string>
+    <string name="settings_update_failed">Impossibile controllare gli aggiornamenti</string>
+    <string name="settings_update_view_release">Visualizza rilascio</string>
+    <string name="settings_update_open_releases">Visualizza rilasci</string>
 </resources>

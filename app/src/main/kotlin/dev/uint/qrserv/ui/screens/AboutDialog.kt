@@ -1,6 +1,5 @@
 package dev.uint.qrserv.ui.screens
 
-import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,11 +36,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.BuildConfig
 import dev.uint.qrserv.R
+import dev.uint.qrserv.ui.components.openLink
 import dev.uint.qrserv.ui.theme.ReducedDialogScrim
 import dev.uint.qrserv.ui.theme.subtleContainerColor
 import dev.uint.qrserv.util.ManifestUtils
-import androidx.core.net.toUri
-import android.widget.Toast
+import dev.uint.qrserv.util.RELEASES_URL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +81,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    LinkRow(Icons.Filled.Archive, stringResource(R.string.about_releases_title), "https://github.com/uintdev/qrserv/releases")
+                    LinkRow(Icons.Filled.Archive, stringResource(R.string.about_releases_title), RELEASES_URL)
                     LinkRow(Icons.Filled.Code, stringResource(R.string.about_opensource_title), "https://github.com/uintdev/qrserv")
                     LinkRow(Icons.Filled.LocalCafe, stringResource(R.string.about_donate_title), "https://ko-fi.com/uintdev")
                 }
@@ -104,19 +103,13 @@ fun AboutDialog(onDismiss: () -> Unit) {
 @Composable
 private fun LinkRow(icon: ImageVector, label: String, url: String) {
     val context = LocalContext.current
-    val linkOpenFailedMessage = stringResource(R.string.info_exception_linkopenfailed)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable {
-                runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri())) }
-                    .onFailure {
-                        Toast.makeText(context, linkOpenFailedMessage, Toast.LENGTH_SHORT).show()
-                    }
-            }
+            .clickable { openLink(context, url) }
             .padding(horizontal = 12.dp, vertical = 8.dp),
     ) {
         Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))

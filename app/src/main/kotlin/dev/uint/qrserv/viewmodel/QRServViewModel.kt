@@ -12,6 +12,7 @@ import android.os.FileObserver
 import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dev.uint.qrserv.BuildConfig
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.AddressGroup
 import dev.uint.qrserv.data.AppUiState
@@ -41,7 +42,9 @@ import dev.uint.qrserv.server.ServingService
 import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.AppShortcut
 import dev.uint.qrserv.util.ManifestUtils
+import dev.uint.qrserv.util.UpdateCheckState
 import dev.uint.qrserv.util.canPostNotifications
+import dev.uint.qrserv.util.checkForUpdate
 import dev.uint.qrserv.util.hasDirectAccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +100,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
+
+    private val _updateCheck = MutableStateFlow<UpdateCheckState>(UpdateCheckState.Idle)
+    val updateCheck: StateFlow<UpdateCheckState> = _updateCheck.asStateFlow()
+
+    private var updateCheckJob: Job? = null
 
     private val _events = MutableSharedFlow<UiEvent>(extraBufferCapacity = 8)
     val events: SharedFlow<UiEvent> = _events
@@ -327,6 +335,20 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     fun onImportClicked() {
         if (rejectIfBusy()) return
         openPicker()
+    }
+
+    fun checkForUpdates() {
+        if (_updateCheck.value == UpdateCheckState.Checking) return
+        _updateCheck.value = UpdateCheckState.Checking
+        updateCheckJob = viewModelScope.launch {
+            _updateCheck.value = UpdateCheckState.Done(checkForUpdate(BuildConfig.VERSION_NAME))
+        }
+    }
+
+    /** Drops a check in progress or its shown result, e.g. on leaving Settings. */
+    fun cancelUpdateCheck() {
+        updateCheckJob?.cancel()
+        _updateCheck.value = UpdateCheckState.Idle
     }
 
     /** Does what the matching button would, from whichever screen and state the app is in. */

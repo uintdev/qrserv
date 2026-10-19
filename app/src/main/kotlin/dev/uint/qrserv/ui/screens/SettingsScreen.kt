@@ -1,6 +1,7 @@
 package dev.uint.qrserv.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -19,6 +21,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
@@ -33,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -52,16 +57,22 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import dev.uint.qrserv.BuildConfig
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.IdleStopOptions
 import dev.uint.qrserv.data.ThemeMode
 import dev.uint.qrserv.net.HotspotBand
 import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.ui.components.BackNavigationIcon
+import dev.uint.qrserv.ui.components.openLink
 import dev.uint.qrserv.ui.theme.ReducedDialogScrim
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
 import dev.uint.qrserv.ui.theme.subtleContainerColor
 import dev.uint.qrserv.ui.theme.transparentTopAppBarColors
+import dev.uint.qrserv.util.ManifestUtils
+import dev.uint.qrserv.util.RELEASES_URL
+import dev.uint.qrserv.util.UpdateCheckResult
+import dev.uint.qrserv.util.UpdateCheckState
 import dev.uint.qrserv.viewmodel.QRServViewModel
 import dev.uint.qrserv.viewmodel.UiEvent
 
@@ -78,6 +89,14 @@ fun SettingsScreen(
     var showBandDialog by remember { mutableStateOf(false) }
     var showIdleDialog by remember { mutableStateOf(false) }
     var showRestoreConfirm by remember { mutableStateOf(false) }
+    val updateCheck by viewModel.updateCheck.collectAsState()
+    val context = LocalContext.current
+    // The GitHub version only, told apart from the Play version the same way About does.
+    val canCheckForUpdates = remember { ManifestUtils.hasManageExternalStorageInManifest(context) }
+
+    DisposableEffect(viewModel) {
+        onDispose { viewModel.cancelUpdateCheck() }
+    }
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
@@ -228,6 +247,22 @@ fun SettingsScreen(
                     modifier = Modifier.clickable { showThemeDialog = true },
                 )
                 GroupDivider()
+                if (canCheckForUpdates) {
+                    val checking = updateCheck == UpdateCheckState.Checking
+                    ListItem(
+                        headlineContent = { Text(stringResource(R.string.settings_update_check_title)) },
+                        supportingContent = { Text(stringResource(R.string.settings_update_version, BuildConfig.VERSION_NAME)) },
+                        // Always there, so the spinner showing up doesn't shift the text; the result is a dialog.
+                        trailingContent = {
+                            Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                                if (checking) CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                            }
+                        },
+                        colors = groupItemColors,
+                        modifier = Modifier.clickable(enabled = !checking) { viewModel.checkForUpdates() },
+                    )
+                    GroupDivider()
+                }
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_general_defaults_list_title)) },
                     colors = groupItemColors,
@@ -286,6 +321,17 @@ fun SettingsScreen(
         )
     }
 
+    (updateCheck as? UpdateCheckState.Done)?.let { done ->
+        UpdateResultDialog(
+            result = done.result,
+            onOpenLink = { url ->
+                openLink(context, url)
+                viewModel.cancelUpdateCheck()
+            },
+            onDismiss = viewModel::cancelUpdateCheck,
+        )
+    }
+
     if (showRestoreConfirm) {
         AlertDialog(
             onDismissRequest = { showRestoreConfirm = false },
@@ -305,6 +351,40 @@ fun SettingsScreen(
             },
         )
     }
+}
+
+@Composable
+private fun UpdateResultDialog(result: UpdateCheckResult, onOpenLink: (String) -> Unit, onDismiss: () -> Unit) {
+    val message = when (result) {
+        is UpdateCheckResult.UpdateAvailable -> stringResource(R.string.settings_update_available, result.version)
+        UpdateCheckResult.UpToDate -> stringResource(R.string.settings_update_latest)
+        is UpdateCheckResult.NewerThanLatest -> stringResource(R.string.settings_update_newer, result.latestVersion)
+        UpdateCheckResult.Failed -> stringResource(R.string.settings_update_failed)
+    }
+    val link = when (result) {
+        is UpdateCheckResult.UpdateAvailable -> R.string.settings_update_view_release to result.releaseUrl
+        UpdateCheckResult.Failed -> R.string.settings_update_open_releases to RELEASES_URL
+        else -> null
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = subtleContainerColor(),
+        title = {
+            ReducedDialogScrim()
+            Text(stringResource(R.string.settings_update_dialog_title))
+        },
+        text = { Text(message) },
+        confirmButton = {
+            if (link != null) {
+                TextButton(onClick = { onOpenLink(link.second) }) { Text(stringResource(link.first)) }
+            } else {
+                TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.ok)) }
+            }
+        },
+        dismissButton = link?.let {
+            { TextButton(onClick = onDismiss) { Text(stringResource(R.string.about_close)) } }
+        },
+    )
 }
 
 @Composable

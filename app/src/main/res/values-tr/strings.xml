@@ -192,4 +192,13 @@
     <string name="settings_general_theme_option_light">Açık</string>
     <string name="settings_general_defaults_list_title">Varsayılan ayarları geri yükle</string>
     <string name="settings_general_defaults_success">Varsayılan ayarlar geri yüklendi</string>
+    <string name="settings_update_version">Sürüm %1$s</string>
+    <string name="settings_update_check_title">Güncellemeleri denetle</string>
+    <string name="settings_update_dialog_title">Güncellemeler</string>
+    <string name="settings_update_available">%1$s sürümü kullanılabilir</string>
+    <string name="settings_update_latest">En son sürümü kullanıyorsunuz</string>
+    <string name="settings_update_newer">Bu sürüm en son yayınlanan sürümden (%1$s) daha yeni</string>
+    <string name="settings_update_failed">Güncellemeler denetlenemedi</string>
+    <string name="settings_update_view_release">Sürümü görüntüle</string>
+    <string name="settings_update_open_releases">Sürümleri görüntüle</string>
 </resources>

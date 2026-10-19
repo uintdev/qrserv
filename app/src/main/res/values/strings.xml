@@ -193,4 +193,13 @@
     <string name="settings_general_theme_option_light">Light</string>
     <string name="settings_general_defaults_list_title">Restore default settings</string>
     <string name="settings_general_defaults_success">Default settings restored</string>
+    <string name="settings_update_version">Version %1$s</string>
+    <string name="settings_update_check_title">Check for updates</string>
+    <string name="settings_update_dialog_title">Updates</string>
+    <string name="settings_update_available">Version %1$s is available</string>
+    <string name="settings_update_latest">You\'re on the latest version</string>
+    <string name="settings_update_newer">This version is newer than the latest release (%1$s)</string>
+    <string name="settings_update_failed">Couldn\'t check for updates</string>
+    <string name="settings_update_view_release">View release</string>
+    <string name="settings_update_open_releases">View releases</string>
 </resources>
