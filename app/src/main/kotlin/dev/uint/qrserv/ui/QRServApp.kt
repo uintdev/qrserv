@@ -122,6 +122,12 @@ fun QRServApp(
                 UiEvent.OpenSafPicker -> onOpenSafPicker()
                 UiEvent.OpenDamBrowser -> screen = Screen.DAM_BROWSER
                 UiEvent.RequestDamPermission -> onRequestDamPermission()
+                UiEvent.ShowMainScreen, UiEvent.OpenHotspotScreen -> {
+                    showAbout = false
+                    // As leaving it with back does, so the browser's import doesn't stay pending.
+                    if (screen == Screen.DAM_BROWSER) viewModel.onImportCanceled()
+                    screen = if (event == UiEvent.OpenHotspotScreen) Screen.HOTSPOT else Screen.MAIN
+                }
                 UiEvent.PortSaved -> {}
                 is UiEvent.Toast -> {
                     val message = if (event.event.args.isEmpty()) {

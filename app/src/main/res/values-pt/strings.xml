@@ -74,6 +74,9 @@
     <string name="notification_starting_hotspot">A iniciar a zona Wi-Fi privada…</string>
     <string name="notification_hotspot_detail">Zona Wi-Fi privada · %1$s</string>
     <string name="hotspot_share_button">Partilhar via zona Wi-Fi privada</string>
+    <string name="shortcut_share_file_short">Partilhar</string>
+    <string name="shortcut_share_file_long">Partilhar um ficheiro</string>
+    <string name="shortcut_hotspot_short">Zona Wi-Fi</string>
     <string name="hotspot_note_disconnects">O Wi-Fi é desligado durante a partilha</string>
     <string name="hotspot_unavailable_android">Requer o Android 13 ou posterior</string>
     <string name="hotspot_unavailable_nowifi">Este dispositivo não tem Wi-Fi</string>

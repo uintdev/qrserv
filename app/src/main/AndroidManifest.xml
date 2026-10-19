@@ -36,6 +36,11 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
+        <!-- The home app, to tell whether it's what started the app (see MainActivity's back handling) -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
     </queries>
 
     <!-- UnusedTranslation: values-iw is Hebrew under its legacy code, which lint doesn't match to "he" -->
@@ -80,6 +85,21 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
+
+        <!-- App shortcuts launch through this; not exported, so other apps can't send their actions -->
+        <activity-alias
+            android:name=".ShortcutLauncher"
+            android:targetActivity=".MainActivity"
+            android:exported="false" />
+
+        <!-- Republishes the app shortcuts' labels in the new language -->
+        <receiver
+            android:name=".util.LocaleChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".server.ServingService"

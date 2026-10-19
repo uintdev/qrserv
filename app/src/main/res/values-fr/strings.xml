@@ -74,6 +74,9 @@
     <string name="notification_starting_hotspot">Démarrage du point d\'accès privé…</string>
     <string name="notification_hotspot_detail">Point d\'accès privé · %1$s</string>
     <string name="hotspot_share_button">Partager via un point d\'accès privé</string>
+    <string name="shortcut_share_file_short">Partager</string>
+    <string name="shortcut_share_file_long">Partager un fichier</string>
+    <string name="shortcut_hotspot_short">Point d\'accès</string>
     <string name="hotspot_note_disconnects">Le Wi-Fi se déconnecte pendant le partage</string>
     <string name="hotspot_unavailable_android">Nécessite Android 13 ou version ultérieure</string>
     <string name="hotspot_unavailable_nowifi">Cet appareil n\'a pas de Wi-Fi</string>

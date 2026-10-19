@@ -78,6 +78,9 @@
     <string name="notification_starting_hotspot">מפעיל נקודה חמה פרטית…</string>
     <string name="notification_hotspot_detail">נקודה חמה פרטית · %1$s</string>
     <string name="hotspot_share_button">שתף דרך נקודה חמה פרטית</string>
+    <string name="shortcut_share_file_short">שיתוף קובץ</string>
+    <string name="shortcut_share_file_long">שתף קובץ</string>
+    <string name="shortcut_hotspot_short">נקודה חמה</string>
     <string name="hotspot_note_disconnects">ה-Wi-Fi מתנתק בזמן השיתוף</string>
     <string name="hotspot_unavailable_android">נדרש Android 13 ומעלה</string>
     <string name="hotspot_unavailable_nowifi">אין Wi-Fi במכשיר זה</string>

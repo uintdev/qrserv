@@ -72,6 +72,9 @@
     <string name="notification_starting_hotspot">در حال راه‌اندازی نقطه اتصال خصوصی…</string>
     <string name="notification_hotspot_detail">نقطه اتصال خصوصی · %1$s</string>
     <string name="hotspot_share_button">هم‌رسانی از طریق نقطه اتصال خصوصی</string>
+    <string name="shortcut_share_file_short">هم‌رسانی</string>
+    <string name="shortcut_share_file_long">هم‌رسانی یک پرونده</string>
+    <string name="shortcut_hotspot_short">نقطه اتصال</string>
     <string name="hotspot_note_disconnects">Wi-Fi هنگام هم‌رسانی قطع می‌شود</string>
     <string name="hotspot_unavailable_android">به Android 13 یا بالاتر نیاز دارد</string>
     <string name="hotspot_unavailable_nowifi">این دستگاه Wi-Fi ندارد</string>

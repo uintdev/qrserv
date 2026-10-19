@@ -72,6 +72,9 @@
     <string name="notification_starting_hotspot">Privát hotspot indítása…</string>
     <string name="notification_hotspot_detail">Privát hotspot · %1$s</string>
     <string name="hotspot_share_button">Megosztás privát hotspoton</string>
+    <string name="shortcut_share_file_short">Megosztás</string>
+    <string name="shortcut_share_file_long">Fájl megosztása</string>
+    <string name="shortcut_hotspot_short">Hotspot</string>
     <string name="hotspot_note_disconnects">A Wi-Fi megszakad a megosztás alatt</string>
     <string name="hotspot_unavailable_android">Android 13 vagy újabb szükséges</string>
     <string name="hotspot_unavailable_nowifi">Ezen az eszközön nincs Wi-Fi</string>

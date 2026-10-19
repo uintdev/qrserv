@@ -72,6 +72,9 @@
     <string name="notification_starting_hotspot">Özel erişim noktası başlatılıyor…</string>
     <string name="notification_hotspot_detail">Özel erişim noktası · %1$s</string>
     <string name="hotspot_share_button">Özel erişim noktasıyla paylaş</string>
+    <string name="shortcut_share_file_short">Paylaş</string>
+    <string name="shortcut_share_file_long">Dosya paylaş</string>
+    <string name="shortcut_hotspot_short">Erişim noktası</string>
     <string name="hotspot_note_disconnects">Paylaşım sırasında Wi-Fi bağlantısı kesilir</string>
     <string name="hotspot_unavailable_android">Android 13 veya üstü gerekir</string>
     <string name="hotspot_unavailable_nowifi">Bu cihazda Wi-Fi yok</string>

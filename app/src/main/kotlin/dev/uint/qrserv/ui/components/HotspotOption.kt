@@ -19,14 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.R
 import dev.uint.qrserv.net.HotspotAvailability
-import dev.uint.qrserv.net.HotspotUnavailable
+import dev.uint.qrserv.net.messageRes
 
 @Composable
-fun hotspotNote(availability: HotspotAvailability): String? = when (availability.unavailable) {
-    HotspotUnavailable.REQUIRES_ANDROID_13 -> stringResource(R.string.hotspot_unavailable_android)
-    HotspotUnavailable.NO_WIFI -> stringResource(R.string.hotspot_unavailable_nowifi)
-    HotspotUnavailable.BLOCKED -> stringResource(R.string.hotspot_unavailable_blocked)
+fun hotspotNote(availability: HotspotAvailability): String? = when (val unavailable = availability.unavailable) {
     null -> if (availability.disconnectsWifi) stringResource(R.string.hotspot_note_disconnects) else null
+    else -> stringResource(unavailable.messageRes)
 }
 
 @Composable

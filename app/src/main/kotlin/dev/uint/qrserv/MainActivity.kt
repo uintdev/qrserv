@@ -4,12 +4,14 @@ import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,8 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import dev.uint.qrserv.data.HotspotDialog
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
@@ -30,14 +34,29 @@ import dev.uint.qrserv.ui.QRServApp
 import dev.uint.qrserv.ui.theme.QRServTheme
 import dev.uint.qrserv.ui.theme.isSystemActuallyInDarkTheme
 import dev.uint.qrserv.ui.theme.resolveIsDark
+import dev.uint.qrserv.util.AppShortcut
+import dev.uint.qrserv.util.SHORTCUT_LAUNCHER
 import dev.uint.qrserv.util.isNearbyWifiGranted
+import dev.uint.qrserv.util.publishAppShortcuts
 import dev.uint.qrserv.viewmodel.QRServViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel: QRServViewModel by viewModels()
 
     private var systemInDarkTheme by mutableStateOf(isSystemActuallyInDarkTheme())
+
+    // Android 12+ keeps a task started from the home screen's launcher icon in the background on back,
+    // sharing and all; anything else (a shortcut, the share sheet, another app, older versions) would
+    // finish the activity and end the share, so back on the main screen does the same there. The other
+    // screens' back handlers are registered later by Compose, so they still come first.
+    private val moveToBackOnBack = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            moveTaskToBack(true)
+        }
+    }
 
     private val safPickerLauncher =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
@@ -90,11 +109,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Read before the share and shortcut handling below clear the action.
+        moveToBackOnBack.isEnabled = Build.VERSION.SDK_INT < 31 || !startedFromHomeScreen()
+        onBackPressedDispatcher.addCallback(this, moveToBackOnBack)
+
         val relaunched = savedInstanceState != null ||
             intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0
         if (relaunched || !handleShareIntent(intent)) {
             viewModel.purgeStaleCacheOnLaunch()
         }
+        if (!relaunched) handleShortcutIntent(intent)
 
         setContent {
             val uiState by viewModel.uiState.collectAsState()
@@ -143,6 +167,8 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.onAppResumed()
+        // Picks up anything that changed the shortcuts while the app was away (policy, language).
+        lifecycleScope.launch(Dispatchers.IO) { publishAppShortcuts(applicationContext) }
     }
 
     private fun handleNearbyPermissionRequest() {
@@ -168,6 +194,28 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         handleShareIntent(intent)
+        handleShortcutIntent(intent)
+    }
+
+    /** The same test Android applies: a launcher intent, sent by the home screen. */
+    private fun startedFromHomeScreen(): Boolean {
+        if (intent.action != Intent.ACTION_MAIN || !intent.hasCategory(Intent.CATEGORY_LAUNCHER)) return false
+        val home = packageManager.resolveActivity(
+            Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME),
+            PackageManager.MATCH_DEFAULT_ONLY,
+        )?.activityInfo?.packageName
+        return home != null && referrer?.host == home
+    }
+
+    private fun handleShortcutIntent(intent: Intent) {
+        // Only the non-exported alias can carry these: MainActivity itself is open to other apps.
+        if (intent.component?.className != SHORTCUT_LAUNCHER) return
+        if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
+        val shortcut = AppShortcut.fromAction(intent.action) ?: return
+        // Clear the action so a recreation within this process doesn't run it again.
+        intent.action = null
+        ShortcutManagerCompat.reportShortcutUsed(this, shortcut.id)
+        viewModel.onShortcut(shortcut)
     }
 
     private fun requestDirectAccessPermission() {

@@ -33,10 +33,13 @@ import dev.uint.qrserv.net.HotspotLoss
 import dev.uint.qrserv.net.LinkKinds
 import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.net.addressChange
+import dev.uint.qrserv.net.hotspotUnavailableOn
+import dev.uint.qrserv.net.messageRes
 import dev.uint.qrserv.server.ServerController
 import dev.uint.qrserv.server.ServingNotice
 import dev.uint.qrserv.server.ServingService
 import dev.uint.qrserv.server.ServingState
+import dev.uint.qrserv.util.AppShortcut
 import dev.uint.qrserv.util.ManifestUtils
 import dev.uint.qrserv.util.canPostNotifications
 import dev.uint.qrserv.util.hasDirectAccess
@@ -67,6 +70,11 @@ sealed interface UiEvent {
     object OpenDamBrowser : UiEvent
     object RequestDamPermission : UiEvent
     object PortSaved : UiEvent
+
+    /** Leave whichever screen is showing for the main one, ahead of a shortcut's action. */
+    object ShowMainScreen : UiEvent
+
+    object OpenHotspotScreen : UiEvent
     data class Toast(val event: ToastEvent) : UiEvent
 }
 
@@ -319,6 +327,33 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     fun onImportClicked() {
         if (rejectIfBusy()) return
         openPicker()
+    }
+
+    /** Does what the matching button would, from whichever screen and state the app is in. */
+    fun onShortcut(shortcut: AppShortcut) {
+        viewModelScope.launch {
+            // Events sent before the UI collects are dropped, and the hotspot only starts in the foreground.
+            _events.subscriptionCount.first { it > 0 }
+            if (rejectIfBusy()) return@launch
+            val state = _uiState.value
+            when {
+                shortcut == AppShortcut.SHARE_FILE -> {
+                    _events.tryEmit(UiEvent.ShowMainScreen)
+                    openPicker()
+                }
+                state.hotspot != null -> _events.tryEmit(UiEvent.OpenHotspotScreen)
+                else -> {
+                    // The device can have changed since the shortcut was published, e.g. a new policy.
+                    val unavailable = getApplication<Application>().hotspotUnavailableOn()
+                    if (unavailable != null) {
+                        postToast(unavailable.messageRes)
+                        return@launch
+                    }
+                    _events.tryEmit(UiEvent.ShowMainScreen)
+                    if (state.serverRunning) hotspot.onSwitchToHotspotClicked() else hotspot.onHotspotClicked()
+                }
+            }
+        }
     }
 
     private fun openPicker() {

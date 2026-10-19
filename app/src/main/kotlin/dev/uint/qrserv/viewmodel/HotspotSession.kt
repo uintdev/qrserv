@@ -1,10 +1,8 @@
 package dev.uint.qrserv.viewmodel
 
 import android.app.Application
-import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.os.UserManager
 import androidx.annotation.StringRes
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.AppUiState
@@ -23,7 +21,7 @@ import dev.uint.qrserv.net.HotspotPreflight
 import dev.uint.qrserv.net.HotspotStartResult
 import dev.uint.qrserv.net.HotspotUnavailable
 import dev.uint.qrserv.net.hotspotPreflight
-import dev.uint.qrserv.net.hotspotUnavailableReason
+import dev.uint.qrserv.net.hotspotUnavailableOn
 import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.isNearbyWifiGranted
@@ -123,15 +121,8 @@ class HotspotSession internal constructor(
         }
     }
 
-    private fun unavailableOn(sdkInt: Int): HotspotUnavailable? = hotspotUnavailableReason(
-        sdkInt = sdkInt,
-        hasWifi = app.packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI),
-        tetheringRestricted = app.getSystemService(UserManager::class.java)
-            .hasUserRestriction(UserManager.DISALLOW_CONFIG_TETHERING),
-    )
-
     private fun computeAvailability(): HotspotAvailability {
-        val unavailable = unavailableOn(Build.VERSION.SDK_INT)
+        val unavailable = app.hotspotUnavailableOn()
         val disconnectsWifi = unavailable == null && Build.VERSION.SDK_INT >= 33 &&
             runCatching { app.getSystemService(WifiManager::class.java)?.isStaApConcurrencySupported }.getOrNull() == false
         return HotspotAvailability(unavailable, disconnectsWifi)
@@ -325,7 +316,7 @@ class HotspotSession internal constructor(
 
     // Private hotspot mode needs 33; below that, only offer what an update would unlock.
     private fun capableBeforeAndroid13(): Boolean =
-        Build.VERSION.SDK_INT < 33 && unavailableOn(sdkInt = 33) == null
+        Build.VERSION.SDK_INT < 33 && app.hotspotUnavailableOn(sdkInt = 33) == null
 
     fun onHotspotScreenOpened() {
         uiState.update { it.copy(hotspotScreenPending = false) }
