@@ -9,15 +9,15 @@ QRServ's on-device HTTP server that hosts the content can be stopped via the in-
 
 Android app permissions:
 
-- INTERNET -- Listing network interfaces and binding the HTTP server's port
+- INTERNET -- Listing network interfaces and running the HTTP server
 - READ_EXTERNAL_STORAGE -- Read-only Direct Access Mode on internal storage (up to Android 10)
-- FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Keeping the server and private hotspot running in the background
-- POST_NOTIFICATIONS -- The ongoing sharing notification with a stop option, and a notice when idle stop ends a share
+- FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Importing and sharing in the background
+- POST_NOTIFICATIONS -- The sharing notification and the idle stop notice
 - WAKE_LOCK -- Keeping the device awake during downloads
-- CHANGE_WIFI_STATE -- The private hotspot (Android 13+); also needed for background sharing on Android 14+
-- NEARBY_WIFI_DEVICES -- Creating the private hotspot (Android 13+). Not used to locate devices
-- ACCESS_WIFI_STATE -- Checking which hotspot features the device supports (Android 13+)
-- ACCESS_NETWORK_STATE -- Noticing network changes, so the IP address list and QR code stay current
+- CHANGE_WIFI_STATE -- Private hotspot (Android 13+), background sharing (Android 14+)
+- NEARBY_WIFI_DEVICES -- Private hotspot (Android 13+); never used for location
+- ACCESS_WIFI_STATE -- Checking hotspot capabilities (Android 13+)
+- ACCESS_NETWORK_STATE -- Keeping the IP address list and QR code current
 
 GitHub and IzzyOnDroid versions (additional permissions):
 
