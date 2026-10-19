@@ -11,6 +11,9 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
 class ServerControllerTest {
 
@@ -54,9 +57,15 @@ class ServerControllerTest {
             headers.forEach(::setRequestProperty)
         }
 
+    /** Polls [condition] until it holds or [timeout] passes, and returns its final value. */
+    private fun await(timeout: Duration = 2.seconds, condition: () -> Boolean): Boolean {
+        val deadline = TimeSource.Monotonic.markNow() + timeout
+        while (!condition() && deadline.hasNotPassedNow()) Thread.sleep(10)
+        return condition()
+    }
+
     private fun awaitTransfers(expected: Int): Int {
-        val deadline = System.currentTimeMillis() + 1000
-        while (ServingState.activeTransfers.value != expected && System.currentTimeMillis() < deadline) Thread.sleep(10)
+        await { ServingState.activeTransfers.value == expected }
         return ServingState.activeTransfers.value
     }
 
@@ -76,8 +85,8 @@ class ServerControllerTest {
         start()
         val replaced = restart()
         replaced.onFileMissing()
-        Thread.sleep(400)
-        assertTrue(controller.isRunning)
+        // Long enough for a wrongly deferred stop (200ms, then the engine's shutdown) to have landed.
+        assertFalse(await(timeout = 1.seconds) { !controller.isRunning })
         assertEquals(0, filesMissing.get())
     }
 
@@ -85,8 +94,7 @@ class ServerControllerTest {
     fun currentServerErrorStopsIt() {
         start()
         controller.currentListener!!.onFileMissing()
-        Thread.sleep(400)
-        assertFalse(controller.isRunning)
+        assertTrue(await { !controller.isRunning })
         assertEquals(1, filesMissing.get())
     }
 

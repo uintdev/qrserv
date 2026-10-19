@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
@@ -31,6 +30,7 @@ import dev.uint.qrserv.ui.QRServApp
 import dev.uint.qrserv.ui.theme.QRServTheme
 import dev.uint.qrserv.ui.theme.isSystemActuallyInDarkTheme
 import dev.uint.qrserv.ui.theme.resolveIsDark
+import dev.uint.qrserv.util.isNearbyWifiGranted
 import dev.uint.qrserv.viewmodel.QRServViewModel
 
 class MainActivity : ComponentActivity() {
@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT < 33) return
         val permission = android.Manifest.permission.NEARBY_WIFI_DEVICES
         when {
-            checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED -> viewModel.hotspot.onNearbyPermissionResult(true)
+            isNearbyWifiGranted() -> viewModel.hotspot.onNearbyPermissionResult(true)
             // Permanently denied: the prompt returns at once and leads to the settings dialog.
             Preferences.wasAskedOnThisInstall(Preferences.PREF_NEARBY_ASKED) && !shouldShowRequestPermissionRationale(permission) ->
                 launchNearbyPrompt()
@@ -184,7 +184,14 @@ class MainActivity : ComponentActivity() {
                     false
                 }
             }
-            if (!launched) viewModel.onDirectAccessPermissionResult(false)
+            if (!launched) {
+                // Without either screen the permission can never be granted, so use the system picker.
+                try {
+                    safPickerLauncher.launch(arrayOf("*/*"))
+                } catch (_: ActivityNotFoundException) {
+                    viewModel.onDirectAccessPermissionResult(false)
+                }
+            }
         } else {
             legacyStoragePermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }

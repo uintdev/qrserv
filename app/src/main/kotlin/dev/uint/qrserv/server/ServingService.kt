@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import dev.uint.qrserv.MainActivity
 import dev.uint.qrserv.R
 import dev.uint.qrserv.util.canPostNotifications
+import dev.uint.qrserv.util.notifyIfAllowed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -78,9 +79,7 @@ class ServingService : Service() {
     }
 
     private fun post(notice: ServingNotice) {
-        if (canPostNotifications()) {
-            NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, buildNotification(notice))
-        }
+        notifyIfAllowed(NOTIFICATION_ID) { buildNotification(notice) }
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -213,16 +212,16 @@ class ServingService : Service() {
                 Intent(context, MainActivity::class.java),
                 PendingIntent.FLAG_IMMUTABLE,
             )
-            val notification = NotificationCompat.Builder(context, IDLE_STOPPED_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(context.getString(R.string.page_info_idlestopped_label))
-                .setContentText(context.resources.getQuantityString(R.plurals.page_info_idlestopped_msg, minutes, minutes))
-                .setContentIntent(openApp)
-                .setAutoCancel(true)
-                .setCategory(NotificationCompat.CATEGORY_STATUS)
-                .build()
-            manager.notify(IDLE_STOPPED_NOTIFICATION_ID, notification)
-            return true
+            return context.notifyIfAllowed(IDLE_STOPPED_NOTIFICATION_ID) {
+                NotificationCompat.Builder(context, IDLE_STOPPED_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(context.getString(R.string.page_info_idlestopped_label))
+                    .setContentText(context.resources.getQuantityString(R.plurals.page_info_idlestopped_msg, minutes, minutes))
+                    .setContentIntent(openApp)
+                    .setAutoCancel(true)
+                    .setCategory(NotificationCompat.CATEGORY_STATUS)
+                    .build()
+            }
         }
 
         fun start(context: Context) {

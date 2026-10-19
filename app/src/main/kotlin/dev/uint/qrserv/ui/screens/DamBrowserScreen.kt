@@ -110,6 +110,11 @@ private enum class DamSortOrder { ASCENDING, DESCENDING }
 
 private class DamEntry(val file: File) {
     val name: String = file.name
+
+    // Sort keys, made once here (off the main thread) rather than on every comparison.
+    val nameKey: String = name.lowercase()
+    val extensionKey: String = file.extension.lowercase()
+
     val isDirectory: Boolean
     val length: Long
     val lastModified: Long
@@ -160,9 +165,9 @@ private fun formattedModifiedDate(modified: Long): String? {
  * within each of those two groups responds to [sortField]/[sortOrder]. */
 private fun sortedDamEntries(entries: List<DamEntry>, sortField: DamSortField, sortOrder: DamSortOrder): List<DamEntry> {
     val fieldComparator: Comparator<DamEntry> = when (sortField) {
-        DamSortField.NAME -> compareBy { it.name.lowercase() }
+        DamSortField.NAME -> compareBy { it.nameKey }
         DamSortField.SIZE -> compareBy { it.length }
-        DamSortField.TYPE -> compareBy { it.file.extension.lowercase() }
+        DamSortField.TYPE -> compareBy { it.extensionKey }
         DamSortField.CREATED -> compareBy { it.createdMillis }
         DamSortField.MODIFIED -> compareBy { it.lastModified }
     }

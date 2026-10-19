@@ -130,6 +130,31 @@ class FileServerTest {
     }
 
     @Test
+    fun segmentCanceledAfterTheEndWasSentStillFinishes() {
+        // Chrome's parallel download: a whole-file request, then a range for the rest; the first is
+        // canceled once it reaches that range, which can be after the range has completed.
+        file.writeBytes(ByteArray(64 * 1024 * 1024))
+        val whole = open("GET")
+        assertEquals(200, whole.responseCode)
+        val rest = open("GET", headers = mapOf("Range" to "bytes=33554432-", "If-Match" to entityTag()))
+        assertEquals(206, rest.responseCode)
+        rest.body()
+        assertEquals(0, awaitFinished())
+        whole.disconnect()
+        assertEquals(1, awaitFinished())
+    }
+
+    @Test
+    fun canceledDownloadIsNotFinished() {
+        file.writeBytes(ByteArray(64 * 1024 * 1024))
+        val connection = open("GET")
+        assertEquals(200, connection.responseCode)
+        connection.inputStream.read(ByteArray(1024 * 1024))
+        connection.disconnect()
+        assertEquals(0, awaitFinished())
+    }
+
+    @Test
     fun matchingIfRangeHonorsTheRange() {
         val connection = open("GET", headers = mapOf("Range" to "bytes=-4", "If-Range" to entityTag()))
         assertEquals(206, connection.responseCode)

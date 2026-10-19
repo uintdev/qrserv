@@ -192,7 +192,7 @@ fun QRServApp(
             playBackCommitAnimation(backProgressAnim, commitFadeAnim, commitVelocity)
             // Mirrors DamBrowserScreen's own Cancel button, which also resets the
             // loading flag set by onImportClicked() -- otherwise it's stuck spinning.
-            if (screen == Screen.DAM_BROWSER) viewModel.onImportCancelled()
+            if (screen == Screen.DAM_BROWSER) viewModel.onImportCanceled()
             screen = Screen.MAIN
         } catch (_: CancellationException) {
             // Gesture canceled -- springs back rather than snapping. This coroutine is itself being
@@ -356,7 +356,7 @@ fun QRServApp(
                         // Only reached when goUpOrCancel() is already at the browser's root -- i.e. genuinely
                         // exiting rather than navigating up a folder in place.
                         playButtonBackTransition {
-                            viewModel.onImportCancelled()
+                            viewModel.onImportCanceled()
                             screen = Screen.MAIN
                         }
                     },

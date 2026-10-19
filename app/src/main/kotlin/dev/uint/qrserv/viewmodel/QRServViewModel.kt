@@ -333,7 +333,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun onImportCancelled() {
+    fun onImportCanceled() {
         setLoading(false)
         hotspot.abandonIdle()
     }
@@ -928,7 +928,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         serverController.stop()
         hotspot.onCleared()
         clearSessionMarker()
-        // viewModelScope's collector is already cancelled.
+        // viewModelScope's collector is already canceled.
         ServingState.setNotice(null)
         CoroutineScope(Dispatchers.IO).launch { deletePickerCache() }
     }

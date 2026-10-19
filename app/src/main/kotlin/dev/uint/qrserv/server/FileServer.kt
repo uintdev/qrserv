@@ -52,7 +52,8 @@ class FileServer(
     private var running = false
 
     // Per client: a multi-connection downloader can finish the segment ending the file before the
-    // rest, so "finished" waits until that client's last transfer in flight is done.
+    // rest, and cancels a segment on purpose once it meets the next one (Chrome does both), so
+    // "finished" waits for the client's last transfer in flight, however that one ends.
     private class ClientTransfers(var active: Int = 0, var reachedEnd: Boolean = false)
 
     private val clientTransfers = HashMap<String, ClientTransfers>()
@@ -119,7 +120,7 @@ class FileServer(
         }
 
         // Doubles as the readability probe. Called directly: CIO already runs handlers on Dispatchers.IO,
-        // and a withContext here could drop the opened stream unclosed if cancelled as it returns.
+        // and a withContext here could drop the opened stream unclosed if canceled as it returns.
         val (stream, length) = try {
             openWithLength(file)
         } catch (error: IOException) {
@@ -186,10 +187,13 @@ class FileServer(
                 // respond() throws on an incomplete transfer.
                 sent = true
             } finally {
-                if (clientTransferEnded(remoteIp, sent, reachedEnd = sent && end == length - 1)) {
-                    listener.onDownloadFinished(remoteIp)
+                try {
+                    if (clientTransferEnded(remoteIp, reachedEnd = sent && end == length - 1)) {
+                        listener.onDownloadFinished(remoteIp)
+                    }
+                } finally {
+                    listener.onTransferEnded()
                 }
-                listener.onTransferEnded()
             }
         } finally {
             // Ktor closes the stream only if it asked for the channel; a second close is a no-op.
@@ -197,14 +201,14 @@ class FileServer(
         }
     }
 
-    /** True if this was [remoteIp]'s last transfer in flight, it was sent in full, and one of them reached the end. */
-    private fun clientTransferEnded(remoteIp: String, sent: Boolean, reachedEnd: Boolean): Boolean =
+    /** True if this was [remoteIp]'s last transfer in flight and one of them sent the end of the file. */
+    private fun clientTransferEnded(remoteIp: String, reachedEnd: Boolean): Boolean =
         synchronized(clientTransfers) {
             val client = clientTransfers.getValue(remoteIp)
             client.reachedEnd = client.reachedEnd || reachedEnd
             if (--client.active > 0) return false
             clientTransfers.remove(remoteIp)
-            sent && client.reachedEnd
+            client.reachedEnd
         }
 
     fun stop() {
