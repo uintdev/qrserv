@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.3.0
+
+- Added launcher shortcuts for sharing a file and, where supported, sharing via private hotspot
+- Going back from the main screen now always keeps sharing in the background, including when opened from the share sheet or on Android 11 and earlier
+- Added a manual update check in settings (GitHub version)
+- Minimum Android version is now 8.0
+- `Download finished` now waits for every connection of a multi-connection download, including Chrome's parallel downloads
+- Fixed a rare case where switching IP address could stop sharing or let idle stop end a download early
+- Fixed a crash on devices without an "All files access" screen -- Direct Access Mode falls back to the system file picker there
+- Fixed a crash at launch on Android 13 or later devices without Wi-Fi
+- Fixed a crash on devices without a file picker
+- Private hotspot no longer mistakes a VPN or mobile data address for its own
+- The hotspot band setting is now hidden where the private hotspot can't be used
+- Clients are now shown by IP address, without a reverse DNS lookup slowing down each request
+- Fixed a file being left open when a request is canceled
+- Faster listing and search in the Direct Access Mode Browser for large folders
+- General internal clean up
+
 ## 4.2.1
 
 - System theme changes are now automatically detected and applied accordingly

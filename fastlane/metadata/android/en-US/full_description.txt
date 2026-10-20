@@ -28,23 +28,25 @@ Features:
 -- Scan a Wi-Fi QR code to join, or enter the network name and password by hand
 -- Switch an ongoing share to or from the private hotspot without selecting the file again
 -- Chooses 5 GHz for faster transfers on Android 16 or later (not all devices support 5 GHz or choosing the band)
+- Launcher shortcuts for quick sharing
 - Keeps sharing while the app is in the background, with a notification to stop sharing
 - Stops sharing when idle (10 minutes by default, adjustable)
 - HTTP server binds to a random free port by default, or a user-configured one
 - In-app theme selection
+- Check for updates in settings (GitHub version)
 - Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
 
 Permission usage:
 
-- INTERNET -- Listing network interfaces and binding the HTTP server's port
+- INTERNET -- Listing network interfaces, running the HTTP server and checking for updates (GitHub version)
 - READ_EXTERNAL_STORAGE -- Read-only Direct Access Mode on internal storage (up to Android 10)
-- FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Keeping the server and private hotspot running in the background
-- POST_NOTIFICATIONS -- The ongoing sharing notification with a stop option, and a notice when idle stop ends a share
+- FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Importing and sharing in the background
+- POST_NOTIFICATIONS -- The sharing notification and the idle stop notice
 - WAKE_LOCK -- Keeping the device awake during downloads
-- CHANGE_WIFI_STATE -- The private hotspot (Android 13+); also needed for background sharing on Android 14+
-- NEARBY_WIFI_DEVICES -- Creating the private hotspot (Android 13+). Not used to locate devices
-- ACCESS_WIFI_STATE -- Checking which hotspot features the device supports (Android 13+)
-- ACCESS_NETWORK_STATE -- Noticing network changes, so the IP address list and QR code stay current
+- CHANGE_WIFI_STATE -- Private hotspot (Android 13+), background sharing (Android 14+)
+- NEARBY_WIFI_DEVICES -- Private hotspot (Android 13+); never used for location
+- ACCESS_WIFI_STATE -- Checking hotspot capabilities (Android 13+)
+- ACCESS_NETWORK_STATE -- Keeping the IP address list and QR code current
 - MANAGE_EXTERNAL_STORAGE -- Read-only Direct Access Mode on internal storage (Android 11+, not on Google Play)
 
 QRServ is open source.

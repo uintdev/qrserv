@@ -1,0 +1,12 @@
+- Added launcher shortcuts
+- Going back keeps sharing in the background
+- Added update check (GitHub)
+- Minimum Android version is now 8.0
+- `Download finished` waits for all connections
+- Fixed IP switches possibly ending sharing or downloads early
+- Fixed crashes without Wi-Fi or the All files access screen
+- Hotspot no longer picks a VPN or mobile data IP
+- No reverse DNS lookup for clients
+- Faster Direct Access Mode Browser in large folders
+
+See GitHub for more changes.

@@ -70,10 +70,12 @@ The app is a native Android app written in Kotlin with Jetpack Compose. Prior to
   - Chooses 5 GHz for faster transfers on Android 16 or later, or 2.4 and 5 GHz at once on devices that can run both; the preferred band can be changed in settings
   - If a device can't find the network, the hotspot screen can restart it on 2.4 GHz, which every device supports
   - On Android 13 to 15 the band can't be chosen, so the device's default is used (usually 2.4 GHz). Some devices can't host a 5 GHz hotspot at all
+- Launcher shortcuts (press and hold the app icon) to share a file, or share via private hotspot where supported
 - Keeps sharing while the app is in the background, with a notification to stop sharing
 - Stops sharing after a set time without downloads (10 minutes by default, or off), with a notification saying why
 - HTTP server binds to a random free port by default, or a user-configured one
 - In-app theme selection
+- Check for updates in settings (GitHub version)
 - Supports various languages: English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish, Russian, Turkish, Persian, Hebrew
 
 ## System Requirements
@@ -98,10 +100,11 @@ As you may be aware, there are two different Android builds of this application.
   - In short, Google Play became far stricter about the usage of such sensitive permissions in June 2024.
   - The MediaStore API has its own limitations for this use case that would require a substantial amount of custom implementation to work around.
 
-#### GitHub and IzzyOnDroid
+#### GitHub
 
 - IzzyOnDroid distributes the same APK as the GitHub releases.
 - Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 11 or later.
+- "Check for updates" in settings asks GitHub for its latest release when tapped; the app never checks on its own.
 
 #### Changing build types
 
