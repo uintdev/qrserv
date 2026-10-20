@@ -18,8 +18,9 @@ import kotlin.time.Duration.Companion.seconds
 
 const val RELEASES_URL = "https://github.com/uintdev/qrserv/releases"
 
-// GitHub's "latest" release is never a pre-release or a draft.
-private const val LATEST_RELEASE_API = "https://api.github.com/repos/uintdev/qrserv/releases/latest"
+// GitHub's "latest" release is never a pre-release or a draft. By the repository's ID rather than its
+// name: that survives an account or repository rename, and a freed-up old name can't be taken over.
+private const val LATEST_RELEASE_API = "https://api.github.com/repositories/343788099/releases/latest"
 
 // The whole check, DNS lookup included -- which the connection's own timeouts don't cover.
 private val CHECK_TIMEOUT = 15.seconds
@@ -63,9 +64,12 @@ internal fun compareVersions(a: List<Int>, b: List<Int>): Int {
     return 0
 }
 
+// A release's page on GitHub, under the repository's current name; its tag is checked separately.
+private val ReleasePageUrl = Regex("""https://github\.com/(?!\.+/)[A-Za-z0-9_.-]+/(?!\.+/)[A-Za-z0-9_.-]+/releases/tag/(.+)""")
+
 /** What GitHub's latest-release response means for [installedVersion]; null [body] for a failed request. */
-internal fun updateCheckResult(installedVersion: String, statusCode: Int, body: String?): UpdateCheckResult {
-    if (statusCode != HttpURLConnection.HTTP_OK || body == null) return UpdateCheckResult.Failed
+internal fun updateCheckResult(installedVersion: String, body: String?): UpdateCheckResult {
+    if (body == null) return UpdateCheckResult.Failed
     val release = runCatching { JSONObject(body) }.getOrNull() ?: return UpdateCheckResult.Failed
     if (release.optBoolean("prerelease") || release.optBoolean("draft")) return UpdateCheckResult.Failed
     val tag = release.optString("tag_name")
@@ -75,8 +79,9 @@ internal fun updateCheckResult(installedVersion: String, statusCode: Int, body: 
     val order = compareVersions(latest, installed)
     return when {
         order > 0 -> {
-            // Only ever this repository's own release pages, whatever the response says.
-            val url = release.optString("html_url").takeIf { it.startsWith("$RELEASES_URL/") } ?: RELEASES_URL
+            // Only ever the page of the release shown, whatever the response says.
+            val url = release.optString("html_url")
+                .takeIf { ReleasePageUrl.matchEntire(it)?.groupValues?.get(1) == tag } ?: RELEASES_URL
             UpdateCheckResult.UpdateAvailable(latestVersion, url)
         }
         order < 0 -> UpdateCheckResult.NewerThanLatest(latestVersion)
@@ -98,7 +103,7 @@ suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
             InetAddress.getAllByName(connection.url.host)
             ensureActive()
         }
-        fetch(connection, installedVersion)
+        updateCheckResult(installedVersion, fetch(connection))
     }
     return try {
         withTimeoutOrNull(CHECK_TIMEOUT) { request.await() } ?: UpdateCheckResult.Failed
@@ -117,25 +122,27 @@ private fun isDirect(url: URL): Boolean =
     runCatching { ProxySelector.getDefault()?.select(url.toURI())?.all { it.type() == Proxy.Type.DIRECT } }
         .getOrNull() ?: true
 
-private fun fetch(connection: HttpURLConnection, installedVersion: String): UpdateCheckResult {
+/**
+ * The latest release's JSON, or null for a non-200 response or one over [MAX_RESPONSE_BYTES]. Throws on a
+ * network failure.
+ */
+private fun fetch(connection: HttpURLConnection): String? {
     connection.connectTimeout = CONNECT_TIMEOUT.inWholeMilliseconds.toInt()
     connection.readTimeout = READ_TIMEOUT.inWholeMilliseconds.toInt()
     connection.setRequestProperty("Accept", "application/vnd.github+json")
     connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28")
     // GitHub's API refuses requests without one, and Android's default names the device model.
     connection.setRequestProperty("User-Agent", "QRServ")
-    val statusCode = connection.responseCode
-    if (statusCode != HttpURLConnection.HTTP_OK) return updateCheckResult(installedVersion, statusCode, null)
-    val body = connection.inputStream.use { input ->
+    if (connection.responseCode != HttpURLConnection.HTTP_OK) return null
+    return connection.inputStream.use { input ->
         val bytes = ByteArrayOutputStream()
         val buffer = ByteArray(8192)
         while (true) {
             val read = input.read(buffer)
             if (read < 0) break
             bytes.write(buffer, 0, read)
-            if (bytes.size() > MAX_RESPONSE_BYTES) return UpdateCheckResult.Failed
+            if (bytes.size() > MAX_RESPONSE_BYTES) return null
         }
         String(bytes.toByteArray(), Charsets.UTF_8)
     }
-    return updateCheckResult(installedVersion, statusCode, body)
 }
