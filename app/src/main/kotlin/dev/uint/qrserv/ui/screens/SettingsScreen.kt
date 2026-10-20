@@ -172,7 +172,9 @@ fun SettingsScreen(
             // shown, disabled, on Android 13 to 15 where 5 GHz exists, since an update would unlock it.
             val bandOptions = uiState.hotspotBandOptions
             val bandEnabled = bandOptions.isNotEmpty()
-            if (bandEnabled || uiState.hotspotBandNeedsNewerAndroid) {
+            // Not where the hotspot can't be used at all, e.g. blocked by a device policy.
+            val hotspotUsable = uiState.hotspotAvailability.unavailable == null
+            if (hotspotUsable && (bandEnabled || uiState.hotspotBandNeedsNewerAndroid)) {
                 SectionHeader(stringResource(R.string.hotspot_screen_title))
                 SettingsGroup {
                     ListItem(

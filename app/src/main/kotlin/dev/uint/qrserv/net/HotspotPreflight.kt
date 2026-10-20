@@ -20,7 +20,7 @@ data class HotspotAvailability(
     val disconnectsWifi: Boolean = false,
 )
 
-/** [hotspotUnavailableReason] for this device, as if it ran Android [sdkInt]. */
+/** [hotspotUnavailableReason] for this device as it is now. */
 fun Context.hotspotUnavailableOn(): HotspotUnavailable? = hotspotUnavailableReason(
     sdkInt = Build.VERSION.SDK_INT,
     hasWifi = packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI),
