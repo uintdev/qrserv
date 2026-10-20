@@ -21,8 +21,8 @@ data class HotspotAvailability(
 )
 
 /** [hotspotUnavailableReason] for this device, as if it ran Android [sdkInt]. */
-fun Context.hotspotUnavailableOn(sdkInt: Int = Build.VERSION.SDK_INT): HotspotUnavailable? = hotspotUnavailableReason(
-    sdkInt = sdkInt,
+fun Context.hotspotUnavailableOn(): HotspotUnavailable? = hotspotUnavailableReason(
+    sdkInt = Build.VERSION.SDK_INT,
     hasWifi = packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI),
     tetheringRestricted = getSystemService(UserManager::class.java).hasUserRestriction(UserManager.DISALLOW_CONFIG_TETHERING),
 )

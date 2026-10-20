@@ -169,7 +169,7 @@ fun SettingsScreen(
             }
 
             // Empty before 36, or without 5 GHz: the hotspot then always uses the system default. It's still
-            // shown, disabled, where 5 GHz exists but Android is too old, since an update would unlock it.
+            // shown, disabled, on Android 13 to 15 where 5 GHz exists, since an update would unlock it.
             val bandOptions = uiState.hotspotBandOptions
             val bandEnabled = bandOptions.isNotEmpty()
             if (bandEnabled || uiState.hotspotBandNeedsNewerAndroid) {

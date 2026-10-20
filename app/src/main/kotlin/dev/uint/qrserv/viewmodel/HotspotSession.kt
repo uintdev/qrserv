@@ -87,8 +87,7 @@ class HotspotSession internal constructor(
         return state.copy(
             hotspotBand = readBand(bandOptions),
             hotspotBandOptions = bandOptions,
-            hotspotBandNeedsNewerAndroid = controller?.bandChoiceNeedsNewerAndroid
-                ?: (capableBeforeAndroid13() && isFiveGhzSupported()),
+            hotspotBandNeedsNewerAndroid = controller?.bandChoiceNeedsNewerAndroid == true,
             hotspotAvailability = computeAvailability(),
         )
     }
@@ -313,13 +312,6 @@ class HotspotSession internal constructor(
         Preferences.writeString(Preferences.PREF_HOTSPOT_BAND, band.name)
         uiState.update { it.copy(hotspotBand = band) }
     }
-
-    private fun isFiveGhzSupported(): Boolean =
-        app.getSystemService(WifiManager::class.java)?.is5GHzBandSupported == true
-
-    // Private hotspot mode needs 33; below that, only offer what an update would unlock.
-    private fun capableBeforeAndroid13(): Boolean =
-        Build.VERSION.SDK_INT < 33 && app.hotspotUnavailableOn(sdkInt = 33) == null
 
     fun onHotspotScreenOpened() {
         uiState.update { it.copy(hotspotScreenPending = false) }
