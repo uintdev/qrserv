@@ -145,6 +145,29 @@ class FileServerTest {
     }
 
     @Test
+    fun segmentCutShortByStoppingTheServerIsNotFinished() {
+        file.writeBytes(ByteArray(64 * 1024 * 1024))
+        val whole = open("GET")
+        assertEquals(200, whole.responseCode)
+        val rest = open("GET", headers = mapOf("Range" to "bytes=33554432-", "If-Match" to entityTag()))
+        assertEquals(206, rest.responseCode)
+        rest.body()
+        server.stop()
+        whole.disconnect()
+        assertEquals(0, awaitFinished())
+    }
+
+    @Test
+    fun downloadCompletedJustBeforeStoppingIsFinished() {
+        file.writeBytes(ByteArray(8 * 1024 * 1024))
+        val whole = open("GET")
+        assertEquals(200, whole.responseCode)
+        whole.body()
+        server.stop()
+        assertEquals(1, awaitFinished())
+    }
+
+    @Test
     fun canceledDownloadIsNotFinished() {
         file.writeBytes(ByteArray(64 * 1024 * 1024))
         val connection = open("GET")

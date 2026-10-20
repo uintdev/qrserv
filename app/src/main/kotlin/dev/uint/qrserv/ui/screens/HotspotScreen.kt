@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -81,6 +82,10 @@ fun HotspotScreen(
     onBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    // So its warning doesn't come back next time, however the screen was left.
+    DisposableEffect(Unit) {
+        onDispose { viewModel.hotspot.onCompatibleBandWarningDismissed() }
+    }
     // QRServApp closes this screen on the same change, except during a band restart.
     val info = uiState.hotspot
     if (info == null && !uiState.hotspotStarting) return

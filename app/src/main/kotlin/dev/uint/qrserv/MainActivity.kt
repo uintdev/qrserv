@@ -48,15 +48,16 @@ class MainActivity : ComponentActivity() {
 
     private var systemInDarkTheme by mutableStateOf(isSystemActuallyInDarkTheme())
 
-    // Android 12+ keeps a task started from the home screen's launcher icon in the background on back,
-    // sharing and all; anything else (a shortcut, the share sheet, another app, older versions) would
-    // finish the activity and end the share, so back on the main screen does the same there. The other
-    // screens' back handlers are registered later by Compose, so they still come first.
+    // Android 12+ moves a root task started from the launcher icon to the background on back; anywhere
+    // else, back would finish the activity and end the share, so it's done here instead. Compose
+    // registers the other screens' back handlers later, so they still come first.
     private val moveToBackOnBack = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             moveTaskToBack(true)
         }
     }
+
+    private var startedFromHomeScreen = false
 
     private val safPickerLauncher =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
@@ -109,8 +110,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Read before the share and shortcut handling below clear the action.
-        moveToBackOnBack.isEnabled = Build.VERSION.SDK_INT < 31 || !startedFromHomeScreen()
+        // Restored on recreation, as the intent may have been replaced since. Read before the share
+        // and shortcut handling below clear the action.
+        startedFromHomeScreen = savedInstanceState?.getBoolean(STATE_STARTED_FROM_HOME_SCREEN)
+            ?: (Build.VERSION.SDK_INT >= 31 && isHomeScreenLaunch())
+        updateBackHandling()
         onBackPressedDispatcher.addCallback(this, moveToBackOnBack)
 
         val relaunched = savedInstanceState != null ||
@@ -164,9 +168,15 @@ class MainActivity : ComponentActivity() {
         systemInDarkTheme = isSystemActuallyInDarkTheme()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_STARTED_FROM_HOME_SCREEN, startedFromHomeScreen)
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.onAppResumed()
+        updateBackHandling()
         // Picks up anything that changed the shortcuts while the app was away (policy, language).
         lifecycleScope.launch(Dispatchers.IO) { publishAppShortcuts(applicationContext) }
     }
@@ -193,13 +203,32 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        // Once any other intent reaches the task (a share, even the app's own notification), Android's
+        // own back finishes the activity and the share; the home screen's launcher intent doesn't.
+        startedFromHomeScreen = startedFromHomeScreen && isHomeScreenLaunch()
+        updateBackHandling()
         handleShareIntent(intent)
         handleShortcutIntent(intent)
     }
 
-    /** The same test Android applies: a launcher intent, sent by the home screen. */
-    private fun startedFromHomeScreen(): Boolean {
-        if (intent.action != Intent.ACTION_MAIN || !intent.hasCategory(Intent.CATEGORY_LAUNCHER)) return false
+    // Rechecked on resume, as isTaskRoot can change while the activity lives.
+    private fun updateBackHandling() {
+        moveToBackOnBack.isEnabled = !(startedFromHomeScreen && isTaskRoot)
+    }
+
+    /**
+     * Android's own test, on the current intent: exactly a launcher intent, sent by the home screen.
+     * In onNewIntent, [getReferrer] is that intent's sender.
+     */
+    private fun isHomeScreenLaunch(): Boolean {
+        val launcherIntent = intent.action == Intent.ACTION_MAIN &&
+            intent.categories == setOf(Intent.CATEGORY_LAUNCHER) && intent.data == null && intent.type == null
+        if (!launcherIntent) return false
+        // Supplied by the launching app, so not to be trusted.
+        val callerReferrer = readExtras(intent) {
+            hasExtra(Intent.EXTRA_REFERRER) || hasExtra(Intent.EXTRA_REFERRER_NAME)
+        } ?: true
+        if (callerReferrer) return false
         val home = packageManager.resolveActivity(
             Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME),
             PackageManager.MATCH_DEFAULT_ONLY,
@@ -247,26 +276,28 @@ class MainActivity : ComponentActivity() {
 
     private fun handleShareIntent(intent: Intent?): Boolean {
         if (intent == null) return false
-        val uris: List<Uri> = when (intent.action) {
-            Intent.ACTION_SEND -> {
-                val single = if (Build.VERSION.SDK_INT >= 33) {
-                    intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
-                } else {
-                    @Suppress("DEPRECATION")
-                    intent.getParcelableExtra(Intent.EXTRA_STREAM)
+        val uris: List<Uri> = readExtras(intent) {
+            when (action) {
+                Intent.ACTION_SEND -> {
+                    val single = if (Build.VERSION.SDK_INT >= 33) {
+                        getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        getParcelableExtra(Intent.EXTRA_STREAM)
+                    }
+                    listOfNotNull(single)
                 }
-                listOfNotNull(single)
+                Intent.ACTION_SEND_MULTIPLE -> {
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+                    } ?: emptyList()
+                }
+                else -> emptyList()
             }
-            Intent.ACTION_SEND_MULTIPLE -> {
-                if (Build.VERSION.SDK_INT >= 33) {
-                    intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
-                } else {
-                    @Suppress("DEPRECATION")
-                    intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-                } ?: emptyList()
-            }
-            else -> emptyList()
-        }.filter(::isAcceptableShareUri)
+        }?.filter(::isAcceptableShareUri) ?: return false
 
         if (uris.isNotEmpty()) {
             viewModel.onSharedFilesReceived(uris)
@@ -277,7 +308,7 @@ class MainActivity : ComponentActivity() {
 
         // No file stream -- fall back to shared plain text (e.g. a URL shared from a browser).
         if (intent.action == Intent.ACTION_SEND) {
-            val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            val text = readExtras(intent) { getStringExtra(Intent.EXTRA_TEXT) }
             if (!text.isNullOrEmpty()) {
                 viewModel.onSharedTextReceived(text)
                 intent.action = null
@@ -287,6 +318,16 @@ class MainActivity : ComponentActivity() {
         return false
     }
 }
+
+private const val STATE_STARTED_FROM_HOME_SCREEN = "started_from_home_screen"
+
+/** Another app's extras, or null if they can't be unpacked (an unknown class, before Android 13). */
+private inline fun <T> readExtras(intent: Intent, read: Intent.() -> T): T? =
+    try {
+        intent.read()
+    } catch (_: RuntimeException) {
+        null
+    }
 
 /**
  * Whether a URI handed over by another app is one this app is willing to open. ContentResolver

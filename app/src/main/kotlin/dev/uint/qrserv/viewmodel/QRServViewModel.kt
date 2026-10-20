@@ -31,6 +31,7 @@ import dev.uint.qrserv.files.ImportResult
 import dev.uint.qrserv.net.AddressChange
 import dev.uint.qrserv.net.HotspotInfo
 import dev.uint.qrserv.net.HotspotLoss
+import dev.uint.qrserv.net.LinkKind
 import dev.uint.qrserv.net.LinkKinds
 import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.net.addressChange
@@ -167,12 +168,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         override fun setLoading(loading: Boolean) = this@QRServViewModel.setLoading(loading)
         override fun rejectIfBusy(): Boolean = this@QRServViewModel.rejectIfBusy()
         override fun isServerRunning(): Boolean = serverController.isRunning
-        override fun openPickerWhenReady() {
-            if (notificationPromptOpen) pickerAfterNotificationPrompt = true else openPicker()
-        }
+        override fun openPickerWhenReady() = this@QRServViewModel.openPickerWhenReady()
         override suspend fun startServing(fileInfo: FileInfo) = this@QRServViewModel.startServing(fileInfo)
         override suspend fun stopServing() = this@QRServViewModel.stopServing()
         override suspend fun switchToHotspot(info: HotspotInfo) = this@QRServViewModel.switchToHotspot(info)
+        override fun linkKinds(): Map<String, LinkKind> = this@QRServViewModel.linkKinds.byInterface()
         override fun endShare() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) { serverController.stop() }
@@ -359,9 +359,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             if (rejectIfBusy()) return@launch
             val state = _uiState.value
             when {
-                shortcut == AppShortcut.SHARE_FILE -> {
+                // Including a hotspot still waiting for a file: back to picking one.
+                shortcut == AppShortcut.SHARE_FILE || (state.hotspot != null && !state.serverRunning) -> {
                     _events.tryEmit(UiEvent.ShowMainScreen)
-                    openPicker()
+                    openPickerWhenReady()
                 }
                 state.hotspot != null -> _events.tryEmit(UiEvent.OpenHotspotScreen)
                 else -> {
@@ -375,6 +376,16 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                     if (state.serverRunning) hotspot.onSwitchToHotspotClicked() else hotspot.onHotspotClicked()
                 }
             }
+        }
+    }
+
+    // For a hotspot waiting for a file, held until the notification prompt closes, which then opens it
+    // once; that's the only case its answer opens one for.
+    private fun openPickerWhenReady() {
+        if (notificationPromptOpen && _uiState.value.hotspot != null) {
+            pickerAfterNotificationPrompt = true
+        } else {
+            openPicker()
         }
     }
 

@@ -122,10 +122,9 @@ fun QRServApp(
                 UiEvent.OpenSafPicker -> onOpenSafPicker()
                 UiEvent.OpenDamBrowser -> screen = Screen.DAM_BROWSER
                 UiEvent.RequestDamPermission -> onRequestDamPermission()
+                // Navigation only: the browser's cancel cleanup would undo the action that follows.
                 UiEvent.ShowMainScreen, UiEvent.OpenHotspotScreen -> {
                     showAbout = false
-                    // As leaving it with back does, so the browser's import doesn't stay pending.
-                    if (screen == Screen.DAM_BROWSER) viewModel.onImportCanceled()
                     screen = if (event == UiEvent.OpenHotspotScreen) Screen.HOTSPOT else Screen.MAIN
                 }
                 UiEvent.PortSaved -> {}
@@ -196,8 +195,7 @@ fun QRServApp(
             val commitVelocity = releaseVelocity.coerceIn(0.5f, 2.5f)
             commitStartProgress = backProgressAnim.value
             playBackCommitAnimation(backProgressAnim, commitFadeAnim, commitVelocity)
-            // Mirrors DamBrowserScreen's own Cancel button, which also resets the
-            // loading flag set by onImportClicked() -- otherwise it's stuck spinning.
+            // The same cleanup as DamBrowserScreen's Cancel button.
             if (screen == Screen.DAM_BROWSER) viewModel.onImportCanceled()
             screen = Screen.MAIN
         } catch (_: CancellationException) {

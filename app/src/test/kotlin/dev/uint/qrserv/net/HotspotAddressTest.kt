@@ -55,6 +55,18 @@ class HotspotAddressTest {
     }
 
     @Test
+    fun reportedTransportCatchesUnusuallyNamedInterfaces() {
+        val before = setOf(wifi.address)
+        val now = listOf(wifi, ip("10.40.2.17", interfaceName = "seth_lte0"))
+        // Unknown by name, so only the system's report of the network gives it away.
+        assertEquals("10.40.2.17", chooseHotspotAddress(before, now))
+        assertNull(chooseHotspotAddress(before, now, reported = mapOf("seth_lte0" to LinkKind.CELLULAR)))
+        assertNull(chooseHotspotAddress(before, now, reported = mapOf("seth_lte0" to LinkKind.VPN)))
+        val hotspot = ip("192.168.61.1", interfaceName = "wlan2")
+        assertEquals("192.168.61.1", chooseHotspotAddress(before, now + hotspot, reported = mapOf("seth_lte0" to LinkKind.CELLULAR)))
+    }
+
+    @Test
     fun wifiDirectGroupIsNotTheHotspot() {
         val direct = ip("192.168.49.1", interfaceName = "p2p-wlan0-0")
         assertNull(chooseHotspotAddress(setOf(wifi.address, direct.address), listOf(wifi, direct)))

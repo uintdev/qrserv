@@ -83,6 +83,7 @@ enum class HotspotLoss {
 class HotspotController(
     context: Context,
     private val onLost: (HotspotLoss) -> Unit,
+    private val reportedLinkKinds: () -> Map<String, LinkKind>,
 ) {
     private val context = context.applicationContext
     private val wifiManager = this.context.getSystemService(WifiManager::class.java)
@@ -290,7 +291,7 @@ class HotspotController(
     // The address can appear a moment after onStarted().
     private suspend fun awaitAddress(before: Set<String>): String? = withContext(Dispatchers.IO) {
         repeat(ADDRESS_POLL_ATTEMPTS) {
-            chooseHotspotAddress(before, ipv4Candidates())?.let { return@withContext it }
+            chooseHotspotAddress(before, ipv4Candidates(), reportedLinkKinds())?.let { return@withContext it }
             delay(ADDRESS_POLL_INTERVAL)
         }
         null

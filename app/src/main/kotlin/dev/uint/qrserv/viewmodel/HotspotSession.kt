@@ -19,6 +19,7 @@ import dev.uint.qrserv.net.HotspotInfo
 import dev.uint.qrserv.net.HotspotLoss
 import dev.uint.qrserv.net.HotspotPreflight
 import dev.uint.qrserv.net.HotspotStartResult
+import dev.uint.qrserv.net.LinkKind
 import dev.uint.qrserv.net.hotspotPreflight
 import dev.uint.qrserv.net.hotspotUnavailableOn
 import dev.uint.qrserv.net.labelRes
@@ -47,6 +48,9 @@ class HotspotSession internal constructor(
         suspend fun startServing(fileInfo: FileInfo)
         suspend fun stopServing()
         suspend fun switchToHotspot(info: HotspotInfo)
+
+        /** Each network interface's transport as the system reports it. */
+        fun linkKinds(): Map<String, LinkKind>
         fun endShare()
     }
 
@@ -57,7 +61,7 @@ class HotspotSession internal constructor(
     }
 
     private val controller: HotspotController? =
-        if (Build.VERSION.SDK_INT >= 33) HotspotController(app, ::onLost) else null
+        if (Build.VERSION.SDK_INT >= 33) HotspotController(app, ::onLost) { host.linkKinds() } else null
 
     private var pendingIntent: Intent? = null
 

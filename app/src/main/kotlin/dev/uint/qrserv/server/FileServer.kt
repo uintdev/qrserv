@@ -56,7 +56,7 @@ class FileServer(
     // Per client: a multi-connection downloader can finish the segment ending the file before the
     // rest, and cancels a segment on purpose once it meets the next one (Chrome does both), so
     // "finished" waits for the client's last transfer in flight, however that one ends.
-    private class ClientTransfers(var active: Int = 0, var reachedEnd: Boolean = false)
+    private class ClientTransfers(var active: Int = 0, var reachedEnd: Boolean = false, var cutByStop: Boolean = false)
 
     private val clientTransfers = HashMap<String, ClientTransfers>()
 
@@ -192,7 +192,8 @@ class FileServer(
                 sent = true
             } finally {
                 try {
-                    if (clientTransferEnded(remoteIp, reachedEnd = sent && end == length - 1)) {
+                    val reachedEnd = sent && end == length - 1
+                    if (clientTransferEnded(remoteIp, reachedEnd, cutByStop = !sent && !running)) {
                         listener.onDownloadFinished(remoteIp)
                     }
                 } finally {
@@ -205,14 +206,18 @@ class FileServer(
         }
     }
 
-    /** True if this was [remoteIp]'s last transfer in flight and one of them sent the end of the file. */
-    private fun clientTransferEnded(remoteIp: String, reachedEnd: Boolean): Boolean =
+    /**
+     * True if this was [remoteIp]'s last transfer in flight and one of them sent the end of the file,
+     * unless stopping the server cut one short.
+     */
+    private fun clientTransferEnded(remoteIp: String, reachedEnd: Boolean, cutByStop: Boolean): Boolean =
         synchronized(clientTransfers) {
             val client = clientTransfers.getValue(remoteIp)
             client.reachedEnd = client.reachedEnd || reachedEnd
+            client.cutByStop = client.cutByStop || cutByStop
             if (--client.active > 0) return false
             clientTransfers.remove(remoteIp)
-            client.reachedEnd
+            client.reachedEnd && !client.cutByStop
         }
 
     fun stop() {

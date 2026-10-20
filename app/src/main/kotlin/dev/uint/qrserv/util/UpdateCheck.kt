@@ -4,10 +4,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
+import java.net.InetAddress
+import java.net.Proxy
+import java.net.ProxySelector
 import java.net.URL
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration.Companion.seconds
@@ -87,7 +91,15 @@ private val requestScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
     val connection = runCatching { URL(LATEST_RELEASE_API).openConnection() as HttpURLConnection }
         .getOrElse { return UpdateCheckResult.Failed }
-    val request = requestScope.async { fetch(connection, installedVersion) }
+    val request = requestScope.async {
+        // A lookup can't be interrupted, so a late answer mustn't still send the request. Not through a
+        // proxy, which does its own.
+        if (isDirect(connection.url)) {
+            InetAddress.getAllByName(connection.url.host)
+            ensureActive()
+        }
+        fetch(connection, installedVersion)
+    }
     return try {
         withTimeoutOrNull(CHECK_TIMEOUT) { request.await() } ?: UpdateCheckResult.Failed
     } catch (e: CancellationException) {
@@ -100,6 +112,10 @@ suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
         request.cancel()
     }
 }
+
+private fun isDirect(url: URL): Boolean =
+    runCatching { ProxySelector.getDefault()?.select(url.toURI())?.all { it.type() == Proxy.Type.DIRECT } }
+        .getOrNull() ?: true
 
 private fun fetch(connection: HttpURLConnection, installedVersion: String): UpdateCheckResult {
     connection.connectTimeout = CONNECT_TIMEOUT.inWholeMilliseconds.toInt()
