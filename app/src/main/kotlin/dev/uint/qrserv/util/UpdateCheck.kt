@@ -19,7 +19,7 @@ import kotlin.time.Duration.Companion.seconds
 const val RELEASES_URL = "https://github.com/uintdev/qrserv/releases"
 
 // GitHub's "latest" release is never a pre-release or a draft. By the repository's ID rather than its
-// name: that survives an account or repository rename, and a freed-up old name can't be taken over.
+// name: that survives an account or repository rename, and a freed-up old name can't take the check over.
 private const val LATEST_RELEASE_API = "https://api.github.com/repositories/343788099/releases/latest"
 
 // The whole check, DNS lookup included -- which the connection's own timeouts don't cover.
