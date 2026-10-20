@@ -8,7 +8,7 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import dev.uint.qrserv.R
 import dev.uint.qrserv.net.HotspotUnavailable
-import dev.uint.qrserv.net.hotspotUnavailableOn
+import dev.uint.qrserv.net.hotspotUnavailableNow
 import dev.uint.qrserv.net.messageRes
 
 enum class AppShortcut(val id: String, val action: String) {
@@ -36,7 +36,7 @@ internal fun availableShortcuts(hotspotUnavailable: HotspotUnavailable?): List<A
  * static: static ones launch with FLAG_ACTIVITY_CLEAR_TASK, which would end a share in progress.
  */
 fun publishAppShortcuts(context: Context) {
-    val hotspotUnavailable = context.hotspotUnavailableOn()
+    val hotspotUnavailable = context.hotspotUnavailableNow()
     val shortcuts = availableShortcuts(hotspotUnavailable).mapIndexed { rank, shortcut ->
         val (shortLabel, longLabel, icon) = when (shortcut) {
             AppShortcut.SHARE_FILE ->

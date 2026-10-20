@@ -35,7 +35,7 @@ import dev.uint.qrserv.net.LinkKind
 import dev.uint.qrserv.net.LinkKinds
 import dev.uint.qrserv.net.NetworkUtils
 import dev.uint.qrserv.net.addressChange
-import dev.uint.qrserv.net.hotspotUnavailableOn
+import dev.uint.qrserv.net.hotspotUnavailableNow
 import dev.uint.qrserv.net.messageRes
 import dev.uint.qrserv.server.ServerController
 import dev.uint.qrserv.server.ServingNotice
@@ -367,7 +367,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 state.hotspot != null -> _events.tryEmit(UiEvent.OpenHotspotScreen)
                 else -> {
                     // The device can have changed since the shortcut was published, e.g. a new policy.
-                    val unavailable = getApplication<Application>().hotspotUnavailableOn()
+                    val unavailable = getApplication<Application>().hotspotUnavailableNow()
                     if (unavailable != null) {
                         postToast(unavailable.messageRes)
                         return@launch

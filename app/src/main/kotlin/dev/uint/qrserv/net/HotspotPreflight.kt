@@ -20,8 +20,8 @@ data class HotspotAvailability(
     val disconnectsWifi: Boolean = false,
 )
 
-/** [hotspotUnavailableReason] for this device as it is now. */
-fun Context.hotspotUnavailableOn(): HotspotUnavailable? = hotspotUnavailableReason(
+/** Why the hotspot can't be used on this device as it is now ([hotspotUnavailableReason]); null if it can. */
+fun Context.hotspotUnavailableNow(): HotspotUnavailable? = hotspotUnavailableReason(
     sdkInt = Build.VERSION.SDK_INT,
     hasWifi = packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI),
     tetheringRestricted = getSystemService(UserManager::class.java).hasUserRestriction(UserManager.DISALLOW_CONFIG_TETHERING),
