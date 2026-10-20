@@ -99,6 +99,15 @@ fun SettingsScreen(
         onDispose { viewModel.cancelUpdateCheck() }
     }
 
+    // Empty before 36 or without 5 GHz, where the hotspot always uses the system's default band, and where the
+    // hotspot can't be used at all.
+    val bandOptions = uiState.hotspotBandOptions
+    val bandSelectable = bandOptions.isNotEmpty()
+    // The hotspot can become unusable while the dialog is open, e.g. a device policy set on return to the app.
+    LaunchedEffect(bandSelectable) {
+        if (!bandSelectable) showBandDialog = false
+    }
+
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             if (event is UiEvent.PortSaved) showPortDialog = false
@@ -169,27 +178,23 @@ fun SettingsScreen(
                 )
             }
 
-            // Empty before 36, without 5 GHz, or where the hotspot can't be used: the hotspot then always uses
-            // the system default. It's still shown, disabled, on Android 13 to 15 where 5 GHz exists, since an
-            // update would unlock it.
-            val bandOptions = uiState.hotspotBandOptions
-            val bandEnabled = bandOptions.isNotEmpty()
-            if (bandEnabled || uiState.hotspotBandNeedsNewerAndroid) {
+            // Still shown, disabled, on Android 13 to 15 where 5 GHz exists, since an update would unlock it.
+            if (bandSelectable || uiState.hotspotBandNeedsNewerAndroid) {
                 SectionHeader(stringResource(R.string.hotspot_screen_title))
                 SettingsGroup {
                     ListItem(
                         headlineContent = { Text(stringResource(R.string.settings_hotspot_band_list_title)) },
                         supportingContent = {
                             Text(
-                                if (bandEnabled) {
+                                if (bandSelectable) {
                                     stringResource((uiState.hotspotBand ?: bandOptions.first()).labelRes)
                                 } else {
                                     stringResource(R.string.settings_hotspot_band_needsandroid)
                                 },
                             )
                         },
-                        colors = if (bandEnabled) groupItemColors else disabledItemColors,
-                        modifier = Modifier.clickable(enabled = bandEnabled) { showBandDialog = true },
+                        colors = if (bandSelectable) groupItemColors else disabledItemColors,
+                        modifier = Modifier.clickable(enabled = bandSelectable) { showBandDialog = true },
                     )
                 }
             }
@@ -294,16 +299,11 @@ fun SettingsScreen(
         )
     }
 
-    // The hotspot can become unusable while the dialog is open, e.g. a device policy set on return to the app.
-    val bandSelectable = uiState.hotspotBandOptions.isNotEmpty()
-    LaunchedEffect(bandSelectable) {
-        if (!bandSelectable) showBandDialog = false
-    }
     if (showBandDialog && bandSelectable) {
         ChoiceDialog(
             title = stringResource(R.string.settings_hotspot_band_list_title),
-            options = uiState.hotspotBandOptions,
-            current = uiState.hotspotBand ?: uiState.hotspotBandOptions.firstOrNull(),
+            options = bandOptions,
+            current = uiState.hotspotBand ?: bandOptions.firstOrNull(),
             label = { stringResource(it.labelRes) },
             description = { stringResource(bandDescriptionRes(it)) },
             onDismiss = { showBandDialog = false },

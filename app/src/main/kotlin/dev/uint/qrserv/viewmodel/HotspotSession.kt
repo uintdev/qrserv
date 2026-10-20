@@ -21,7 +21,7 @@ import dev.uint.qrserv.net.HotspotPreflight
 import dev.uint.qrserv.net.HotspotStartResult
 import dev.uint.qrserv.net.LinkKind
 import dev.uint.qrserv.net.hotspotPreflight
-import dev.uint.qrserv.net.hotspotUnavailableOn
+import dev.uint.qrserv.net.hotspotUnavailableNow
 import dev.uint.qrserv.net.labelRes
 import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.isNearbyWifiGranted
@@ -84,7 +84,8 @@ class HotspotSession internal constructor(
 
     internal fun initialState(state: AppUiState): AppUiState = withAvailability(state, computeAvailability())
 
-    // The band is only asked of Wi-Fi where the hotspot can be used; without Wi-Fi there's no WifiManager.
+    // No band to choose where the hotspot can't be used. Read again on each availability check, so the options
+    // follow both that and what Wi-Fi reports.
     private fun withAvailability(state: AppUiState, availability: HotspotAvailability): AppUiState {
         val usable = availability.unavailable == null
         val bandOptions = controller?.takeIf { usable }?.selectableBands.orEmpty()
@@ -129,7 +130,7 @@ class HotspotSession internal constructor(
     }
 
     private fun computeAvailability(): HotspotAvailability {
-        val unavailable = app.hotspotUnavailableOn()
+        val unavailable = app.hotspotUnavailableNow()
         val disconnectsWifi = unavailable == null && Build.VERSION.SDK_INT >= 33 &&
             runCatching { app.getSystemService(WifiManager::class.java)?.isStaApConcurrencySupported }.getOrNull() == false
         return HotspotAvailability(unavailable, disconnectsWifi)

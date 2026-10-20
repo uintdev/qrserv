@@ -86,7 +86,8 @@ class HotspotController(
     private val reportedLinkKinds: () -> Map<String, LinkKind>,
 ) {
     private val context = context.applicationContext
-    private val wifiManager = this.context.getSystemService(WifiManager::class.java)
+    // Null on a device without Wi-Fi.
+    private val wifiManager: WifiManager? = this.context.getSystemService(WifiManager::class.java)
     private val appOps = this.context.getSystemService(AppOpsManager::class.java)
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -100,17 +101,24 @@ class HotspotController(
     val isActive: Boolean
         get() = reservation != null
 
-    /** Bands the hotspot can be asked for, fastest first; empty where the band can't be requested. */
-    val selectableBands: List<HotspotBand> by lazy {
-        when {
-            Build.VERSION.SDK_INT < 36 || !wifiManager.is5GHzBandSupported -> emptyList()
-            wifiManager.isBridgedApConcurrencySupported -> listOf(HotspotBand.DUAL, HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
-            else -> listOf(HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
+    /**
+     * Bands the hotspot can be asked for, fastest first; empty where the band can't be requested. Asked of
+     * Wi-Fi on each read, so a later read sees what an earlier one didn't.
+     */
+    val selectableBands: List<HotspotBand>
+        get() {
+            val wifiManager = wifiManager ?: return emptyList()
+            return when {
+                Build.VERSION.SDK_INT < 36 || !wifiManager.is5GHzBandSupported -> emptyList()
+                wifiManager.isBridgedApConcurrencySupported ->
+                    listOf(HotspotBand.DUAL, HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
+                else -> listOf(HotspotBand.FIVE_GHZ, HotspotBand.TWO_GHZ)
+            }
         }
-    }
 
     /** True where [selectableBands] is empty only because this Android version can't request a band. */
-    val bandChoiceNeedsNewerAndroid: Boolean by lazy { Build.VERSION.SDK_INT < 36 && wifiManager.is5GHzBandSupported }
+    val bandChoiceNeedsNewerAndroid: Boolean
+        get() = Build.VERSION.SDK_INT < 36 && wifiManager?.is5GHzBandSupported == true
 
     private var closingAddress: String? = null
 
@@ -131,7 +139,9 @@ class HotspotController(
         closingAddress = null
         val before = withContext(Dispatchers.IO) { ipv4Candidates() }.mapTo(HashSet()) { it.address }
 
-        val newReservation = when (val started = requestReservationFor(band ?: selectableBands.firstOrNull())) {
+        // Read once, so the band asked for and the faster band reported agree.
+        val bands = selectableBands
+        val newReservation = when (val started = requestReservationFor(band ?: bands.firstOrNull(), bands)) {
             is Requested.Started -> started.reservation
             is Requested.Failed -> return HotspotStartResult.Failed(started.reason)
         }
@@ -152,7 +162,7 @@ class HotspotController(
             securityName = securityNameOf(config.securityType),
             address = address,
             band = if (Build.VERSION.SDK_INT >= 36) bandOf(config) else null,
-            fasterBand = selectableBands.firstOrNull(),
+            fasterBand = bands.firstOrNull(),
         )
         info = newInfo
         watchWifiControl()
@@ -185,8 +195,8 @@ class HotspotController(
     // channel, regulatory, a concurrent Wi-Fi connection). So: both bands where the device can run them
     // together, else 5 GHz, else the default. A preferred band that's refused falls back the same way.
     @RequiresApi(33)
-    private suspend fun requestReservationFor(band: HotspotBand?): Requested {
-        if (Build.VERSION.SDK_INT >= 36 && band != null && band in selectableBands) {
+    private suspend fun requestReservationFor(band: HotspotBand?, selectable: List<HotspotBand>): Requested {
+        if (Build.VERSION.SDK_INT >= 36 && band != null && band in selectable) {
             val attempts = when (band) {
                 HotspotBand.DUAL -> listOf(
                     bands(SoftApConfiguration.BAND_2GHZ, SoftApConfiguration.BAND_5GHZ),
@@ -239,6 +249,11 @@ class HotspotController(
     private suspend fun requestReservation(
         config: SoftApConfiguration? = null,
     ): Requested = suspendCancellableCoroutine { continuation ->
+        val wifiManager = wifiManager
+        if (wifiManager == null) {
+            continuation.resume(Requested.Failed(HotspotFailure.GENERIC))
+            return@suspendCancellableCoroutine
+        }
         val cb = object : WifiManager.LocalOnlyHotspotCallback() {
             override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation) {
                 if (continuation.isActive) {
