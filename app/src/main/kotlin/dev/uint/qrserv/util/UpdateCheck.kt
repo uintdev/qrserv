@@ -122,8 +122,8 @@ private fun fetch(connection: HttpURLConnection, installedVersion: String): Upda
     connection.readTimeout = READ_TIMEOUT.inWholeMilliseconds.toInt()
     connection.setRequestProperty("Accept", "application/vnd.github+json")
     connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28")
-    // GitHub's API refuses requests without one.
-    connection.setRequestProperty("User-Agent", "QRServ/$installedVersion")
+    // GitHub's API refuses requests without one, and Android's default names the device model.
+    connection.setRequestProperty("User-Agent", "QRServ")
     val statusCode = connection.responseCode
     if (statusCode != HttpURLConnection.HTTP_OK) return updateCheckResult(installedVersion, statusCode, null)
     val body = connection.inputStream.use { input ->
