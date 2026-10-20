@@ -22,6 +22,7 @@
         <item quantity="other">%d دقیقه چیزی دریافت نشد</item>
     </plurals>
     <string name="info_idle_stopped">هم‌رسانی متوقف شد: مدتی چیزی دریافت نشد</string>
+    <string name="info_no_file_picker">انتخابگر پرونده نیست. پرونده را از برنامهٔ دیگری با QRServ هم‌رسانی کنید</string>
     <string name="page_info_unhandlederror_label">خطا</string>
     <string name="page_info_unhandlederror_msg">خطای غیرمنتظره‌ای رخ داد</string>
     <string name="page_info_unhandlederror_hint">برای هم‌رسانی جزئیات، لمس کرده و نگه دارید</string>

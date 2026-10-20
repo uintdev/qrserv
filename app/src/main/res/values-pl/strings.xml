@@ -24,6 +24,7 @@
         <item quantity="other">Nic nie pobrano przez %d minuty</item>
     </plurals>
     <string name="info_idle_stopped">Udostępnianie zatrzymane: od dawna nic nie pobrano</string>
+    <string name="info_no_file_picker">Brak selektora plików. Udostępnij pliki do QRServ z innej aplikacji</string>
     <string name="page_info_unhandlederror_label">Błąd</string>
     <string name="page_info_unhandlederror_msg">Wystąpił nieoczekiwany błąd</string>
     <string name="page_info_unhandlederror_hint">Naciśnij i przytrzymaj, aby udostępnić szczegóły</string>

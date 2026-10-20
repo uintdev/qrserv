@@ -22,6 +22,7 @@
         <item quantity="other">Nothing was downloaded for %d minutes</item>
     </plurals>
     <string name="info_idle_stopped">Sharing stopped: nothing was downloaded for a while</string>
+    <string name="info_no_file_picker">No file picker found. Share files to QRServ from another app instead</string>
     <string name="page_info_unhandlederror_label">Error</string>
     <string name="page_info_unhandlederror_msg">An unexpected error occurred</string>
     <string name="page_info_unhandlederror_hint">Press and hold to share details</string>

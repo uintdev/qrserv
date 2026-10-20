@@ -24,6 +24,7 @@
         <item quantity="other">Не было загрузок %d минуты</item>
     </plurals>
     <string name="info_idle_stopped">Раздача остановлена: давно не было загрузок</string>
+    <string name="info_no_file_picker">Нет средства выбора файлов. Отправьте файл в QRServ из другого приложения</string>
     <string name="page_info_unhandlederror_label">Ошибка</string>
     <string name="page_info_unhandlederror_msg">Произошла непредвиденная ошибка</string>
     <string name="page_info_unhandlederror_hint">Нажмите и удерживайте, чтобы поделиться деталями</string>

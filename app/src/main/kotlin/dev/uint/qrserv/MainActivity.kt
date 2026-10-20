@@ -142,7 +142,7 @@ class MainActivity : ComponentActivity() {
             QRServTheme(darkTheme = darkTheme) {
                 QRServApp(
                     viewModel = viewModel,
-                    onOpenSafPicker = { safPickerLauncher.launch(arrayOf("*/*")) },
+                    onOpenSafPicker = ::openSafPicker,
                     onRequestDamPermission = ::requestDirectAccessPermission,
                     onRequestNotificationPermission = {
                         if (Build.VERSION.SDK_INT >= 33) {
@@ -151,10 +151,7 @@ class MainActivity : ComponentActivity() {
                     },
                     onRequestNearbyPermission = ::handleNearbyPermissionRequest,
                     onLaunchNearbyPrompt = ::launchNearbyPrompt,
-                    onOpenAppSettings = {
-                        // No public screen for "Wi-Fi control" alone.
-                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()))
-                    },
+                    onOpenAppSettings = ::openAppSettings,
                 )
             }
         }
@@ -247,6 +244,30 @@ class MainActivity : ComponentActivity() {
         viewModel.onShortcut(shortcut)
     }
 
+    // Some builds (TV, Automotive, some locked-down ones) have nothing that handles it.
+    private fun openSafPicker() {
+        try {
+            safPickerLauncher.launch(arrayOf("*/*"))
+        } catch (_: ActivityNotFoundException) {
+            viewModel.onFilePickerMissing()
+        }
+    }
+
+    // No public screen for "Wi-Fi control" alone. The app's own page can be missing too, as on some TVs.
+    private fun openAppSettings() {
+        listOf(
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()),
+            Intent(Settings.ACTION_SETTINGS),
+        ).any { intent ->
+            try {
+                startActivity(intent)
+                true
+            } catch (_: ActivityNotFoundException) {
+                false
+            }
+        }
+    }
+
     private fun requestDirectAccessPermission() {
         if (Build.VERSION.SDK_INT >= 30) {
             // Some builds (TV, Go, some OEMs) lack the per-app screen, or All files access entirely.
@@ -261,14 +282,8 @@ class MainActivity : ComponentActivity() {
                     false
                 }
             }
-            if (!launched) {
-                // Without either screen the permission can never be granted, so use the system picker.
-                try {
-                    safPickerLauncher.launch(arrayOf("*/*"))
-                } catch (_: ActivityNotFoundException) {
-                    viewModel.onDirectAccessPermissionResult(false)
-                }
-            }
+            // Without either screen the permission can never be granted, so use the system picker.
+            if (!launched) openSafPicker()
         } else {
             legacyStoragePermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }

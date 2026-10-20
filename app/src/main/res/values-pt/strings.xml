@@ -23,6 +23,7 @@
         <item quantity="other">Sem transferências durante %d minutos</item>
     </plurals>
     <string name="info_idle_stopped">Partilha parada: sem transferências há algum tempo</string>
+    <string name="info_no_file_picker">Nenhum seletor de ficheiros. Partilhe para o QRServ a partir de outra app</string>
     <string name="page_info_unhandlederror_label">Erro</string>
     <string name="page_info_unhandlederror_msg">Ocorreu um erro inesperado</string>
     <string name="page_info_unhandlederror_hint">Toque sem soltar para partilhar os detalhes</string>

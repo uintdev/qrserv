@@ -406,6 +406,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         hotspot.abandonIdle()
     }
 
+    /** Nothing on the device can pick a file (e.g. some TVs); sharing from another app still works. */
+    fun onFilePickerMissing() {
+        onImportCanceled()
+        postToast(R.string.info_no_file_picker)
+    }
+
     fun onFilesPicked(uris: List<Uri>) {
         if (uris.isEmpty()) {
             hotspot.abandonIdle()

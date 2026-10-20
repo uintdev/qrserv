@@ -23,6 +23,7 @@
         <item quantity="other">Nessun download per %d minuti</item>
     </plurals>
     <string name="info_idle_stopped">Condivisione interrotta: nessun download da un po\'</string>
+    <string name="info_no_file_picker">Nessun selettore di file. Condividi i file su QRServ da un\'altra app</string>
     <string name="page_info_unhandlederror_label">Errore</string>
     <string name="page_info_unhandlederror_msg">Si è verificato un errore imprevisto</string>
     <string name="page_info_unhandlederror_hint">Tieni premuto per condividere i dettagli</string>
