@@ -118,9 +118,9 @@ data class AppUiState(
     val hotspotScreenPending: Boolean = false,
     /** The preferred private hotspot band; null for the fastest the device supports. */
     val hotspotBand: HotspotBand? = null,
-    /** Bands the preference can be set to, fastest first; empty where the band can't be requested. */
+    /** Bands the preference can be set to, fastest first; empty where it can't be requested or the hotspot used. */
     val hotspotBandOptions: List<HotspotBand> = emptyList(),
-    /** 5 GHz is there, but only 36+ lets apps request it: shown disabled, where the hotspot is usable. */
+    /** 5 GHz is there, but only 36+ lets apps request it: shown disabled. False where the hotspot can't be used. */
     val hotspotBandNeedsNewerAndroid: Boolean = false,
     /** Minutes without downloads before sharing stops; 0 is off. */
     val idleStopMinutes: Int = DEFAULT_IDLE_STOP_MINUTES,
