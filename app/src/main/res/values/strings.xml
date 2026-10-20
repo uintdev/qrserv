@@ -200,6 +200,11 @@
     <string name="settings_update_latest">You\'re on the latest version</string>
     <string name="settings_update_newer">This version is newer than the latest release (%1$s)</string>
     <string name="settings_update_failed">Couldn\'t check for updates</string>
+    <string name="settings_update_failed_http">The server responded with HTTP %1$s</string>
+    <string name="settings_update_failed_invalid">The response wasn\'t a valid release</string>
+    <string name="settings_update_failed_timeout">The request timed out</string>
+    <string name="settings_update_failed_certificate">The server\'s certificate isn\'t valid</string>
+    <string name="settings_update_failed_noconnection">Couldn\'t connect to GitHub</string>
     <string name="settings_update_view_release">View release</string>
     <string name="settings_update_open_releases">View releases</string>
 </resources>

@@ -207,6 +207,11 @@
     <string name="settings_update_latest">Zainstalowana jest najnowsza wersja</string>
     <string name="settings_update_newer">Ta wersja jest nowsza niż najnowsze wydanie (%1$s)</string>
     <string name="settings_update_failed">Nie udało się sprawdzić aktualizacji</string>
+    <string name="settings_update_failed_http">Serwer odpowiedział kodem HTTP %1$s</string>
+    <string name="settings_update_failed_invalid">Odpowiedź nie była prawidłowym wydaniem</string>
+    <string name="settings_update_failed_timeout">Upłynął limit czasu żądania</string>
+    <string name="settings_update_failed_certificate">Certyfikat serwera jest nieprawidłowy</string>
+    <string name="settings_update_failed_noconnection">Nie udało się połączyć z GitHubem</string>
     <string name="settings_update_view_release">Zobacz wydanie</string>
     <string name="settings_update_open_releases">Zobacz wydania</string>
 </resources>

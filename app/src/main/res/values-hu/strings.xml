@@ -199,6 +199,11 @@
     <string name="settings_update_latest">A legújabb verziót használja</string>
     <string name="settings_update_newer">Ez a verzió újabb a legutóbbi kiadásnál (%1$s)</string>
     <string name="settings_update_failed">Nem sikerült frissítéseket keresni</string>
+    <string name="settings_update_failed_http">A kiszolgáló HTTP %1$s kóddal válaszolt</string>
+    <string name="settings_update_failed_invalid">A válasz nem érvényes kiadás volt</string>
+    <string name="settings_update_failed_timeout">A kérés túllépte az időkorlátot</string>
+    <string name="settings_update_failed_certificate">A kiszolgáló tanúsítványa érvénytelen</string>
+    <string name="settings_update_failed_noconnection">Nem sikerült csatlakozni a GitHubhoz</string>
     <string name="settings_update_view_release">Kiadás megtekintése</string>
     <string name="settings_update_open_releases">Kiadások megtekintése</string>
 </resources>

@@ -5,6 +5,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.security.cert.CertificateExpiredException
+import javax.net.ssl.SSLHandshakeException
+import javax.net.ssl.SSLPeerUnverifiedException
 
 class UpdateCheckTest {
 
@@ -57,36 +64,59 @@ class UpdateCheckTest {
     }
 
     @Test
-    fun renamedRepositoryStillLinksToTheRelease() {
-        val renamed = "https://github.com/someone-else/qrserv-renamed/releases/tag/v4.4.0"
-        assertEquals(
-            UpdateCheckResult.UpdateAvailable("4.4.0", renamed),
-            updateCheckResult("4.3.0", release("v4.4.0", url = renamed)),
-        )
-    }
-
-    @Test
-    fun releaseLinkThatIsntAGitHubReleasePageFallsBackToTheReleasesPage() {
+    fun releaseLinkIsAlwaysThisRepositorysPageForTheTag() {
         for (url in listOf(
+            "https://github.com/someone-else/qrserv/releases/tag/v4.4.0",
             "https://example.com/qrserv.apk",
-            "https://github.com.example.com/uintdev/qrserv/releases/tag/v4.4.0",
-            "http://github.com/uintdev/qrserv/releases/tag/v4.4.0",
             "https://github.com/uintdev/qrserv/releases/download/v4.4.0/qrserv.apk",
-            "https://github.com/uintdev/qrserv/releases/tag/v4.4.0/../../../../evil",
-            "https://github.com/uintdev/qrserv/releases/tag/v4.4.0\\..\\..\\..\\..\\settings\\tokens",
-            "https://github.com/%2e%2e/%2e%2e/releases/tag/v4.4.0",
-            "https://github.com/../../releases/tag/v4.4.0",
             "https://github.com/uintdev/qrserv/releases/tag/v9.9.9",
         )) {
-            assertEquals(url, UpdateCheckResult.UpdateAvailable("4.4.0", RELEASES_URL), updateCheckResult("4.3.0", release("v4.4.0", url = url)))
+            assertEquals(
+                url,
+                UpdateCheckResult.UpdateAvailable("4.4.0", "$RELEASES_URL/tag/v4.4.0"),
+                updateCheckResult("4.3.0", release("v4.4.0", url = url)),
+            )
         }
     }
 
     @Test
-    fun anythingElseIsAFailure() {
-        assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", "<html>rate limited</html>"))
-        assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", release("v4.4.0", prerelease = true)))
-        assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", release("nightly")))
-        assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0-dev", release("v4.4.0")))
+    fun clientAndServerErrorsGiveTheirStatus() {
+        for (status in listOf(400, 403, 404, 429, 500, 503, 599)) {
+            assertEquals(UpdateCheckFailure.HttpError(status), failureForStatus(status))
+        }
+    }
+
+    @Test
+    fun otherUnsuccessfulResponsesAreInvalid() {
+        for (status in listOf(-1, 100, 204, 301, 304, 399, 600)) {
+            assertEquals(status.toString(), UpdateCheckFailure.InvalidResponse, failureForStatus(status))
+        }
+    }
+
+    @Test
+    fun exceptionsAreClassifiedThroughTheirCauses() {
+        assertEquals(UpdateCheckFailure.TimedOut, failureForException(SocketTimeoutException()))
+        assertEquals(
+            UpdateCheckFailure.CertificateInvalid,
+            failureForException(SSLHandshakeException("handshake").apply { initCause(CertificateExpiredException()) }),
+        )
+        assertEquals(UpdateCheckFailure.CertificateInvalid, failureForException(SSLPeerUnverifiedException("Hostname not verified")))
+        assertEquals(UpdateCheckFailure.NoConnection, failureForException(UnknownHostException()))
+        assertEquals(UpdateCheckFailure.NoConnection, failureForException(IOException(ConnectException())))
+        assertEquals(UpdateCheckFailure.Other, failureForException(SSLHandshakeException("protocol")))
+        assertEquals(UpdateCheckFailure.Other, failureForException(IllegalStateException()))
+    }
+
+    @Test
+    fun responseThatIsntARelease() {
+        val invalid = UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse)
+        assertEquals(invalid, updateCheckResult("4.3.0", "<html>rate limited</html>"))
+        assertEquals(invalid, updateCheckResult("4.3.0", release("v4.4.0", prerelease = true)))
+        assertEquals(invalid, updateCheckResult("4.3.0", release("nightly")))
+    }
+
+    @Test
+    fun installedVersionThatCantBeComparedIsAnotherFailure() {
+        assertEquals(UpdateCheckResult.Failed(UpdateCheckFailure.Other), updateCheckResult("4.3.0-dev", release("v4.4.0")))
     }
 }

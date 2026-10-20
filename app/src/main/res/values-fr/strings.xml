@@ -203,6 +203,11 @@
     <string name="settings_update_latest">Vous utilisez la dernière version</string>
     <string name="settings_update_newer">Cette version est plus récente que la dernière version publiée (%1$s)</string>
     <string name="settings_update_failed">Impossible de rechercher des mises à jour</string>
+    <string name="settings_update_failed_http">Le serveur a répondu avec HTTP %1$s</string>
+    <string name="settings_update_failed_invalid">La réponse n\'était pas une version valide</string>
+    <string name="settings_update_failed_timeout">La requête a expiré</string>
+    <string name="settings_update_failed_certificate">Le certificat du serveur n\'est pas valide</string>
+    <string name="settings_update_failed_noconnection">Impossible de se connecter à GitHub</string>
     <string name="settings_update_view_release">Voir la version</string>
     <string name="settings_update_open_releases">Voir les versions</string>
 </resources>

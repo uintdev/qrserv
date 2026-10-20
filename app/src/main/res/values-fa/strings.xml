@@ -199,6 +199,11 @@
     <string name="settings_update_latest">از آخرین نسخه استفاده می‌کنید</string>
     <string name="settings_update_newer">این نسخه از آخرین انتشار (%1$s) جدیدتر است</string>
     <string name="settings_update_failed">بررسی به‌روزرسانی‌ها ممکن نشد</string>
+    <string name="settings_update_failed_http">سرور با HTTP %1$s پاسخ داد</string>
+    <string name="settings_update_failed_invalid">پاسخ یک انتشار معتبر نبود</string>
+    <string name="settings_update_failed_timeout">مهلت درخواست به پایان رسید</string>
+    <string name="settings_update_failed_certificate">گواهی سرور معتبر نیست</string>
+    <string name="settings_update_failed_noconnection">اتصال به GitHub ممکن نشد</string>
     <string name="settings_update_view_release">مشاهدهٔ انتشار</string>
     <string name="settings_update_open_releases">مشاهدهٔ انتشارها</string>
 </resources>

@@ -199,6 +199,11 @@
     <string name="settings_update_latest">En son sürümü kullanıyorsunuz</string>
     <string name="settings_update_newer">Bu sürüm en son yayınlanan sürümden (%1$s) daha yeni</string>
     <string name="settings_update_failed">Güncellemeler denetlenemedi</string>
+    <string name="settings_update_failed_http">Sunucu HTTP %1$s ile yanıt verdi</string>
+    <string name="settings_update_failed_invalid">Yanıt geçerli bir sürüm değildi</string>
+    <string name="settings_update_failed_timeout">İstek zaman aşımına uğradı</string>
+    <string name="settings_update_failed_certificate">Sunucunun sertifikası geçerli değil</string>
+    <string name="settings_update_failed_noconnection">GitHub\'a bağlanılamadı</string>
     <string name="settings_update_view_release">Sürümü görüntüle</string>
     <string name="settings_update_open_releases">Sürümleri görüntüle</string>
 </resources>

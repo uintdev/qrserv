@@ -71,6 +71,7 @@ import dev.uint.qrserv.ui.theme.subtleContainerColor
 import dev.uint.qrserv.ui.theme.transparentTopAppBarColors
 import dev.uint.qrserv.util.ManifestUtils
 import dev.uint.qrserv.util.RELEASES_URL
+import dev.uint.qrserv.util.UpdateCheckFailure
 import dev.uint.qrserv.util.UpdateCheckResult
 import dev.uint.qrserv.util.UpdateCheckState
 import dev.uint.qrserv.viewmodel.QRServViewModel
@@ -168,13 +169,12 @@ fun SettingsScreen(
                 )
             }
 
-            // Empty before 36, or without 5 GHz: the hotspot then always uses the system default. It's still
-            // shown, disabled, on Android 13 to 15 where 5 GHz exists, since an update would unlock it.
+            // Empty before 36, without 5 GHz, or where the hotspot can't be used: the hotspot then always uses
+            // the system default. It's still shown, disabled, on Android 13 to 15 where 5 GHz exists, since an
+            // update would unlock it.
             val bandOptions = uiState.hotspotBandOptions
             val bandEnabled = bandOptions.isNotEmpty()
-            // Not where the hotspot can't be used at all, e.g. blocked by a device policy.
-            val hotspotUsable = uiState.hotspotAvailability.unavailable == null
-            if (hotspotUsable && (bandEnabled || uiState.hotspotBandNeedsNewerAndroid)) {
+            if (bandEnabled || uiState.hotspotBandNeedsNewerAndroid) {
                 SectionHeader(stringResource(R.string.hotspot_screen_title))
                 SettingsGroup {
                     ListItem(
@@ -294,7 +294,12 @@ fun SettingsScreen(
         )
     }
 
-    if (showBandDialog) {
+    // The hotspot can become unusable while the dialog is open, e.g. a device policy set on return to the app.
+    val bandSelectable = uiState.hotspotBandOptions.isNotEmpty()
+    LaunchedEffect(bandSelectable) {
+        if (!bandSelectable) showBandDialog = false
+    }
+    if (showBandDialog && bandSelectable) {
         ChoiceDialog(
             title = stringResource(R.string.settings_hotspot_band_list_title),
             options = uiState.hotspotBandOptions,
@@ -361,11 +366,13 @@ private fun UpdateResultDialog(result: UpdateCheckResult, onOpenLink: (String) -
         is UpdateCheckResult.UpdateAvailable -> stringResource(R.string.settings_update_available, result.version)
         UpdateCheckResult.UpToDate -> stringResource(R.string.settings_update_latest)
         is UpdateCheckResult.NewerThanLatest -> stringResource(R.string.settings_update_newer, result.latestVersion)
-        UpdateCheckResult.Failed -> stringResource(R.string.settings_update_failed)
+        is UpdateCheckResult.Failed -> stringResource(R.string.settings_update_failed)
     }
+    // On a line of its own, under the message.
+    val reason = (result as? UpdateCheckResult.Failed)?.let { failureReason(it.reason) }
     val link = when (result) {
         is UpdateCheckResult.UpdateAvailable -> R.string.settings_update_view_release to result.releaseUrl
-        UpdateCheckResult.Failed -> R.string.settings_update_open_releases to RELEASES_URL
+        is UpdateCheckResult.Failed -> R.string.settings_update_open_releases to RELEASES_URL
         else -> null
     }
     AlertDialog(
@@ -375,7 +382,12 @@ private fun UpdateResultDialog(result: UpdateCheckResult, onOpenLink: (String) -
             ReducedDialogScrim()
             Text(stringResource(R.string.settings_update_dialog_title))
         },
-        text = { Text(message) },
+        text = {
+            Column {
+                Text(message)
+                reason?.let { Text(it) }
+            }
+        },
         confirmButton = {
             if (link != null) {
                 TextButton(onClick = { onOpenLink(link.second) }) { Text(stringResource(link.first)) }
@@ -387,6 +399,17 @@ private fun UpdateResultDialog(result: UpdateCheckResult, onOpenLink: (String) -
             { TextButton(onClick = onDismiss) { Text(stringResource(R.string.about_close)) } }
         },
     )
+}
+
+// The HTTP status goes in as text so it keeps its usual digits in every locale, e.g. not ۴۰۳ in Persian.
+@Composable
+private fun failureReason(failure: UpdateCheckFailure): String? = when (failure) {
+    is UpdateCheckFailure.HttpError -> stringResource(R.string.settings_update_failed_http, failure.status.toString())
+    UpdateCheckFailure.InvalidResponse -> stringResource(R.string.settings_update_failed_invalid)
+    UpdateCheckFailure.TimedOut -> stringResource(R.string.settings_update_failed_timeout)
+    UpdateCheckFailure.CertificateInvalid -> stringResource(R.string.settings_update_failed_certificate)
+    UpdateCheckFailure.NoConnection -> stringResource(R.string.settings_update_failed_noconnection)
+    UpdateCheckFailure.Other -> null
 }
 
 @Composable

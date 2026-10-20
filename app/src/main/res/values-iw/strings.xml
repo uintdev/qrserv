@@ -207,6 +207,11 @@
     <string name="settings_update_latest">הגרסה שלך היא העדכנית ביותר</string>
     <string name="settings_update_newer">גרסה זו חדשה מהמהדורה האחרונה (%1$s)</string>
     <string name="settings_update_failed">לא ניתן לבדוק עדכונים</string>
+    <string name="settings_update_failed_http">השרת השיב עם HTTP %1$s</string>
+    <string name="settings_update_failed_invalid">התגובה אינה מהדורה תקינה</string>
+    <string name="settings_update_failed_timeout">הזמן המוקצב לבקשה עבר</string>
+    <string name="settings_update_failed_certificate">האישור של השרת אינו תקף</string>
+    <string name="settings_update_failed_noconnection">לא ניתן להתחבר ל-GitHub</string>
     <string name="settings_update_view_release">הצג מהדורה</string>
     <string name="settings_update_open_releases">הצג מהדורות</string>
 </resources>

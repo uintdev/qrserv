@@ -8,11 +8,17 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.InetAddress
+import java.net.NoRouteToHostException
 import java.net.Proxy
 import java.net.ProxySelector
+import java.net.SocketTimeoutException
 import java.net.URL
+import java.net.UnknownHostException
+import java.security.cert.CertificateException
+import javax.net.ssl.SSLPeerUnverifiedException
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration.Companion.seconds
 
@@ -37,7 +43,24 @@ sealed interface UpdateCheckResult {
 
     data class NewerThanLatest(val latestVersion: String) : UpdateCheckResult
 
-    data object Failed : UpdateCheckResult
+    data class Failed(val reason: UpdateCheckFailure) : UpdateCheckResult
+}
+
+sealed interface UpdateCheckFailure {
+    /** GitHub answered with a client or server error, such as 403 when rate-limited. */
+    data class HttpError(val status: Int) : UpdateCheckFailure
+
+    /** Not a release as expected: not JSON, too large, or without a plain version. */
+    data object InvalidResponse : UpdateCheckFailure
+
+    data object TimedOut : UpdateCheckFailure
+
+    data object CertificateInvalid : UpdateCheckFailure
+
+    data object NoConnection : UpdateCheckFailure
+
+    /** Nothing more specific to say, such as an installed version that can't be compared. */
+    data object Other : UpdateCheckFailure
 }
 
 sealed interface UpdateCheckState {
@@ -64,25 +87,20 @@ internal fun compareVersions(a: List<Int>, b: List<Int>): Int {
     return 0
 }
 
-// A release's page on GitHub, under the repository's current name; its tag is checked separately.
-private val ReleasePageUrl = Regex("""https://github\.com/(?!\.+/)[A-Za-z0-9_.-]+/(?!\.+/)[A-Za-z0-9_.-]+/releases/tag/(.+)""")
-
 /** What GitHub's latest-release response means for [installedVersion]. */
 internal fun updateCheckResult(installedVersion: String, body: String): UpdateCheckResult {
-    val release = runCatching { JSONObject(body) }.getOrNull() ?: return UpdateCheckResult.Failed
-    if (release.optBoolean("prerelease") || release.optBoolean("draft")) return UpdateCheckResult.Failed
+    val invalid = UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse)
+    val release = runCatching { JSONObject(body) }.getOrNull() ?: return invalid
+    if (release.optBoolean("prerelease") || release.optBoolean("draft")) return invalid
     val tag = release.optString("tag_name")
-    val latest = parseVersion(tag) ?: return UpdateCheckResult.Failed
-    val installed = parseVersion(installedVersion) ?: return UpdateCheckResult.Failed
+    val latest = parseVersion(tag) ?: return invalid
+    val installed = parseVersion(installedVersion) ?: return UpdateCheckResult.Failed(UpdateCheckFailure.Other)
     val latestVersion = tag.removePrefix("v")
     val order = compareVersions(latest, installed)
     return when {
-        order > 0 -> {
-            // Only ever a GitHub release page for the tag shown, whatever the response says.
-            val url = release.optString("html_url")
-                .takeIf { ReleasePageUrl.matchEntire(it)?.groupValues?.get(1) == tag } ?: RELEASES_URL
-            UpdateCheckResult.UpdateAvailable(latestVersion, url)
-        }
+        // Built from the tag rather than taken from the response's html_url, so it can only ever lead to this
+        // repository. The tag is only "v" and numbers, as parsed above. After a rename, GitHub redirects it.
+        order > 0 -> UpdateCheckResult.UpdateAvailable(latestVersion, "$RELEASES_URL/tag/$tag")
         order < 0 -> UpdateCheckResult.NewerThanLatest(latestVersion)
         else -> UpdateCheckResult.UpToDate
     }
@@ -91,10 +109,27 @@ internal fun updateCheckResult(installedVersion: String, body: String): UpdateCh
 // Not a child of the caller: a stalled DNS lookup can't be interrupted, and the deadline mustn't wait for it.
 private val requestScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+/** Why a response other than 200 failed: its status for a client or server error, otherwise not a release. */
+internal fun failureForStatus(status: Int): UpdateCheckFailure =
+    if (status in 400..599) UpdateCheckFailure.HttpError(status) else UpdateCheckFailure.InvalidResponse
+
+/** Why the request threw, from anywhere in the cause chain: Android wraps a certificate error in a handshake one. */
+internal fun failureForException(e: Throwable): UpdateCheckFailure {
+    val chain = generateSequence(e) { it.cause }.take(16).toList()
+    return when {
+        chain.any { it is SocketTimeoutException } -> UpdateCheckFailure.TimedOut
+        chain.any { it is CertificateException || it is SSLPeerUnverifiedException } ->
+            UpdateCheckFailure.CertificateInvalid
+        chain.any { it is UnknownHostException || it is ConnectException || it is NoRouteToHostException } ->
+            UpdateCheckFailure.NoConnection
+        else -> UpdateCheckFailure.Other
+    }
+}
+
 /** Asks GitHub for its latest release. Never throws: anything that goes wrong is [UpdateCheckResult.Failed]. */
 suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
     val connection = runCatching { URL(LATEST_RELEASE_API).openConnection() as HttpURLConnection }
-        .getOrElse { return UpdateCheckResult.Failed }
+        .getOrElse { return UpdateCheckResult.Failed(UpdateCheckFailure.Other) }
     val request = requestScope.async {
         // A lookup can't be interrupted, so a late answer mustn't still send the request. Not through a
         // proxy, which does its own.
@@ -102,14 +137,17 @@ suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
             InetAddress.getAllByName(connection.url.host)
             ensureActive()
         }
-        fetch(connection)?.let { updateCheckResult(installedVersion, it) } ?: UpdateCheckResult.Failed
+        val status = send(connection)
+        if (status != HttpURLConnection.HTTP_OK) return@async UpdateCheckResult.Failed(failureForStatus(status))
+        readBody(connection)?.let { updateCheckResult(installedVersion, it) }
+            ?: UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse)
     }
     return try {
-        withTimeoutOrNull(CHECK_TIMEOUT) { request.await() } ?: UpdateCheckResult.Failed
+        withTimeoutOrNull(CHECK_TIMEOUT) { request.await() } ?: UpdateCheckResult.Failed(UpdateCheckFailure.TimedOut)
     } catch (e: CancellationException) {
         throw e
-    } catch (_: Exception) {
-        UpdateCheckResult.Failed
+    } catch (e: Exception) {
+        UpdateCheckResult.Failed(failureForException(e))
     } finally {
         // Closes the socket, so a stalled connect or read ends now rather than at its own timeout.
         connection.disconnect()
@@ -121,19 +159,20 @@ private fun isDirect(url: URL): Boolean =
     runCatching { ProxySelector.getDefault()?.select(url.toURI())?.all { it.type() == Proxy.Type.DIRECT } }
         .getOrNull() ?: true
 
-/**
- * The latest release's JSON, or null for a non-200 response or one over [MAX_RESPONSE_BYTES]. Throws on a
- * network failure.
- */
-private fun fetch(connection: HttpURLConnection): String? {
+/** Sends the request and returns the response's status, -1 if it isn't HTTP. Throws on a network failure. */
+private fun send(connection: HttpURLConnection): Int {
     connection.connectTimeout = CONNECT_TIMEOUT.inWholeMilliseconds.toInt()
     connection.readTimeout = READ_TIMEOUT.inWholeMilliseconds.toInt()
     connection.setRequestProperty("Accept", "application/vnd.github+json")
     connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28")
     // GitHub's API refuses requests without one, and Android's default names the device model.
     connection.setRequestProperty("User-Agent", "QRServ")
-    if (connection.responseCode != HttpURLConnection.HTTP_OK) return null
-    return connection.inputStream.use { input ->
+    return connection.responseCode
+}
+
+/** The response's body, or null for one over [MAX_RESPONSE_BYTES]. Throws on a network failure. */
+private fun readBody(connection: HttpURLConnection): String? =
+    connection.inputStream.use { input ->
         val bytes = ByteArrayOutputStream()
         val buffer = ByteArray(8192)
         while (true) {
@@ -142,6 +181,5 @@ private fun fetch(connection: HttpURLConnection): String? {
             bytes.write(buffer, 0, read)
             if (bytes.size() > MAX_RESPONSE_BYTES) return null
         }
-        String(bytes.toByteArray(), Charsets.UTF_8)
+        bytes.toString(Charsets.UTF_8.name())
     }
-}

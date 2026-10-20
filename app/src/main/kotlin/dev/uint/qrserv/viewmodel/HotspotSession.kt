@@ -82,13 +82,17 @@ class HotspotSession internal constructor(
     internal val isActive: Boolean
         get() = controller?.isActive == true
 
-    internal fun initialState(state: AppUiState): AppUiState {
-        val bandOptions = controller?.selectableBands.orEmpty()
+    internal fun initialState(state: AppUiState): AppUiState = withAvailability(state, computeAvailability())
+
+    // The band is only asked of Wi-Fi where the hotspot can be used; without Wi-Fi there's no WifiManager.
+    private fun withAvailability(state: AppUiState, availability: HotspotAvailability): AppUiState {
+        val usable = availability.unavailable == null
+        val bandOptions = controller?.takeIf { usable }?.selectableBands.orEmpty()
         return state.copy(
             hotspotBand = readBand(bandOptions),
             hotspotBandOptions = bandOptions,
-            hotspotBandNeedsNewerAndroid = controller?.bandChoiceNeedsNewerAndroid == true,
-            hotspotAvailability = computeAvailability(),
+            hotspotBandNeedsNewerAndroid = usable && controller?.bandChoiceNeedsNewerAndroid == true,
+            hotspotAvailability = availability,
         )
     }
 
@@ -110,7 +114,8 @@ class HotspotSession internal constructor(
     }
 
     internal fun onAppResumed() {
-        uiState.update { it.copy(hotspotAvailability = computeAvailability()) }
+        val availability = computeAvailability()
+        uiState.update { withAvailability(it, availability) }
         controller?.recheck()
         val fixed = when (uiState.value.hotspotDialog) {
             HotspotDialog.NEARBY_SETTINGS -> isNearbyGranted()
@@ -153,7 +158,7 @@ class HotspotSession internal constructor(
         if (host.rejectIfBusy()) return
         val controller = controller ?: return
         val availability = computeAvailability()
-        uiState.update { it.copy(hotspotAvailability = availability) }
+        uiState.update { withAvailability(it, availability) }
         pendingIntent = intent
         when (hotspotPreflight(availability.unavailable, controller.isWifiControlAllowed(), isNearbyGranted())) {
             HotspotPreflight.Ready -> start()
