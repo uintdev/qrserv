@@ -1,7 +1,12 @@
 package dev.uint.qrserv.util
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -12,6 +17,8 @@ import java.net.UnknownHostException
 import java.security.cert.CertificateExpiredException
 import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLPeerUnverifiedException
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class UpdateCheckTest {
 
@@ -113,6 +120,80 @@ class UpdateCheckTest {
         assertEquals(invalid, updateCheckResult("4.3.0", "<html>rate limited</html>"))
         assertEquals(invalid, updateCheckResult("4.3.0", release("v4.4.0", prerelease = true)))
         assertEquals(invalid, updateCheckResult("4.3.0", release("nightly")))
+    }
+
+    @Test
+    fun jsonNullTagIsInvalid() {
+        // Android's optString gives "null" here, where the reference org.json gives "": the tests run on Android's.
+        assertEquals("null", JSONObject("""{"tag_name":null}""").optString("tag_name"))
+        assertEquals(
+            UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse),
+            updateCheckResult("4.3.0", """{"tag_name":null,"prerelease":false,"draft":false}"""),
+        )
+    }
+
+    @Test
+    fun okResponseIsReadAsARelease() {
+        assertEquals(UpdateCheckResult.UpToDate, responseResult("4.3.0", 200) { release("v4.3.0") })
+    }
+
+    @Test
+    fun errorResponseIsntReadAndGivesItsStatus() {
+        for (status in listOf(403, 404, 500)) {
+            val result = responseResult("4.3.0", status) { throw AssertionError("body read for $status") }
+            assertEquals(UpdateCheckResult.Failed(UpdateCheckFailure.HttpError(status)), result)
+        }
+    }
+
+    @Test
+    fun responseThatIsntAnErrorOrA200IsInvalid() {
+        for (status in listOf(-1, 204, 301)) {
+            val result = responseResult("4.3.0", status) { throw AssertionError("body read for $status") }
+            assertEquals(UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse), result)
+        }
+    }
+
+    @Test
+    fun oversizedOrUnparseableBodyIsInvalid() {
+        val invalid = UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse)
+        assertEquals(invalid, responseResult("4.3.0", 200) { null })
+        assertEquals(invalid, responseResult("4.3.0", 200) { "<html>captive portal</html>" })
+    }
+
+    @Test
+    fun requestsResultIsPassedOn() = runBlocking {
+        val request = CompletableDeferred<UpdateCheckResult>(UpdateCheckResult.UpToDate)
+        assertEquals(UpdateCheckResult.UpToDate, awaitResult(request, 10.seconds))
+    }
+
+    @Test
+    fun requestThatOutlastsTheDeadlineTimesOut() = runBlocking {
+        val request = CompletableDeferred<UpdateCheckResult>()
+        assertEquals(UpdateCheckResult.Failed(UpdateCheckFailure.TimedOut), awaitResult(request, 50.milliseconds))
+    }
+
+    @Test
+    fun requestThatThrowsGivesWhy() = runBlocking {
+        val certificate = CompletableDeferred<UpdateCheckResult>()
+        certificate.completeExceptionally(SSLHandshakeException("handshake").apply { initCause(CertificateExpiredException()) })
+        assertEquals(UpdateCheckResult.Failed(UpdateCheckFailure.CertificateInvalid), awaitResult(certificate, 10.seconds))
+
+        val readTimeout = CompletableDeferred<UpdateCheckResult>()
+        readTimeout.completeExceptionally(SocketTimeoutException())
+        assertEquals(UpdateCheckResult.Failed(UpdateCheckFailure.TimedOut), awaitResult(readTimeout, 10.seconds))
+    }
+
+    @Test
+    fun callerBeingCanceledIsntTurnedIntoAFailure() = runBlocking {
+        // Were it returned as a failure, the caller would go on to show it, e.g. after leaving Settings.
+        var returned = false
+        val waiting = launch(start = CoroutineStart.UNDISPATCHED) {
+            awaitResult(CompletableDeferred(), 10.seconds)
+            returned = true
+        }
+        waiting.cancel()
+        waiting.join()
+        assertFalse(returned)
     }
 
     @Test

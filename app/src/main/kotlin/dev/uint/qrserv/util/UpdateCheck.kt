@@ -1,6 +1,7 @@
 package dev.uint.qrserv.util
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -20,12 +21,16 @@ import java.net.UnknownHostException
 import java.security.cert.CertificateException
 import javax.net.ssl.SSLPeerUnverifiedException
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+// By name, as are the release pages built from it: after an account or repository rename, GitHub redirects
+// them only until someone else takes the old name.
 const val RELEASES_URL = "https://github.com/uintdev/qrserv/releases"
 
 // GitHub's "latest" release is never a pre-release or a draft. By the repository's ID rather than its
-// name: that survives an account or repository rename, and a freed-up old name can't take the check over.
+// name: that survives an account or repository rename, and a freed-up old name can't take the check over
+// (though it would take the release pages, see RELEASES_URL).
 private const val LATEST_RELEASE_API = "https://api.github.com/repositories/343788099/releases/latest"
 
 // The whole check, DNS lookup included -- which the connection's own timeouts don't cover.
@@ -47,16 +52,20 @@ sealed interface UpdateCheckResult {
 }
 
 sealed interface UpdateCheckFailure {
-    /** GitHub answered with a client or server error, such as 403 when rate-limited. */
+    /** A client or server error, such as 403 when GitHub rate-limits -- or from a proxy on the way. */
     data class HttpError(val status: Int) : UpdateCheckFailure
 
-    /** Not a release as expected: not JSON, too large, or without a plain version. */
+    /**
+     * An answer that isn't a release: a status other than 200 that isn't an error (or no HTTP at all), or a
+     * body that isn't JSON, is too large, or has no plain version -- such as a captive portal's page.
+     */
     data object InvalidResponse : UpdateCheckFailure
 
     data object TimedOut : UpdateCheckFailure
 
     data object CertificateInvalid : UpdateCheckFailure
 
+    /** The server, or a proxy on the way to it, couldn't be looked up or reached. */
     data object NoConnection : UpdateCheckFailure
 
     /** Nothing more specific to say, such as an installed version that can't be compared. */
@@ -98,8 +107,8 @@ internal fun updateCheckResult(installedVersion: String, body: String): UpdateCh
     val latestVersion = tag.removePrefix("v")
     val order = compareVersions(latest, installed)
     return when {
-        // Built from the tag rather than taken from the response's html_url, so it can only ever lead to this
-        // repository. The tag is only "v" and numbers, as parsed above. After a rename, GitHub redirects it.
+        // Built from the tag rather than taken from the response's html_url, so the response can't point it
+        // anywhere else; the tag is only "v" and numbers, as parsed above. By name, like RELEASES_URL.
         order > 0 -> UpdateCheckResult.UpdateAvailable(latestVersion, "$RELEASES_URL/tag/$tag")
         order < 0 -> UpdateCheckResult.NewerThanLatest(latestVersion)
         else -> UpdateCheckResult.UpToDate
@@ -109,13 +118,16 @@ internal fun updateCheckResult(installedVersion: String, body: String): UpdateCh
 // Not a child of the caller: a stalled DNS lookup can't be interrupted, and the deadline mustn't wait for it.
 private val requestScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-/** Why a response other than 200 failed: its status for a client or server error, otherwise not a release. */
+/**
+ * Why a response other than 200 failed: its status for a client or server error. Anything else -- a redirect
+ * that wasn't followed, a 204, or -1 for an answer that isn't HTTP -- isn't a release.
+ */
 internal fun failureForStatus(status: Int): UpdateCheckFailure =
     if (status in 400..599) UpdateCheckFailure.HttpError(status) else UpdateCheckFailure.InvalidResponse
 
 /** Why the request threw, from anywhere in the cause chain: Android wraps a certificate error in a handshake one. */
 internal fun failureForException(e: Throwable): UpdateCheckFailure {
-    val chain = generateSequence(e) { it.cause }.take(16).toList()
+    val chain = e.causeChain().toList()
     return when {
         chain.any { it is SocketTimeoutException } -> UpdateCheckFailure.TimedOut
         chain.any { it is CertificateException || it is SSLPeerUnverifiedException } ->
@@ -125,6 +137,29 @@ internal fun failureForException(e: Throwable): UpdateCheckFailure {
         else -> UpdateCheckFailure.Other
     }
 }
+
+/**
+ * What an answer with [status] means. [readBody] is only called for a 200, and gives null for a body over
+ * [MAX_RESPONSE_BYTES].
+ */
+internal fun responseResult(installedVersion: String, status: Int, readBody: () -> String?): UpdateCheckResult {
+    if (status != HttpURLConnection.HTTP_OK) return UpdateCheckResult.Failed(failureForStatus(status))
+    val body = readBody() ?: return UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse)
+    return updateCheckResult(installedVersion, body)
+}
+
+/**
+ * [request]'s result, if it has one within [timeout]; otherwise, or if it throws, why it failed. Only the
+ * caller being canceled is thrown.
+ */
+internal suspend fun awaitResult(request: Deferred<UpdateCheckResult>, timeout: Duration): UpdateCheckResult =
+    try {
+        withTimeoutOrNull(timeout) { request.await() } ?: UpdateCheckResult.Failed(UpdateCheckFailure.TimedOut)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        UpdateCheckResult.Failed(failureForException(e))
+    }
 
 /** Asks GitHub for its latest release. Never throws: anything that goes wrong is [UpdateCheckResult.Failed]. */
 suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
@@ -138,16 +173,10 @@ suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
             ensureActive()
         }
         val status = send(connection)
-        if (status != HttpURLConnection.HTTP_OK) return@async UpdateCheckResult.Failed(failureForStatus(status))
-        readBody(connection)?.let { updateCheckResult(installedVersion, it) }
-            ?: UpdateCheckResult.Failed(UpdateCheckFailure.InvalidResponse)
+        responseResult(installedVersion, status) { readBody(connection) }
     }
     return try {
-        withTimeoutOrNull(CHECK_TIMEOUT) { request.await() } ?: UpdateCheckResult.Failed(UpdateCheckFailure.TimedOut)
-    } catch (e: CancellationException) {
-        throw e
-    } catch (e: Exception) {
-        UpdateCheckResult.Failed(failureForException(e))
+        awaitResult(request, CHECK_TIMEOUT)
     } finally {
         // Closes the socket, so a stalled connect or read ends now rather than at its own timeout.
         connection.disconnect()
