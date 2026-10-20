@@ -200,10 +200,10 @@
     <string name="settings_update_newer">Diese Version ist neuer als die neueste Veröffentlichung (%1$s)</string>
     <string name="settings_update_failed">Suche nach Updates fehlgeschlagen</string>
     <string name="settings_update_failed_http">Der Server antwortete mit HTTP %1$s</string>
-    <string name="settings_update_failed_invalid">Die Antwort war keine gültige Veröffentlichung</string>
+    <string name="settings_update_failed_invalid">Die Antwort war ungültig</string>
     <string name="settings_update_failed_timeout">Zeitüberschreitung bei der Anfrage</string>
     <string name="settings_update_failed_certificate">Das Zertifikat des Servers ist ungültig</string>
-    <string name="settings_update_failed_noconnection">Keine Verbindung zu GitHub möglich</string>
+    <string name="settings_update_failed_noconnection">Keine Verbindung zum Server möglich</string>
     <string name="settings_update_view_release">Veröffentlichung ansehen</string>
     <string name="settings_update_open_releases">Veröffentlichungen ansehen</string>
 </resources>

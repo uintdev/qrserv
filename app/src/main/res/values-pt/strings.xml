@@ -204,10 +204,10 @@
     <string name="settings_update_newer">Esta versão é mais recente do que a última versão publicada (%1$s)</string>
     <string name="settings_update_failed">Não foi possível procurar atualizações</string>
     <string name="settings_update_failed_http">O servidor respondeu com HTTP %1$s</string>
-    <string name="settings_update_failed_invalid">A resposta não era uma versão válida</string>
+    <string name="settings_update_failed_invalid">A resposta não era válida</string>
     <string name="settings_update_failed_timeout">O pedido excedeu o tempo limite</string>
     <string name="settings_update_failed_certificate">O certificado do servidor não é válido</string>
-    <string name="settings_update_failed_noconnection">Não foi possível ligar ao GitHub</string>
+    <string name="settings_update_failed_noconnection">Não foi possível ligar ao servidor</string>
     <string name="settings_update_view_release">Ver versão</string>
     <string name="settings_update_open_releases">Ver versões</string>
 </resources>

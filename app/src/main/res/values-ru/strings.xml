@@ -208,10 +208,10 @@
     <string name="settings_update_newer">Эта версия новее последнего релиза (%1$s)</string>
     <string name="settings_update_failed">Не удалось проверить обновления</string>
     <string name="settings_update_failed_http">Сервер ответил кодом HTTP %1$s</string>
-    <string name="settings_update_failed_invalid">Ответ не содержит корректного релиза</string>
+    <string name="settings_update_failed_invalid">Получен некорректный ответ</string>
     <string name="settings_update_failed_timeout">Время ожидания запроса истекло</string>
     <string name="settings_update_failed_certificate">Сертификат сервера недействителен</string>
-    <string name="settings_update_failed_noconnection">Не удалось подключиться к GitHub</string>
+    <string name="settings_update_failed_noconnection">Не удалось подключиться к серверу</string>
     <string name="settings_update_view_release">Открыть релиз</string>
     <string name="settings_update_open_releases">Открыть релизы</string>
 </resources>

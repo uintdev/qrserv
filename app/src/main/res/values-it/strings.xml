@@ -204,10 +204,10 @@
     <string name="settings_update_newer">Questa versione è più recente dell\'ultimo rilascio (%1$s)</string>
     <string name="settings_update_failed">Impossibile controllare gli aggiornamenti</string>
     <string name="settings_update_failed_http">Il server ha risposto con HTTP %1$s</string>
-    <string name="settings_update_failed_invalid">La risposta non era un rilascio valido</string>
+    <string name="settings_update_failed_invalid">La risposta non era valida</string>
     <string name="settings_update_failed_timeout">La richiesta è scaduta</string>
     <string name="settings_update_failed_certificate">Il certificato del server non è valido</string>
-    <string name="settings_update_failed_noconnection">Impossibile connettersi a GitHub</string>
+    <string name="settings_update_failed_noconnection">Impossibile connettersi al server</string>
     <string name="settings_update_view_release">Visualizza rilascio</string>
     <string name="settings_update_open_releases">Visualizza rilasci</string>
 </resources>
