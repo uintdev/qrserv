@@ -33,7 +33,7 @@ class ServerControllerTest {
     @Before
     fun setUp() {
         file = File.createTempFile("qrserv", ".bin").apply { writeBytes(ByteArray(1234) { it.toByte() }) }
-        info = FileInfo(name = "report.pdf", path = file.path, pathPart = file.parent, length = file.length())
+        info = FileInfo(name = "report.pdf", path = file.path, pathPart = file.parent!!, length = file.length())
     }
 
     @After
@@ -62,11 +62,6 @@ class ServerControllerTest {
         val deadline = TimeSource.Monotonic.markNow() + timeout
         while (!condition() && deadline.hasNotPassedNow()) Thread.sleep(10)
         return condition()
-    }
-
-    private fun awaitTransfers(expected: Int): Int {
-        await { ServingState.activeTransfers.value == expected }
-        return ServingState.activeTransfers.value
     }
 
     @Test
@@ -118,6 +113,8 @@ class ServerControllerTest {
         assertEquals(206, connection.responseCode)
         assertEquals(file.readBytes().drop(1000), connection.inputStream.use { it.readBytes() }.toList())
         assertEquals(1, downloadsResumed.get())
-        assertEquals(0, awaitTransfers(0))
+        // The transfer ends just after the body is read, on the server's thread.
+        await { ServingState.activeTransfers.value == 0 }
+        assertEquals(0, ServingState.activeTransfers.value)
     }
 }

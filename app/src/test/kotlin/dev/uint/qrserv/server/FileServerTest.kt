@@ -27,7 +27,7 @@ class FileServerTest {
     @Before
     fun setUp() {
         file = File.createTempFile("qrserv", ".bin").apply { writeBytes(ByteArray(1234) { it.toByte() }) }
-        val info = FileInfo(name = "report.pdf", path = file.path, pathPart = file.parent, length = file.length())
+        val info = FileInfo(name = "report.pdf", path = file.path, pathPart = file.parent!!, length = file.length())
         server = FileServer(
             port = 0,
             bindAddress = "127.0.0.1",
