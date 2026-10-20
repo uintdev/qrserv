@@ -164,8 +164,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
     testImplementation("junit:junit:4.13.2")
-    // Android's own org.json is a stub in local unit tests.
-    testImplementation("org.json:json:20260814")
+    // Android's own org.json is a stub in local unit tests. This is Android's implementation, from AOSP, rather
+    // than the reference org.json, which differs in places (e.g. optString on a JSON null).
+    testImplementation("com.vaadin.external.google:android-json:0.0.20131108.vaadin1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2026.09.00"))
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
