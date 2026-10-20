@@ -67,9 +67,8 @@ internal fun compareVersions(a: List<Int>, b: List<Int>): Int {
 // A release's page on GitHub, under the repository's current name; its tag is checked separately.
 private val ReleasePageUrl = Regex("""https://github\.com/(?!\.+/)[A-Za-z0-9_.-]+/(?!\.+/)[A-Za-z0-9_.-]+/releases/tag/(.+)""")
 
-/** What GitHub's latest-release response means for [installedVersion]; null [body] for a failed request. */
-internal fun updateCheckResult(installedVersion: String, body: String?): UpdateCheckResult {
-    if (body == null) return UpdateCheckResult.Failed
+/** What GitHub's latest-release response means for [installedVersion]. */
+internal fun updateCheckResult(installedVersion: String, body: String): UpdateCheckResult {
     val release = runCatching { JSONObject(body) }.getOrNull() ?: return UpdateCheckResult.Failed
     if (release.optBoolean("prerelease") || release.optBoolean("draft")) return UpdateCheckResult.Failed
     val tag = release.optString("tag_name")
@@ -79,7 +78,7 @@ internal fun updateCheckResult(installedVersion: String, body: String?): UpdateC
     val order = compareVersions(latest, installed)
     return when {
         order > 0 -> {
-            // Only ever the page of the release shown, whatever the response says.
+            // Only ever a GitHub release page for the tag shown, whatever the response says.
             val url = release.optString("html_url")
                 .takeIf { ReleasePageUrl.matchEntire(it)?.groupValues?.get(1) == tag } ?: RELEASES_URL
             UpdateCheckResult.UpdateAvailable(latestVersion, url)
@@ -103,7 +102,7 @@ suspend fun checkForUpdate(installedVersion: String): UpdateCheckResult {
             InetAddress.getAllByName(connection.url.host)
             ensureActive()
         }
-        updateCheckResult(installedVersion, fetch(connection))
+        fetch(connection)?.let { updateCheckResult(installedVersion, it) } ?: UpdateCheckResult.Failed
     }
     return try {
         withTimeoutOrNull(CHECK_TIMEOUT) { request.await() } ?: UpdateCheckResult.Failed

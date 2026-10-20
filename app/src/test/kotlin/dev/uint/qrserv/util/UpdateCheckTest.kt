@@ -84,7 +84,6 @@ class UpdateCheckTest {
 
     @Test
     fun anythingElseIsAFailure() {
-        assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", null))
         assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", "<html>rate limited</html>"))
         assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", release("v4.4.0", prerelease = true)))
         assertEquals(UpdateCheckResult.Failed, updateCheckResult("4.3.0", release("nightly")))
