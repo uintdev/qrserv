@@ -9,6 +9,7 @@ import android.provider.OpenableColumns
 import dev.uint.qrserv.data.ArchivedEntry
 import dev.uint.qrserv.data.FileInfo
 import dev.uint.qrserv.util.TokenGenerator
+import dev.uint.qrserv.util.causeChain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -50,14 +51,8 @@ private fun importFailureResult(error: Throwable): ImportResult = when {
  * to be read out of the message and the whole cause chain has to be walked to find it. ENOSPC is
  * matched rather than the text beside it, being the part that isn't free to be reworded.
  */
-private fun isOutOfSpace(error: Throwable): Boolean {
-    var current: Throwable? = error
-    while (current != null) {
-        if (current.message?.contains("ENOSPC") == true) return true
-        current = current.cause
-    }
-    return false
-}
+private fun isOutOfSpace(error: Throwable): Boolean =
+    error.causeChain().any { it.message?.contains("ENOSPC") == true }
 
 /**
  * Reduces a provider-supplied name to a bare filename. DISPLAY_NAME is whatever the providing app
