@@ -23,6 +23,7 @@
     </plurals>
     <string name="info_idle_stopped">Megosztás leállítva: egy ideje nem volt letöltés</string>
     <string name="info_no_file_picker">Nincs fájlválasztó. Osszon meg fájlt a QRServ-vel egy másik alkalmazásból</string>
+    <string name="info_no_settings">A beállítások nem nyithatók meg ezen az eszközön</string>
     <string name="page_info_unhandlederror_label">Hiba</string>
     <string name="page_info_unhandlederror_msg">Váratlan hiba történt</string>
     <string name="page_info_unhandlederror_hint">Tartsa lenyomva a részletek megosztásához</string>

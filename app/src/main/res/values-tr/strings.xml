@@ -23,6 +23,7 @@
     </plurals>
     <string name="info_idle_stopped">Paylaşım durduruldu: bir süredir indirme yok</string>
     <string name="info_no_file_picker">Dosya seçici bulunamadı. Dosyaları başka bir uygulamadan QRServ\'e paylaşın</string>
+    <string name="info_no_settings">Ayarlar bu cihazda açılamıyor</string>
     <string name="page_info_unhandlederror_label">Hata</string>
     <string name="page_info_unhandlederror_msg">Beklenmeyen bir hata oluştu</string>
     <string name="page_info_unhandlederror_hint">Ayrıntıları paylaşmak için basılı tutun</string>

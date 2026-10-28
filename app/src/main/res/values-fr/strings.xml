@@ -24,6 +24,7 @@
     </plurals>
     <string name="info_idle_stopped">Partage arrêté : aucun téléchargement depuis un moment</string>
     <string name="info_no_file_picker">Aucun sélecteur de fichiers. Partagez vers QRServ depuis une autre app</string>
+    <string name="info_no_settings">Impossible d\'ouvrir les paramètres sur cet appareil</string>
     <string name="page_info_unhandlederror_label">Erreur</string>
     <string name="page_info_unhandlederror_msg">Une erreur inattendue s\'est produite</string>
     <string name="page_info_unhandlederror_hint">Maintenez appuyé pour partager les détails</string>

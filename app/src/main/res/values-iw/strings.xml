@@ -28,6 +28,7 @@
     </plurals>
     <string name="info_idle_stopped">השיתוף הופסק: לא היו הורדות זמן מה</string>
     <string name="info_no_file_picker">לא נמצא בוחר קבצים. שתפו קבצים ל-QRServ מאפליקציה אחרת</string>
+    <string name="info_no_settings">לא ניתן לפתוח את ההגדרות במכשיר זה</string>
     <string name="page_info_unhandlederror_label">שגיאה</string>
     <string name="page_info_unhandlederror_msg">אירעה שגיאה בלתי צפויה</string>
     <string name="page_info_unhandlederror_hint">לחץ והחזק כדי לשתף את הפרטים</string>

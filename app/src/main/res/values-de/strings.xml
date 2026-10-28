@@ -23,6 +23,7 @@
     </plurals>
     <string name="info_idle_stopped">Teilen beendet: eine Weile wurde nichts heruntergeladen</string>
     <string name="info_no_file_picker">Keine Dateiauswahl gefunden. Teilen Sie Dateien aus einer anderen App</string>
+    <string name="info_no_settings">Die Einstellungen lassen sich auf diesem Gerät nicht öffnen</string>
     <string name="page_info_unhandlederror_label">Fehler</string>
     <string name="page_info_unhandlederror_msg">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="page_info_unhandlederror_hint">Zum Teilen der Details gedrückt halten</string>

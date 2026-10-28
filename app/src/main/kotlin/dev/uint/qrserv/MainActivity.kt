@@ -255,33 +255,24 @@ class MainActivity : ComponentActivity() {
 
     // No public screen for "Wi-Fi control" alone. The app's own page can be missing too, as on some TVs.
     private fun openAppSettings() {
-        listOf(
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()),
-            Intent(Settings.ACTION_SETTINGS),
-        ).any { intent ->
-            try {
-                startActivity(intent)
-                true
-            } catch (_: ActivityNotFoundException) {
-                false
-            }
-        }
+        val launched = launchFirst(
+            listOf(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()),
+                Intent(Settings.ACTION_SETTINGS),
+            ),
+        ) { startActivity(it) }
+        if (!launched) viewModel.hotspot.onAppSettingsMissing()
     }
 
     private fun requestDirectAccessPermission() {
         if (Build.VERSION.SDK_INT >= 30) {
             // Some builds (TV, Go, some OEMs) lack the per-app screen, or All files access entirely.
-            val launched = listOf(
-                Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, "package:$packageName".toUri()),
-                Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
-            ).any { intent ->
-                try {
-                    manageStorageSettingsLauncher.launch(intent)
-                    true
-                } catch (_: ActivityNotFoundException) {
-                    false
-                }
-            }
+            val launched = launchFirst(
+                listOf(
+                    Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, "package:$packageName".toUri()),
+                    Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
+                ),
+            ) { manageStorageSettingsLauncher.launch(it) }
             // Without either screen the permission can never be granted, so use the system picker.
             if (!launched) openSafPicker()
         } else {
@@ -335,6 +326,17 @@ class MainActivity : ComponentActivity() {
 }
 
 private const val STATE_STARTED_FROM_HOME_SCREEN = "started_from_home_screen"
+
+/** Launches the first of [intents] that something handles; false when nothing does. */
+private inline fun launchFirst(intents: List<Intent>, launch: (Intent) -> Unit): Boolean =
+    intents.any { intent ->
+        try {
+            launch(intent)
+            true
+        } catch (_: ActivityNotFoundException) {
+            false
+        }
+    }
 
 /** Another app's extras, or null if they can't be unpacked (an unknown class, before Android 13). */
 private inline fun <T> readExtras(intent: Intent, read: Intent.() -> T): T? =

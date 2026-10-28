@@ -201,6 +201,12 @@ class HotspotSession internal constructor(
         uiState.update { it.copy(hotspotDialog = null) }
     }
 
+    /** The dialog's settings button had nowhere to go, so it can't be resolved from here. */
+    fun onAppSettingsMissing() {
+        onHotspotDialogDismissed()
+        host.postToast(R.string.info_no_settings)
+    }
+
     private fun start() {
         val intent = pendingIntent ?: return
         pendingIntent = null
