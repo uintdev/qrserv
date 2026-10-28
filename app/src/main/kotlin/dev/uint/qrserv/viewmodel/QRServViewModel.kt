@@ -44,6 +44,7 @@ import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.AppShortcut
 import dev.uint.qrserv.util.ManifestUtils
 import dev.uint.qrserv.util.UpdateCheckState
+import dev.uint.qrserv.util.canGetDirectAccess
 import dev.uint.qrserv.util.canPostNotifications
 import dev.uint.qrserv.util.checkForUpdate
 import dev.uint.qrserv.util.hasDirectAccess
@@ -213,10 +214,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val port = Preferences.readInt(Preferences.PREF_SERVER_PORT) ?: 0
         val themeMode = readPersistedThemeMode()
         val damEligible = isDamBuildEligible()
+        val damSupported = damEligible && application.canGetDirectAccess()
         _uiState.update {
             hotspot.initialState(it).copy(
                 // Can still be on from before, e.g. restored from Android 10 or earlier, with the switch locked.
-                damEnabled = damEligible && Preferences.readBool(Preferences.PREF_CLIENT_DAM),
+                damEnabled = damSupported && Preferences.readBool(Preferences.PREF_CLIENT_DAM),
                 fiuEnabled = fiu,
                 allInterfacesEnabled = Preferences.readBool(Preferences.PREF_SERVER_ALL_INTERFACES),
                 idleStopMinutes = Preferences.readInt(Preferences.PREF_SERVER_IDLE_MINUTES)?.takeIf { it in IdleStopOptions }
@@ -224,6 +226,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 port = port,
                 savedPort = port,
                 damBuildIneligible = !damEligible,
+                damDeviceUnsupported = damEligible && !damSupported,
                 themeMode = themeMode,
                 vpnLockdown = NetworkUtils.isVpnLockdownEnabled(application),
             )

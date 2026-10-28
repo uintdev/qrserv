@@ -184,6 +184,7 @@
     <string name="settings_client_dam_list_title">Doğrudan Erişim Modu</string>
     <string name="settings_client_dam_list_subtitle">Büyük dosyalar için idealdir</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ GitHub sürümünü gerektirir</string>
+    <string name="settings_client_dam_unsupported">Bu cihazda desteklenmiyor</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">URL\'deki Dosya Adı</string>
     <string name="settings_client_fiu_list_subtitle">Dosya adını URL\'ye dahil et</string>

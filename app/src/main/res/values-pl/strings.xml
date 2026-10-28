@@ -192,6 +192,7 @@
     <string name="settings_client_dam_list_title">Tryb Dostępu Bezpośredniego</string>
     <string name="settings_client_dam_list_subtitle">Idealne dla dużych plików</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ wymaga wersji z GitHub</string>
+    <string name="settings_client_dam_unsupported">Nieobsługiwane na tym urządzeniu</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Nazwa pliku w adresie URL</string>
     <string name="settings_client_fiu_list_subtitle">Uwzględnij nazwę pliku w adresie URL</string>

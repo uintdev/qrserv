@@ -184,6 +184,7 @@
     <string name="settings_client_dam_list_title">Direktzugriffsmodus</string>
     <string name="settings_client_dam_list_subtitle">Ideal für große Dateien</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ benötigt die GitHub-Version</string>
+    <string name="settings_client_dam_unsupported">Auf diesem Gerät nicht unterstützt</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Dateiname in der URL</string>
     <string name="settings_client_fiu_list_subtitle">Dateinamen in URL aufnehmen</string>

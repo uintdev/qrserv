@@ -192,6 +192,7 @@
     <string name="settings_client_dam_list_title">מצב גישה ישירה</string>
     <string name="settings_client_dam_list_subtitle">אידיאלי לקבצים גדולים</string>
     <string name="settings_client_dam_ineligiblebuild">אנדרואיד 11 ומעלה דורש את גרסת ה-GitHub</string>
+    <string name="settings_client_dam_unsupported">לא נתמך במכשיר זה</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">שם קובץ בכתובת URL</string>
     <string name="settings_client_fiu_list_subtitle">כלול את שם הקובץ בכתובת ה-URL</string>

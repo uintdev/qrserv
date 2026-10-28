@@ -184,6 +184,7 @@
     <string name="settings_client_dam_list_title">Közvetlen Hozzáférési Mód</string>
     <string name="settings_client_dam_list_subtitle">Nagy méretű fájlokhoz ideális</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ esetén a GitHub-verzió szükséges</string>
+    <string name="settings_client_dam_unsupported">Ezen az eszközön nem támogatott</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Fájlnév az URL-ben</string>
     <string name="settings_client_fiu_list_subtitle">Fájlnév szerepeltetése az URL-ben</string>

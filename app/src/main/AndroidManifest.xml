@@ -41,6 +41,14 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
         </intent>
+        <!-- The All files access screens, which some builds lack (see canGetDirectAccess) -->
+        <intent>
+            <action android:name="android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION" />
+            <data android:scheme="package" />
+        </intent>
+        <intent>
+            <action android:name="android.settings.MANAGE_ALL_FILES_ACCESS_PERMISSION" />
+        </intent>
     </queries>
 
     <!-- UnusedTranslation: values-iw is Hebrew under its legacy code, which lint doesn't match to "he" -->

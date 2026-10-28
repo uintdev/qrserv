@@ -192,6 +192,7 @@
     <string name="settings_client_dam_list_title">Режим прямого доступа</string>
     <string name="settings_client_dam_list_subtitle">Идеально подходит для больших файлов</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ требует версии с GitHub</string>
+    <string name="settings_client_dam_unsupported">Не поддерживается на этом устройстве</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Имя файла в URL</string>
     <string name="settings_client_fiu_list_subtitle">Включать имя файла в URL-адрес</string>

@@ -99,6 +99,7 @@ data class AppUiState(
     val savedPort: Int = 0,
     val damEnabled: Boolean = false,
     val damBuildIneligible: Boolean = false,
+    val damDeviceUnsupported: Boolean = false,
     val fiuEnabled: Boolean = false,
     val allInterfacesEnabled: Boolean = false,
     val vpnLockdown: Boolean = false,

@@ -36,6 +36,7 @@ import dev.uint.qrserv.ui.theme.isSystemActuallyInDarkTheme
 import dev.uint.qrserv.ui.theme.resolveIsDark
 import dev.uint.qrserv.util.AppShortcut
 import dev.uint.qrserv.util.SHORTCUT_LAUNCHER
+import dev.uint.qrserv.util.directAccessSettingsIntents
 import dev.uint.qrserv.util.isNearbyWifiGranted
 import dev.uint.qrserv.util.publishAppShortcuts
 import dev.uint.qrserv.viewmodel.QRServViewModel
@@ -266,13 +267,7 @@ class MainActivity : ComponentActivity() {
 
     private fun requestDirectAccessPermission() {
         if (Build.VERSION.SDK_INT >= 30) {
-            // Some builds (TV, Go, some OEMs) lack the per-app screen, or All files access entirely.
-            val launched = launchFirst(
-                listOf(
-                    Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, "package:$packageName".toUri()),
-                    Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
-                ),
-            ) { manageStorageSettingsLauncher.launch(it) }
+            val launched = launchFirst(directAccessSettingsIntents()) { manageStorageSettingsLauncher.launch(it) }
             // Without either screen the permission can never be granted, so use the system picker.
             if (!launched) openSafPicker()
         } else {

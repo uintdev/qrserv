@@ -184,6 +184,7 @@
     <string name="settings_client_dam_list_title">حالت دسترسی مستقیم</string>
     <string name="settings_client_dam_list_subtitle">ایده‌آل برای فایل‌های حجیم</string>
     <string name="settings_client_dam_ineligiblebuild">اندروید ۱۱ و بالاتر به نسخه گیت‌هاب نیاز دارد</string>
+    <string name="settings_client_dam_unsupported">در این دستگاه پشتیبانی نمی‌شود</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">نام فایل در URL</string>
     <string name="settings_client_fiu_list_subtitle">گنجاندن نام فایل در URL</string>

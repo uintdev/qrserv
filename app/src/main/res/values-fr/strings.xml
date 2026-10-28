@@ -188,6 +188,7 @@
     <string name="settings_client_dam_list_title">Mode d\'Accès Direct</string>
     <string name="settings_client_dam_list_subtitle">Idéal pour les fichiers volumineux</string>
     <string name="settings_client_dam_ineligiblebuild">Android 11+ nécessite la version GitHub</string>
+    <string name="settings_client_dam_unsupported">Non pris en charge sur cet appareil</string>
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Nom de fichier dans l\'URL</string>
     <string name="settings_client_fiu_list_subtitle">Inclure le nom de fichier dans l\'URL</string>

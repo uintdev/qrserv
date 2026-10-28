@@ -201,15 +201,20 @@ fun SettingsScreen(
 
             SectionHeader(stringResource(R.string.settings_subheading_client))
             SettingsGroup {
+                val damUnavailableRes = when {
+                    uiState.damBuildIneligible -> R.string.settings_client_dam_ineligiblebuild
+                    uiState.damDeviceUnsupported -> R.string.settings_client_dam_unsupported
+                    else -> null
+                }
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_client_dam_list_title)) },
                     supportingContent = {
                         Text(
-                            if (uiState.damBuildIneligible) {
+                            if (damUnavailableRes != null) {
                                 stringResource(
                                     R.string.settings_client_dam_subtitle_combined,
                                     stringResource(R.string.settings_client_dam_list_subtitle),
-                                    stringResource(R.string.settings_client_dam_ineligiblebuild),
+                                    stringResource(damUnavailableRes),
                                 )
                             } else {
                                 stringResource(R.string.settings_client_dam_list_subtitle)
@@ -220,15 +225,15 @@ fun SettingsScreen(
                         Switch(
                             checked = uiState.damEnabled,
                             onCheckedChange = { viewModel.toggleDam() },
-                            enabled = !uiState.damBuildIneligible,
+                            enabled = damUnavailableRes == null,
                         )
                     },
-                    colors = if (uiState.damBuildIneligible) {
+                    colors = if (damUnavailableRes != null) {
                         disabledItemColors
                     } else {
                         groupItemColors
                     },
-                    modifier = Modifier.clickable(enabled = !uiState.damBuildIneligible) { viewModel.toggleDam() },
+                    modifier = Modifier.clickable(enabled = damUnavailableRes == null) { viewModel.toggleDam() },
                 )
                 GroupDivider()
                 ListItem(
