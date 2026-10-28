@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 
     private val safPickerLauncher =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
-            viewModel.onFilesPicked(uris)
+            viewModel.onFilesPicked(uris.filter(::isAcceptableShareUri))
         }
 
     private val legacyStoragePermissionLauncher =
