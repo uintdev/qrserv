@@ -16,7 +16,7 @@ It is worth noting that this limitation is not specific to this application. Any
 
 Despite that, you can use Direct Access Mode to avoid the extra overhead (only one file can be selected at a time). This can be enabled in the app's settings. Please note that when using the share sheet to pass the file selection over, it uses the app cache method from the get-go, so DAM cannot be used in that case.
 <br>
-Due to Google Play restrictions in regard to Manage External Storage permission (required for direct file access on Android 11 or later), the Google Play version only offers Direct Access Mode on Android 10 or earlier. GitHub releases (also distributed through IzzyOnDroid) offer it on all supported Android versions.
+Due to Google Play restrictions in regard to Manage External Storage permission (required for direct file access on Android 11 or later), the Google Play version only offers Direct Access Mode on Android 10 or earlier. GitHub releases (also distributed through IzzyOnDroid) offer it on all supported Android versions, except on the odd device without an "All files access" screen, where that permission can't be granted.
 
 ## Why does the HTTP server not offer a secure connection?
 

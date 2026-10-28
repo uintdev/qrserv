@@ -103,7 +103,7 @@ As you may be aware, there are two different Android builds of this application.
 #### GitHub
 
 - IzzyOnDroid distributes the same APK as the GitHub releases.
-- Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 11 or later.
+- Direct Access Mode **is** available for all supported Android versions, as `MANAGE_EXTERNAL_STORAGE` can be used to allow support for Android 11 or later. The exception is the odd device without an "All files access" screen, where that permission can't be granted.
 - "Check for updates" in settings asks GitHub for its latest release when tapped; the app never checks on its own.
 
 #### Changing build types

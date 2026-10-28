@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.3.1
+
+- Direct Access Mode is now shown as unsupported on devices without an "All files access" screen, instead of quietly using the system file picker
+- Direct Access Mode no longer stays on in the Google Play version on Android 11 or later, such as after restoring a backup
+- Fixed actions and messages being lost when Android recreated or restarted the app, such as after granting All files access
+- The private hotspot's permission dialog now says when settings can't be opened, instead of doing nothing
+- Fixed rare cases where the file picker could interfere with a file being shared from another app
+- Files from a file picker now get the same safety check as files shared from other apps
+- Fixed the Hebrew wording of the "no file picker" message
+
 ## 4.3.0
 
 - Added launcher shortcuts for sharing a file and, where supported, sharing via private hotspot

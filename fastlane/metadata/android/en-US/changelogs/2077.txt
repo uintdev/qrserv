@@ -1,0 +1,9 @@
+- Direct Access Mode shown as unsupported without All files access
+- Direct Access Mode stays off on Google Play for Android 11+
+- Fixed actions and messages lost when the app restarts
+- Hotspot dialog says when settings can't be opened
+- Fixed the file picker interfering with shared files
+- Picked files get the same check as shared files
+- Fixed Hebrew no file picker wording
+
+See GitHub for more changes.
