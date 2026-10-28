@@ -435,11 +435,15 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onDirectAccessPermissionResult(granted: Boolean) {
-        if (granted) {
-            _events.tryEmit(UiEvent.OpenDamBrowser)
-        } else {
-            onImportCanceled()
-            postToast(R.string.page_info_permissiondenied_msg)
+        viewModelScope.launch {
+            // Arrives before the UI collects events when the app was killed while away.
+            _events.subscriptionCount.first { it > 0 }
+            if (granted) {
+                _events.tryEmit(UiEvent.OpenDamBrowser)
+            } else {
+                onImportCanceled()
+                postToast(R.string.page_info_permissiondenied_msg)
+            }
         }
     }
 
