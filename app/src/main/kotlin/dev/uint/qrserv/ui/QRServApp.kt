@@ -127,7 +127,6 @@ fun QRServApp(
                     showAbout = false
                     screen = if (event == UiEvent.OpenHotspotScreen) Screen.HOTSPOT else Screen.MAIN
                 }
-                UiEvent.PortSaved -> {}
                 is UiEvent.Toast -> {
                     val message = if (event.event.args.isEmpty()) {
                         context.getString(event.event.resId)

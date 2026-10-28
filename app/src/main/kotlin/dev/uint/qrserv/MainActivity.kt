@@ -26,6 +26,7 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withResumed
 import dev.uint.qrserv.data.HotspotDialog
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
@@ -242,7 +243,8 @@ class MainActivity : ComponentActivity() {
         // Clear the action so a recreation within this process doesn't run it again.
         intent.action = null
         ShortcutManagerCompat.reportShortcutUsed(this, shortcut.id)
-        viewModel.onShortcut(shortcut)
+        // The hotspot only starts in the foreground.
+        lifecycleScope.launch { lifecycle.withResumed { viewModel.onShortcut(shortcut) } }
     }
 
     // Some builds (TV, Automotive, some locked-down ones) have nothing that handles it.

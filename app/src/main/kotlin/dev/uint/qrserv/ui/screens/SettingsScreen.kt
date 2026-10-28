@@ -75,7 +75,6 @@ import dev.uint.qrserv.util.UpdateCheckFailure
 import dev.uint.qrserv.util.UpdateCheckResult
 import dev.uint.qrserv.util.UpdateCheckState
 import dev.uint.qrserv.viewmodel.QRServViewModel
-import dev.uint.qrserv.viewmodel.UiEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,12 +105,6 @@ fun SettingsScreen(
     // The hotspot can become unusable while the dialog is open, e.g. a device policy set on return to the app.
     LaunchedEffect(bandSelectable) {
         if (!bandSelectable) showBandDialog = false
-    }
-
-    LaunchedEffect(viewModel) {
-        viewModel.events.collect { event ->
-            if (event is UiEvent.PortSaved) showPortDialog = false
-        }
     }
 
     val groupItemColors = ListItemDefaults.colors(containerColor = Color.Transparent)
@@ -289,7 +282,7 @@ fun SettingsScreen(
             currentPort = uiState.savedPort,
             serverRunning = uiState.serverRunning,
             onDismiss = { showPortDialog = false },
-            onSave = { port -> viewModel.trySavePort(port) },
+            onSave = { port -> viewModel.trySavePort(port) { showPortDialog = false } },
         )
     }
 

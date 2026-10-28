@@ -52,17 +52,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -74,7 +75,6 @@ sealed interface UiEvent {
     object OpenSafPicker : UiEvent
     object OpenDamBrowser : UiEvent
     object RequestDamPermission : UiEvent
-    object PortSaved : UiEvent
 
     /** Leave whichever screen is showing for the main one, ahead of a shortcut's action. */
     object ShowMainScreen : UiEvent
@@ -108,8 +108,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var updateCheckJob: Job? = null
 
-    private val _events = MutableSharedFlow<UiEvent>(extraBufferCapacity = 8)
-    val events: SharedFlow<UiEvent> = _events
+    // Held until the UI collects them, e.g. after the activity is recreated. One collector: QRServApp.
+    private val _events = Channel<UiEvent>(Channel.BUFFERED)
+    val events: Flow<UiEvent> = _events.receiveAsFlow()
 
     private var fileObserver: FileObserver? = null
 
@@ -299,7 +300,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         else -> null
     }
 
-    // State, not a UiEvent: a share from another app starts before the UI collects events.
+    // State, not a UiEvent, so the dialog is still there after the activity is recreated.
     private fun maybeRequestNotificationPermission() {
         if (Build.VERSION.SDK_INT < 33) return
         if (Preferences.wasAskedOnThisInstall(Preferences.PREF_NOTIFICATIONS_ASKED)) return
@@ -361,17 +362,15 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     /** Does what the matching button would, from whichever screen and state the app is in. */
     fun onShortcut(shortcut: AppShortcut) {
         viewModelScope.launch {
-            // Events sent before the UI collects are dropped, and the hotspot only starts in the foreground.
-            _events.subscriptionCount.first { it > 0 }
             if (rejectIfBusy()) return@launch
             val state = _uiState.value
             when {
                 // Including a hotspot still waiting for a file: back to picking one.
                 shortcut == AppShortcut.SHARE_FILE || (state.hotspot != null && !state.serverRunning) -> {
-                    _events.tryEmit(UiEvent.ShowMainScreen)
+                    _events.trySend(UiEvent.ShowMainScreen)
                     openPickerWhenReady()
                 }
-                state.hotspot != null -> _events.tryEmit(UiEvent.OpenHotspotScreen)
+                state.hotspot != null -> _events.trySend(UiEvent.OpenHotspotScreen)
                 else -> {
                     // The device can have changed since the shortcut was published, e.g. a new policy.
                     val unavailable = getApplication<Application>().hotspotUnavailableNow()
@@ -379,7 +378,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                         postToast(unavailable.messageRes)
                         return@launch
                     }
-                    _events.tryEmit(UiEvent.ShowMainScreen)
+                    _events.trySend(UiEvent.ShowMainScreen)
                     if (state.serverRunning) hotspot.onSwitchToHotspotClicked() else hotspot.onHotspotClicked()
                 }
             }
@@ -399,12 +398,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private fun openPicker() {
         if (_uiState.value.damEnabled) {
             if (hasDirectAccessPermission()) {
-                _events.tryEmit(UiEvent.OpenDamBrowser)
+                _events.trySend(UiEvent.OpenDamBrowser)
             } else {
-                _events.tryEmit(UiEvent.RequestDamPermission)
+                _events.trySend(UiEvent.RequestDamPermission)
             }
         } else {
-            _events.tryEmit(UiEvent.OpenSafPicker)
+            _events.trySend(UiEvent.OpenSafPicker)
         }
     }
 
@@ -438,15 +437,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onDirectAccessPermissionResult(granted: Boolean) {
-        viewModelScope.launch {
-            // Arrives before the UI collects events when the app was killed while away.
-            _events.subscriptionCount.first { it > 0 }
-            if (granted) {
-                _events.tryEmit(UiEvent.OpenDamBrowser)
-            } else {
-                onImportCanceled()
-                postToast(R.string.page_info_permissiondenied_msg)
-            }
+        if (granted) {
+            _events.trySend(UiEvent.OpenDamBrowser)
+        } else {
+            onImportCanceled()
+            postToast(R.string.page_info_permissiondenied_msg)
         }
     }
 
@@ -918,15 +913,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         val wasHotspot = Preferences.readBool(Preferences.PREF_SESSION_HOTSPOT)
         clearSessionMarker()
         if (wasHotspot && Build.VERSION.SDK_INT >= 33 && !hotspot.isNearbyGranted()) {
-            viewModelScope.launch {
-                // Nothing collects events this early in launch; an earlier toast would be dropped.
-                _events.subscriptionCount.first { it > 0 }
-                postToast(R.string.hotspot_lost_nearby)
-            }
+            postToast(R.string.hotspot_lost_nearby)
         }
     }
 
-    fun trySavePort(port: Int?) {
+    fun trySavePort(port: Int?, onSaved: () -> Unit) {
         viewModelScope.launch {
             val ownPort = serverController.isRunning && port == serverController.port
             if (port != null && !ownPort && NetworkUtils.isPortUsed(port)) {
@@ -938,7 +929,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             // actually bound to until it's restarted, not the newly saved preference.
             _uiState.update { it.copy(savedPort = port ?: 0) }
             postToast(R.string.settings_server_port_dialog_saved)
-            _events.tryEmit(UiEvent.PortSaved)
+            onSaved()
         }
     }
 
@@ -1003,7 +994,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun postToast(resId: Int, vararg args: String) {
-        _events.tryEmit(UiEvent.Toast(ToastEvent(resId, args.toList())))
+        _events.trySend(UiEvent.Toast(ToastEvent(resId, args.toList())))
     }
 
     override fun onCleared() {
