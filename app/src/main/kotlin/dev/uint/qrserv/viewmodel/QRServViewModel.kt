@@ -322,7 +322,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         if (granted && ServingState.notice.value != null) ServingService.start(getApplication())
         if (pickerAfterNotificationPrompt) {
             pickerAfterNotificationPrompt = false
-            if (_uiState.value.hotspot != null) openPicker()
+            // Only while the hotspot still waits for a file: a share from another app may have come in meanwhile.
+            val state = _uiState.value
+            if (state.hotspot != null && !state.serverRunning && !state.actionButtonLoading) openPicker()
         }
     }
 
@@ -403,12 +405,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    // Not busy while picking (see HotspotSession.continueFromIdle), so busy here means another import.
     fun onImportCanceled() {
-        setLoading(false)
         hotspot.abandonIdle()
     }
 
-    /** Nothing on the device can pick a file (e.g. some TVs); sharing from another app still works. */
+    /** No system file picker on the device; sharing from another app still works. */
     fun onFilePickerMissing() {
         onImportCanceled()
         postToast(R.string.info_no_file_picker)
@@ -436,8 +438,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         if (granted) {
             _events.tryEmit(UiEvent.OpenDamBrowser)
         } else {
-            setLoading(false)
-            hotspot.abandonIdle()
+            onImportCanceled()
             postToast(R.string.page_info_permissiondenied_msg)
         }
     }
