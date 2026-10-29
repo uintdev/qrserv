@@ -154,8 +154,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     // Embedded HTTP server used to serve the selected file
-    implementation("io.ktor:ktor-server-core:3.6.0")
-    implementation("io.ktor:ktor-server-cio:3.6.0")
+    implementation("io.ktor:ktor-server-core:3.6.1")
+    implementation("io.ktor:ktor-server-cio:3.6.1")
 
     // QR code generation
     implementation("com.google.zxing:core:3.5.4")
