@@ -11,6 +11,7 @@ QRServ's on-device HTTP server that hosts the content can be stopped via the in-
 Android app permissions:
 
 - INTERNET -- Listing network interfaces, running the HTTP server and checking for updates (GitHub version)
+- ACCESS_LOCAL_NETWORK -- Letting other devices connect to the HTTP server (Android 17+)
 - READ_EXTERNAL_STORAGE -- Read-only Direct Access Mode on internal storage (up to Android 10)
 - FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Importing and sharing in the background
 - POST_NOTIFICATIONS -- The sharing notification and the idle stop notice

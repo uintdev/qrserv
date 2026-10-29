@@ -17,6 +17,7 @@ object Preferences {
     const val PREF_THEME_MODE = "theme_mode"
     const val PREF_NOTIFICATIONS_ASKED = "notifications_asked_install"
     const val PREF_NEARBY_ASKED = "nearby_asked_install"
+    const val PREF_LOCAL_NETWORK_ASKED = "local_network_asked_install"
 
     private val LegacyAskedKeys = mapOf(
         "notifications_asked" to PREF_NOTIFICATIONS_ASKED,

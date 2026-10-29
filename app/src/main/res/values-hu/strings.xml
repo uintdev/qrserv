@@ -92,6 +92,7 @@
     <string name="hotspot_dialog_title">Engedély szükséges</string>
     <string name="hotspot_dialog_nearby">Engedélyezze a „Közeli eszközök” hozzáférést, hogy a QRServ privát hotspotot hozhasson létre.</string>
     <string name="hotspot_dialog_wificontrol">Engedélyezze a „Wi-Fi-vezérlés” hozzáférést, hogy a QRServ privát hotspotot hozhasson létre.</string>
+    <string name="local_network_dialog_body">Engedélyezze a „Közeli eszközök” hozzáférést, hogy a hálózat többi eszköze letölthessen a QRServ-ről.</string>
     <string name="permission_dialog_notnow">Most nem</string>
     <string name="permission_dialog_continue">Tovább</string>
     <string name="hotspot_dialog_settings">Beállítások megnyitása</string>

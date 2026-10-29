@@ -29,6 +29,10 @@ fun Context.notifyIfAllowed(id: Int, build: () -> Notification): Boolean {
     return true
 }
 
+/** From Android 17, other devices on the network can't reach the server without it; implied before that. */
+fun Context.isLocalNetworkGranted(): Boolean =
+    Build.VERSION.SDK_INT < 37 || isGranted(Manifest.permission.ACCESS_LOCAL_NETWORK)
+
 /** The private hotspot needs it, along with Android 13 or later to begin with. */
 fun Context.isNearbyWifiGranted(): Boolean =
     Build.VERSION.SDK_INT >= 33 && isGranted(Manifest.permission.NEARBY_WIFI_DEVICES)

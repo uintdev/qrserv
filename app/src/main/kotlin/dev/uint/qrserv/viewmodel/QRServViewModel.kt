@@ -21,6 +21,7 @@ import dev.uint.qrserv.data.FileInfo
 import dev.uint.qrserv.data.IdleStopOptions
 import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.data.InterfaceAddress
+import dev.uint.qrserv.data.LocalNetworkDialog
 import dev.uint.qrserv.data.PageType
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
@@ -48,6 +49,7 @@ import dev.uint.qrserv.util.canGetDirectAccess
 import dev.uint.qrserv.util.canPostNotifications
 import dev.uint.qrserv.util.checkForUpdate
 import dev.uint.qrserv.util.hasDirectAccess
+import dev.uint.qrserv.util.isLocalNetworkGranted
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -175,6 +177,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         override suspend fun stopServing() = this@QRServViewModel.stopServing()
         override suspend fun switchToHotspot(info: HotspotInfo) = this@QRServViewModel.switchToHotspot(info)
         override fun linkKinds(): Map<String, LinkKind> = this@QRServViewModel.linkKinds.byInterface()
+        override fun withLocalNetwork(action: () -> Unit) = this@QRServViewModel.withLocalNetwork(action)
         override fun endShare() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) { serverController.stop() }
@@ -334,6 +337,48 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var notificationsGranted = getApplication<Application>().canPostNotifications()
 
+    // What to do once local network access is granted; dropped if it isn't.
+    private var afterLocalNetworkGrant: (() -> Unit)? = null
+
+    /** Runs [action] now if other devices can reach the server, else once that's granted. */
+    private fun withLocalNetwork(action: () -> Unit) {
+        if (getApplication<Application>().isLocalNetworkGranted()) {
+            action()
+            return
+        }
+        afterLocalNetworkGrant = action
+        _uiState.update { it.copy(localNetworkPermissionRequest = true) }
+    }
+
+    fun onLocalNetworkPermissionRequestTaken() {
+        _uiState.update { it.copy(localNetworkPermissionRequest = false) }
+    }
+
+    fun onLocalNetworkPermissionResult(granted: Boolean) {
+        val action = afterLocalNetworkGrant
+        afterLocalNetworkGrant = null
+        if (granted) action?.invoke() else hotspot.abandonIdle()
+    }
+
+    fun showLocalNetworkDialog(dialog: LocalNetworkDialog) {
+        _uiState.update { it.copy(localNetworkDialog = dialog) }
+    }
+
+    fun onLocalNetworkDialogContinue() {
+        _uiState.update { it.copy(localNetworkDialog = null) }
+    }
+
+    fun onLocalNetworkDialogDismissed() {
+        _uiState.update { it.copy(localNetworkDialog = null) }
+        onLocalNetworkPermissionResult(false)
+    }
+
+    /** The dialog's settings button had nowhere to go, so it can't be resolved from here. */
+    fun onLocalNetworkSettingsMissing() {
+        onLocalNetworkDialogDismissed()
+        postToast(R.string.info_no_settings)
+    }
+
     fun purgeStaleCacheOnLaunch() {
         if (launchCacheHandled) return
         launchCacheHandled = true
@@ -395,7 +440,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun openPicker() {
+    private fun openPicker() = withLocalNetwork {
         if (_uiState.value.damEnabled) {
             if (hasDirectAccessPermission()) {
                 _events.trySend(UiEvent.OpenDamBrowser)
@@ -462,19 +507,21 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onSharedFilesReceived(uris: List<Uri>) {
         launchCacheHandled = true
-        onFilesPicked(uris)
+        withLocalNetwork { onFilesPicked(uris) }
     }
 
     /** Handles a plain-text share (e.g. a URL) by writing it to a generated .txt file and importing that. */
     fun onSharedTextReceived(text: String) {
         launchCacheHandled = true
         if (text.isBlank()) return
-        if (rejectIfBusy()) return
-        setLoading(true)
-        stopFileObserver()
-        viewModelScope.launch {
-            val result = fileRepo.importSharedText(text)
-            handleImportResult(result)
+        withLocalNetwork {
+            if (rejectIfBusy()) return@withLocalNetwork
+            setLoading(true)
+            stopFileObserver()
+            viewModelScope.launch {
+                val result = fileRepo.importSharedText(text)
+                handleImportResult(result)
+            }
         }
     }
 
@@ -830,6 +877,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         addressCheckRequests.tryEmit(Unit)
         _uiState.update { it.copy(vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication())) }
         hotspot.onAppResumed()
+        if (_uiState.value.localNetworkDialog == LocalNetworkDialog.SETTINGS && getApplication<Application>().isLocalNetworkGranted()) {
+            _uiState.update { it.copy(localNetworkDialog = null) }
+            onLocalNetworkPermissionResult(true)
+        }
         val granted = getApplication<Application>().canPostNotifications()
         if (granted && !notificationsGranted && ServingState.notice.value != null) ServingService.start(getApplication())
         notificationsGranted = granted
@@ -912,7 +963,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         if (!Preferences.readBool(Preferences.PREF_SESSION_ACTIVE)) return
         val wasHotspot = Preferences.readBool(Preferences.PREF_SESSION_HOTSPOT)
         clearSessionMarker()
-        if (wasHotspot && Build.VERSION.SDK_INT >= 33 && !hotspot.isNearbyGranted()) {
+        // From Android 17 both are under Nearby devices, so the one message covers either.
+        val nearbyLost = wasHotspot && Build.VERSION.SDK_INT >= 33 && !hotspot.isNearbyGranted()
+        if (nearbyLost || !getApplication<Application>().isLocalNetworkGranted()) {
             postToast(R.string.hotspot_lost_nearby)
         }
     }

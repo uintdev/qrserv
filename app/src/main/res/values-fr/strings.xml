@@ -94,6 +94,7 @@
     <string name="hotspot_dialog_title">Autorisation requise</string>
     <string name="hotspot_dialog_nearby">Autorisez « Appareils à proximité » pour que QRServ puisse créer un point d\'accès privé.</string>
     <string name="hotspot_dialog_wificontrol">Autorisez « Contrôle Wi-Fi » pour que QRServ puisse créer un point d\'accès privé.</string>
+    <string name="local_network_dialog_body">Autorisez « Appareils à proximité » pour que les autres appareils du réseau puissent télécharger depuis QRServ.</string>
     <string name="permission_dialog_notnow">Pas maintenant</string>
     <string name="permission_dialog_continue">Continuer</string>
     <string name="hotspot_dialog_settings">Ouvrir les paramètres</string>

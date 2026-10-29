@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Lets other devices on the network reach the server (API 37+) -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
     <!-- Keeps sharing while the app is in the background -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />

@@ -51,6 +51,9 @@ class HotspotSession internal constructor(
 
         /** Each network interface's transport as the system reports it. */
         fun linkKinds(): Map<String, LinkKind>
+
+        /** Runs [action] once other devices can reach the server; not at all if that's refused. */
+        fun withLocalNetwork(action: () -> Unit)
         fun endShare()
     }
 
@@ -138,7 +141,8 @@ class HotspotSession internal constructor(
 
     internal fun isNearbyGranted(): Boolean = app.isNearbyWifiGranted()
 
-    fun onHotspotClicked() {
+    // Asked ahead of Nearby devices; from Android 17 granting one grants the other without a second prompt.
+    fun onHotspotClicked() = host.withLocalNetwork {
         val state = uiState.value
         if (state.pageType != PageType.HOTSPOT_FAILED) bandOnce = null
         reuseFile = when (state.pageType) {

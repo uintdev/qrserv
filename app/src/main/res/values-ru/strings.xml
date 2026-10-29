@@ -96,6 +96,7 @@
     <string name="hotspot_dialog_title">Требуется разрешение</string>
     <string name="hotspot_dialog_nearby">Разрешите «Устройства поблизости», чтобы QRServ мог создать частную точку доступа.</string>
     <string name="hotspot_dialog_wificontrol">Разрешите «Управление сетями Wi-Fi», чтобы QRServ мог создать частную точку доступа.</string>
+    <string name="local_network_dialog_body">Разрешите «Устройства поблизости», чтобы другие устройства в сети могли загружать файлы из QRServ.</string>
     <string name="permission_dialog_notnow">Не сейчас</string>
     <string name="permission_dialog_continue">Продолжить</string>
     <string name="hotspot_dialog_settings">Открыть настройки</string>

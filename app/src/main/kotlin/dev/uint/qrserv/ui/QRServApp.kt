@@ -38,6 +38,7 @@ import dev.uint.qrserv.ui.screens.AboutDialog
 import dev.uint.qrserv.ui.screens.DamBrowserScreen
 import dev.uint.qrserv.ui.screens.HotspotPermissionDialog
 import dev.uint.qrserv.ui.screens.HotspotScreen
+import dev.uint.qrserv.ui.screens.LocalNetworkPermissionDialog
 import dev.uint.qrserv.ui.screens.MainScreen
 import dev.uint.qrserv.ui.screens.NotificationPermissionDialog
 import dev.uint.qrserv.ui.screens.SettingsScreen
@@ -84,7 +85,9 @@ fun QRServApp(
     onRequestNotificationPermission: () -> Unit,
     onRequestNearbyPermission: () -> Unit,
     onLaunchNearbyPrompt: () -> Unit,
-    onOpenAppSettings: () -> Unit,
+    onRequestLocalNetworkPermission: () -> Unit,
+    onLaunchLocalNetworkPrompt: () -> Unit,
+    onOpenAppSettings: (onMissing: () -> Unit) -> Unit,
 ) {
     var screen by rememberSaveable { mutableStateOf(Screen.MAIN) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
@@ -114,6 +117,10 @@ fun QRServApp(
 
     LaunchedEffect(uiState.nearbyPermissionRequest) {
         if (uiState.nearbyPermissionRequest) onRequestNearbyPermission()
+    }
+
+    LaunchedEffect(uiState.localNetworkPermissionRequest) {
+        if (uiState.localNetworkPermissionRequest) onRequestLocalNetworkPermission()
     }
 
     LaunchedEffect(viewModel) {
@@ -377,7 +384,18 @@ fun QRServApp(
                         viewModel.hotspot.onHotspotDialogContinue()
                         onLaunchNearbyPrompt()
                     },
-                    onOpenSettings = onOpenAppSettings,
+                    onOpenSettings = { onOpenAppSettings(viewModel.hotspot::onAppSettingsMissing) },
+                )
+            }
+            uiState.localNetworkDialog?.let { dialog ->
+                LocalNetworkPermissionDialog(
+                    dialog = dialog,
+                    onDismiss = viewModel::onLocalNetworkDialogDismissed,
+                    onContinue = {
+                        viewModel.onLocalNetworkDialogContinue()
+                        onLaunchLocalNetworkPrompt()
+                    },
+                    onOpenSettings = { onOpenAppSettings(viewModel::onLocalNetworkSettingsMissing) },
                 )
             }
             if (uiState.notificationPermissionPending) {

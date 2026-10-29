@@ -94,6 +94,7 @@
     <string name="hotspot_dialog_title">Permiso necesario</string>
     <string name="hotspot_dialog_nearby">Permite «Dispositivos cercanos» para que QRServ pueda crear un punto de acceso privado.</string>
     <string name="hotspot_dialog_wificontrol">Permite «Control de Wi-Fi» para que QRServ pueda crear un punto de acceso privado.</string>
+    <string name="local_network_dialog_body">Permite «Dispositivos cercanos» para que otros dispositivos de la red puedan descargar desde QRServ.</string>
     <string name="permission_dialog_notnow">Ahora no</string>
     <string name="permission_dialog_continue">Continuar</string>
     <string name="hotspot_dialog_settings">Abrir ajustes</string>

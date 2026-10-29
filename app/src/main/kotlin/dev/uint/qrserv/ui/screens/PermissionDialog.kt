@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.CompatibleBandWarning
+import dev.uint.qrserv.data.LocalNetworkDialog
 import dev.uint.qrserv.ui.theme.ReducedDialogScrim
 import dev.uint.qrserv.ui.theme.subtleContainerColor
 
@@ -71,6 +72,23 @@ fun NotificationPermissionDialog(onDismiss: () -> Unit, onContinue: () -> Unit) 
         confirmLabel = stringResource(R.string.permission_dialog_continue),
         onDismiss = onDismiss,
         onConfirm = onContinue,
+    )
+}
+
+@Composable
+fun LocalNetworkPermissionDialog(
+    dialog: LocalNetworkDialog,
+    onDismiss: () -> Unit,
+    onContinue: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    val explain = dialog == LocalNetworkDialog.EXPLAIN
+    PermissionDialog(
+        title = stringResource(R.string.hotspot_dialog_title),
+        text = stringResource(R.string.local_network_dialog_body),
+        confirmLabel = stringResource(if (explain) R.string.permission_dialog_continue else R.string.hotspot_dialog_settings),
+        onDismiss = onDismiss,
+        onConfirm = if (explain) onContinue else onOpenSettings,
     )
 }
 

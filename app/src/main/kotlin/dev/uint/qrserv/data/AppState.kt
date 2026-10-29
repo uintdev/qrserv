@@ -57,6 +57,12 @@ enum class HotspotDialog {
     WIFI_CONTROL_SETTINGS,
 }
 
+enum class LocalNetworkDialog {
+    EXPLAIN,
+
+    SETTINGS,
+}
+
 /** User's app theme preference, persisted via [dev.uint.qrserv.data.Preferences]. */
 enum class ThemeMode { SYSTEM, DARK, LIGHT }
 
@@ -109,6 +115,8 @@ data class AppUiState(
     val errorDetail: String = "",
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val notificationPermissionPending: Boolean = false,
+    val localNetworkDialog: LocalNetworkDialog? = null,
+    val localNetworkPermissionRequest: Boolean = false,
     val hotspot: HotspotInfo? = null,
     val hotspotStarting: Boolean = false,
     val hotspotStopping: Boolean = false,

@@ -92,6 +92,7 @@
     <string name="hotspot_dialog_title">مجوز لازم است</string>
     <string name="hotspot_dialog_nearby">به «دستگاه‌های اطراف» اجازه دهید تا QRServ بتواند نقطه اتصال خصوصی بسازد.</string>
     <string name="hotspot_dialog_wificontrol">به «کنترل Wi-Fi» اجازه دهید تا QRServ بتواند نقطه اتصال خصوصی بسازد.</string>
+    <string name="local_network_dialog_body">به «دستگاه‌های اطراف» اجازه دهید تا دستگاه‌های دیگر در شبکه بتوانند از QRServ دریافت کنند.</string>
     <string name="permission_dialog_notnow">اکنون نه</string>
     <string name="permission_dialog_continue">ادامه</string>
     <string name="hotspot_dialog_settings">باز کردن تنظیمات</string>

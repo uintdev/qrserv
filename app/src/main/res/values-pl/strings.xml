@@ -96,6 +96,7 @@
     <string name="hotspot_dialog_title">Wymagane uprawnienie</string>
     <string name="hotspot_dialog_nearby">Zezwól na „Urządzenia w pobliżu”, aby QRServ mógł utworzyć prywatny hotspot.</string>
     <string name="hotspot_dialog_wificontrol">Zezwól na „Sterowanie Wi-Fi”, aby QRServ mógł utworzyć prywatny hotspot.</string>
+    <string name="local_network_dialog_body">Zezwól na „Urządzenia w pobliżu”, aby inne urządzenia w sieci mogły pobierać z QRServ.</string>
     <string name="permission_dialog_notnow">Nie teraz</string>
     <string name="permission_dialog_continue">Dalej</string>
     <string name="hotspot_dialog_settings">Otwórz ustawienia</string>

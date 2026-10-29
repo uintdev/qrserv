@@ -28,6 +28,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withResumed
 import dev.uint.qrserv.data.HotspotDialog
+import dev.uint.qrserv.data.LocalNetworkDialog
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
 import dev.uint.qrserv.data.readPersistedThemeMode
@@ -38,6 +39,7 @@ import dev.uint.qrserv.ui.theme.resolveIsDark
 import dev.uint.qrserv.util.AppShortcut
 import dev.uint.qrserv.util.SHORTCUT_LAUNCHER
 import dev.uint.qrserv.util.directAccessSettingsIntents
+import dev.uint.qrserv.util.isLocalNetworkGranted
 import dev.uint.qrserv.util.isNearbyWifiGranted
 import dev.uint.qrserv.util.publishAppShortcuts
 import dev.uint.qrserv.viewmodel.QRServViewModel
@@ -85,6 +87,17 @@ class MainActivity : ComponentActivity() {
                     !shouldShowRequestPermissionRationale(android.Manifest.permission.NEARBY_WIFI_DEVICES) ->
                     viewModel.hotspot.showHotspotDialog(HotspotDialog.NEARBY_SETTINGS)
                 else -> viewModel.hotspot.onNearbyPermissionResult(false)
+            }
+        }
+
+    private val localNetworkPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            when {
+                granted -> viewModel.onLocalNetworkPermissionResult(true)
+                Build.VERSION.SDK_INT >= 37 &&
+                    !shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_LOCAL_NETWORK) ->
+                    viewModel.showLocalNetworkDialog(LocalNetworkDialog.SETTINGS)
+                else -> viewModel.onLocalNetworkPermissionResult(false)
             }
         }
 
@@ -153,6 +166,8 @@ class MainActivity : ComponentActivity() {
                     },
                     onRequestNearbyPermission = ::handleNearbyPermissionRequest,
                     onLaunchNearbyPrompt = ::launchNearbyPrompt,
+                    onRequestLocalNetworkPermission = ::handleLocalNetworkPermissionRequest,
+                    onLaunchLocalNetworkPrompt = ::launchLocalNetworkPrompt,
                     onOpenAppSettings = ::openAppSettings,
                 )
             }
@@ -186,6 +201,8 @@ class MainActivity : ComponentActivity() {
         val permission = android.Manifest.permission.NEARBY_WIFI_DEVICES
         when {
             isNearbyWifiGranted() -> viewModel.hotspot.onNearbyPermissionResult(true)
+            // In the same group from Android 17, so the system grants it without asking.
+            Build.VERSION.SDK_INT >= 37 && isLocalNetworkGranted() -> launchNearbyPrompt()
             // Permanently denied: the prompt returns at once and leads to the settings dialog.
             Preferences.wasAskedOnThisInstall(Preferences.PREF_NEARBY_ASKED) && !shouldShowRequestPermissionRationale(permission) ->
                 launchNearbyPrompt()
@@ -197,6 +214,30 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT < 33) return
         Preferences.markAskedOnThisInstall(Preferences.PREF_NEARBY_ASKED)
         nearbyPermissionLauncher.launch(android.Manifest.permission.NEARBY_WIFI_DEVICES)
+    }
+
+    private fun handleLocalNetworkPermissionRequest() {
+        viewModel.onLocalNetworkPermissionRequestTaken()
+        if (Build.VERSION.SDK_INT < 37 || isLocalNetworkGranted()) {
+            viewModel.onLocalNetworkPermissionResult(true)
+            return
+        }
+        val permission = android.Manifest.permission.ACCESS_LOCAL_NETWORK
+        when {
+            // In the same group, so the system grants it without asking.
+            isNearbyWifiGranted() -> launchLocalNetworkPrompt()
+            // Permanently denied: the prompt returns at once and leads to the settings dialog.
+            Preferences.wasAskedOnThisInstall(Preferences.PREF_LOCAL_NETWORK_ASKED) &&
+                !shouldShowRequestPermissionRationale(permission) ->
+                launchLocalNetworkPrompt()
+            else -> viewModel.showLocalNetworkDialog(LocalNetworkDialog.EXPLAIN)
+        }
+    }
+
+    private fun launchLocalNetworkPrompt() {
+        if (Build.VERSION.SDK_INT < 37) return
+        Preferences.markAskedOnThisInstall(Preferences.PREF_LOCAL_NETWORK_ASKED)
+        localNetworkPermissionLauncher.launch(android.Manifest.permission.ACCESS_LOCAL_NETWORK)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -257,14 +298,14 @@ class MainActivity : ComponentActivity() {
     }
 
     // No public screen for "Wi-Fi control" alone. The app's own page can be missing too, as on some TVs.
-    private fun openAppSettings() {
+    private fun openAppSettings(onMissing: () -> Unit) {
         val launched = launchFirst(
             listOf(
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()),
                 Intent(Settings.ACTION_SETTINGS),
             ),
         ) { startActivity(it) }
-        if (!launched) viewModel.hotspot.onAppSettingsMissing()
+        if (!launched) onMissing()
     }
 
     private fun requestDirectAccessPermission() {
