@@ -1,0 +1,2 @@
+- Android 17+: asks for Nearby devices before sharing, needed for other devices to connect
+- Updated dependencies

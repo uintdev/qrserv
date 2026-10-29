@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.2
+
+- Android 17 or later now asks for the Nearby devices permission before sharing, as other devices can't connect without it
+- Updated dependencies
+
 ## 4.3.1
 
 - Direct Access Mode is now shown as unsupported on devices without an "All files access" screen, instead of quietly using the system file picker
