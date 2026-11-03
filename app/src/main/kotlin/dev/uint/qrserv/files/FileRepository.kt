@@ -19,6 +19,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -153,7 +154,13 @@ internal suspend fun copyWithProgress(
 }
 
 internal fun zipOutputStream(output: OutputStream, compression: ZipCompression): ZipOutputStream =
-    ZipOutputStream(output).apply { setLevel(compression.level) }
+    LargeBufferZipOutputStream(BufferedOutputStream(output, 64 * 1024)).apply { setLevel(compression.level) }
+
+private class LargeBufferZipOutputStream(output: OutputStream) : ZipOutputStream(output) {
+    init {
+        buf = ByteArray(64 * 1024)
+    }
+}
 
 private const val MAX_FILE_NAME_BYTES = 255
 
@@ -286,32 +293,35 @@ class FileRepository(private val context: Context) {
         var bytesCopiedSoFar = 0L
 
         try {
-            zipOutputStream(FileOutputStream(archiveFile), compression).use { zos ->
-                for ((index, entry) in metas.withIndex()) {
-                    val (uri, meta) = entry
-                    val (rawName, size) = meta
-                    var finalName = fittedEntryName(rawName)
-                    // Ignoring case, as a case-insensitive file system would have one overwrite the other.
-                    if (!usedNames.add(finalName.lowercase())) {
-                        finalName = prefixedEntryName(TokenGenerator.generate("0123456789ABCDEF", 6), rawName)
-                        usedNames.add(finalName.lowercase())
-                    }
-                    val base = bytesCopiedSoFar
-                    control.startingFile()
-                    resolver.openAssetFileDescriptor(uri, "r")?.use { descriptor ->
-                        val expected = expectedBytes(descriptor.length, size ?: 0L)
-                        descriptor.createInputStream().use { input ->
-                            control.attach(input)
-                            zos.putNextEntry(ZipEntry(finalName))
-                            bytesCopiedSoFar = base + copyWithProgress(input, zos, control::dataArrived) { copied ->
-                                onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
-                            }
-                            zos.closeEntry()
-                            checkFullyCopied(bytesCopiedSoFar - base, expected)
+            FileOutputStream(archiveFile).use { file ->
+                // Its own block, so the file still closes if closing the ZIP fails on a full disk.
+                zipOutputStream(file, compression).use { zos ->
+                    for ((index, entry) in metas.withIndex()) {
+                        val (uri, meta) = entry
+                        val (rawName, size) = meta
+                        var finalName = fittedEntryName(rawName)
+                        // Ignoring case, as a case-insensitive file system would have one overwrite the other.
+                        if (!usedNames.add(finalName.lowercase())) {
+                            finalName = prefixedEntryName(TokenGenerator.generate("0123456789ABCDEF", 6), rawName)
+                            usedNames.add(finalName.lowercase())
                         }
-                    } ?: throw FileNotFoundException()
-                    archivedEntries.add(ArchivedEntry(finalName, bytesCopiedSoFar - base))
-                    onProgress(multiFileProgress(index + 1, uris.size, bytesCopiedSoFar, totalBytes))
+                        val base = bytesCopiedSoFar
+                        control.startingFile()
+                        resolver.openAssetFileDescriptor(uri, "r")?.use { descriptor ->
+                            val expected = expectedBytes(descriptor.length, size ?: 0L)
+                            descriptor.createInputStream().use { input ->
+                                control.attach(input)
+                                zos.putNextEntry(ZipEntry(finalName))
+                                bytesCopiedSoFar = base + copyWithProgress(input, zos, control::dataArrived) { copied ->
+                                    onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
+                                }
+                                zos.closeEntry()
+                                checkFullyCopied(bytesCopiedSoFar - base, expected)
+                            }
+                        } ?: throw FileNotFoundException()
+                        archivedEntries.add(ArchivedEntry(finalName, bytesCopiedSoFar - base))
+                        onProgress(multiFileProgress(index + 1, uris.size, bytesCopiedSoFar, totalBytes))
+                    }
                 }
             }
         } catch (e: Exception) {
