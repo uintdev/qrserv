@@ -173,7 +173,11 @@ fun MainScreen(
     var operationShowedProgress by remember { mutableStateOf(false) }
     val finishedProgress = remember { uiState.importProgress.takeIf { !uiState.actionButtonLoading } }
     LaunchedEffect(uiState.actionButtonLoading) {
-        if (uiState.actionButtonLoading) operationShowedProgress = false
+        if (uiState.actionButtonLoading) {
+            operationShowedProgress = false
+        } else if (uiState.importProgress?.isFinal != true) {
+            progressBarPending = false
+        }
     }
     // Keyed on Unit (not uiState.importProgress) so this coroutine survives for the composable's
     // whole lifetime -- the ViewModel resets importProgress to null immediately once it's done,
@@ -181,6 +185,8 @@ fun MainScreen(
     // permanently stranding progressBarPending at true before it ever gets to clear itself.
     LaunchedEffect(Unit) {
         snapshotFlow { uiState.importProgress }.filterNotNull().filter { it !== finishedProgress }.collect { progress ->
+            // Left over from an import that ended early.
+            if (!progress.isFinal && !uiState.actionButtonLoading) return@collect
             if (!operationShowedProgress) progressAnim.snapTo(0f)
             lastProgress = progress
             progressBarPending = true
@@ -201,7 +207,7 @@ fun MainScreen(
                 if (isFinal) 1f else fraction,
                 animationSpec = tween(durationMillis = 150, easing = LinearEasing),
             )
-            if (isFinal) progressBarPending = false
+            if (isFinal || !uiState.actionButtonLoading) progressBarPending = false
         }
     }
     // Waits for the progress bar too: its fill to 100% outlives the loading state.
