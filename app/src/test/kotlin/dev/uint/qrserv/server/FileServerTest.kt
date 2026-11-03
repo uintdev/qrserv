@@ -9,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.io.IOException
+import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.atomic.AtomicInteger
@@ -256,5 +257,46 @@ class FileServerTest {
         }
         assertEquals(405, connection.responseCode)
         assertEquals(0, downloadsStarted.get())
+    }
+
+    private class Counts : FileServer.Listener {
+        val missing = AtomicInteger()
+        val ended = AtomicInteger()
+        val finished = AtomicInteger()
+        override fun onDownloadStarted(remoteIp: String, resumed: Boolean) = Unit
+        override fun onDownloadFinished(remoteIp: String) { finished.incrementAndGet() }
+        override fun onTransferEnded() { ended.incrementAndGet() }
+        override fun onServerGone() = Unit
+        override fun onFileMissing() { missing.incrementAndGet() }
+        override fun onFileUnreadable(error: IOException) = Unit
+        override fun onPermissionDenied() = Unit
+    }
+
+    @Test
+    fun aFileThatShrinksMidTransferIsNotAFinishedDownload() {
+        val big = File.createTempFile("qrserv", ".shrink").apply { RandomAccessFile(this, "rw").use { it.setLength(32L * 1024 * 1024) } }
+        val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
+        val counts = Counts()
+        val serving = FileServer(0, "127.0.0.1", { info }, { true }, counts)
+        serving.start()
+        try {
+            java.net.Socket().use { socket ->
+                socket.receiveBufferSize = 4096
+                socket.connect(java.net.InetSocketAddress("127.0.0.1", serving.listeningPort))
+                socket.getOutputStream().write("GET / HTTP/1.1\r\nHost: x\r\n\r\n".toByteArray())
+                socket.getInputStream().read(ByteArray(1024))
+                RandomAccessFile(big, "rw").use { it.setLength(1024L * 1024L) }
+                socket.soTimeout = 10000
+                val drain = ByteArray(1024 * 1024)
+                while (socket.getInputStream().read(drain) != -1) Unit
+            }
+            val deadline = System.currentTimeMillis() + 5000
+            while (counts.ended.get() == 0 && System.currentTimeMillis() < deadline) Thread.sleep(20)
+            assertEquals(1, counts.ended.get())
+            assertEquals(0, counts.finished.get())
+        } finally {
+            serving.stop()
+            big.delete()
+        }
     }
 }

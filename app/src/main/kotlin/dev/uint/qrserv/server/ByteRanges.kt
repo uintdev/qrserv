@@ -58,7 +58,11 @@ internal fun entityTag(file: File, length: Long): String {
     return "\"" + digest.digest().take(12).joinToString("") { "%02x".format(it) } + "\""
 }
 
-internal class LimitedInputStream(input: InputStream, private var remaining: Long) : FilterInputStream(input) {
+internal class LimitedInputStream(input: InputStream, remaining: Long) : FilterInputStream(input) {
+    @Volatile
+    var remaining: Long = remaining
+        private set
+
     override fun read(): Int {
         if (remaining <= 0) return -1
         return super.read().also { if (it >= 0) remaining-- }

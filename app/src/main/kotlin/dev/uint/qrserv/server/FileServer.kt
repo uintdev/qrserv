@@ -13,8 +13,8 @@ import io.ktor.server.plugins.origin
 import io.ktor.server.request.path
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.jvm.javaio.toByteReadChannel
+import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +25,8 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+
+private const val TRANSFER_CHUNK_BYTES = 64 * 1024
 
 class FileServer(
     private val port: Int,
@@ -182,11 +184,21 @@ class FileServer(
             synchronized(clientTransfers) { clientTransfers.getOrPut(remoteIp, ::ClientTransfers).active++ }
             var sent = false
             try {
-                call.respond(object : OutgoingContent.ReadChannelContent() {
+                val body = LimitedInputStream(stream, end - start + 1)
+                call.respond(object : OutgoingContent.WriteChannelContent() {
                     override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
                     override val contentType = ContentType.Application.OctetStream
                     override val contentLength = end - start + 1
-                    override fun readFrom(): ByteReadChannel = LimitedInputStream(stream, end - start + 1).toByteReadChannel()
+                    override suspend fun writeTo(channel: ByteWriteChannel) {
+                        val buffer = ByteArray(TRANSFER_CHUNK_BYTES)
+                        while (true) {
+                            val read = body.read(buffer)
+                            if (read == -1) break
+                            channel.writeFully(buffer, 0, read)
+                            channel.flush()
+                        }
+                        if (body.remaining > 0) throw IOException("File got shorter during the transfer")
+                    }
                 })
                 // respond() throws on an incomplete transfer.
                 sent = true
@@ -201,7 +213,6 @@ class FileServer(
                 }
             }
         } finally {
-            // Ktor closes the stream only if it asked for the channel; a second close is a no-op.
             runCatching { stream.close() }
         }
     }
