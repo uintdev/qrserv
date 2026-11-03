@@ -264,15 +264,15 @@ class FileRepository(private val context: Context) {
                         finalName = prefixedEntryName(TokenGenerator.generate("0123456789ABCDEF", 6), rawName)
                         usedNames.add(finalName.lowercase())
                     }
+                    val base = bytesCopiedSoFar
                     resolver.openInputStream(uri)?.use { input ->
                         zos.putNextEntry(ZipEntry(finalName))
-                        val base = bytesCopiedSoFar
                         bytesCopiedSoFar = base + copyWithProgress(input, zos) { copied ->
                             onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
                         }
                         zos.closeEntry()
                     } ?: throw FileNotFoundException(finalName)
-                    archivedEntries.add(ArchivedEntry(finalName, size ?: 0L))
+                    archivedEntries.add(ArchivedEntry(finalName, bytesCopiedSoFar - base))
                     onProgress(multiFileProgress(index + 1, uris.size, bytesCopiedSoFar, totalBytes))
                 }
             }
