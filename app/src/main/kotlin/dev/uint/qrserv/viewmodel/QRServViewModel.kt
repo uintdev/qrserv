@@ -130,6 +130,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var launchCacheHandled = false
 
+    private var launchPurge: Job? = null
+
+    private var importRunning = false
+
     private var addressesAtManualPick = emptySet<String>()
 
     @Volatile
@@ -381,7 +385,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     fun purgeStaleCacheOnLaunch() {
         if (launchCacheHandled) return
         launchCacheHandled = true
-        viewModelScope.launch(Dispatchers.IO) { deletePickerCache() }
+        launchPurge = viewModelScope.launch(Dispatchers.IO) { deletePickerCache() }
     }
 
     fun onImportClicked() {
@@ -468,13 +472,21 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
         if (rejectIfBusy()) return
-        setLoading(true)
-        stopFileObserver()
-        viewModelScope.launch {
-            val result = fileRepo.importUris(uris) { progress ->
+        runImport {
+            fileRepo.importUris(uris) { progress ->
                 _uiState.update { it.copy(importProgress = progress) }
             }
-            handleImportResult(result)
+        }
+    }
+
+    private fun runImport(import: suspend () -> ImportResult) {
+        setLoading(true)
+        importRunning = true
+        stopFileObserver()
+        viewModelScope.launch {
+            // The purge would otherwise take the new file too.
+            launchPurge?.join()
+            handleImportResult(import())
         }
     }
 
@@ -494,12 +506,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onDirectAccessFileChosen(path: String) {
         if (rejectIfBusy()) return
-        setLoading(true)
-        stopFileObserver()
-        viewModelScope.launch {
-            val result = fileRepo.importDirectAccessFile(path)
-            handleImportResult(result)
-        }
+        runImport { fileRepo.importDirectAccessFile(path) }
     }
 
     fun onSharedFilesReceived(uris: List<Uri>) {
@@ -513,17 +520,22 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         if (text.isBlank()) return
         withLocalNetwork {
             if (rejectIfBusy()) return@withLocalNetwork
-            setLoading(true)
-            stopFileObserver()
-            viewModelScope.launch {
-                val result = fileRepo.importSharedText(text)
-                handleImportResult(result)
-            }
+            runImport { fileRepo.importSharedText(text) }
         }
     }
 
     private suspend fun handleImportResult(result: ImportResult) {
         val sharing = _uiState.value.let { it.serverRunning && !it.serverPoweringDown }
+        handleImportOutcome(result, sharing)
+        importRunning = false
+        if (result !is ImportResult.Success) {
+            if (_uiState.value.serverRunning) fileRepo.pruneCacheKeeping(_uiState.value.fileInfo.path) else deletePickerCache()
+        }
+        if (result !is ImportResult.Success && sharing) startFileObserver(_uiState.value.fileInfo)
+        setLoading(false)
+    }
+
+    private suspend fun handleImportOutcome(result: ImportResult, sharing: Boolean) {
         when (result) {
             is ImportResult.Success -> {
                 stopFileObserver()
@@ -544,8 +556,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             is ImportResult.SelectionFailed ->
                 importFailed(sharing, PageType.UNHANDLED_ERROR, R.string.page_info_unhandlederror_msg, result.message)
         }
-        if (result !is ImportResult.Success && sharing) startFileObserver(_uiState.value.fileInfo)
-        setLoading(false)
     }
 
     private suspend fun importFailed(sharing: Boolean, page: PageType, @StringRes toastRes: Int, detail: String = "") {
@@ -779,7 +789,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             clearSessionMarker()
             val stoppedPage = page ?: pageAfterStop
             pageAfterStop = PageType.LANDING
-            withContext(Dispatchers.IO) { deletePickerCache() }
+            // A running import writes there too.
+            if (!importRunning) withContext(Dispatchers.IO) { deletePickerCache() }
             hotspot.stopSession()
             _uiState.update {
                 it.copy(
