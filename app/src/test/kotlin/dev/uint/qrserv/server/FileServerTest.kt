@@ -13,6 +13,7 @@ import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.time.Duration.Companion.milliseconds
 
 class FileServerTest {
 
@@ -273,6 +274,103 @@ class FileServerTest {
     }
 
     @Test
+    fun aClientThatStopsReadingIsCutAfterTheStallTimeout() {
+        val big = File.createTempFile("qrserv", ".big").apply { RandomAccessFile(this, "rw").use { it.setLength(64L * 1024 * 1024) } }
+        val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
+        val counts = Counts()
+        val stalling = FileServer(0, "127.0.0.1", { info }, { true }, counts, stallTimeout = 500.milliseconds)
+        stalling.start()
+        try {
+            java.net.Socket().use { socket ->
+                socket.receiveBufferSize = 4096
+                socket.connect(java.net.InetSocketAddress("127.0.0.1", stalling.listeningPort))
+                socket.getOutputStream().write("GET / HTTP/1.1\r\nHost: x\r\n\r\n".toByteArray())
+                socket.getInputStream().read(ByteArray(1024))
+                val deadline = System.currentTimeMillis() + 5000
+                while (counts.ended.get() == 0 && System.currentTimeMillis() < deadline) Thread.sleep(20)
+                assertEquals(1, counts.ended.get())
+                socket.soTimeout = 5000
+                val drain = ByteArray(1024 * 1024)
+                while (socket.getInputStream().read(drain) != -1) Unit
+            }
+        } finally {
+            stalling.stop()
+            big.delete()
+        }
+    }
+
+    @Test
+    fun aClientReadingAboveTheMinimumRateIsNotCut() {
+        val big = File.createTempFile("qrserv", ".slow").apply { RandomAccessFile(this, "rw").use { it.setLength(32L * 1024 * 1024) } }
+        val info = FileInfo(name = "slow.bin", path = big.path, pathPart = big.parent!!, length = big.length())
+        val counts = Counts()
+        val serving = FileServer(0, "127.0.0.1", { info }, { true }, counts, stallTimeout = 500.milliseconds)
+        serving.start()
+        try {
+            var total = 0L
+            val started = System.currentTimeMillis()
+            (URL("http://127.0.0.1:${serving.listeningPort}/").openConnection() as HttpURLConnection).inputStream.use { input ->
+                // About 5 MiB/s, over 1 MiB per timeout.
+                val buffer = ByteArray(256 * 1024)
+                while (true) {
+                    val read = input.read(buffer)
+                    if (read == -1) break
+                    total += read
+                    Thread.sleep(50)
+                }
+            }
+            assertEquals(big.length(), total)
+            assertTrue(System.currentTimeMillis() - started > 2000)
+            val deadline = System.currentTimeMillis() + 1000
+            while (counts.finished.get() == 0 && System.currentTimeMillis() < deadline) Thread.sleep(10)
+            assertEquals(1, counts.finished.get())
+        } finally {
+            serving.stop()
+            big.delete()
+        }
+    }
+
+    @Test
+    fun aDownloaderCutForStallingIsNotFinishedAndCanResume() {
+        val big = File.createTempFile("qrserv", ".big").apply { RandomAccessFile(this, "rw").use { it.setLength(64L * 1024 * 1024) } }
+        val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
+        val counts = Counts()
+        val serving = FileServer(0, "127.0.0.1", { info }, { true }, counts, stallTimeout = 500.milliseconds)
+        serving.start()
+        fun get(range: String, tag: String): HttpURLConnection =
+            (URL("http://127.0.0.1:${serving.listeningPort}/").openConnection() as HttpURLConnection).apply {
+                setRequestProperty("Range", range)
+                setRequestProperty("If-Range", tag)
+            }
+        try {
+            val tag = (URL("http://127.0.0.1:${serving.listeningPort}/").openConnection() as HttpURLConnection).run {
+                requestMethod = "HEAD"
+                getHeaderField("ETag").also { disconnect() }
+            }
+            java.net.Socket().use { stalled ->
+                stalled.receiveBufferSize = 4096
+                stalled.connect(java.net.InetSocketAddress("127.0.0.1", serving.listeningPort))
+                stalled.getOutputStream().write("GET / HTTP/1.1\r\nHost: x\r\nRange: bytes=0-\r\nIf-Range: $tag\r\n\r\n".toByteArray())
+                stalled.getInputStream().read(ByteArray(1024))
+                // The segment ending the file completes while the other is stuck.
+                val tail = get("bytes=${big.length() - 1024}-", tag)
+                assertEquals(206, tail.responseCode)
+                tail.inputStream.use { it.readBytes() }
+                val deadline = System.currentTimeMillis() + 5000
+                while (counts.ended.get() < 2 && System.currentTimeMillis() < deadline) Thread.sleep(20)
+                assertEquals(2, counts.ended.get())
+                assertEquals(0, counts.finished.get())
+            }
+            val resumed = get("bytes=${big.length() - 4096}-", tag)
+            assertEquals(206, resumed.responseCode)
+            assertEquals(4096, resumed.inputStream.use { it.readBytes() }.size)
+        } finally {
+            serving.stop()
+            big.delete()
+        }
+    }
+
+    @Test
     fun aFileThatShrinksMidTransferIsNotAFinishedDownload() {
         val big = File.createTempFile("qrserv", ".shrink").apply { RandomAccessFile(this, "rw").use { it.setLength(32L * 1024 * 1024) } }
         val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
@@ -294,6 +392,78 @@ class FileServerTest {
             while (counts.ended.get() == 0 && System.currentTimeMillis() < deadline) Thread.sleep(20)
             assertEquals(1, counts.ended.get())
             assertEquals(0, counts.finished.get())
+        } finally {
+            serving.stop()
+            big.delete()
+        }
+    }
+
+    @Test
+    fun aDownloaderThatResumesAfterACutCanStillFinish() {
+        val big = File.createTempFile("qrserv", ".resume").apply { RandomAccessFile(this, "rw").use { it.setLength(64L * 1024 * 1024) } }
+        val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
+        val counts = Counts()
+        val serving = FileServer(0, "127.0.0.1", { info }, { true }, counts, stallTimeout = 500.milliseconds)
+        serving.start()
+        fun rangeGet(start: Long, tag: String): HttpURLConnection =
+            (URL("http://127.0.0.1:${serving.listeningPort}/").openConnection() as HttpURLConnection).apply {
+                setRequestProperty("Range", "bytes=$start-")
+                setRequestProperty("If-Range", tag)
+            }
+        try {
+            val tag = (URL("http://127.0.0.1:${serving.listeningPort}/").openConnection() as HttpURLConnection).run {
+                requestMethod = "HEAD"
+                getHeaderField("ETag").also { disconnect() }
+            }
+            // A second segment that keeps moving holds the client's entry open across the cut.
+            val moving = rangeGet(big.length() / 2, tag).inputStream
+            val buffer = ByteArray(256 * 1024)
+            java.net.Socket().use { stalled ->
+                stalled.receiveBufferSize = 4096
+                stalled.connect(java.net.InetSocketAddress("127.0.0.1", serving.listeningPort))
+                stalled.getOutputStream().write("GET / HTTP/1.1\r\nHost: x\r\nRange: bytes=0-\r\nIf-Range: $tag\r\n\r\n".toByteArray())
+                stalled.getInputStream().read(ByteArray(1024))
+                val deadline = System.currentTimeMillis() + 5000
+                while (counts.ended.get() == 0 && System.currentTimeMillis() < deadline) {
+                    moving.read(buffer)
+                    Thread.sleep(20)
+                }
+                assertEquals(1, counts.ended.get())
+            }
+            rangeGet(big.length() - 1024, tag).inputStream.use { it.readBytes() }
+            while (moving.read(buffer) != -1) Unit
+            moving.close()
+            val deadline = System.currentTimeMillis() + 3000
+            while (counts.finished.get() == 0 && System.currentTimeMillis() < deadline) Thread.sleep(20)
+            assertEquals(1, counts.finished.get())
+        } finally {
+            serving.stop()
+            big.delete()
+        }
+    }
+
+    // A known limit: Ktor buffers about 1 MiB between file reads, so about 3.5 KB/s at the real 5 minutes.
+    @Test
+    fun aClientFarBelowTheMinimumRateCountsAsStalled() {
+        val big = File.createTempFile("qrserv", ".limit").apply { RandomAccessFile(this, "rw").use { it.setLength(64L * 1024 * 1024) } }
+        val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
+        val counts = Counts()
+        val serving = FileServer(0, "127.0.0.1", { info }, { true }, counts, stallTimeout = 500.milliseconds)
+        serving.start()
+        try {
+            java.net.Socket().use { socket ->
+                socket.receiveBufferSize = 4096
+                socket.connect(java.net.InetSocketAddress("127.0.0.1", serving.listeningPort))
+                socket.getOutputStream().write("GET / HTTP/1.1\r\nHost: x\r\n\r\n".toByteArray())
+                val buffer = ByteArray(4 * 1024)
+                val deadline = System.currentTimeMillis() + 10_000
+                while (counts.ended.get() == 0 && System.currentTimeMillis() < deadline) {
+                    socket.getInputStream().read(buffer)
+                    Thread.sleep(40)
+                }
+                assertEquals(1, counts.ended.get())
+                assertEquals(0, counts.finished.get())
+            }
         } finally {
             serving.stop()
             big.delete()

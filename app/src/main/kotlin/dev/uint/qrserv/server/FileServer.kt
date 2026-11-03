@@ -20,11 +20,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
+
+private val TRANSFER_STALL_TIMEOUT = 5.minutes
 
 private const val TRANSFER_CHUNK_BYTES = 64 * 1024
 
@@ -34,6 +41,7 @@ class FileServer(
     private val fileInfoProvider: () -> FileInfo?,
     private val hasStoragePermission: (String) -> Boolean,
     private val listener: Listener,
+    private val stallTimeout: Duration = TRANSFER_STALL_TIMEOUT,
 ) {
 
     interface Listener {
@@ -58,7 +66,7 @@ class FileServer(
     // Per client: a multi-connection downloader can finish the segment ending the file before the
     // rest, and cancels a segment on purpose once it meets the next one (Chrome does both), so
     // "finished" waits for the client's last transfer in flight, however that one ends.
-    private class ClientTransfers(var active: Int = 0, var reachedEnd: Boolean = false, var cutByStop: Boolean = false)
+    private class ClientTransfers(var active: Int = 0, var reachedEnd: Boolean = false, var cutByStop: Boolean = false, var stalled: Boolean = false)
 
     private val clientTransfers = HashMap<String, ClientTransfers>()
 
@@ -181,31 +189,39 @@ class FileServer(
             }
 
             listener.onDownloadStarted(remoteIp, resumed = start > 0)
-            synchronized(clientTransfers) { clientTransfers.getOrPut(remoteIp, ::ClientTransfers).active++ }
+            synchronized(clientTransfers) {
+                val client = clientTransfers.getOrPut(remoteIp, ::ClientTransfers)
+                client.active++
+                // Asking again after a stall is the resume.
+                client.stalled = false
+            }
             var sent = false
+            var stalled = false
             try {
                 val body = LimitedInputStream(stream, end - start + 1)
-                call.respond(object : OutgoingContent.WriteChannelContent() {
-                    override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
-                    override val contentType = ContentType.Application.OctetStream
-                    override val contentLength = end - start + 1
-                    override suspend fun writeTo(channel: ByteWriteChannel) {
-                        val buffer = ByteArray(TRANSFER_CHUNK_BYTES)
-                        while (true) {
-                            val read = body.read(buffer)
-                            if (read == -1) break
-                            channel.writeFully(buffer, 0, read)
-                            channel.flush()
+                cutIfStalled(body, onStalled = { stalled = true }) {
+                    call.respond(object : OutgoingContent.WriteChannelContent() {
+                        override val status = if (range != null) HttpStatusCode.PartialContent else HttpStatusCode.OK
+                        override val contentType = ContentType.Application.OctetStream
+                        override val contentLength = end - start + 1
+                        override suspend fun writeTo(channel: ByteWriteChannel) {
+                            val buffer = ByteArray(TRANSFER_CHUNK_BYTES)
+                            while (true) {
+                                val read = body.read(buffer)
+                                if (read == -1) break
+                                channel.writeFully(buffer, 0, read)
+                                channel.flush()
+                            }
+                            if (body.remaining > 0) throw IOException("File got shorter during the transfer")
                         }
-                        if (body.remaining > 0) throw IOException("File got shorter during the transfer")
-                    }
-                })
-                // respond() throws on an incomplete transfer.
-                sent = true
+                    })
+                    // respond() throws on an incomplete transfer.
+                    sent = true
+                }
             } finally {
                 try {
                     val reachedEnd = sent && end == length - 1
-                    if (clientTransferEnded(remoteIp, reachedEnd, cutByStop = !sent && !running)) {
+                    if (clientTransferEnded(remoteIp, reachedEnd, cutByStop = !sent && !running, stalled = stalled)) {
                         listener.onDownloadFinished(remoteIp)
                     }
                 } finally {
@@ -217,18 +233,35 @@ class FileServer(
         }
     }
 
+    private suspend fun cutIfStalled(body: LimitedInputStream, onStalled: () -> Unit, respond: suspend () -> Unit) = coroutineScope {
+        val watchdog = launch {
+            var last = body.remaining
+            while (true) {
+                delay(stallTimeout)
+                if (body.remaining == last) {
+                    onStalled()
+                    this@coroutineScope.cancel()
+                }
+                last = body.remaining
+            }
+        }
+        respond()
+        watchdog.cancel()
+    }
+
     /**
      * True if this was [remoteIp]'s last transfer in flight and one of them sent the end of the file,
-     * unless stopping the server cut one short.
+     * unless one was cut short by the server stopping or the client stalling.
      */
-    private fun clientTransferEnded(remoteIp: String, reachedEnd: Boolean, cutByStop: Boolean): Boolean =
+    private fun clientTransferEnded(remoteIp: String, reachedEnd: Boolean, cutByStop: Boolean, stalled: Boolean): Boolean =
         synchronized(clientTransfers) {
             val client = clientTransfers.getValue(remoteIp)
             client.reachedEnd = client.reachedEnd || reachedEnd
             client.cutByStop = client.cutByStop || cutByStop
+            client.stalled = client.stalled || stalled
             if (--client.active > 0) return false
             clientTransfers.remove(remoteIp)
-            client.reachedEnd && !client.cutByStop
+            client.reachedEnd && !client.cutByStop && !client.stalled
         }
 
     fun stop() {
