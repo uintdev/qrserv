@@ -90,6 +90,8 @@ private val ADDRESS_SETTLE_TIME = 2.seconds
 
 private val BETTER_IPV6_ADDRESS_SETTLE_TIME = 13.seconds
 
+private val IMPORT_STALL_CHECK_INTERVAL = 1.minutes
+
 private data class IdleTimerKey(
     val sharing: Boolean,
     val network: String?,
@@ -495,7 +497,14 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             launchPurge?.join()
             // Separate, as a provider can block this for good.
             val work = viewModelScope.launch(Dispatchers.IO) { outcome.complete(import(control)) }
+            val watchdog = launch {
+                while (true) {
+                    delay(IMPORT_STALL_CHECK_INTERVAL)
+                    if (control.stalled() && outcome.complete(ImportResult.Incomplete)) control.abort()
+                }
+            }
             val result = outcome.await()
+            watchdog.cancel()
             work.cancel()
             importInProgress = null
             _uiState.update { it.copy(importCancelable = false) }

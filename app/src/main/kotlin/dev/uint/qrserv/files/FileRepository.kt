@@ -130,6 +130,7 @@ private fun entryNameWithin(prefix: String, name: String): String {
 internal suspend fun copyWithProgress(
     input: InputStream,
     output: OutputStream,
+    onData: () -> Unit = {},
     onBytesCopied: (bytesCopied: Long) -> Unit,
 ): Long = withContext(Dispatchers.IO) {
     val buffer = ByteArray(64 * 1024)
@@ -139,6 +140,7 @@ internal suspend fun copyWithProgress(
         ensureActive()
         val read = input.read(buffer)
         if (read == -1) break
+        onData()
         output.write(buffer, 0, read)
         copied += read
         if (lastReport == null || lastReport.elapsedNow() >= PROGRESS_REPORT_INTERVAL) {
@@ -235,7 +237,7 @@ class FileRepository(private val context: Context) {
                     descriptor.createInputStream().use { input ->
                         control.attach(input)
                         FileOutputStream(partFile).use { output ->
-                            finalBytes = copyWithProgress(input, output) { copied ->
+                            finalBytes = copyWithProgress(input, output, control::dataArrived) { copied ->
                                 // A real size wasn't available from the content provider -- fall
                                 // back to the plain spinner rather than a meaningless bar/percentage.
                                 if (size > 0) onProgress(ImportProgress(0, 1, copied, totalBytes))
@@ -290,12 +292,13 @@ class FileRepository(private val context: Context) {
                         usedNames.add(finalName.lowercase())
                     }
                     val base = bytesCopiedSoFar
+                    control.startingFile()
                     resolver.openAssetFileDescriptor(uri, "r")?.use { descriptor ->
                         val expected = expectedBytes(descriptor.length, size ?: 0L)
                         descriptor.createInputStream().use { input ->
                             control.attach(input)
                             zos.putNextEntry(ZipEntry(finalName))
-                            bytesCopiedSoFar = base + copyWithProgress(input, zos) { copied ->
+                            bytesCopiedSoFar = base + copyWithProgress(input, zos, control::dataArrived) { copied ->
                                 onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
                             }
                             zos.closeEntry()
