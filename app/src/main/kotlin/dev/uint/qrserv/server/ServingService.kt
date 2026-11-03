@@ -25,6 +25,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -63,13 +64,21 @@ class ServingService : Service() {
             }
         }
         scope.launch {
-            ServingState.activeTransfers.map { it > 0 }.distinctUntilChanged().collectLatest { active ->
-                holdWakeLock(active)
-                while (active) {
-                    delay(WAKE_LOCK_RENEW)
-                    holdWakeLock(true)
-                }
-            }
+            combine(
+                ServingState.activeTransfers.map { it > 0 },
+                ServingState.notice.map { (it as? ServingNotice.Preparing)?.cancelable == true },
+            ) { downloading, importing -> downloading to importing }
+                .distinctUntilChanged()
+                .collectLatest { (downloading, importing) -> keepAwakeWhile(downloading, importing) }
+        }
+    }
+
+    // A sleeping device stalls an import from a slow source.
+    private suspend fun keepAwakeWhile(downloading: Boolean, importing: Boolean) {
+        holdWakeLock(downloading || importing)
+        while (downloading || importing) {
+            delay(WAKE_LOCK_RENEW)
+            holdWakeLock(true)
         }
     }
 

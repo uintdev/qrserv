@@ -21,7 +21,7 @@
         android:name="android.permission.NEARBY_WIFI_DEVICES"
         android:usesPermissionFlags="neverForLocation"
         tools:targetApi="s" />
-    <!-- Held only while a download is in progress -->
+    <!-- Held only while an import or download is in progress -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- Legacy storage permission, used on API 29 and below for Direct Access Mode -->

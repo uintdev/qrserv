@@ -43,7 +43,7 @@ Permission usage:
 - READ_EXTERNAL_STORAGE -- Read-only Direct Access Mode on internal storage (up to Android 10)
 - FOREGROUND_SERVICE and FOREGROUND_SERVICE_CONNECTED_DEVICE -- Importing and sharing in the background
 - POST_NOTIFICATIONS -- The sharing notification and the idle stop notice
-- WAKE_LOCK -- Keeping the device awake during downloads
+- WAKE_LOCK -- Keeping the device awake during imports and downloads
 - CHANGE_WIFI_STATE -- Private hotspot (Android 13+), background sharing (Android 14+)
 - NEARBY_WIFI_DEVICES -- Private hotspot (Android 13+); never used for location
 - ACCESS_WIFI_STATE -- Checking hotspot capabilities (Android 13+)
