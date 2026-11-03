@@ -142,14 +142,14 @@ class ServingService : Service() {
             .setPublicVersion(publicVersion)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
+        val stop = PendingIntent.getService(
+            this,
+            1,
+            Intent(this, ServingService::class.java).setAction(ACTION_STOP),
+            PendingIntent.FLAG_IMMUTABLE,
+        )
         when (notice) {
             is ServingNotice.Sharing -> {
-                val stop = PendingIntent.getService(
-                    this,
-                    1,
-                    Intent(this, ServingService::class.java).setAction(ACTION_STOP),
-                    PendingIntent.FLAG_IMMUTABLE,
-                )
                 builder
                     .setContentTitle(getString(R.string.notification_sharing_title, notice.fileName))
                     .setContentText(
@@ -165,6 +165,9 @@ class ServingService : Service() {
 
             else -> {
                 builder.setContentTitle(getString(R.string.notification_preparing_title))
+                if ((notice as? ServingNotice.Preparing)?.cancelable == true) {
+                    builder.addAction(0, getString(R.string.notification_action_stop), stop)
+                }
             }
         }
         return builder.build()

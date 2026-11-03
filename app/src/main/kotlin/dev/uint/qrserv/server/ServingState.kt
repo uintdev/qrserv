@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 sealed interface ServingNotice {
-    data object Preparing : ServingNotice
+    data class Preparing(val cancelable: Boolean) : ServingNotice
 
     data object StartingHotspot : ServingNotice
 

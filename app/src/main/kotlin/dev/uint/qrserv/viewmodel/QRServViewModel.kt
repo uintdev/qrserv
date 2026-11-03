@@ -27,6 +27,7 @@ import dev.uint.qrserv.data.ThemeMode
 import dev.uint.qrserv.data.readPersistedThemeMode
 import dev.uint.qrserv.files.CacheManager
 import dev.uint.qrserv.files.FileRepository
+import dev.uint.qrserv.files.ImportControl
 import dev.uint.qrserv.files.ImportResult
 import dev.uint.qrserv.net.AddressChange
 import dev.uint.qrserv.net.HotspotInfo
@@ -49,6 +50,7 @@ import dev.uint.qrserv.util.canPostNotifications
 import dev.uint.qrserv.util.checkForUpdate
 import dev.uint.qrserv.util.hasDirectAccess
 import dev.uint.qrserv.util.isLocalNetworkGranted
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -133,6 +135,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private var launchPurge: Job? = null
 
     private var importRunning = false
+
+    private var importInProgress: Pair<ImportControl, CompletableDeferred<ImportResult>>? = null
 
     private var addressesAtManualPick = emptySet<String>()
 
@@ -298,7 +302,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun servingNoticeFor(state: AppUiState): ServingNotice? = when {
         state.hotspotStarting -> ServingNotice.StartingHotspot
-        state.actionButtonLoading -> ServingNotice.Preparing
+        state.actionButtonLoading -> ServingNotice.Preparing(state.importCancelable)
         state.serverRunning && !state.serverPoweringDown -> {
             ServingNotice.Sharing(state.fileInfo.name, "${NetworkUtils.urlHost(state.selectedIp)}:${state.port}", state.hotspot?.ssid)
         }
@@ -472,21 +476,40 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
         if (rejectIfBusy()) return
-        runImport {
-            fileRepo.importUris(uris) { progress ->
-                _uiState.update { it.copy(importProgress = progress) }
+        runImport { control ->
+            fileRepo.importUris(uris, control) { progress ->
+                if (!control.aborted) _uiState.update { it.copy(importProgress = progress) }
             }
         }
     }
 
-    private fun runImport(import: suspend () -> ImportResult) {
+    private fun runImport(import: suspend (ImportControl) -> ImportResult) {
         setLoading(true)
         importRunning = true
+        val control = ImportControl()
+        val outcome = CompletableDeferred<ImportResult>()
+        importInProgress = control to outcome
+        _uiState.update { it.copy(importCancelable = true) }
         viewModelScope.launch {
             // The purge would otherwise take the new file too.
             launchPurge?.join()
-            handleImportResult(import())
+            // Separate, as a provider can block this for good.
+            val work = viewModelScope.launch(Dispatchers.IO) { outcome.complete(import(control)) }
+            val result = outcome.await()
+            work.cancel()
+            importInProgress = null
+            _uiState.update { it.copy(importCancelable = false) }
+            handleImportResult(result)
         }
+    }
+
+    /** True if there was an import to cancel. */
+    fun cancelImport(): Boolean {
+        val (control, outcome) = importInProgress ?: return false
+        // It had already finished.
+        if (!outcome.complete(ImportResult.Canceled)) return false
+        control.abort()
+        return true
     }
 
     fun onDirectAccessPermissionResult(granted: Boolean) {
@@ -542,6 +565,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 startServing(result.fileInfo)
             }
             ImportResult.EmptySelection -> hotspot.abandonIdle()
+            ImportResult.Canceled -> hotspot.abandonIdle()
             ImportResult.FileGone -> importFailed(sharing, PageType.FILE_REMOVED, R.string.page_info_fileremoved_msg)
             ImportResult.DirectAccessPathMissing -> {
                 postToast(R.string.dam_path_not_found)
@@ -765,7 +789,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onShutdownClicked() {
-        if (_uiState.value.actionButtonLoading) {
+        val canceledImport = cancelImport()
+        if (canceledImport && !_uiState.value.serverRunning) return
+        if (_uiState.value.actionButtonLoading && !canceledImport) {
             postToast(R.string.info_pending_fileprocessing_shutdown)
             return
         }
@@ -1059,6 +1085,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     override fun onCleared() {
+        cancelImport()
         connectivityManager.unregisterNetworkCallback(networkCallback)
         stopFileObserver()
         serverController.stop()

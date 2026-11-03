@@ -100,6 +100,7 @@ data class FileInfo(
 data class AppUiState(
     val pageType: PageType = PageType.LANDING,
     val actionButtonLoading: Boolean = false,
+    val importCancelable: Boolean = false,
     val serverRunning: Boolean = false,
     val serverPoweringDown: Boolean = false,
     val fileInfo: FileInfo = FileInfo(),

@@ -15,6 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -34,6 +36,7 @@ sealed class ImportResult {
     object DirectAccessPathMissing : ImportResult()
     /** The device ran out of room, either before the copy started or part-way through it. */
     object InsufficientStorage : ImportResult()
+    object Canceled : ImportResult()
     object Incomplete : ImportResult()
     /** A picked file couldn't be read/archived, or a shared text file couldn't be written --
      * for any reason other than [FileGone] (e.g. deleted between selection and confirmation). */
@@ -119,6 +122,33 @@ private fun entryNameWithin(prefix: String, name: String): String {
     return kept.append(extension).toString()
 }
 
+/**
+ * Copies [input] to [output] in chunks, calling [onBytesCopied] with the running total no
+ * more than once per 100ms (large files can churn through this loop thousands of times a
+ * second, and there's no point re-rendering progress UI faster than that).
+ */
+internal suspend fun copyWithProgress(
+    input: InputStream,
+    output: OutputStream,
+    onBytesCopied: (bytesCopied: Long) -> Unit,
+): Long = withContext(Dispatchers.IO) {
+    val buffer = ByteArray(64 * 1024)
+    var copied = 0L
+    var lastReport: TimeSource.Monotonic.ValueTimeMark? = null
+    while (true) {
+        ensureActive()
+        val read = input.read(buffer)
+        if (read == -1) break
+        output.write(buffer, 0, read)
+        copied += read
+        if (lastReport == null || lastReport.elapsedNow() >= PROGRESS_REPORT_INTERVAL) {
+            onBytesCopied(copied)
+            lastReport = TimeSource.Monotonic.markNow()
+        }
+    }
+    copied
+}
+
 private const val MAX_FILE_NAME_BYTES = 255
 
 internal fun fitsFileName(name: String): Boolean = name.toByteArray(Charsets.UTF_8).size <= MAX_FILE_NAME_BYTES
@@ -171,35 +201,10 @@ class FileRepository(private val context: Context) {
         }
     }
 
-    /**
-     * Copies [input] to [output] in chunks, calling [onBytesCopied] with the running total no
-     * more than once per 100ms (large files can churn through this loop thousands of times a
-     * second, and there's no point re-rendering progress UI faster than that).
-     */
-    private fun copyWithProgress(
-        input: InputStream,
-        output: OutputStream,
-        onBytesCopied: (bytesCopied: Long) -> Unit,
-    ): Long {
-        val buffer = ByteArray(64 * 1024)
-        var copied = 0L
-        var lastReport: TimeSource.Monotonic.ValueTimeMark? = null
-        while (true) {
-            val read = input.read(buffer)
-            if (read == -1) break
-            output.write(buffer, 0, read)
-            copied += read
-            if (lastReport == null || lastReport.elapsedNow() >= PROGRESS_REPORT_INTERVAL) {
-                onBytesCopied(copied)
-                lastReport = TimeSource.Monotonic.markNow()
-            }
-        }
-        return copied
-    }
-
     /** Imports files picked via the system document picker or received via a share intent. */
     suspend fun importUris(
         uris: List<Uri>,
+        control: ImportControl = ImportControl(),
         onProgress: (ImportProgress) -> Unit = {},
     ): ImportResult = withContext(Dispatchers.IO) {
         if (uris.isEmpty()) return@withContext ImportResult.EmptySelection
@@ -228,6 +233,7 @@ class FileRepository(private val context: Context) {
                     // Before the copy, so a file still growing isn't taken for a short one.
                     val expected = expectedBytes(descriptor.length, size)
                     descriptor.createInputStream().use { input ->
+                        control.attach(input)
                         FileOutputStream(partFile).use { output ->
                             finalBytes = copyWithProgress(input, output) { copied ->
                                 // A real size wasn't available from the content provider -- fall
@@ -238,6 +244,7 @@ class FileRepository(private val context: Context) {
                         checkFullyCopied(finalBytes, expected)
                     }
                 } ?: throw FileNotFoundException()
+                currentCoroutineContext().ensureActive()
                 if (!partFile.renameTo(destFile)) throw IOException("Couldn't move the file into place")
             }
             copyResult.onFailure { error ->
@@ -286,6 +293,7 @@ class FileRepository(private val context: Context) {
                     resolver.openAssetFileDescriptor(uri, "r")?.use { descriptor ->
                         val expected = expectedBytes(descriptor.length, size ?: 0L)
                         descriptor.createInputStream().use { input ->
+                            control.attach(input)
                             zos.putNextEntry(ZipEntry(finalName))
                             bytesCopiedSoFar = base + copyWithProgress(input, zos) { copied ->
                                 onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))

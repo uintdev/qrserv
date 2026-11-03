@@ -75,6 +75,7 @@ import androidx.compose.material3.TooltipState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ripple
@@ -146,9 +147,11 @@ import dev.uint.qrserv.util.iconForFileName
 import dev.uint.qrserv.viewmodel.QRServViewModel
 import dev.uint.qrserv.viewmodel.hotspotFailureMessageRes
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -171,6 +174,7 @@ fun MainScreen(
     var progressBarPending by remember { mutableStateOf(false) }
     var lastProgress by remember { mutableStateOf<ImportProgress?>(null) }
     var operationShowedProgress by remember { mutableStateOf(false) }
+    var cancelShownOnCard by remember { mutableStateOf(false) }
     val finishedProgress = remember { uiState.importProgress.takeIf { !uiState.actionButtonLoading } }
     LaunchedEffect(uiState.actionButtonLoading) {
         if (uiState.actionButtonLoading) {
@@ -219,6 +223,27 @@ fun MainScreen(
     val settledState = remember { arrayOf(uiState) }
     SideEffect { if (!uiState.hotspotScreenPending) settledState[0] = uiState }
     val shownState = if (uiState.hotspotScreenPending) settledState[0] else uiState
+
+    // After a moment, so quick re-imports don't flash the card.
+    var importTakingAWhile by remember { mutableStateOf(false) }
+    LaunchedEffect(uiState.importCancelable) {
+        importTakingAWhile = false
+        if (uiState.importCancelable) {
+            delay(1.seconds)
+            importTakingAWhile = true
+        }
+    }
+    // Held at 100% so the hotspot screen replaces the card without the imported screen flashing up.
+    val progressCardShown = progressBarPending || (uiState.hotspotScreenPending && operationShowedProgress) ||
+        // Shutting down cancels the import first; don't show the sharing screen on the way out.
+        (cancelShownOnCard && shownState.serverPoweringDown) ||
+        // Starting the hotspot shows on its own button instead, as the import FAB does.
+        (shownState.actionButtonLoading && !shownState.hotspotStarting &&
+            (shownState.pageType != PageType.IMPORTED || shownState.importProgress != null || importTakingAWhile))
+    // Stays once shown, disabled, so the card doesn't resize as it finishes filling.
+    LaunchedEffect(uiState.importCancelable, progressCardShown) {
+        if (uiState.importCancelable) cancelShownOnCard = true else if (!progressCardShown) cancelShownOnCard = false
+    }
 
     var menuExpanded by remember { mutableStateOf(false) }
     val isWideScreen = rememberIsWideScreen()
@@ -292,11 +317,7 @@ fun MainScreen(
         ) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 when {
-                    // Held at 100% so the hotspot screen replaces the card without the imported screen flashing up.
-                    progressBarPending || (uiState.hotspotScreenPending && operationShowedProgress) ||
-                        // Starting the hotspot shows on its own button instead, as the import FAB does.
-                        (shownState.actionButtonLoading && !shownState.hotspotStarting &&
-                            (shownState.pageType != PageType.IMPORTED || shownState.importProgress != null)) -> {
+                    progressCardShown -> {
                         Card(
                             shape = MaterialTheme.shapes.extraLarge,
                             elevation = CardDefaults.cardElevation(1.dp),
@@ -331,6 +352,15 @@ fun MainScreen(
                                     }
                                 } else {
                                     CircularProgressIndicator()
+                                }
+                            }
+                            if (cancelShownOnCard || uiState.importCancelable) {
+                                TextButton(
+                                    onClick = { viewModel.cancelImport() },
+                                    enabled = uiState.importCancelable,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 8.dp),
+                                ) {
+                                    Text(stringResource(android.R.string.cancel))
                                 }
                             }
                         }
