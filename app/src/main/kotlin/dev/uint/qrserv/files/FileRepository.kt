@@ -259,9 +259,10 @@ class FileRepository(private val context: Context) {
                     val (uri, meta) = entry
                     val (rawName, size) = meta
                     var finalName = fittedEntryName(rawName)
-                    if (!usedNames.add(finalName)) {
+                    // Ignoring case, as a case-insensitive file system would have one overwrite the other.
+                    if (!usedNames.add(finalName.lowercase())) {
                         finalName = prefixedEntryName(TokenGenerator.generate("0123456789ABCDEF", 6), rawName)
-                        usedNames.add(finalName)
+                        usedNames.add(finalName.lowercase())
                     }
                     resolver.openInputStream(uri)?.use { input ->
                         zos.putNextEntry(ZipEntry(finalName))
