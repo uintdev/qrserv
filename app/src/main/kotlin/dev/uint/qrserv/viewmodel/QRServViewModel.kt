@@ -191,6 +191,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         override fun postToast(resId: Int, vararg args: String) = this@QRServViewModel.postToast(resId, *args)
         override fun setLoading(loading: Boolean) = this@QRServViewModel.setLoading(loading)
         override fun rejectIfBusy(): Boolean = this@QRServViewModel.rejectIfBusy()
+        override fun refuseIfDownloading(): Boolean = this@QRServViewModel.refuseIfDownloading()
         override fun isServerRunning(): Boolean = serverController.isRunning
         override fun openPickerWhenReady() = this@QRServViewModel.openPickerWhenReady()
         override suspend fun startServing(fileInfo: FileInfo) = this@QRServViewModel.startServing(fileInfo)
@@ -757,10 +758,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
         if (rebindJob?.isActive == true || rejectIfBusy()) return
-        if (ServingState.activeTransfers.value > 0) {
-            postToast(R.string.page_imported_iface_switch_downloading)
-            return
-        }
+        if (refuseIfDownloading()) return
         rebindJob = viewModelScope.launch {
             val port = serverController.port
             try {
@@ -1156,6 +1154,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private fun rejectIfBusy(): Boolean {
         if (!_uiState.value.actionButtonLoading) return false
         postToast(R.string.info_pending_fileprocessing)
+        return true
+    }
+
+    private fun refuseIfDownloading(): Boolean {
+        if (ServingState.activeTransfers.value == 0) return false
+        postToast(R.string.page_imported_iface_switch_downloading)
         return true
     }
 

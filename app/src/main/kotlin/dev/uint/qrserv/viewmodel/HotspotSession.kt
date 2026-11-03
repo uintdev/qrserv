@@ -43,6 +43,9 @@ class HotspotSession internal constructor(
         fun postToast(@StringRes resId: Int, vararg args: String)
         fun setLoading(loading: Boolean)
         fun rejectIfBusy(): Boolean
+
+        /** True (after toasting) if a download is running. */
+        fun refuseIfDownloading(): Boolean
         fun isServerRunning(): Boolean
         fun openPickerWhenReady()
         suspend fun startServing(fileInfo: FileInfo)
@@ -161,6 +164,10 @@ class HotspotSession internal constructor(
 
     private fun request(intent: Intent) {
         if (host.rejectIfBusy()) return
+        if (intent == Intent.SWITCH && host.refuseIfDownloading()) {
+            pendingIntent = null
+            return
+        }
         val controller = controller ?: return
         val availability = computeAvailability()
         uiState.update { withAvailability(it, availability) }
@@ -238,7 +245,12 @@ class HotspotSession internal constructor(
                     }
                     if (intent == Intent.SWITCH) {
                         uiState.update { it.copy(hotspotStarting = false, hotspotFailure = null) }
-                        host.switchToHotspot(result.info)
+                        if (host.refuseIfDownloading()) {
+                            stopHotspot()
+                            host.setLoading(false)
+                        } else {
+                            host.switchToHotspot(result.info)
+                        }
                     } else {
                         uiState.update { it.copy(hotspot = result.info, hotspotStarting = false, hotspotFailure = null) }
                         continueFromIdle()
