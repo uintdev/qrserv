@@ -89,6 +89,7 @@
     <string name="hotspot_failed_label">Impossibile avviare l\'hotspot privato</string>
     <string name="hotspot_failed_incompatible">Disattiva gli altri hotspot, poi riprova</string>
     <string name="hotspot_failed_nochannel">Nessun canale Wi-Fi libero al momento</string>
+    <string name="hotspot_failed_noaddress">Indirizzo dell\'hotspot non trovato. Chiudi le altre app che lo usano</string>
     <string name="hotspot_failed_generic">Impossibile avviare l\'hotspot privato</string>
     <string name="hotspot_try_again">Riprova</string>
     <string name="hotspot_lost_stopped">L\'hotspot è stato disattivato, condivisione interrotta</string>

@@ -87,6 +87,7 @@
     <string name="hotspot_failed_label">Nem sikerült elindítani a privát hotspotot</string>
     <string name="hotspot_failed_incompatible">Kapcsolja ki a többi hotspotot, majd próbálja újra</string>
     <string name="hotspot_failed_nochannel">Jelenleg nincs szabad Wi-Fi-csatorna</string>
+    <string name="hotspot_failed_noaddress">A hotspot címe nem található. Zárja be a hotspotot használó más appokat</string>
     <string name="hotspot_failed_generic">Nem sikerült elindítani a privát hotspotot</string>
     <string name="hotspot_try_again">Újra</string>
     <string name="hotspot_lost_stopped">A hotspot kikapcsolt, a megosztás leállt</string>

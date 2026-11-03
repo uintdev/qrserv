@@ -91,6 +91,7 @@
     <string name="hotspot_failed_label">Nie udało się uruchomić prywatnego hotspotu</string>
     <string name="hotspot_failed_incompatible">Wyłącz inne hotspoty i spróbuj ponownie</string>
     <string name="hotspot_failed_nochannel">Brak wolnego kanału Wi-Fi</string>
+    <string name="hotspot_failed_noaddress">Nie znaleziono adresu hotspotu. Zamknij inne aplikacje z hotspotem</string>
     <string name="hotspot_failed_generic">Nie udało się uruchomić prywatnego hotspotu</string>
     <string name="hotspot_try_again">Spróbuj ponownie</string>
     <string name="hotspot_lost_stopped">Hotspot został wyłączony, udostępnianie zatrzymane</string>

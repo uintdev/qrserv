@@ -386,10 +386,10 @@ class HotspotSession internal constructor(
 fun hotspotFailureMessageRes(reason: HotspotFailure): Int = when (reason) {
     HotspotFailure.INCOMPATIBLE_MODE -> R.string.hotspot_failed_incompatible
     HotspotFailure.NO_CHANNEL -> R.string.hotspot_failed_nochannel
+    HotspotFailure.NO_ADDRESS -> R.string.hotspot_failed_noaddress
     HotspotFailure.TETHERING_DISALLOWED -> R.string.hotspot_unavailable_blocked
     HotspotFailure.PERMISSION_DENIED,
     HotspotFailure.WIFI_CONTROL_DENIED,
-    HotspotFailure.NO_ADDRESS,
     HotspotFailure.GENERIC,
     -> R.string.hotspot_failed_generic
 }

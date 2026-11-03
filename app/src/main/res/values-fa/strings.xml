@@ -87,6 +87,7 @@
     <string name="hotspot_failed_label">راه‌اندازی نقطه اتصال خصوصی ممکن نشد</string>
     <string name="hotspot_failed_incompatible">نقطه‌های اتصال دیگر را خاموش کرده و دوباره امتحان کنید</string>
     <string name="hotspot_failed_nochannel">در حال حاضر کانال Wi-Fi آزادی وجود ندارد</string>
+    <string name="hotspot_failed_noaddress">نشانی نقطه اتصال پیدا نشد. برنامه‌های دیگر را ببندید و دوباره تلاش کنید</string>
     <string name="hotspot_failed_generic">راه‌اندازی نقطه اتصال خصوصی ممکن نشد</string>
     <string name="hotspot_try_again">تلاش دوباره</string>
     <string name="hotspot_lost_stopped">نقطه اتصال خاموش شد، هم‌رسانی متوقف شد</string>

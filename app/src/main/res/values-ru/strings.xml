@@ -91,6 +91,7 @@
     <string name="hotspot_failed_label">Не удалось запустить частную точку доступа</string>
     <string name="hotspot_failed_incompatible">Отключите другие точки доступа и повторите попытку</string>
     <string name="hotspot_failed_nochannel">Сейчас нет свободного канала Wi-Fi</string>
+    <string name="hotspot_failed_noaddress">Адрес точки доступа не найден. Закройте другие приложения с ней</string>
     <string name="hotspot_failed_generic">Не удалось запустить частную точку доступа</string>
     <string name="hotspot_try_again">Повторить</string>
     <string name="hotspot_lost_stopped">Точка доступа выключена, раздача остановлена</string>

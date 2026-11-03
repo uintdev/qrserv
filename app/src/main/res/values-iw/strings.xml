@@ -93,6 +93,7 @@
     <string name="hotspot_failed_label">לא ניתן להפעיל את הנקודה החמה הפרטית</string>
     <string name="hotspot_failed_incompatible">כבה נקודות חמות אחרות ונסה שוב</string>
     <string name="hotspot_failed_nochannel">אין כרגע ערוץ Wi-Fi פנוי</string>
+    <string name="hotspot_failed_noaddress">כתובת הנקודה החמה לא נמצאה. סגור אפליקציות אחרות שמשתמשות בה</string>
     <string name="hotspot_failed_generic">לא ניתן להפעיל את הנקודה החמה הפרטית</string>
     <string name="hotspot_try_again">נסה שוב</string>
     <string name="hotspot_lost_stopped">הנקודה החמה כובתה, השיתוף הופסק</string>

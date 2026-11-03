@@ -89,6 +89,7 @@
     <string name="hotspot_failed_label">Não foi possível iniciar a zona Wi-Fi privada</string>
     <string name="hotspot_failed_incompatible">Desative outras zonas Wi-Fi e tente novamente</string>
     <string name="hotspot_failed_nochannel">Nenhum canal Wi-Fi livre de momento</string>
+    <string name="hotspot_failed_noaddress">Endereço da zona Wi-Fi não encontrado. Feche outras apps que a usem</string>
     <string name="hotspot_failed_generic">Não foi possível iniciar a zona Wi-Fi privada</string>
     <string name="hotspot_try_again">Tentar novamente</string>
     <string name="hotspot_lost_stopped">A zona Wi-Fi foi desativada e a partilha parou</string>

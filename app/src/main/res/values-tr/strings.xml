@@ -87,6 +87,7 @@
     <string name="hotspot_failed_label">Özel erişim noktası başlatılamadı</string>
     <string name="hotspot_failed_incompatible">Diğer erişim noktalarını kapatıp tekrar deneyin</string>
     <string name="hotspot_failed_nochannel">Şu anda boş Wi-Fi kanalı yok</string>
+    <string name="hotspot_failed_noaddress">Erişim noktası adresi bulunamadı. Onu kullanan diğer uygulamaları kapatın</string>
     <string name="hotspot_failed_generic">Özel erişim noktası başlatılamadı</string>
     <string name="hotspot_try_again">Tekrar dene</string>
     <string name="hotspot_lost_stopped">Erişim noktası kapatıldı, paylaşım durdu</string>

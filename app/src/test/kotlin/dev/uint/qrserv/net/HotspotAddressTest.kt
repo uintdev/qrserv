@@ -39,7 +39,8 @@ class HotspotAddressTest {
     fun fallsBackToSharedHotspotWhenNothingAppeared() {
         val shared = ip("192.168.43.1")
         val before = setOf(wifi.address, shared.address)
-        assertEquals("192.168.43.1", chooseHotspotAddress(before, listOf(wifi, shared)))
+        assertNull(chooseHotspotAddress(before, listOf(wifi, shared)))
+        assertEquals("192.168.43.1", chooseHotspotAddress(before, listOf(wifi, shared), lastChance = true))
     }
 
     @Test
@@ -93,6 +94,26 @@ class HotspotAddressTest {
     }
 
     @Test
+    fun anotherAppsHotspotIsFoundWhateverItsAddress() {
+        val shared = ip("10.204.52.32", interfaceName = "wlan2")
+        val before = setOf(wifi.address, shared.address)
+        val reported = mapOf("wlan0" to LinkKind.LOCAL)
+        assertNull(chooseHotspotAddress(before, listOf(wifi, shared), reported))
+        assertEquals("10.204.52.32", chooseHotspotAddress(before, listOf(wifi, shared), reported, lastChance = true))
+        val softAp = ip("172.18.3.9", interfaceName = "swlan0")
+        assertEquals("172.18.3.9", chooseHotspotAddress(setOf(softAp.address), listOf(softAp), lastChance = true))
+    }
+
+    @Test
+    fun otherTetheringIsNeverTakenForTheSharedHotspot() {
+        val bluetooth = ip("192.168.44.1", interfaceName = "bt-pan")
+        val usb = ip("192.168.42.1", interfaceName = "rndis0")
+        val before = setOf(wifi.address, bluetooth.address, usb.address)
+        val reported = mapOf("wlan0" to LinkKind.LOCAL)
+        assertNull(chooseHotspotAddress(before, listOf(wifi, bluetooth, usb), reported, lastChance = true))
+    }
+
+    @Test
     fun aHotspotTheSystemReportsAsHostedIsAcceptedRightAway() {
         val now = listOf(wifi, ip("10.100.9.218", interfaceName = "wlan2"))
         val reported = mapOf("wlan0" to LinkKind.LOCAL, "wlan2" to LinkKind.HOSTED)
@@ -100,9 +121,33 @@ class HotspotAddressTest {
     }
 
     @Test
+    fun aJoinedNetworkIsNeverTheHotspotEvenOnTheLastChance() {
+        val renewed = ip("192.168.2.200", interfaceName = "wlan0")
+        val reported = mapOf("wlan0" to LinkKind.LOCAL)
+        assertNull(chooseHotspotAddress(setOf(wifi.address), listOf(renewed), reported))
+        assertNull(chooseHotspotAddress(setOf(wifi.address), listOf(renewed), reported, lastChance = true))
+    }
+
+    @Test
+    fun aRenewedLanAddressNeverBeatsTheSharedHotspot() {
+        val shared = ip("10.204.52.32", interfaceName = "wlan2")
+        val renewed = ip("192.168.2.200", interfaceName = "wlan0")
+        val reported = mapOf("wlan0" to LinkKind.LOCAL)
+        assertEquals("10.204.52.32", chooseHotspotAddress(setOf(wifi.address, shared.address), listOf(renewed, shared), reported, lastChance = true))
+    }
+
+    @Test
     fun aHotspotTakingOverTheWifiInterfaceIsAcceptedOnceTheNetworkIsGone() {
         val taken = ip("192.168.43.1", interfaceName = "wlan0")
         assertEquals("192.168.43.1", chooseHotspotAddress(setOf(wifi.address), listOf(taken), emptyMap()))
+    }
+
+    @Test
+    fun anotherAppsHotspotIsFoundOnOtherInterfaceNames() {
+        for (name in listOf("uap0", "ra0", "wl0.1", "wifi_ap", "ap0", "softap0")) {
+            val shared = ip("10.1.2.3", interfaceName = name)
+            assertEquals(name, "10.1.2.3", chooseHotspotAddress(setOf(shared.address), listOf(shared), lastChance = true))
+        }
     }
 
     @Test

@@ -88,6 +88,7 @@
     <string name="hotspot_failed_label">Couldn\'t start the private hotspot</string>
     <string name="hotspot_failed_incompatible">Turn off other hotspots, then try again</string>
     <string name="hotspot_failed_nochannel">No free Wi-Fi channel right now</string>
+    <string name="hotspot_failed_noaddress">Hotspot address not found. Close other apps using a hotspot and try again</string>
     <string name="hotspot_failed_generic">Couldn\'t start the private hotspot</string>
     <string name="hotspot_try_again">Try again</string>
     <string name="hotspot_lost_stopped">Hotspot was turned off, so sharing stopped</string>

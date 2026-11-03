@@ -319,7 +319,7 @@ class HotspotController(
         repeat(ADDRESS_POLL_ATTEMPTS) { attempt ->
             val lastChance = attempt == ADDRESS_POLL_ATTEMPTS - 1
             val candidates = ipv4Candidates()
-            val address = chooseHotspotAddress(before, candidates, reportedLinkKinds())
+            val address = chooseHotspotAddress(before, candidates, reportedLinkKinds(), lastChance)
             // Twice: a network being joined has its address just before it's reported.
             if (address != null && (address == seen || lastChance)) {
                 return@withContext candidates.first { it.address == address }

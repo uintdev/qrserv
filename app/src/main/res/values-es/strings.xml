@@ -89,6 +89,7 @@
     <string name="hotspot_failed_label">No se pudo iniciar el punto de acceso privado</string>
     <string name="hotspot_failed_incompatible">Desactiva otros puntos de acceso y vuelve a intentarlo</string>
     <string name="hotspot_failed_nochannel">No hay ningún canal Wi-Fi libre ahora</string>
+    <string name="hotspot_failed_noaddress">Dirección del punto de acceso no encontrada. Cierra otras apps que lo usen</string>
     <string name="hotspot_failed_generic">No se pudo iniciar el punto de acceso privado</string>
     <string name="hotspot_try_again">Reintentar</string>
     <string name="hotspot_lost_stopped">Se desactivó el punto de acceso, se dejó de compartir</string>
