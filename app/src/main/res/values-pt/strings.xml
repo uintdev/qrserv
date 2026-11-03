@@ -16,6 +16,7 @@
     <string name="page_info_insufficientstorage_msg">Armazenamento insuficiente</string>
     <string name="page_info_incomplete_label">Ficheiro incompleto</string>
     <string name="page_info_incomplete_msg">Não foi possível ler o ficheiro por completo. Tente novamente</string>
+    <string name="info_import_failed_sharing">Não foi possível importar o ficheiro. A partilha atual continua</string>
     <string name="page_info_portinuse_label">Erro</string>
     <string name="page_info_portinuse_msg">O servidor tentou iniciar com uma porta já em uso</string>
     <string name="page_info_idlestopped_label">Partilha parada</string>

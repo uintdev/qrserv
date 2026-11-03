@@ -16,6 +16,7 @@
     <string name="page_info_insufficientstorage_msg">حافظه ناکافی</string>
     <string name="page_info_incomplete_label">پرونده ناقص</string>
     <string name="page_info_incomplete_msg">این پرونده کامل خوانده نشد. دوباره تلاش کنید</string>
+    <string name="info_import_failed_sharing">وارد کردن پرونده ممکن نشد. هم‌رسانی فعلی ادامه دارد</string>
     <string name="page_info_portinuse_label">خطا</string>
     <string name="page_info_portinuse_msg">سرور تلاش میکرد با پورتی متصل شود که از پیش استفاده شده بود</string>
     <string name="page_info_idlestopped_label">هم‌رسانی متوقف شد</string>

@@ -587,7 +587,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             ImportResult.Incomplete ->
                 importFailed(sharing, PageType.FILE_INCOMPLETE, R.string.page_info_incomplete_msg)
             is ImportResult.SelectionFailed ->
-                importFailed(sharing, PageType.UNHANDLED_ERROR, R.string.page_info_unhandlederror_msg, result.message)
+                importFailed(
+                    sharing,
+                    PageType.UNHANDLED_ERROR,
+                    if (sharing) R.string.info_import_failed_sharing else R.string.page_info_unhandlederror_msg,
+                    result.message,
+                )
         }
     }
 

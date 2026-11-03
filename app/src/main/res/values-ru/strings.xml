@@ -16,6 +16,7 @@
     <string name="page_info_insufficientstorage_msg">Недостаточно свободного места</string>
     <string name="page_info_incomplete_label">Неполный файл</string>
     <string name="page_info_incomplete_msg">Не удалось прочитать файл полностью. Повторите попытку</string>
+    <string name="info_import_failed_sharing">Не удалось импортировать файл. Текущая раздача продолжается</string>
     <string name="page_info_portinuse_label">Ошибка</string>
     <string name="page_info_portinuse_msg">Сервер пытался начать с уже привязанного порта</string>
     <string name="page_info_idlestopped_label">Раздача остановлена</string>
