@@ -125,6 +125,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        if (savedInstanceState?.getBoolean(STATE_PICKER_FOR_HOTSPOT) == true) viewModel.pickerOpenedForHotspot = true
         // Restored on recreation, as the intent may have been replaced since. Read before the share
         // and shortcut handling below clear the action.
         startedFromHomeScreen = savedInstanceState?.getBoolean(STATE_STARTED_FROM_HOME_SCREEN)
@@ -185,6 +186,7 @@ class MainActivity : ComponentActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(STATE_STARTED_FROM_HOME_SCREEN, startedFromHomeScreen)
+        outState.putBoolean(STATE_PICKER_FOR_HOTSPOT, viewModel.pickerOpenedForHotspot)
     }
 
     override fun onPause() {
@@ -375,6 +377,7 @@ private class OpenableMultipleDocuments : ActivityResultContracts.OpenMultipleDo
 }
 
 private const val STATE_STARTED_FROM_HOME_SCREEN = "started_from_home_screen"
+private const val STATE_PICKER_FOR_HOTSPOT = "picker_for_hotspot"
 
 /** Launches the first of [intents] that something handles; false when nothing does. */
 private inline fun launchFirst(intents: List<Intent>, launch: (Intent) -> Unit): Boolean =

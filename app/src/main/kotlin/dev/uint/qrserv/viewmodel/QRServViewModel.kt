@@ -142,7 +142,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var importInProgress: Pair<ImportControl, CompletableDeferred<ImportResult>>? = null
 
+    private var pickerCanceledUnresolved = false
+
     private var appInForeground = true
+
+    // Saved by the activity, as a picker can outlive this process.
+    var pickerOpenedForHotspot = false
 
     private var addressesAtManualPick = emptySet<String>()
 
@@ -455,6 +460,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun openPicker() = withLocalNetwork {
+        pickerOpenedForHotspot = _uiState.value.hotspot != null
         if (_uiState.value.damEnabled) {
             if (hasDirectAccessPermission()) {
                 _events.trySend(UiEvent.OpenDamBrowser)
@@ -466,9 +472,15 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    // Not busy while picking (see HotspotSession.continueFromIdle), so busy here means another import.
     fun onImportCanceled() {
+        pickerOpenedForHotspot = false
         hotspot.abandonIdle()
+    }
+
+    // A share from another app closes the picker too. Both arrive just before resuming, so onAppResumed can tell.
+    private fun onPickerClosedEmpty() {
+        pickerOpenedForHotspot = false
+        pickerCanceledUnresolved = true
     }
 
     /** No system file picker on the device; sharing from another app still works. */
@@ -479,7 +491,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onFilesPicked(uris: List<Uri>) {
         if (uris.isEmpty()) {
-            hotspot.abandonIdle()
+            onPickerClosedEmpty()
             return
         }
         if (rejectIfBusy()) return
@@ -492,6 +504,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun runImport(import: suspend (ImportControl) -> ImportResult) {
+        val forHotspot = _uiState.value.hotspot != null || pickerOpenedForHotspot
+        pickerOpenedForHotspot = false
+        if (forHotspot && _uiState.value.hotspot == null) {
+            postToast(R.string.hotspot_lost_stopped)
+            return
+        }
         setLoading(true)
         importRunning = true
         val control = ImportControl()
@@ -501,7 +519,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             // The purge would otherwise take the new file too.
             launchPurge?.join()
-            // Separate, as a provider can block this for good.
+            // Its own job, as a provider can block this for good, and the result mustn't wait for that.
             val work = viewModelScope.launch(Dispatchers.IO) { outcome.complete(import(control)) }
             val watchdog = launch {
                 while (true) {
@@ -514,7 +532,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             work.cancel()
             importInProgress = null
             _uiState.update { it.copy(importCancelable = false) }
-            handleImportResult(result)
+            handleImportResult(result, forHotspot)
         }
     }
 
@@ -548,12 +566,14 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onSharedFilesReceived(uris: List<Uri>) {
         launchCacheHandled = true
+        pickerOpenedForHotspot = false
         withLocalNetwork { onFilesPicked(uris) }
     }
 
     /** Handles a plain-text share (e.g. a URL) by writing it to a generated .txt file and importing that. */
     fun onSharedTextReceived(text: String) {
         launchCacheHandled = true
+        pickerOpenedForHotspot = false
         if (text.isBlank()) return
         withLocalNetwork {
             if (rejectIfBusy()) return@withLocalNetwork
@@ -561,9 +581,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private suspend fun handleImportResult(result: ImportResult) {
+    private suspend fun handleImportResult(result: ImportResult, forHotspot: Boolean) {
         val sharing = _uiState.value.let { it.serverRunning && !it.serverPoweringDown }
-        handleImportOutcome(result, sharing)
+        handleImportOutcome(result, sharing, forHotspot)
         importRunning = false
         if (result !is ImportResult.Success) {
             if (_uiState.value.serverRunning) fileRepo.pruneCacheKeeping(_uiState.value.fileInfo.path) else deletePickerCache()
@@ -571,13 +591,17 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         setLoading(false)
     }
 
-    private suspend fun handleImportOutcome(result: ImportResult, sharing: Boolean) {
+    private suspend fun handleImportOutcome(result: ImportResult, sharing: Boolean, forHotspot: Boolean) {
         when (result) {
             is ImportResult.Success -> {
+                if (forHotspot && _uiState.value.hotspot == null) {
+                    discardHotspotImport()
+                    return
+                }
                 stopFileObserver()
                 _uiState.update { it.copy(fileInfo = result.fileInfo) }
                 fileRepo.pruneCacheKeeping(result.fileInfo.path)
-                startServing(result.fileInfo)
+                startServing(result.fileInfo, forHotspot = forHotspot)
             }
             ImportResult.EmptySelection -> hotspot.abandonIdle()
             ImportResult.Canceled -> hotspot.abandonIdle()
@@ -600,6 +624,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    // Told again, as the hotspot can have ended long before the copy did.
+    private suspend fun discardHotspotImport() {
+        postToast(R.string.hotspot_lost_stopped)
+        deletePickerCache()
+    }
+
     private suspend fun importFailed(sharing: Boolean, page: PageType, @StringRes toastRes: Int, detail: String = "") {
         if (!appInForeground) ServingService.notifyImportFailed(getApplication(), toastRes)
         if (sharing) {
@@ -610,8 +640,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         stopServing()
     }
 
-    private suspend fun startServing(fileInfo: FileInfo, leavingHotspot: Boolean = false) {
+    private suspend fun startServing(fileInfo: FileInfo, leavingHotspot: Boolean = false, forHotspot: Boolean = false) {
         rebindJob?.join()
+        if (forHotspot && _uiState.value.hotspot == null) {
+            discardHotspotImport()
+            return
+        }
         val keepsSelection = serverController.isRunning || !movedAutomatically
         if (!serverController.isRunning || leavingHotspot) {
             addressesAtManualPick = emptySet()
@@ -657,6 +691,13 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 _uiState.update { it.copy(pageType = PageType.PORT_IN_USE) }
                 return
             }
+        }
+
+        // Otherwise the address checks would move the server to another network.
+        if (hotspot != null && _uiState.value.hotspot == null) {
+            withContext(Dispatchers.IO) { serverController.stop() }
+            if (forHotspot) discardHotspotImport()
+            return
         }
 
         val openHotspotScreen = hotspot != null && this.hotspot.claimScreenOpening()
@@ -934,6 +975,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onAppResumed() {
         appInForeground = true
+        if (pickerCanceledUnresolved) {
+            pickerCanceledUnresolved = false
+            if (!_uiState.value.actionButtonLoading) hotspot.abandonIdle()
+        }
         addressCheckRequests.tryEmit(Unit)
         _uiState.update { it.copy(vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication())) }
         hotspot.onAppResumed()
