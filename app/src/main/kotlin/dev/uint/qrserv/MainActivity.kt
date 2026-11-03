@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
     private var startedFromHomeScreen = false
 
     private val safPickerLauncher =
-        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+        registerForActivityResult(OpenableMultipleDocuments()) { uris ->
             viewModel.onFilesPicked(uris.filter(::isAcceptableShareUri))
         }
 
@@ -366,6 +366,12 @@ class MainActivity : ComponentActivity() {
         }
         return false
     }
+}
+
+/** Keeps out files that can only be converted, such as Google Docs. */
+private class OpenableMultipleDocuments : ActivityResultContracts.OpenMultipleDocuments() {
+    override fun createIntent(context: Context, input: Array<String>): Intent =
+        super.createIntent(context, input).addCategory(Intent.CATEGORY_OPENABLE)
 }
 
 private const val STATE_STARTED_FROM_HOME_SCREEN = "started_from_home_screen"
