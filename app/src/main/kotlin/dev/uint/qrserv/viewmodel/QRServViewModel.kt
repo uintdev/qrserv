@@ -177,10 +177,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
         override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
             linkKinds.update(network, networkCapabilities)
+            hotspot.onLinksChanged()
         }
 
         override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
             linkKinds.update(network, linkProperties)
+            hotspot.onLinksChanged()
             addressCheckRequests.tryEmit(Unit)
         }
     }

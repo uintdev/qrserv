@@ -1,7 +1,9 @@
 package dev.uint.qrserv.net
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class HotspotAddressTest {
@@ -79,6 +81,40 @@ class HotspotAddressTest {
         val now = listOf(wifi, ip("10.54.3.1", interfaceName = "rmnet_data0"), ip("192.0.0.4", interfaceName = "v4-rmnet_data0"))
         assertNull(chooseHotspotAddress(before, now))
         assertNull(chooseHotspotAddress(before, listOf(wifi, ip("10.71.4.9", interfaceName = "wwan0"), ip("10.12.0.5", interfaceName = "pdp0"))))
+    }
+
+    @Test
+    fun aNewAddressOnAJoinedNetworkIsNotTheHotspot() {
+        val before = setOf(wifi.address)
+        val renewed = ip("192.168.2.200", interfaceName = "wlan0")
+        val joined = mapOf("wlan0" to LinkKind.LOCAL)
+        assertNull(chooseHotspotAddress(before, listOf(wifi, renewed), reported = joined))
+        assertEquals("10.100.9.218", chooseHotspotAddress(before, listOf(renewed, ip("10.100.9.218")), reported = joined))
+    }
+
+    @Test
+    fun aHotspotTheSystemReportsAsHostedIsAcceptedRightAway() {
+        val now = listOf(wifi, ip("10.100.9.218", interfaceName = "wlan2"))
+        val reported = mapOf("wlan0" to LinkKind.LOCAL, "wlan2" to LinkKind.HOSTED)
+        assertEquals("10.100.9.218", chooseHotspotAddress(setOf(wifi.address), now, reported))
+    }
+
+    @Test
+    fun aHotspotTakingOverTheWifiInterfaceIsAcceptedOnceTheNetworkIsGone() {
+        val taken = ip("192.168.43.1", interfaceName = "wlan0")
+        assertEquals("192.168.43.1", chooseHotspotAddress(setOf(wifi.address), listOf(taken), emptyMap()))
+    }
+
+    @Test
+    fun aHotspotLaterReportedAsJoinedIsCaught() {
+        assertTrue(hotspotTurnedOutJoined("wlan0", mapOf("wlan0" to LinkKind.LOCAL)))
+    }
+
+    @Test
+    fun aHotspotStaysValidOtherwise() {
+        assertFalse(hotspotTurnedOutJoined("wlan2", mapOf("wlan0" to LinkKind.LOCAL)))
+        assertFalse(hotspotTurnedOutJoined("wlan2", mapOf("wlan2" to LinkKind.HOSTED)))
+        assertFalse(hotspotTurnedOutJoined(null, mapOf("wlan0" to LinkKind.LOCAL)))
     }
 
     @Test

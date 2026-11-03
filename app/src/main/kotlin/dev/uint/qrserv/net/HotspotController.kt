@@ -147,9 +147,9 @@ class HotspotController(
         }
         reservation = newReservation
 
-        val address = awaitAddress(before)
+        val chosen = awaitAddress(before)
         if (reservation !== newReservation) return HotspotStartResult.Failed(HotspotFailure.GENERIC)
-        if (address == null) {
+        if (chosen == null) {
             stop()
             return HotspotStartResult.Failed(HotspotFailure.NO_ADDRESS)
         }
@@ -160,12 +160,15 @@ class HotspotController(
             passphrase = config.passphrase.orEmpty(),
             security = securityOf(config.securityType),
             securityName = securityNameOf(config.securityType),
-            address = address,
+            address = chosen.address,
             band = if (Build.VERSION.SDK_INT >= 36) bandOf(config) else null,
             fasterBand = bands.firstOrNull(),
         )
+        hotspotInterface = chosen.interfaceName
         info = newInfo
         watchWifiControl()
+        recheckAddress()
+        if (info == null) return HotspotStartResult.Failed(HotspotFailure.GENERIC)
         return HotspotStartResult.Started(newInfo)
     }
 
@@ -178,12 +181,19 @@ class HotspotController(
         callback = null
         info?.let { closingAddress = it.address }
         info = null
+        hotspotInterface = null
         closing?.close()
     }
 
     fun recheck() {
         if (reservation != null && !isWifiControlAllowed()) loseTo(HotspotLoss.WIFI_CONTROL_REVOKED)
     }
+
+    fun recheckAddress() {
+        if (info != null && hotspotTurnedOutJoined(hotspotInterface, reportedLinkKinds())) loseTo(HotspotLoss.STOPPED)
+    }
+
+    private var hotspotInterface: String? = null
 
     private sealed interface Requested {
         data class Started(val reservation: WifiManager.LocalOnlyHotspotReservation) : Requested
@@ -304,9 +314,17 @@ class HotspotController(
     }
 
     // The address can appear a moment after onStarted().
-    private suspend fun awaitAddress(before: Set<String>): String? = withContext(Dispatchers.IO) {
-        repeat(ADDRESS_POLL_ATTEMPTS) {
-            chooseHotspotAddress(before, ipv4Candidates(), reportedLinkKinds())?.let { return@withContext it }
+    private suspend fun awaitAddress(before: Set<String>): Ipv4Candidate? = withContext(Dispatchers.IO) {
+        var seen: String? = null
+        repeat(ADDRESS_POLL_ATTEMPTS) { attempt ->
+            val lastChance = attempt == ADDRESS_POLL_ATTEMPTS - 1
+            val candidates = ipv4Candidates()
+            val address = chooseHotspotAddress(before, candidates, reportedLinkKinds())
+            // Twice: a network being joined has its address just before it's reported.
+            if (address != null && (address == seen || lastChance)) {
+                return@withContext candidates.first { it.address == address }
+            }
+            seen = address
             delay(ADDRESS_POLL_INTERVAL)
         }
         null

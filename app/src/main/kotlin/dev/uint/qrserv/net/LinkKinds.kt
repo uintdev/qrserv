@@ -3,6 +3,7 @@ package dev.uint.qrserv.net
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.os.Build
 import java.util.concurrent.ConcurrentHashMap
 
 /** Each network's interface and kind, as a NetworkCallback reports them. */
@@ -14,6 +15,7 @@ class LinkKinds {
         kinds[network] = when {
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> LinkKind.VPN
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> LinkKind.CELLULAR
+            Build.VERSION.SDK_INT >= 35 && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_LOCAL_NETWORK) -> LinkKind.HOSTED
             else -> LinkKind.LOCAL
         }
     }

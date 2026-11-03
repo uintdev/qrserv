@@ -12,7 +12,15 @@ import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.ServerSocket
 
-enum class LinkKind { LOCAL, VPN, CELLULAR }
+enum class LinkKind {
+    /** A network this device joined. */
+    LOCAL,
+
+    /** A network this device hosts itself, such as a hotspot. */
+    HOSTED,
+    VPN,
+    CELLULAR,
+}
 
 private val VpnInterfacePrefixes = listOf("tun", "ppp", "ipsec", "wg")
 private val CellularInterfacePrefixes = listOf("rmnet", "ccmni", "wwan", "pdp")

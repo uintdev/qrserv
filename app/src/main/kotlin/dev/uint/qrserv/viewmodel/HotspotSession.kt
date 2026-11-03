@@ -368,6 +368,11 @@ class HotspotSession internal constructor(
         if (uiState.value.serverRunning) host.endShare() else stopSession()
     }
 
+    // Called from the network callback's thread; the controller is only touched on main.
+    internal fun onLinksChanged() {
+        scope.launch(Dispatchers.Main.immediate) { controller?.recheckAddress() }
+    }
+
     internal fun onCleared() {
         controller?.stop()
     }
