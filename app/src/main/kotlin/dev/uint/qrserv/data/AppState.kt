@@ -75,15 +75,18 @@ fun readPersistedThemeMode(): ThemeMode =
 /**
  * Progress of copying a selection in (a single large file, or zipping several into an archive).
  * [completedFiles]/[totalFiles] is shown as a count for multi-file imports, but the bar itself
- * is always driven by [bytesCopied]/[totalBytes] -- file count alone stalls or jumps when one
- * file dominates the total size, and is meaningless (always 0 until the very end) for one file.
+ * is driven by [bytesCopied]/[totalBytes] -- file count alone stalls or jumps when one file dominates
+ * the total size, and is meaningless (always 0 until the very end) for one file. Those two hold file
+ * counts instead when the total size isn't known.
  */
 data class ImportProgress(
     val completedFiles: Int,
     val totalFiles: Int,
     val bytesCopied: Long,
     val totalBytes: Long,
-)
+) {
+    val isFinal: Boolean get() = completedFiles >= totalFiles
+}
 
 data class FileInfo(
     val name: String = "",

@@ -19,7 +19,6 @@ import dev.uint.qrserv.data.AppUiState
 import dev.uint.qrserv.data.DEFAULT_IDLE_STOP_MINUTES
 import dev.uint.qrserv.data.FileInfo
 import dev.uint.qrserv.data.IdleStopOptions
-import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.data.InterfaceAddress
 import dev.uint.qrserv.data.LocalNetworkDialog
 import dev.uint.qrserv.data.PageType
@@ -472,10 +471,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         setLoading(true)
         stopFileObserver()
         viewModelScope.launch {
-            val result = fileRepo.importUris(uris) { completedFiles, totalFiles, bytesCopied, totalBytes ->
-                _uiState.update {
-                    it.copy(importProgress = ImportProgress(completedFiles, totalFiles, bytesCopied, totalBytes))
-                }
+            val result = fileRepo.importUris(uris) { progress ->
+                _uiState.update { it.copy(importProgress = progress) }
             }
             handleImportResult(result)
         }

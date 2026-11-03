@@ -189,7 +189,7 @@ fun MainScreen(
             // comparison -- for a large file (e.g. 250MB), converting both to Float loses enough
             // precision that the computed fraction can land just under 1f even once the copy is
             // genuinely done, so a `fraction >= 1f` check never fires and strands progressBarPending.
-            val isFinal = progress.completedFiles >= progress.totalFiles
+            val isFinal = progress.isFinal
             val fraction = if (progress.totalBytes > 0) {
                 (progress.bytesCopied.toFloat() / progress.totalBytes.toFloat()).coerceIn(0f, 1f)
             } else {
@@ -317,7 +317,7 @@ fun MainScreen(
                                         }
                                         Spacer(Modifier.size(8.dp))
                                         val label = if (progress.totalFiles > 1) {
-                                            "${progress.completedFiles}/${progress.totalFiles}"
+                                            "${minOf(progress.completedFiles + 1, progress.totalFiles)}/${progress.totalFiles}"
                                         } else {
                                             "${(progressAnim.value * 100).toInt()}%"
                                         }

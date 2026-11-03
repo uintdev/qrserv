@@ -8,6 +8,7 @@ import android.os.storage.StorageManager
 import android.provider.OpenableColumns
 import dev.uint.qrserv.data.ArchivedEntry
 import dev.uint.qrserv.data.FileInfo
+import dev.uint.qrserv.data.ImportProgress
 import dev.uint.qrserv.util.TokenGenerator
 import dev.uint.qrserv.util.causeChain
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +79,13 @@ internal fun isContainedIn(file: File, dir: File): Boolean =
 
 private val PROGRESS_REPORT_INTERVAL = 100.milliseconds
 
+internal fun multiFileProgress(filesDone: Int, totalFiles: Int, bytesCopied: Long, totalBytes: Long?): ImportProgress =
+    if (totalBytes != null) {
+        ImportProgress(filesDone, totalFiles, bytesCopied, totalBytes)
+    } else {
+        ImportProgress(filesDone, totalFiles, filesDone.toLong(), totalFiles.toLong())
+    }
+
 class FileRepository(private val context: Context) {
 
     companion object {
@@ -93,15 +101,15 @@ class FileRepository(private val context: Context) {
      * sanitized here rather than at each use site, so nothing downstream -- a cache path, a ZIP
      * entry, a Content-Disposition header -- ever sees the provider's raw string.
      */
-    private fun resolveUriMeta(resolver: ContentResolver, uri: Uri): Pair<String, Long> {
+    private fun resolveUriMeta(resolver: ContentResolver, uri: Uri): Pair<String, Long?> {
         var name = uri.lastPathSegment ?: "file"
-        var size = 0L
+        var size: Long? = null
         resolver.query(uri, null, null, null, null)?.use { cursor ->
             val nameIdx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             val sizeIdx = cursor.getColumnIndex(OpenableColumns.SIZE)
             if (cursor.moveToFirst()) {
                 if (nameIdx >= 0) name = cursor.getString(nameIdx) ?: name
-                if (sizeIdx >= 0 && !cursor.isNull(sizeIdx)) size = cursor.getLong(sizeIdx)
+                if (sizeIdx >= 0 && !cursor.isNull(sizeIdx)) size = cursor.getLong(sizeIdx).takeIf { it >= 0 }
             }
         }
         return sanitizePickedName(name) to size
@@ -148,8 +156,7 @@ class FileRepository(private val context: Context) {
     /** Imports files picked via the system document picker or received via a share intent. */
     suspend fun importUris(
         uris: List<Uri>,
-        onProgress: (completedFiles: Int, totalFiles: Int, bytesCopied: Long, totalBytes: Long) -> Unit =
-            { _, _, _, _ -> },
+        onProgress: (ImportProgress) -> Unit = {},
     ): ImportResult = withContext(Dispatchers.IO) {
         if (uris.isEmpty()) return@withContext ImportResult.EmptySelection
 
@@ -158,8 +165,9 @@ class FileRepository(private val context: Context) {
 
         if (uris.size == 1) {
             val uri = uris.first()
-            val (rawName, size) = runCatching { resolveUriMeta(resolver, uri) }
+            val (rawName, reportedSize) = runCatching { resolveUriMeta(resolver, uri) }
                 .getOrElse { return@withContext importFailureResult(it) }
+            val size = reportedSize ?: 0L
             val destFile = File(dir, rawName)
             if (!isContainedIn(destFile, dir)) {
                 return@withContext ImportResult.SelectionFailed("Rejected file name: $rawName")
@@ -176,7 +184,7 @@ class FileRepository(private val context: Context) {
                         finalBytes = copyWithProgress(input, output) { copied ->
                             // A real size wasn't available from the content provider -- fall
                             // back to the plain spinner rather than a meaningless bar/percentage.
-                            if (size > 0) onProgress(0, 1, copied, totalBytes)
+                            if (size > 0) onProgress(ImportProgress(0, 1, copied, totalBytes))
                         }
                     }
                 } ?: throw FileNotFoundException(rawName)
@@ -186,7 +194,7 @@ class FileRepository(private val context: Context) {
                 partFile.delete()
                 return@withContext importFailureResult(error)
             }
-            if (size > 0) onProgress(1, 1, finalBytes.coerceAtLeast(totalBytes), totalBytes)
+            if (size > 0) onProgress(ImportProgress(1, 1, finalBytes.coerceAtLeast(totalBytes), totalBytes))
             return@withContext finalizeSelection(rawName, destFile.path, dir.path)
         }
 
@@ -208,9 +216,9 @@ class FileRepository(private val context: Context) {
         } catch (e: Exception) {
             return@withContext importFailureResult(e)
         }
-        val reportedBytes = metas.sumOf { (_, meta) -> meta.second }
+        val reportedBytes = metas.sumOf { (_, meta) -> meta.second ?: 0L }
         if (reportedBytes > 0 && !makeRoomFor(dir, reportedBytes)) return@withContext ImportResult.InsufficientStorage
-        val totalBytes = reportedBytes.coerceAtLeast(1L)
+        val totalBytes = reportedBytes.takeIf { total -> total > 0 && metas.all { (_, meta) -> meta.second != null } }
         var bytesCopiedSoFar = 0L
 
         try {
@@ -227,12 +235,12 @@ class FileRepository(private val context: Context) {
                         zos.putNextEntry(ZipEntry(finalName))
                         val base = bytesCopiedSoFar
                         bytesCopiedSoFar = base + copyWithProgress(input, zos) { copied ->
-                            onProgress(index + 1, uris.size, base + copied, totalBytes)
+                            onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
                         }
                         zos.closeEntry()
                     } ?: throw FileNotFoundException(finalName)
-                    archivedEntries.add(ArchivedEntry(finalName, size))
-                    onProgress(index + 1, uris.size, bytesCopiedSoFar, totalBytes)
+                    archivedEntries.add(ArchivedEntry(finalName, size ?: 0L))
+                    onProgress(multiFileProgress(index + 1, uris.size, bytesCopiedSoFar, totalBytes))
                 }
             }
         } catch (e: Exception) {
