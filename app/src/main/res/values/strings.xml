@@ -14,6 +14,8 @@
     <string name="page_info_permissiondenied_msg">Storage permission was denied</string>
     <string name="page_info_insufficientstorage_label">Error</string>
     <string name="page_info_insufficientstorage_msg">Insufficient storage</string>
+    <string name="page_info_incomplete_label">Incomplete file</string>
+    <string name="page_info_incomplete_msg">This file couldn\'t be read completely. Try again</string>
     <string name="page_info_portinuse_label">Error</string>
     <string name="page_info_portinuse_msg">Server tried to start with an already bound port</string>
     <string name="page_info_idlestopped_label">Sharing stopped</string>

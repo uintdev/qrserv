@@ -2,10 +2,45 @@ package dev.uint.qrserv.files
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.IOException
 
 class CopyTest {
+
+    @Test
+    fun aStreamEndingBeforeItsReportedSizeFails() {
+        assertThrows(IOException::class.java) { checkFullyCopied(copied = 2, expected = 8) }
+    }
+
+    @Test
+    fun aCompleteCopyPasses() {
+        checkFullyCopied(copied = 8, expected = 8)
+    }
+
+    @Test
+    fun aProviderThatUnderreportsOrDoesNotKnowIsFine() {
+        checkFullyCopied(copied = 9, expected = 8)
+        checkFullyCopied(copied = 9, expected = 0)
+    }
+
+    @Test
+    fun aFilesOwnLengthOutranksTheReportedSize() {
+        assertEquals(1000L, expectedBytes(descriptorLength = 1000, reportedSize = 4022))
+        assertEquals(0L, expectedBytes(descriptorLength = 0, reportedSize = 4022))
+    }
+
+    @Test
+    fun aPipeFallsBackToTheReportedSize() {
+        assertEquals(4022L, expectedBytes(descriptorLength = -1, reportedSize = 4022))
+    }
+
+    @Test
+    fun anIncompleteCopyHasItsOwnResult() {
+        assertEquals(ImportResult.Incomplete, importFailureResult(IncompleteCopyException()))
+        assertTrue(importFailureResult(IOException("other")) is ImportResult.SelectionFailed)
+    }
 
     private fun bytes(name: String) = name.toByteArray(Charsets.UTF_8).size
 

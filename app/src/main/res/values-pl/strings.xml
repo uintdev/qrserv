@@ -14,6 +14,8 @@
     <string name="page_info_permissiondenied_msg">Odmówiono pozwolenia na zapisywanie do pamięci urządzenia</string>
     <string name="page_info_insufficientstorage_label">Błąd</string>
     <string name="page_info_insufficientstorage_msg">Niewystarczające składowanie</string>
+    <string name="page_info_incomplete_label">Niekompletny plik</string>
+    <string name="page_info_incomplete_msg">Nie udało się odczytać całego pliku. Spróbuj ponownie</string>
     <string name="page_info_portinuse_label">Błąd</string>
     <string name="page_info_portinuse_msg">Serwer próbował uruchomić z już powiązanym portem sieciowym</string>
     <string name="page_info_idlestopped_label">Udostępnianie zatrzymane</string>

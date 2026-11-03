@@ -34,12 +34,16 @@ sealed class ImportResult {
     object DirectAccessPathMissing : ImportResult()
     /** The device ran out of room, either before the copy started or part-way through it. */
     object InsufficientStorage : ImportResult()
+    object Incomplete : ImportResult()
     /** A picked file couldn't be read/archived, or a shared text file couldn't be written --
      * for any reason other than [FileGone] (e.g. deleted between selection and confirmation). */
     data class SelectionFailed(val message: String) : ImportResult()
 }
 
-private fun importFailureResult(error: Throwable): ImportResult = when {
+internal class IncompleteCopyException : IOException()
+
+internal fun importFailureResult(error: Throwable): ImportResult = when {
+    error is IncompleteCopyException -> ImportResult.Incomplete
     // Ahead of the FileNotFoundException check: opening the destination on a full disk fails with
     // exactly that exception, and it means no room rather than a file that went missing.
     isOutOfSpace(error) -> ImportResult.InsufficientStorage
@@ -80,6 +84,15 @@ internal fun isContainedIn(file: File, dir: File): Boolean =
 private val PROGRESS_REPORT_INTERVAL = 100.milliseconds
 
 private const val MAX_KEPT_EXTENSION_BYTES = 16
+
+/** A reported size can be out of date, so the file's own length wins; a pipe doesn't have one. */
+internal fun expectedBytes(descriptorLength: Long, reportedSize: Long): Long =
+    if (descriptorLength >= 0) descriptorLength else reportedSize
+
+/** A provider stopping early just looks like the end of the file. */
+internal fun checkFullyCopied(copied: Long, expected: Long) {
+    if (copied < expected) throw IncompleteCopyException()
+}
 
 internal fun prefixedEntryName(tag: String, name: String): String = entryNameWithin("${tag}_", name)
 
@@ -211,16 +224,21 @@ class FileRepository(private val context: Context) {
             var finalBytes = 0L
             val partFile = File(dir, ".${TokenGenerator.generate("0123456789ABCDEF", 8)}.part")
             val copyResult = runCatching {
-                resolver.openInputStream(uri)?.use { input ->
-                    FileOutputStream(partFile).use { output ->
-                        finalBytes = copyWithProgress(input, output) { copied ->
-                            // A real size wasn't available from the content provider -- fall
-                            // back to the plain spinner rather than a meaningless bar/percentage.
-                            if (size > 0) onProgress(ImportProgress(0, 1, copied, totalBytes))
+                resolver.openAssetFileDescriptor(uri, "r")?.use { descriptor ->
+                    // Before the copy, so a file still growing isn't taken for a short one.
+                    val expected = expectedBytes(descriptor.length, size)
+                    descriptor.createInputStream().use { input ->
+                        FileOutputStream(partFile).use { output ->
+                            finalBytes = copyWithProgress(input, output) { copied ->
+                                // A real size wasn't available from the content provider -- fall
+                                // back to the plain spinner rather than a meaningless bar/percentage.
+                                if (size > 0) onProgress(ImportProgress(0, 1, copied, totalBytes))
+                            }
                         }
+                        checkFullyCopied(finalBytes, expected)
                     }
-                } ?: throw FileNotFoundException(rawName)
-                if (!partFile.renameTo(destFile)) throw IOException("Couldn't move $rawName into place")
+                } ?: throw FileNotFoundException()
+                if (!partFile.renameTo(destFile)) throw IOException("Couldn't move the file into place")
             }
             copyResult.onFailure { error ->
                 partFile.delete()
@@ -265,13 +283,17 @@ class FileRepository(private val context: Context) {
                         usedNames.add(finalName.lowercase())
                     }
                     val base = bytesCopiedSoFar
-                    resolver.openInputStream(uri)?.use { input ->
-                        zos.putNextEntry(ZipEntry(finalName))
-                        bytesCopiedSoFar = base + copyWithProgress(input, zos) { copied ->
-                            onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
+                    resolver.openAssetFileDescriptor(uri, "r")?.use { descriptor ->
+                        val expected = expectedBytes(descriptor.length, size ?: 0L)
+                        descriptor.createInputStream().use { input ->
+                            zos.putNextEntry(ZipEntry(finalName))
+                            bytesCopiedSoFar = base + copyWithProgress(input, zos) { copied ->
+                                onProgress(multiFileProgress(index, uris.size, base + copied, totalBytes))
+                            }
+                            zos.closeEntry()
+                            checkFullyCopied(bytesCopiedSoFar - base, expected)
                         }
-                        zos.closeEntry()
-                    } ?: throw FileNotFoundException(finalName)
+                    } ?: throw FileNotFoundException()
                     archivedEntries.add(ArchivedEntry(finalName, bytesCopiedSoFar - base))
                     onProgress(multiFileProgress(index + 1, uris.size, bytesCopiedSoFar, totalBytes))
                 }

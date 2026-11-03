@@ -366,6 +366,7 @@ private fun MessageForPageType(uiState: AppUiState, viewModel: QRServViewModel) 
         PageType.INTERFACE_LOOKUP_ERROR -> Triple(Icons.Filled.Error, R.string.page_info_interfacelookuperror_label, R.string.page_info_interfacelookuperror_msg)
         PageType.FILE_REMOVED -> Triple(Icons.Filled.Block, R.string.page_info_fileremoved_label, R.string.page_info_fileremoved_msg)
         PageType.FILE_MODIFIED -> Triple(Icons.Filled.Edit, R.string.page_info_filemodified_label, R.string.page_info_filemodified_msg)
+        PageType.FILE_INCOMPLETE -> Triple(Icons.Filled.Error, R.string.page_info_incomplete_label, R.string.page_info_incomplete_msg)
         PageType.INSUFFICIENT_STORAGE -> Triple(Icons.Filled.Storage, R.string.page_info_insufficientstorage_label, R.string.page_info_insufficientstorage_msg)
         PageType.PORT_IN_USE -> Triple(Icons.Filled.Error, R.string.page_info_portinuse_label, R.string.page_info_portinuse_msg)
         PageType.IMPORTED, PageType.UNHANDLED_ERROR ->

@@ -14,6 +14,8 @@
     <string name="page_info_permissiondenied_msg">Se denegó el permiso de almacenamiento</string>
     <string name="page_info_insufficientstorage_label">Error</string>
     <string name="page_info_insufficientstorage_msg">Almacenamiento insuficiente</string>
+    <string name="page_info_incomplete_label">Archivo incompleto</string>
+    <string name="page_info_incomplete_msg">No se pudo leer el archivo por completo. Inténtalo de nuevo</string>
     <string name="page_info_portinuse_label">Error</string>
     <string name="page_info_portinuse_msg">El servidor intentó ejecutarse con un puerto en uso</string>
     <string name="page_info_idlestopped_label">Se dejó de compartir</string>

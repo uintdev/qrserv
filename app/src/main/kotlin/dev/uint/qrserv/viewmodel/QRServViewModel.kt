@@ -539,6 +539,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             }
             ImportResult.InsufficientStorage ->
                 importFailed(sharing, PageType.INSUFFICIENT_STORAGE, R.string.page_info_insufficientstorage_msg)
+            ImportResult.Incomplete ->
+                importFailed(sharing, PageType.FILE_INCOMPLETE, R.string.page_info_incomplete_msg)
             is ImportResult.SelectionFailed ->
                 importFailed(sharing, PageType.UNHANDLED_ERROR, R.string.page_info_unhandlederror_msg, result.message)
         }

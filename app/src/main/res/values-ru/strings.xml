@@ -14,6 +14,8 @@
     <string name="page_info_permissiondenied_msg">Доступ к хранилищу был запрещён</string>
     <string name="page_info_insufficientstorage_label">Ошибка</string>
     <string name="page_info_insufficientstorage_msg">Недостаточно свободного места</string>
+    <string name="page_info_incomplete_label">Неполный файл</string>
+    <string name="page_info_incomplete_msg">Не удалось прочитать файл полностью. Повторите попытку</string>
     <string name="page_info_portinuse_label">Ошибка</string>
     <string name="page_info_portinuse_msg">Сервер пытался начать с уже привязанного порта</string>
     <string name="page_info_idlestopped_label">Раздача остановлена</string>

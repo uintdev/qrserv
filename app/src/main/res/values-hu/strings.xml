@@ -14,6 +14,8 @@
     <string name="page_info_permissiondenied_msg">Tárhely hozzáférés megtagadva</string>
     <string name="page_info_insufficientstorage_label">Hiba</string>
     <string name="page_info_insufficientstorage_msg">Elégtelen tárolás</string>
+    <string name="page_info_incomplete_label">Hiányos fájl</string>
+    <string name="page_info_incomplete_msg">A fájlt nem sikerült teljesen beolvasni. Próbálja újra</string>
     <string name="page_info_portinuse_label">Hiba</string>
     <string name="page_info_portinuse_msg">Egy már használt porton próbált indulni a szerver</string>
     <string name="page_info_idlestopped_label">Megosztás leállítva</string>

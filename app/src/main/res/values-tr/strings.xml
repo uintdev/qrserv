@@ -14,6 +14,8 @@
     <string name="page_info_permissiondenied_msg">Depolama izni reddedildi</string>
     <string name="page_info_insufficientstorage_label">Hata</string>
     <string name="page_info_insufficientstorage_msg">Yeterli depolama alanı yok</string>
+    <string name="page_info_incomplete_label">Eksik dosya</string>
+    <string name="page_info_incomplete_msg">Dosya tamamen okunamadı. Tekrar deneyin</string>
     <string name="page_info_portinuse_label">Hata</string>
     <string name="page_info_portinuse_msg">Sunucu zaten bağlanmış bağlantı noktasıyla başlatılmaya çalışıldı</string>
     <string name="page_info_idlestopped_label">Paylaşım durduruldu</string>
