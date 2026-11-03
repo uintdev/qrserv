@@ -187,6 +187,11 @@ class MainActivity : ComponentActivity() {
         outState.putBoolean(STATE_STARTED_FROM_HOME_SCREEN, startedFromHomeScreen)
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.onAppPaused()
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.onAppResumed()

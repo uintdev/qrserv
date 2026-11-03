@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -189,6 +190,7 @@ class ServingService : Service() {
         private const val IDLE_STOPPED_CHANNEL_ID = "sharing_stopped"
         private const val NOTIFICATION_ID = 1
         private const val IDLE_STOPPED_NOTIFICATION_ID = 2
+        private const val IMPORT_FAILED_NOTIFICATION_ID = 3
         private const val ACTION_STOP = "dev.uint.qrserv.action.STOP_SHARING"
 
         // Safety net against a lost release.
@@ -204,13 +206,8 @@ class ServingService : Service() {
             )
         }
 
-        /** Posts a dismissable "sharing stopped" notice; false if notifications aren't allowed. */
-        fun notifyIdleStopped(context: Context, minutes: Int): Boolean {
-            val manager = NotificationManagerCompat.from(context)
-            if (!manager.areNotificationsEnabled() || !context.canPostNotifications()) return false
-            // Its own channel, so it can pop up without making the ongoing sharing notification do the
-            // same, and so it can be turned down on its own. No sound or vibration either way.
-            manager.createNotificationChannel(
+        private fun ensureStoppedChannel(context: Context) {
+            NotificationManagerCompat.from(context).createNotificationChannel(
                 NotificationChannelCompat.Builder(IDLE_STOPPED_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
                     .setName(context.getString(R.string.notification_channel_idle_name))
                     .setSound(null, null)
@@ -218,6 +215,15 @@ class ServingService : Service() {
                     .setShowBadge(false)
                     .build(),
             )
+        }
+
+        /** Posts a dismissable "sharing stopped" notice; false if notifications aren't allowed. */
+        fun notifyIdleStopped(context: Context, minutes: Int): Boolean {
+            val manager = NotificationManagerCompat.from(context)
+            if (!manager.areNotificationsEnabled() || !context.canPostNotifications()) return false
+            // Its own channel, so it can pop up without making the ongoing sharing notification do the
+            // same, and so it can be turned down on its own. No sound or vibration either way.
+            ensureStoppedChannel(context)
             val openApp = PendingIntent.getActivity(
                 context,
                 0,
@@ -236,9 +242,30 @@ class ServingService : Service() {
             }
         }
 
+        /** For an import that failed with the app out of view. */
+        fun notifyImportFailed(context: Context, @StringRes message: Int) {
+            ensureStoppedChannel(context)
+            val openApp = PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, MainActivity::class.java),
+                PendingIntent.FLAG_IMMUTABLE,
+            )
+            context.notifyIfAllowed(IMPORT_FAILED_NOTIFICATION_ID) {
+                NotificationCompat.Builder(context, IDLE_STOPPED_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(context.getString(message))
+                    .setContentIntent(openApp)
+                    .setAutoCancel(true)
+                    .setCategory(NotificationCompat.CATEGORY_STATUS)
+                    .build()
+            }
+        }
+
         fun start(context: Context) {
-            // A new share makes the last one's "stopped" notice stale.
+            // A new share makes the last one's notices stale.
             NotificationManagerCompat.from(context).cancel(IDLE_STOPPED_NOTIFICATION_ID)
+            NotificationManagerCompat.from(context).cancel(IMPORT_FAILED_NOTIFICATION_ID)
             try {
                 ContextCompat.startForegroundService(context, Intent(context, ServingService::class.java))
             } catch (_: IllegalStateException) {

@@ -140,6 +140,8 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     private var importInProgress: Pair<ImportControl, CompletableDeferred<ImportResult>>? = null
 
+    private var appInForeground = true
+
     private var addressesAtManualPick = emptySet<String>()
 
     @Volatile
@@ -590,6 +592,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private suspend fun importFailed(sharing: Boolean, page: PageType, @StringRes toastRes: Int, detail: String = "") {
+        if (!appInForeground) ServingService.notifyImportFailed(getApplication(), toastRes)
         if (sharing) {
             postToast(toastRes)
             return
@@ -916,7 +919,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         fileObserver = null
     }
 
+    fun onAppPaused() {
+        appInForeground = false
+    }
+
     fun onAppResumed() {
+        appInForeground = true
         addressCheckRequests.tryEmit(Unit)
         _uiState.update { it.copy(vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication())) }
         hotspot.onAppResumed()
