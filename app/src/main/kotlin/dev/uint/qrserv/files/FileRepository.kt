@@ -79,6 +79,37 @@ internal fun isContainedIn(file: File, dir: File): Boolean =
 
 private val PROGRESS_REPORT_INTERVAL = 100.milliseconds
 
+private const val MAX_KEPT_EXTENSION_BYTES = 16
+
+internal fun prefixedEntryName(tag: String, name: String): String = entryNameWithin("${tag}_", name)
+
+internal fun fittedEntryName(name: String): String = entryNameWithin("", name)
+
+private fun entryNameWithin(prefix: String, name: String): String {
+    if (fitsFileName(prefix + name)) return prefix + name
+    val extension = name.substringAfterLast('.', "")
+        .takeIf { it.isNotEmpty() && it.toByteArray(Charsets.UTF_8).size < MAX_KEPT_EXTENSION_BYTES }
+        ?.let { ".$it" }
+        .orEmpty()
+    val stem = name.removeSuffix(extension)
+    val kept = StringBuilder(prefix)
+    var bytes = (prefix + extension).toByteArray(Charsets.UTF_8).size
+    var index = 0
+    while (index < stem.length) {
+        val codePoint = stem.codePointAt(index)
+        val character = String(Character.toChars(codePoint))
+        bytes += character.toByteArray(Charsets.UTF_8).size
+        if (bytes > MAX_FILE_NAME_BYTES) break
+        kept.append(character)
+        index += character.length
+    }
+    return kept.append(extension).toString()
+}
+
+private const val MAX_FILE_NAME_BYTES = 255
+
+internal fun fitsFileName(name: String): Boolean = name.toByteArray(Charsets.UTF_8).size <= MAX_FILE_NAME_BYTES
+
 internal fun multiFileProgress(filesDone: Int, totalFiles: Int, bytesCopied: Long, totalBytes: Long?): ImportProgress =
     if (totalBytes != null) {
         ImportProgress(filesDone, totalFiles, bytesCopied, totalBytes)
@@ -165,8 +196,9 @@ class FileRepository(private val context: Context) {
 
         if (uris.size == 1) {
             val uri = uris.first()
-            val (rawName, reportedSize) = runCatching { resolveUriMeta(resolver, uri) }
+            val (fullName, reportedSize) = runCatching { resolveUriMeta(resolver, uri) }
                 .getOrElse { return@withContext importFailureResult(it) }
+            val rawName = fittedEntryName(fullName)
             val size = reportedSize ?: 0L
             val destFile = File(dir, rawName)
             if (!isContainedIn(destFile, dir)) {
@@ -226,9 +258,9 @@ class FileRepository(private val context: Context) {
                 for ((index, entry) in metas.withIndex()) {
                     val (uri, meta) = entry
                     val (rawName, size) = meta
-                    var finalName = rawName
+                    var finalName = fittedEntryName(rawName)
                     if (!usedNames.add(finalName)) {
-                        finalName = "${TokenGenerator.generate("0123456789ABCDEF", 6)}_$rawName"
+                        finalName = prefixedEntryName(TokenGenerator.generate("0123456789ABCDEF", 6), rawName)
                         usedNames.add(finalName)
                     }
                     resolver.openInputStream(uri)?.use { input ->

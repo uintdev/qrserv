@@ -40,6 +40,15 @@ class PickedNameTest {
     }
 
     @Test
+    fun fileNameLimitCountsBytesNotCharacters() {
+        assertTrue(fitsFileName("a".repeat(255)))
+        assertFalse(fitsFileName("a".repeat(256)))
+        assertTrue(fitsFileName("中".repeat(85)))
+        assertFalse(fitsFileName("中".repeat(86)))
+        assertFalse(fitsFileName("😀".repeat(64)))
+    }
+
+    @Test
     fun containment() {
         val dir = Files.createTempDirectory("qrserv").toFile()
         try {
