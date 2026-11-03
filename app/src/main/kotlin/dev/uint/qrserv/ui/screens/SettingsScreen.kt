@@ -1,5 +1,6 @@
 package dev.uint.qrserv.ui.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import dev.uint.qrserv.BuildConfig
 import dev.uint.qrserv.R
 import dev.uint.qrserv.data.IdleStopOptions
+import dev.uint.qrserv.data.ZipCompression
 import dev.uint.qrserv.data.ThemeMode
 import dev.uint.qrserv.net.HotspotBand
 import dev.uint.qrserv.net.labelRes
@@ -88,6 +90,7 @@ fun SettingsScreen(
     var showThemeDialog by remember { mutableStateOf(false) }
     var showBandDialog by remember { mutableStateOf(false) }
     var showIdleDialog by remember { mutableStateOf(false) }
+    var showZipDialog by remember { mutableStateOf(false) }
     var showRestoreConfirm by remember { mutableStateOf(false) }
     val updateCheck by viewModel.updateCheck.collectAsState()
     val context = LocalContext.current
@@ -241,6 +244,15 @@ fun SettingsScreen(
                     colors = groupItemColors,
                     modifier = Modifier.clickable { viewModel.toggleFiu() },
                 )
+                GroupDivider()
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_client_zip_list_title)) },
+                    supportingContent = {
+                        Text(stringResource(zipCompressionLabelRes(uiState.zipCompression)))
+                    },
+                    colors = groupItemColors,
+                    modifier = Modifier.clickable { showZipDialog = true },
+                )
             }
 
             SectionHeader(stringResource(R.string.settings_subheading_general))
@@ -306,6 +318,18 @@ fun SettingsScreen(
             description = { stringResource(bandDescriptionRes(it)) },
             onDismiss = { showBandDialog = false },
             onSelect = { band -> viewModel.hotspot.setHotspotBand(band) },
+        )
+    }
+
+    if (showZipDialog) {
+        ChoiceDialog(
+            title = stringResource(R.string.settings_client_zip_list_title),
+            options = ZipCompression.entries,
+            current = uiState.zipCompression,
+            label = { stringResource(zipCompressionLabelRes(it)) },
+            note = stringResource(R.string.settings_client_zip_note),
+            onDismiss = { showZipDialog = false },
+            onSelect = { compression -> viewModel.setZipCompression(compression) },
         )
     }
 
@@ -547,6 +571,7 @@ private fun <T> ChoiceDialog(
     onDismiss: () -> Unit,
     onSelect: (T) -> Unit,
     description: (@Composable (T) -> String)? = null,
+    note: String? = null,
 ) {
     BasicAlertDialog(onDismissRequest = onDismiss) {
         ReducedDialogScrim()
@@ -557,6 +582,10 @@ private fun <T> ChoiceDialog(
         ) {
             Column(modifier = Modifier.padding(24.dp).selectableGroup()) {
                 Text(title, style = MaterialTheme.typography.headlineSmall)
+                if (note != null) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
                 Spacer(Modifier.height(16.dp))
                 options.forEach { option ->
                     Row(
@@ -592,4 +621,11 @@ private fun <T> ChoiceDialog(
             }
         }
     }
+}
+
+@StringRes
+private fun zipCompressionLabelRes(compression: ZipCompression): Int = when (compression) {
+    ZipCompression.NONE -> R.string.settings_client_zip_none
+    ZipCompression.FAST -> R.string.settings_client_zip_fast
+    ZipCompression.NORMAL -> R.string.settings_client_zip_normal
 }

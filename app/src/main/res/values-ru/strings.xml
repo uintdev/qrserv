@@ -200,6 +200,11 @@
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Имя файла в URL</string>
     <string name="settings_client_fiu_list_subtitle">Включать имя файла в URL-адрес</string>
+    <string name="settings_client_zip_list_title">Сжатие ZIP для нескольких файлов</string>
+    <string name="settings_client_zip_note">Применяется к следующему выбору нескольких файлов</string>
+    <string name="settings_client_zip_none">Нет</string>
+    <string name="settings_client_zip_fast">Быстрое</string>
+    <string name="settings_client_zip_normal">Обычное</string>
     <string name="settings_subheading_general">Общие</string>
     <string name="settings_general_theme_list_title">Тема</string>
     <string name="settings_general_theme_option_system">Системная</string>

@@ -192,6 +192,11 @@
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">نام فایل در URL</string>
     <string name="settings_client_fiu_list_subtitle">گنجاندن نام فایل در URL</string>
+    <string name="settings_client_zip_list_title">فشرده‌سازی ZIP چند پرونده</string>
+    <string name="settings_client_zip_note">برای انتخاب چندپرونده‌ای بعدی اعمال می‌شود</string>
+    <string name="settings_client_zip_none">هیچ</string>
+    <string name="settings_client_zip_fast">سریع</string>
+    <string name="settings_client_zip_normal">معمولی</string>
     <string name="settings_subheading_general">عمومی</string>
     <string name="settings_general_theme_list_title">تم</string>
     <string name="settings_general_theme_option_system">پیش‌فرض سیستم</string>

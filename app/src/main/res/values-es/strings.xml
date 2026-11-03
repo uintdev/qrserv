@@ -196,6 +196,11 @@
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Nombre de archivo en la URL</string>
     <string name="settings_client_fiu_list_subtitle">Incluir nombre de archivo en la URL</string>
+    <string name="settings_client_zip_list_title">Compresión ZIP de varios archivos</string>
+    <string name="settings_client_zip_note">Se aplica a la próxima selección de varios archivos</string>
+    <string name="settings_client_zip_none">Ninguna</string>
+    <string name="settings_client_zip_fast">Rápida</string>
+    <string name="settings_client_zip_normal">Normal</string>
     <string name="settings_subheading_general">General</string>
     <string name="settings_general_theme_list_title">Tema</string>
     <string name="settings_general_theme_option_system">Predeterminado del sistema</string>

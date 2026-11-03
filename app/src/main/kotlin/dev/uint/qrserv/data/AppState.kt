@@ -4,6 +4,7 @@ import dev.uint.qrserv.net.HotspotAvailability
 import dev.uint.qrserv.net.HotspotBand
 import dev.uint.qrserv.net.HotspotFailure
 import dev.uint.qrserv.net.HotspotInfo
+import java.util.zip.Deflater
 
 enum class PageType {
     LANDING,
@@ -73,6 +74,17 @@ fun readPersistedThemeMode(): ThemeMode =
         ?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() }
         ?: ThemeMode.SYSTEM
 
+enum class ZipCompression(val level: Int) {
+    NONE(Deflater.NO_COMPRESSION),
+    FAST(Deflater.BEST_SPEED),
+    NORMAL(Deflater.DEFAULT_COMPRESSION),
+}
+
+fun readPersistedZipCompression(): ZipCompression =
+    Preferences.readString(Preferences.PREF_ZIP_COMPRESSION)
+        ?.let { name -> ZipCompression.entries.firstOrNull { it.name == name } }
+        ?: ZipCompression.NONE
+
 /**
  * Progress of copying a selection in (a single large file, or zipping several into an archive).
  * [completedFiles]/[totalFiles] is shown as a count for multi-file imports, but the bar itself
@@ -112,6 +124,7 @@ data class AppUiState(
     val damBuildIneligible: Boolean = false,
     val damDeviceUnsupported: Boolean = false,
     val fiuEnabled: Boolean = false,
+    val zipCompression: ZipCompression = ZipCompression.NONE,
     val allInterfacesEnabled: Boolean = false,
     val vpnLockdown: Boolean = false,
     val suggestedIp: String? = null,

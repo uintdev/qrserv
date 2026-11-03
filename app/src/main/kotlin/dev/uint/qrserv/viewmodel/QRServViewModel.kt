@@ -24,7 +24,9 @@ import dev.uint.qrserv.data.LocalNetworkDialog
 import dev.uint.qrserv.data.PageType
 import dev.uint.qrserv.data.Preferences
 import dev.uint.qrserv.data.ThemeMode
+import dev.uint.qrserv.data.ZipCompression
 import dev.uint.qrserv.data.readPersistedThemeMode
+import dev.uint.qrserv.data.readPersistedZipCompression
 import dev.uint.qrserv.files.CacheManager
 import dev.uint.qrserv.files.FileRepository
 import dev.uint.qrserv.files.ImportControl
@@ -235,6 +237,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 // Can still be on from before, e.g. restored from Android 10 or earlier, with the switch locked.
                 damEnabled = damSupported && Preferences.readBool(Preferences.PREF_CLIENT_DAM),
                 fiuEnabled = fiu,
+                zipCompression = readPersistedZipCompression(),
                 allInterfacesEnabled = Preferences.readBool(Preferences.PREF_SERVER_ALL_INTERFACES),
                 idleStopMinutes = Preferences.readInt(Preferences.PREF_SERVER_IDLE_MINUTES)?.takeIf { it in IdleStopOptions }
                     ?: DEFAULT_IDLE_STOP_MINUTES,
@@ -480,8 +483,9 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
         if (rejectIfBusy()) return
+        val compression = _uiState.value.zipCompression
         runImport { control ->
-            fileRepo.importUris(uris, control) { progress ->
+            fileRepo.importUris(uris, compression, control) { progress ->
                 if (!control.aborted) _uiState.update { it.copy(importProgress = progress) }
             }
         }
@@ -1057,6 +1061,11 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         _uiState.update { it.copy(fiuEnabled = newValue) }
     }
 
+    fun setZipCompression(compression: ZipCompression) {
+        Preferences.writeString(Preferences.PREF_ZIP_COMPRESSION, compression.name)
+        _uiState.update { it.copy(zipCompression = compression) }
+    }
+
     fun setThemeMode(mode: ThemeMode) {
         Preferences.writeString(Preferences.PREF_THEME_MODE, mode.name)
         _uiState.update { it.copy(themeMode = mode) }
@@ -1068,6 +1077,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 damEnabled = false,
                 fiuEnabled = false,
+                zipCompression = ZipCompression.NONE,
                 allInterfacesEnabled = false,
                 hotspotBand = null,
                 idleStopMinutes = DEFAULT_IDLE_STOP_MINUTES,

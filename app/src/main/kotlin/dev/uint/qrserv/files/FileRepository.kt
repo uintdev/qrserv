@@ -9,6 +9,7 @@ import android.provider.OpenableColumns
 import dev.uint.qrserv.data.ArchivedEntry
 import dev.uint.qrserv.data.FileInfo
 import dev.uint.qrserv.data.ImportProgress
+import dev.uint.qrserv.data.ZipCompression
 import dev.uint.qrserv.util.TokenGenerator
 import dev.uint.qrserv.util.causeChain
 import kotlinx.coroutines.Dispatchers
@@ -151,6 +152,9 @@ internal suspend fun copyWithProgress(
     copied
 }
 
+internal fun zipOutputStream(output: OutputStream, compression: ZipCompression): ZipOutputStream =
+    ZipOutputStream(output).apply { setLevel(compression.level) }
+
 private const val MAX_FILE_NAME_BYTES = 255
 
 internal fun fitsFileName(name: String): Boolean = name.toByteArray(Charsets.UTF_8).size <= MAX_FILE_NAME_BYTES
@@ -206,6 +210,7 @@ class FileRepository(private val context: Context) {
     /** Imports files picked via the system document picker or received via a share intent. */
     suspend fun importUris(
         uris: List<Uri>,
+        compression: ZipCompression = ZipCompression.NONE,
         control: ImportControl = ImportControl(),
         onProgress: (ImportProgress) -> Unit = {},
     ): ImportResult = withContext(Dispatchers.IO) {
@@ -281,7 +286,7 @@ class FileRepository(private val context: Context) {
         var bytesCopiedSoFar = 0L
 
         try {
-            ZipOutputStream(FileOutputStream(archiveFile)).use { zos ->
+            zipOutputStream(FileOutputStream(archiveFile), compression).use { zos ->
                 for ((index, entry) in metas.withIndex()) {
                     val (uri, meta) = entry
                     val (rawName, size) = meta

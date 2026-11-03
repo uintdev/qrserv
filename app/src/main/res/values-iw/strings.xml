@@ -200,6 +200,11 @@
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">שם קובץ בכתובת URL</string>
     <string name="settings_client_fiu_list_subtitle">כלול את שם הקובץ בכתובת ה-URL</string>
+    <string name="settings_client_zip_list_title">דחיסת ZIP של מספר קבצים</string>
+    <string name="settings_client_zip_note">חל על הבחירה הבאה של מספר קבצים</string>
+    <string name="settings_client_zip_none">ללא</string>
+    <string name="settings_client_zip_fast">מהירה</string>
+    <string name="settings_client_zip_normal">רגילה</string>
     <string name="settings_subheading_general">כללי</string>
     <string name="settings_general_theme_list_title">ערכת נושא</string>
     <string name="settings_general_theme_option_system">ברירת מחדל של המערכת</string>

@@ -14,6 +14,7 @@ object Preferences {
     const val PREF_SERVER_IDLE_MINUTES = "server_idle_minutes"
     const val PREF_CLIENT_DAM = "client_dam"
     const val PREF_CLIENT_FIU = "client_fiu"
+    const val PREF_ZIP_COMPRESSION = "zip_compression"
     const val PREF_THEME_MODE = "theme_mode"
     const val PREF_NOTIFICATIONS_ASKED = "notifications_asked_install"
     const val PREF_NEARBY_ASKED = "nearby_asked_install"

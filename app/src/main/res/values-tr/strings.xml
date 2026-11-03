@@ -192,6 +192,11 @@
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">URL\'deki Dosya Adı</string>
     <string name="settings_client_fiu_list_subtitle">Dosya adını URL\'ye dahil et</string>
+    <string name="settings_client_zip_list_title">Çoklu dosya ZIP sıkıştırması</string>
+    <string name="settings_client_zip_note">Sonraki çoklu dosya seçimine uygulanır</string>
+    <string name="settings_client_zip_none">Yok</string>
+    <string name="settings_client_zip_fast">Hızlı</string>
+    <string name="settings_client_zip_normal">Normal</string>
     <string name="settings_subheading_general">Genel</string>
     <string name="settings_general_theme_list_title">Tema</string>
     <string name="settings_general_theme_option_system">Sistem varsayılanı</string>

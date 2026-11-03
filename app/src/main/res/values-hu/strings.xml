@@ -192,6 +192,11 @@
     <string name="settings_client_dam_subtitle_combined">%1$s — %2$s</string>
     <string name="settings_client_fiu_list_title">Fájlnév az URL-ben</string>
     <string name="settings_client_fiu_list_subtitle">Fájlnév szerepeltetése az URL-ben</string>
+    <string name="settings_client_zip_list_title">Többfájlos ZIP-tömörítés</string>
+    <string name="settings_client_zip_note">A következő többfájlos kijelölésre érvényes</string>
+    <string name="settings_client_zip_none">Nincs</string>
+    <string name="settings_client_zip_fast">Gyors</string>
+    <string name="settings_client_zip_normal">Normál</string>
     <string name="settings_subheading_general">Általános</string>
     <string name="settings_general_theme_list_title">Téma</string>
     <string name="settings_general_theme_option_system">Rendszer alapértelmezett</string>
