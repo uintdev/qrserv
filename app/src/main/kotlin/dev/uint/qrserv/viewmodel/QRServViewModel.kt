@@ -482,7 +482,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     private fun runImport(import: suspend () -> ImportResult) {
         setLoading(true)
         importRunning = true
-        stopFileObserver()
         viewModelScope.launch {
             // The purge would otherwise take the new file too.
             launchPurge?.join()
@@ -531,7 +530,6 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         if (result !is ImportResult.Success) {
             if (_uiState.value.serverRunning) fileRepo.pruneCacheKeeping(_uiState.value.fileInfo.path) else deletePickerCache()
         }
-        if (result !is ImportResult.Success && sharing) startFileObserver(_uiState.value.fileInfo)
         setLoading(false)
     }
 
