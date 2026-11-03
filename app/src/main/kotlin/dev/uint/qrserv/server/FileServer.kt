@@ -107,6 +107,9 @@ class FileServer(
         running = true
     }
 
+    // A request can outlive its file; reporting that would stop the share that replaced it.
+    private fun isStillShared(info: FileInfo?): Boolean = fileInfoProvider()?.path == info?.path
+
     private suspend fun serve(call: ApplicationCall, headOnly: Boolean) {
         // Not remoteHost: that resolves the client's name with a blocking reverse DNS lookup.
         val remoteIp = call.request.origin.remoteAddress
@@ -120,13 +123,13 @@ class FileServer(
 
         // Before exists(): without MANAGE_EXTERNAL_STORAGE, exists() is false too.
         if (info != null && file != null && !hasStoragePermission(info.path)) {
-            listener.onPermissionDenied()
+            if (isStillShared(info)) listener.onPermissionDenied()
             call.respondText("", status = HttpStatusCode.Forbidden)
             return
         }
 
         if (info == null || file == null || !file.exists()) {
-            listener.onFileMissing()
+            if (isStillShared(info)) listener.onFileMissing()
             call.respondText("", status = HttpStatusCode.NotFound)
             return
         }
@@ -136,7 +139,7 @@ class FileServer(
         val (stream, length) = try {
             openWithLength(file)
         } catch (error: IOException) {
-            listener.onFileUnreadable(error)
+            if (isStillShared(info)) listener.onFileUnreadable(error)
             call.respondText("", status = HttpStatusCode.InternalServerError)
             return
         }
@@ -182,7 +185,7 @@ class FileServer(
                     // open above, it's safe to wrap: the stream is already inside the try that closes it.
                     withContext(Dispatchers.IO) { stream.channel.position(start) }
                 } catch (error: IOException) {
-                    listener.onFileUnreadable(error)
+                    if (isStillShared(info)) listener.onFileUnreadable(error)
                     call.respondText("", status = HttpStatusCode.InternalServerError)
                     return
                 }

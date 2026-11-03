@@ -219,7 +219,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         downloadFinishedCallback = { ip ->
             postToast(R.string.server_info_download_finished, ip)
         },
-        fileMissingCallback = { onServerStopped() },
+        fileMissingCallback = { onServerStopped(PageType.FILE_REMOVED) },
         fileUnreadableCallback = { detail ->
             _uiState.update { it.copy(errorDetail = detail) }
             onServerStopped(PageType.UNHANDLED_ERROR)

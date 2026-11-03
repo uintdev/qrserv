@@ -274,6 +274,39 @@ class FileServerTest {
     }
 
     @Test
+    fun aRequestForAReplacedFileDoesNotStopTheNewShare() {
+        val gone = FileInfo(name = "old.bin", path = file.path + ".gone", pathPart = file.parent!!, length = 1)
+        val current = FileInfo(name = "new.bin", path = file.path, pathPart = file.parent!!, length = file.length())
+        val calls = AtomicInteger()
+        val counts = Counts()
+        // The first read is the request's own, from before the share moved on.
+        val replaced = FileServer(0, "127.0.0.1", { if (calls.getAndIncrement() == 0) gone else current }, { true }, counts)
+        replaced.start()
+        try {
+            val status = (URL("http://127.0.0.1:${replaced.listeningPort}/").openConnection() as HttpURLConnection).responseCode
+            assertEquals(404, status)
+            assertEquals(0, counts.missing.get())
+        } finally {
+            replaced.stop()
+        }
+    }
+
+    @Test
+    fun theFileGoneFromTheCurrentShareIsStillReported() {
+        val gone = FileInfo(name = "old.bin", path = file.path + ".gone", pathPart = file.parent!!, length = 1)
+        val counts = Counts()
+        val missing = FileServer(0, "127.0.0.1", { gone }, { true }, counts)
+        missing.start()
+        try {
+            val status = (URL("http://127.0.0.1:${missing.listeningPort}/").openConnection() as HttpURLConnection).responseCode
+            assertEquals(404, status)
+            assertEquals(1, counts.missing.get())
+        } finally {
+            missing.stop()
+        }
+    }
+
+    @Test
     fun aClientThatStopsReadingIsCutAfterTheStallTimeout() {
         val big = File.createTempFile("qrserv", ".big").apply { RandomAccessFile(this, "rw").use { it.setLength(64L * 1024 * 1024) } }
         val info = FileInfo(name = "big.bin", path = big.path, pathPart = big.parent!!, length = big.length())
