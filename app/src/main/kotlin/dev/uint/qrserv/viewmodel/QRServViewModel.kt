@@ -490,6 +490,10 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
         pickerCanceledUnresolved = true
     }
 
+    fun onShareRefused() {
+        postToast(R.string.info_share_no_access)
+    }
+
     /** No system file picker on the device; sharing from another app still works. */
     fun onFilePickerMissing() {
         onImportCanceled()

@@ -21,6 +21,7 @@
     <string name="page_info_incomplete_label">קובץ חלקי</string>
     <string name="page_info_incomplete_msg">לא ניתן היה לקרוא את הקובץ במלואו. נסה שוב</string>
     <string name="info_import_failed_sharing">לא ניתן לייבא את הקובץ. השיתוף הנוכחי ממשיך</string>
+    <string name="info_share_no_access">האפליקציה השולחת לא נתנה גישה לכל הקבצים</string>
     <string name="page_info_portinuse_label">שגיאה</string>
     <string name="page_info_portinuse_msg">השרת ניסה לפעול על פורט שכבר נמצא בשימוש</string>
     <string name="page_info_idlestopped_label">השיתוף הופסק</string>

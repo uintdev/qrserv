@@ -41,6 +41,7 @@ import dev.uint.qrserv.util.SHORTCUT_LAUNCHER
 import dev.uint.qrserv.util.directAccessSettingsIntents
 import dev.uint.qrserv.util.isLocalNetworkGranted
 import dev.uint.qrserv.util.isNearbyWifiGranted
+import dev.uint.qrserv.util.isMediaStoreAuthority
 import dev.uint.qrserv.util.publishAppShortcuts
 import dev.uint.qrserv.viewmodel.QRServViewModel
 import kotlinx.coroutines.Dispatchers
@@ -350,6 +351,13 @@ class MainActivity : ComponentActivity() {
             }
         }?.filter(::isAcceptableShareUri) ?: return false
 
+        val granted = urisCoveredByGrant(intent)
+        if (uris.any { isMediaStoreAuthority(it.authority) && it !in granted }) {
+            viewModel.onShareRefused()
+            intent.action = null
+            return false
+        }
+
         if (uris.isNotEmpty()) {
             viewModel.onSharedFilesReceived(uris)
             // Clear the action so a recreation within this process doesn't re-import the same share.
@@ -407,3 +415,13 @@ private inline fun <T> readExtras(intent: Intent, read: Intent.() -> T): T? =
  */
 private fun isAcceptableShareUri(uri: Uri): Boolean =
     uri.scheme.equals(ContentResolver.SCHEME_CONTENT, ignoreCase = true)
+
+/** QRServ's own storage permission reaches MediaStore, so a shared media file needs the sender's grant too. */
+private fun urisCoveredByGrant(intent: Intent): Set<Uri> {
+    if (intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION == 0) return emptySet()
+    val clip = intent.clipData
+    return buildSet {
+        intent.data?.let(::add)
+        if (clip != null) for (index in 0 until clip.itemCount) clip.getItemAt(index).uri?.let(::add)
+    }
+}

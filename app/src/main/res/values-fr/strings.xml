@@ -17,6 +17,7 @@
     <string name="page_info_incomplete_label">Fichier incomplet</string>
     <string name="page_info_incomplete_msg">Ce fichier n\'a pas pu être lu entièrement. Réessayez</string>
     <string name="info_import_failed_sharing">Impossible d\'importer le fichier. Le partage en cours continue</string>
+    <string name="info_share_no_access">L\'app source n\'a pas donné accès à tous ses fichiers</string>
     <string name="page_info_portinuse_label">Erreur</string>
     <string name="page_info_portinuse_msg">Le serveur a essayé de démarrer avec un port en utilisation</string>
     <string name="page_info_idlestopped_label">Partage arrêté</string>

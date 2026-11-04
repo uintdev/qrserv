@@ -17,6 +17,7 @@
     <string name="page_info_incomplete_label">Niekompletny plik</string>
     <string name="page_info_incomplete_msg">Nie udało się odczytać całego pliku. Spróbuj ponownie</string>
     <string name="info_import_failed_sharing">Nie udało się zaimportować pliku. Bieżące udostępnianie trwa</string>
+    <string name="info_share_no_access">Aplikacja wysyłająca nie dała dostępu do wszystkich plików</string>
     <string name="page_info_portinuse_label">Błąd</string>
     <string name="page_info_portinuse_msg">Serwer próbował uruchomić z już powiązanym portem sieciowym</string>
     <string name="page_info_idlestopped_label">Udostępnianie zatrzymane</string>

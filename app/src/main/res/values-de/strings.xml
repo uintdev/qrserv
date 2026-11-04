@@ -17,6 +17,7 @@
     <string name="page_info_incomplete_label">Datei unvollständig</string>
     <string name="page_info_incomplete_msg">Diese Datei konnte nicht vollständig gelesen werden. Versuche es erneut</string>
     <string name="info_import_failed_sharing">Datei konnte nicht importiert werden. Aktuelle Freigabe läuft weiter</string>
+    <string name="info_share_no_access">Die sendende App hat keinen Zugriff auf alle Dateien gewährt</string>
     <string name="page_info_portinuse_label">Fehler</string>
     <string name="page_info_portinuse_msg">Server hat versucht, mit einem bereits belegten Port zu beginnen</string>
     <string name="page_info_idlestopped_label">Teilen beendet</string>

@@ -17,6 +17,7 @@
     <string name="page_info_incomplete_label">Eksik dosya</string>
     <string name="page_info_incomplete_msg">Dosya tamamen okunamadı. Tekrar deneyin</string>
     <string name="info_import_failed_sharing">Dosya içe aktarılamadı. Geçerli paylaşım devam ediyor</string>
+    <string name="info_share_no_access">Gönderen uygulama tüm dosyalara erişim vermedi</string>
     <string name="page_info_portinuse_label">Hata</string>
     <string name="page_info_portinuse_msg">Sunucu zaten bağlanmış bağlantı noktasıyla başlatılmaya çalışıldı</string>
     <string name="page_info_idlestopped_label">Paylaşım durduruldu</string>
