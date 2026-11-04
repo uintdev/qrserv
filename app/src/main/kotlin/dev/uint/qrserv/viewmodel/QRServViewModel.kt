@@ -45,6 +45,7 @@ import dev.uint.qrserv.server.ServingNotice
 import dev.uint.qrserv.server.ServingService
 import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.AppShortcut
+import dev.uint.qrserv.util.SleepCountingDelay
 import dev.uint.qrserv.util.ManifestUtils
 import dev.uint.qrserv.util.UpdateCheckState
 import dev.uint.qrserv.util.canGetDirectAccess
@@ -106,6 +107,8 @@ private data class IdleTimerKey(
 class QRServViewModel(application: Application) : AndroidViewModel(application) {
 
     private val fileRepo = FileRepository(application)
+
+    private val idleDelay = SleepCountingDelay(application)
 
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
@@ -291,7 +294,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
                 .distinctUntilChanged()
                 .collectLatest { key ->
                     if (!key.sharing || key.minutes <= 0 || key.downloading || key.busy) return@collectLatest
-                    delay(key.minutes.minutes)
+                    idleDelay.delay(key.minutes.minutes)
                     stopForIdle(key.minutes)
                 }
         }
@@ -1046,7 +1049,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun stopForIdle(minutes: Int) {
-        if (!_uiState.value.serverRunning || _uiState.value.serverPoweringDown) return
+        if (!_uiState.value.serverRunning || _uiState.value.serverPoweringDown || _uiState.value.actionButtonLoading) return
         // A notification reaches someone who isn't looking at the app; otherwise a toast will have to do.
         if (!ServingService.notifyIdleStopped(getApplication(), minutes)) postToast(R.string.info_idle_stopped)
         _uiState.update { it.copy(idleStoppedMinutes = minutes) }
@@ -1169,6 +1172,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
 
     override fun onCleared() {
         cancelImport()
+        idleDelay.close()
         connectivityManager.unregisterNetworkCallback(networkCallback)
         stopFileObserver()
         serverController.stop()
