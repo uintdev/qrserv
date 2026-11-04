@@ -25,8 +25,17 @@ object Preferences {
         "nearby_asked" to PREF_NEARBY_ASKED,
     )
 
-    const val PREF_SESSION_ACTIVE = "session_active"
+    private const val PREF_SESSION_ACTIVE = "session_active_install"
+    private const val LEGACY_PREF_SESSION_ACTIVE = "session_active"
     const val PREF_SESSION_HOTSPOT = "session_hotspot"
+
+    private val RuntimeKeys = setOf(
+        PREF_NOTIFICATIONS_ASKED,
+        PREF_NEARBY_ASKED,
+        PREF_LOCAL_NETWORK_ASKED,
+        PREF_SESSION_ACTIVE,
+        PREF_SESSION_HOTSPOT,
+    )
 
     private lateinit var prefs: SharedPreferences
 
@@ -37,6 +46,7 @@ object Preferences {
         prefs = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         installTime = app.packageManager.getPackageInfo(app.packageName, 0).firstInstallTime
         migrateAskedFlags()
+        if (prefs.contains(LEGACY_PREF_SESSION_ACTIVE)) prefs.edit { remove(LEGACY_PREF_SESSION_ACTIVE) }
     }
 
     private fun migrateAskedFlags() {
@@ -56,6 +66,13 @@ object Preferences {
     fun markAskedOnThisInstall(key: String) {
         prefs.edit { putLong(key, installTime) }
     }
+
+    // Tied to this install, as a backup taken mid-share restores it too.
+    var sessionActive: Boolean
+        get() = wasAskedOnThisInstall(PREF_SESSION_ACTIVE)
+        set(active) {
+            if (active) markAskedOnThisInstall(PREF_SESSION_ACTIVE) else prefs.edit { remove(PREF_SESSION_ACTIVE) }
+        }
 
     fun readInt(key: String): Int? =
         if (prefs.contains(key)) prefs.getInt(key, 0) else null
@@ -82,7 +99,7 @@ object Preferences {
         }
     }
 
-    fun clear() {
-        prefs.edit { clear() }
+    fun clearSettings() {
+        prefs.edit { prefs.all.keys.filterNot(RuntimeKeys::contains).forEach(::remove) }
     }
 }

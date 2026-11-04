@@ -1068,17 +1068,17 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun markSessionActive(hotspot: Boolean) {
-        Preferences.writeBool(Preferences.PREF_SESSION_ACTIVE, true)
+        Preferences.sessionActive = true
         Preferences.writeBool(Preferences.PREF_SESSION_HOTSPOT, hotspot)
     }
 
     private fun clearSessionMarker() {
-        Preferences.writeBool(Preferences.PREF_SESSION_ACTIVE, false)
+        Preferences.sessionActive = false
     }
 
     // Revoking a runtime permission kills the process, so the next launch reports it instead.
     private fun reportAbruptSessionEnd() {
-        if (!Preferences.readBool(Preferences.PREF_SESSION_ACTIVE)) return
+        if (!Preferences.sessionActive) return
         val wasHotspot = Preferences.readBool(Preferences.PREF_SESSION_HOTSPOT)
         clearSessionMarker()
         // From Android 17 both are under Nearby devices, so the one message covers either.
@@ -1130,7 +1130,7 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun restoreDefaults() {
-        Preferences.clear()
+        Preferences.clearSettings()
         _uiState.update {
             it.copy(
                 damEnabled = false,
