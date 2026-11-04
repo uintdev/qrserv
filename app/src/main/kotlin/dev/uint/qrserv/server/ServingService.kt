@@ -54,6 +54,8 @@ class ServingService : Service() {
         if (!observing) {
             observing = true
             observe()
+        } else if (ServingState.notice.value == null) {
+            stopCleanly()
         }
         return START_NOT_STICKY
     }
