@@ -1,5 +1,34 @@
 # Changelog
 
+## 4.4.0
+
+- Downloads can now be over twice as fast on fast connections
+- Idle stop now stops on time, even when asleep
+- Multi-file imports are now much faster
+- Imports from slow sources no longer stall with the screen off
+- Imports can now be canceled, and end by themselves if data stops
+- Failed imports now show a notification if the app isn't open
+- Added a ZIP compression setting for multi-file selections (off by default)
+- Added an app language setting (Android 13+)
+- Private hotspot files stay off the normal network
+- Private hotspot no longer mistakes a joined network's address for its own
+- Private hotspot now works alongside another app's hotspot
+- Switching to the private hotspot is refused during a download
+- Over-long file names are now shortened, keeping the extension
+- Files that end before their reported size now show a message instead of being shared cut off
+- Fixed import progress hiding errors or filling up early
+- Stalled downloads now end after several minutes, so the device can sleep
+- The app now says so when a download finds the shared file missing
+- Requests for a previous file no longer stop the current share
+- Sharing ending during an import no longer deletes the file being imported
+- The ZIP's file list now shows actual sizes
+- Duplicate names in a ZIP are now shortened to fit the length limit
+- Restore defaults no longer forgets which permissions were asked for
+- Media files shared from other apps now need that app's permission
+- Failed imports during a share now say the share is still running
+- Fixed a possible crash from malformed shares on older Android versions
+- Fixed a rare stuck "Preparing" notification
+
 ## 4.3.2
 
 - Android 17 or later now asks for the Nearby devices permission before sharing, as other devices can't connect without it

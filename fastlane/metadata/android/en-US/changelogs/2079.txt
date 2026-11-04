@@ -1,0 +1,13 @@
+- Downloads can now be over twice as fast
+- Idle stop now stops on time, even when asleep
+- Faster multi-file imports
+- Imports no longer stall when the screen is off
+- Imports can now be canceled
+- Added ZIP compression setting (off by default)
+- Added app language setting (Android 13+)
+- Over-long file names are now shortened
+- Hotspot files stay off the normal network
+- Files that end early now show an error
+- Stalled downloads now end after several minutes
+
+See GitHub for more changes.
