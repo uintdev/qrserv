@@ -47,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -135,7 +136,8 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(bottom = 8.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                .clip(RoundedCornerShape(20.dp))
                 .verticalScroll(rememberScrollState()),
         ) {
             SectionHeader(stringResource(R.string.settings_subheading_server))
@@ -451,7 +453,7 @@ private fun SectionHeader(text: String) {
         text = text,
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(start = 16.dp, top = 20.dp, bottom = 4.dp),
+        modifier = Modifier.padding(top = 20.dp, bottom = 4.dp),
     )
 }
 
@@ -460,9 +462,7 @@ private fun SettingsGroup(content: @Composable ColumnScope.() -> Unit) {
     Surface(
         shape = RoundedCornerShape(20.dp),
         color = subtleContainerColor(),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(content = content)
     }
