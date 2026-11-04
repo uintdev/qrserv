@@ -348,8 +348,8 @@ class MainActivity : ComponentActivity() {
                     } ?: emptyList()
                 }
                 else -> emptyList()
-            }
-        }?.filter(::isAcceptableShareUri) ?: return false
+            }.filterIsInstance<Uri>().filter(::isAcceptableShareUri)
+        } ?: return false
 
         val granted = urisCoveredByGrant(intent)
         if (uris.any { isMediaStoreAuthority(it.authority) && it !in granted }) {
