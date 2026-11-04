@@ -71,7 +71,7 @@ class UpdateCheckTest {
     }
 
     @Test
-    fun releaseLinkIsAlwaysThisRepositorysPageForTheTag() {
+    fun releaseLinkIsAlwaysThisRepositoriessPageForTheTag() {
         for (url in listOf(
             "https://github.com/someone-else/qrserv/releases/tag/v4.4.0",
             "https://example.com/qrserv.apk",
