@@ -211,6 +211,7 @@
     <string name="settings_general_theme_option_system">Domyślny systemowy</string>
     <string name="settings_general_theme_option_dark">Ciemny</string>
     <string name="settings_general_theme_option_light">Jasny</string>
+    <string name="settings_general_language_list_title">Język aplikacji</string>
     <string name="settings_general_defaults_list_title">Przywróć ustawienia domyślne</string>
     <string name="settings_general_defaults_success">Przywrócono ustawienia domyślne</string>
     <string name="settings_update_version">Wersja %1$s</string>

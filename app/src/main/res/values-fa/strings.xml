@@ -203,6 +203,7 @@
     <string name="settings_general_theme_option_system">پیش‌فرض سیستم</string>
     <string name="settings_general_theme_option_dark">تیره</string>
     <string name="settings_general_theme_option_light">روشن</string>
+    <string name="settings_general_language_list_title">زبان برنامه</string>
     <string name="settings_general_defaults_list_title">بازگردانی به تنظیمات پیش‌فرض</string>
     <string name="settings_general_defaults_success">تنظیمات پیش‌فرض بازیابی شد</string>
     <string name="settings_update_version">نسخهٔ %1$s</string>

@@ -203,6 +203,7 @@
     <string name="settings_general_theme_option_system">Sistem varsayılanı</string>
     <string name="settings_general_theme_option_dark">Koyu</string>
     <string name="settings_general_theme_option_light">Açık</string>
+    <string name="settings_general_language_list_title">Uygulama dili</string>
     <string name="settings_general_defaults_list_title">Varsayılan ayarları geri yükle</string>
     <string name="settings_general_defaults_success">Varsayılan ayarlar geri yüklendi</string>
     <string name="settings_update_version">Sürüm %1$s</string>

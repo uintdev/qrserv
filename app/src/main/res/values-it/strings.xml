@@ -207,6 +207,7 @@
     <string name="settings_general_theme_option_system">Predefinito di sistema</string>
     <string name="settings_general_theme_option_dark">Scuro</string>
     <string name="settings_general_theme_option_light">Chiaro</string>
+    <string name="settings_general_language_list_title">Lingua dell\'app</string>
     <string name="settings_general_defaults_list_title">Ripristina impostazioni predefinite</string>
     <string name="settings_general_defaults_success">Impostazioni predefinite ripristinate</string>
     <string name="settings_update_version">Versione %1$s</string>

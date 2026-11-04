@@ -203,6 +203,7 @@
     <string name="settings_general_theme_option_system">Systemstandard</string>
     <string name="settings_general_theme_option_dark">Dunkel</string>
     <string name="settings_general_theme_option_light">Hell</string>
+    <string name="settings_general_language_list_title">App-Sprache</string>
     <string name="settings_general_defaults_list_title">Standardeinstellungen wiederherstellen</string>
     <string name="settings_general_defaults_success">Standardeinstellungen wiederhergestellt</string>
     <string name="settings_update_version">Version %1$s</string>

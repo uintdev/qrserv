@@ -211,6 +211,7 @@
     <string name="settings_general_theme_option_system">Системная</string>
     <string name="settings_general_theme_option_dark">Тёмная</string>
     <string name="settings_general_theme_option_light">Светлая</string>
+    <string name="settings_general_language_list_title">Язык приложения</string>
     <string name="settings_general_defaults_list_title">Восстановить настройки по умолчанию</string>
     <string name="settings_general_defaults_success">Настройки по умолчанию восстановлены</string>
     <string name="settings_update_version">Версия %1$s</string>

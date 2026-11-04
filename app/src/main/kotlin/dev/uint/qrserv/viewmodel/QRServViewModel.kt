@@ -47,6 +47,7 @@ import dev.uint.qrserv.server.ServingState
 import dev.uint.qrserv.util.AppShortcut
 import dev.uint.qrserv.util.SleepCountingDelay
 import dev.uint.qrserv.util.ManifestUtils
+import dev.uint.qrserv.util.appLanguageName
 import dev.uint.qrserv.util.UpdateCheckState
 import dev.uint.qrserv.util.canGetDirectAccess
 import dev.uint.qrserv.util.canPostNotifications
@@ -983,7 +984,12 @@ class QRServViewModel(application: Application) : AndroidViewModel(application) 
             if (!_uiState.value.actionButtonLoading) hotspot.abandonIdle()
         }
         addressCheckRequests.tryEmit(Unit)
-        _uiState.update { it.copy(vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication())) }
+        _uiState.update {
+            it.copy(
+                vpnLockdown = NetworkUtils.isVpnLockdownEnabled(getApplication()),
+                appLanguage = if (Build.VERSION.SDK_INT >= 33) getApplication<Application>().appLanguageName() else null,
+            )
+        }
         hotspot.onAppResumed()
         if (_uiState.value.localNetworkDialog == LocalNetworkDialog.SETTINGS && getApplication<Application>().isLocalNetworkGranted()) {
             _uiState.update { it.copy(localNetworkDialog = null) }

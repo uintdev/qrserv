@@ -132,6 +132,8 @@ data class AppUiState(
     /** Raw exception detail shown (and copyable) on [PageType.UNHANDLED_ERROR]. */
     val errorDetail: String = "",
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    /** Null when following the system. */
+    val appLanguage: String? = null,
     val notificationPermissionPending: Boolean = false,
     val localNetworkDialog: LocalNetworkDialog? = null,
     val localNetworkPermissionRequest: Boolean = false,

@@ -207,6 +207,7 @@
     <string name="settings_general_theme_option_system">Predefinição do sistema</string>
     <string name="settings_general_theme_option_dark">Escuro</string>
     <string name="settings_general_theme_option_light">Claro</string>
+    <string name="settings_general_language_list_title">Idioma da aplicação</string>
     <string name="settings_general_defaults_list_title">Repor as predefinições</string>
     <string name="settings_general_defaults_success">Predefinições repostas</string>
     <string name="settings_update_version">Versão %1$s</string>

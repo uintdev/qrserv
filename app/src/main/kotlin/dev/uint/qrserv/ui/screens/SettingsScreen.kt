@@ -1,5 +1,6 @@
 package dev.uint.qrserv.ui.screens
 
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -71,6 +72,7 @@ import dev.uint.qrserv.ui.theme.ReducedDialogScrim
 import dev.uint.qrserv.ui.theme.reducedBottomInsetContentWindowInsets
 import dev.uint.qrserv.ui.theme.subtleContainerColor
 import dev.uint.qrserv.ui.theme.transparentTopAppBarColors
+import dev.uint.qrserv.util.openAppLanguageSettings
 import dev.uint.qrserv.util.ManifestUtils
 import dev.uint.qrserv.util.RELEASES_URL
 import dev.uint.qrserv.util.UpdateCheckFailure
@@ -264,6 +266,15 @@ fun SettingsScreen(
                     modifier = Modifier.clickable { showThemeDialog = true },
                 )
                 GroupDivider()
+                if (Build.VERSION.SDK_INT >= 33) {
+                    ListItem(
+                        headlineContent = { Text(stringResource(R.string.settings_general_language_list_title)) },
+                        supportingContent = { Text(uiState.appLanguage ?: stringResource(R.string.settings_general_theme_option_system)) },
+                        colors = groupItemColors,
+                        modifier = Modifier.clickable { openAppLanguageSettings(context) },
+                    )
+                    GroupDivider()
+                }
                 if (canCheckForUpdates) {
                     val checking = updateCheck == UpdateCheckState.Checking
                     ListItem(

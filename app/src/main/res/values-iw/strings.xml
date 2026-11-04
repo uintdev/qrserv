@@ -211,6 +211,7 @@
     <string name="settings_general_theme_option_system">ברירת מחדל של המערכת</string>
     <string name="settings_general_theme_option_dark">כהה</string>
     <string name="settings_general_theme_option_light">בהיר</string>
+    <string name="settings_general_language_list_title">שפת האפליקציה</string>
     <string name="settings_general_defaults_list_title">שחזור הגדרות ברירת מחדל</string>
     <string name="settings_general_defaults_success">הגדרות ברירת המחדל שוחזרו</string>
     <string name="settings_update_version">גרסה %1$s</string>

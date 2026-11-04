@@ -203,6 +203,7 @@
     <string name="settings_general_theme_option_system">Rendszer alapértelmezett</string>
     <string name="settings_general_theme_option_dark">Sötét</string>
     <string name="settings_general_theme_option_light">Világos</string>
+    <string name="settings_general_language_list_title">Alkalmazás nyelve</string>
     <string name="settings_general_defaults_list_title">Alapértelmezett beállítások visszaállítása</string>
     <string name="settings_general_defaults_success">Alapértelmezett beállítások visszaállítva</string>
     <string name="settings_update_version">%1$s verzió</string>

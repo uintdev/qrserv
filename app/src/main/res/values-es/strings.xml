@@ -207,6 +207,7 @@
     <string name="settings_general_theme_option_system">Predeterminado del sistema</string>
     <string name="settings_general_theme_option_dark">Oscuro</string>
     <string name="settings_general_theme_option_light">Claro</string>
+    <string name="settings_general_language_list_title">Idioma de la aplicación</string>
     <string name="settings_general_defaults_list_title">Restaurar configuración predeterminada</string>
     <string name="settings_general_defaults_success">Restaurado configuración predeterminada</string>
     <string name="settings_update_version">Versión %1$s</string>

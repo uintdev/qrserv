@@ -207,6 +207,7 @@
     <string name="settings_general_theme_option_system">Système par défaut</string>
     <string name="settings_general_theme_option_dark">Sombre</string>
     <string name="settings_general_theme_option_light">Clair</string>
+    <string name="settings_general_language_list_title">Langue de l\'application</string>
     <string name="settings_general_defaults_list_title">Restaurer les paramètres par défaut</string>
     <string name="settings_general_defaults_success">Paramètres par défaut restaurés</string>
     <string name="settings_update_version">Version %1$s</string>

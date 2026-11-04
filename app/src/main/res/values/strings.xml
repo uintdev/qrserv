@@ -204,6 +204,7 @@
     <string name="settings_general_theme_option_system">System default</string>
     <string name="settings_general_theme_option_dark">Dark</string>
     <string name="settings_general_theme_option_light">Light</string>
+    <string name="settings_general_language_list_title">App language</string>
     <string name="settings_general_defaults_list_title">Restore default settings</string>
     <string name="settings_general_defaults_success">Default settings restored</string>
     <string name="settings_update_version">Version %1$s</string>
